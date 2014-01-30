@@ -1,0 +1,490 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7B199B4D189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
+		7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */; };
+		7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
+		7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B55189ABEC9003E7F6A /* InfoPlist.strings */; };
+		7B199B59189ABEC9003E7F6A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
+		7B199B5D189ABEC9003E7F6A /* IKCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B5C189ABEC9003E7F6A /* IKCAppDelegate.m */; };
+		7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */; };
+		7B199B63189ABEC9003E7F6A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B61189ABEC9003E7F6A /* Main_iPad.storyboard */; };
+		7B199B66189ABEC9003E7F6A /* IKCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B65189ABEC9003E7F6A /* IKCViewController.m */; };
+		7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B67189ABEC9003E7F6A /* Images.xcassets */; };
+		7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B6E189ABEC9003E7F6A /* XCTest.framework */; };
+		7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
+		7B199B71189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
+		7B199B79189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B77189ABEC9003E7F6A /* InfoPlist.strings */; };
+		7B199B7B189ABEC9003E7F6A /* ios_knob_controlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7B199B72189ABEC9003E7F6A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B199B41189ABEC9003E7F6A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B199B48189ABEC9003E7F6A;
+			remoteInfo = "ios-knob-control";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		7B199B49189ABEC9003E7F6A /* ios-knob-control.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios-knob-control.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B199B4C189ABEC9003E7F6A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		7B199B50189ABEC9003E7F6A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		7B199B54189ABEC9003E7F6A /* ios-knob-control-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ios-knob-control-Info.plist"; sourceTree = "<group>"; };
+		7B199B56189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7B199B58189ABEC9003E7F6A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7B199B5A189ABEC9003E7F6A /* ios-knob-control-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-knob-control-Prefix.pch"; sourceTree = "<group>"; };
+		7B199B5B189ABEC9003E7F6A /* IKCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKCAppDelegate.h; sourceTree = "<group>"; };
+		7B199B5C189ABEC9003E7F6A /* IKCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IKCAppDelegate.m; sourceTree = "<group>"; };
+		7B199B5F189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		7B199B62189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
+		7B199B64189ABEC9003E7F6A /* IKCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKCViewController.h; sourceTree = "<group>"; };
+		7B199B65189ABEC9003E7F6A /* IKCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IKCViewController.m; sourceTree = "<group>"; };
+		7B199B67189ABEC9003E7F6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		7B199B6D189ABEC9003E7F6A /* ios-knob-controlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ios-knob-controlTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B199B6E189ABEC9003E7F6A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		7B199B76189ABEC9003E7F6A /* ios-knob-controlTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ios-knob-controlTests-Info.plist"; sourceTree = "<group>"; };
+		7B199B78189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ios_knob_controlTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7B199B46189ABEC9003E7F6A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */,
+				7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */,
+				7B199B4D189ABEC9003E7F6A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B199B6A189ABEC9003E7F6A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */,
+				7B199B71189ABEC9003E7F6A /* UIKit.framework in Frameworks */,
+				7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7B199B40189ABEC9003E7F6A = {
+			isa = PBXGroup;
+			children = (
+				7B199B52189ABEC9003E7F6A /* ios-knob-control */,
+				7B199B74189ABEC9003E7F6A /* ios-knob-controlTests */,
+				7B199B4B189ABEC9003E7F6A /* Frameworks */,
+				7B199B4A189ABEC9003E7F6A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7B199B4A189ABEC9003E7F6A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B49189ABEC9003E7F6A /* ios-knob-control.app */,
+				7B199B6D189ABEC9003E7F6A /* ios-knob-controlTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7B199B4B189ABEC9003E7F6A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B4C189ABEC9003E7F6A /* Foundation.framework */,
+				7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */,
+				7B199B50189ABEC9003E7F6A /* UIKit.framework */,
+				7B199B6E189ABEC9003E7F6A /* XCTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7B199B52189ABEC9003E7F6A /* ios-knob-control */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B5B189ABEC9003E7F6A /* IKCAppDelegate.h */,
+				7B199B5C189ABEC9003E7F6A /* IKCAppDelegate.m */,
+				7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */,
+				7B199B61189ABEC9003E7F6A /* Main_iPad.storyboard */,
+				7B199B64189ABEC9003E7F6A /* IKCViewController.h */,
+				7B199B65189ABEC9003E7F6A /* IKCViewController.m */,
+				7B199B67189ABEC9003E7F6A /* Images.xcassets */,
+				7B199B53189ABEC9003E7F6A /* Supporting Files */,
+			);
+			path = "ios-knob-control";
+			sourceTree = "<group>";
+		};
+		7B199B53189ABEC9003E7F6A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B54189ABEC9003E7F6A /* ios-knob-control-Info.plist */,
+				7B199B55189ABEC9003E7F6A /* InfoPlist.strings */,
+				7B199B58189ABEC9003E7F6A /* main.m */,
+				7B199B5A189ABEC9003E7F6A /* ios-knob-control-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7B199B74189ABEC9003E7F6A /* ios-knob-controlTests */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */,
+				7B199B75189ABEC9003E7F6A /* Supporting Files */,
+			);
+			path = "ios-knob-controlTests";
+			sourceTree = "<group>";
+		};
+		7B199B75189ABEC9003E7F6A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B76189ABEC9003E7F6A /* ios-knob-controlTests-Info.plist */,
+				7B199B77189ABEC9003E7F6A /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7B199B48189ABEC9003E7F6A /* ios-knob-control */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-control" */;
+			buildPhases = (
+				7B199B45189ABEC9003E7F6A /* Sources */,
+				7B199B46189ABEC9003E7F6A /* Frameworks */,
+				7B199B47189ABEC9003E7F6A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ios-knob-control";
+			productName = "ios-knob-control";
+			productReference = 7B199B49189ABEC9003E7F6A /* ios-knob-control.app */;
+			productType = "com.apple.product-type.application";
+		};
+		7B199B6C189ABEC9003E7F6A /* ios-knob-controlTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-controlTests" */;
+			buildPhases = (
+				7B199B69189ABEC9003E7F6A /* Sources */,
+				7B199B6A189ABEC9003E7F6A /* Frameworks */,
+				7B199B6B189ABEC9003E7F6A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7B199B73189ABEC9003E7F6A /* PBXTargetDependency */,
+			);
+			name = "ios-knob-controlTests";
+			productName = "ios-knob-controlTests";
+			productReference = 7B199B6D189ABEC9003E7F6A /* ios-knob-controlTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7B199B41189ABEC9003E7F6A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = IKC;
+				LastUpgradeCheck = 0500;
+				ORGANIZATIONNAME = "Jimmy Dee";
+				TargetAttributes = {
+					7B199B6C189ABEC9003E7F6A = {
+						TestTargetID = 7B199B48189ABEC9003E7F6A;
+					};
+				};
+			};
+			buildConfigurationList = 7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "ios-knob-control" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7B199B40189ABEC9003E7F6A;
+			productRefGroup = 7B199B4A189ABEC9003E7F6A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7B199B48189ABEC9003E7F6A /* ios-knob-control */,
+				7B199B6C189ABEC9003E7F6A /* ios-knob-controlTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7B199B47189ABEC9003E7F6A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B199B63189ABEC9003E7F6A /* Main_iPad.storyboard in Resources */,
+				7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */,
+				7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */,
+				7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B199B6B189ABEC9003E7F6A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B199B79189ABEC9003E7F6A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7B199B45189ABEC9003E7F6A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B199B5D189ABEC9003E7F6A /* IKCAppDelegate.m in Sources */,
+				7B199B59189ABEC9003E7F6A /* main.m in Sources */,
+				7B199B66189ABEC9003E7F6A /* IKCViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B199B69189ABEC9003E7F6A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B199B7B189ABEC9003E7F6A /* ios_knob_controlTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7B199B73189ABEC9003E7F6A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B199B48189ABEC9003E7F6A /* ios-knob-control */;
+			targetProxy = 7B199B72189ABEC9003E7F6A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7B199B55189ABEC9003E7F6A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7B199B56189ABEC9003E7F6A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7B199B5F189ABEC9003E7F6A /* Base */,
+			);
+			name = Main_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		7B199B61189ABEC9003E7F6A /* Main_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7B199B62189ABEC9003E7F6A /* Base */,
+			);
+			name = Main_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		7B199B77189ABEC9003E7F6A /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7B199B78189ABEC9003E7F6A /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7B199B7C189ABEC9003E7F6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7B199B7D189ABEC9003E7F6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7B199B7F189ABEC9003E7F6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
+				INFOPLIST_FILE = "ios-knob-control/ios-knob-control-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		7B199B80189ABEC9003E7F6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
+				INFOPLIST_FILE = "ios-knob-control/ios-knob-control-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		7B199B82189ABEC9003E7F6A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ios-knob-control.app/ios-knob-control";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "ios-knob-controlTests/ios-knob-controlTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		7B199B83189ABEC9003E7F6A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ios-knob-control.app/ios-knob-control";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
+				INFOPLIST_FILE = "ios-knob-controlTests/ios-knob-controlTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "ios-knob-control" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B199B7C189ABEC9003E7F6A /* Debug */,
+				7B199B7D189ABEC9003E7F6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-control" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B199B7F189ABEC9003E7F6A /* Debug */,
+				7B199B80189ABEC9003E7F6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-controlTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B199B82189ABEC9003E7F6A /* Debug */,
+				7B199B83189ABEC9003E7F6A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7B199B41189ABEC9003E7F6A /* Project object */;
+}
