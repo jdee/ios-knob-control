@@ -121,7 +121,7 @@
 {
     NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
 
-    // with the hexagonal image for discrete mode, min and max don't make any sense
+    // with the hexagonal image for discrete mode, min and max don't make much sense
     self.minTextField.enabled = self.maxTextField.enabled = knobControl.mode == IKCMContinuous ? ! sender.on : NO;
 
     [self updateKnobProperties];
