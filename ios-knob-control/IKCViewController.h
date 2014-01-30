@@ -16,5 +16,8 @@
 @property IBOutlet UISegmentedControl* modeControl;
 @property IBOutlet UISegmentedControl* animationControl;
 @property IBOutlet UITextField* positionsTextField;
+@property IBOutlet UISwitch* circularSwitch;
+@property IBOutlet UITextField* minTextField;
+@property IBOutlet UITextField* maxTextField;
 
 @end
