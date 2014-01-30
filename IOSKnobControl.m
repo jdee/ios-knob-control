@@ -217,7 +217,7 @@
     // deltas.
 
     // TODO: Make this constant a property.
-    double duration = 0.15*fabs(delta*self.positions/M_PI);
+    double duration = 1.0*fabs(delta*self.positions/M_PI);
 
     [CATransaction new];
     [CATransaction setDisableActions:YES];
@@ -245,6 +245,12 @@
     [imageLayer addAnimation:animation forKey:nil];
 
     [CATransaction commit];
+
+    // DEBT: This ought to change over time with the animation, rather than instantaneously
+    // like this. Though at least the value changed event should probably only fire once, after
+    // the animation has completed. And maybe the position could be assigned then too.
+    self.position = nearestPositionAngle;
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
 @end

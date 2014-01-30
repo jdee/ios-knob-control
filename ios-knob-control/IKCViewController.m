@@ -21,23 +21,34 @@
 {
     [super viewDidLoad];
 
+    // basic IOSKnobControl initialization (using default settings)
     knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
+
+    // there is no default image atm, so must always set it (should add that to the constructor)
     knobControl.image = [UIImage imageNamed:@"hexagon"];
+
+    // arrange to be notified whenever the knob turns
+    [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
+
+    // NOW hook it up to the demo
     [self.knobControlView addSubview:knobControl];
 
+    [self updateKnobProperties];
+
+    if (knobControl.mode == IKCMContinuous) {
+        self.indexLabel.hidden = YES;
+        self.indexLabelLabel.hidden = YES;
+    }
+}
+
+- (void)updateKnobProperties
+{
     knobControl.mode = IKCMDiscrete + self.modeControl.selectedSegmentIndex;
     knobControl.animation = IKCASlowReturn + self.animationControl.selectedSegmentIndex;
     knobControl.positions = self.positionsTextField.text.intValue;
     knobControl.circular = self.circularSwitch.on;
     knobControl.min = self.minTextField.text.floatValue;
     knobControl.max = self.maxTextField.text.floatValue;
-
-    [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
-
-    if (knobControl.mode == IKCMContinuous) {
-        self.indexLabel.hidden = YES;
-        self.indexLabelLabel.hidden = YES;
-    }
 }
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
@@ -65,9 +76,12 @@
         case IKCMDiscrete:
             self.animationControl.enabled = YES;
             // for now, always use a hexagonal image, so positions is always 6
+            // circular is always YES
             // self.positionsTextField.enabled = YES;
             self.indexLabelLabel.hidden = NO;
             self.indexLabel.hidden = NO;
+            self.circularSwitch.on = YES;
+            self.circularSwitch.enabled = NO;
 
             knobControl.image = [UIImage imageNamed:@"hexagon"];
 
@@ -78,6 +92,7 @@
             self.positionsTextField.enabled = NO;
             self.indexLabelLabel.hidden = YES;
             self.indexLabel.hidden = YES;
+            self.circularSwitch.enabled = YES;
 
             knobControl.image = [UIImage imageNamed:@"knob"];
             
@@ -88,47 +103,34 @@
             self.positionsTextField.enabled = NO;
             self.indexLabelLabel.hidden = NO;
             self.indexLabel.hidden = NO;
+            self.circularSwitch.enabled = NO;
             NSLog(@"Hello, Operator?");
             break;
     }
 
-    // inform the knob of its new mode
-    knobControl.mode = mode;
+    [self updateKnobProperties];
 }
 
 - (void)animationChanged:(UISegmentedControl *)sender
 {
     NSLog(@"Animation index changed to %d", sender.selectedSegmentIndex);
-    enum IKCAnimation animation = IKCASlowReturn + sender.selectedSegmentIndex;
-
-    // inform the knob of its new animation
-    knobControl.animation = animation;
+    [self updateKnobProperties];
 }
 
 - (void)circularChanged:(UISwitch *)sender
 {
     NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
-    self.minTextField.enabled = self.maxTextField.enabled = ! sender.on;
 
-    // inform the knob of its new circular setting
-    knobControl.circular = sender.on;
+    // with the hexagonal image for discrete mode, min and max don't make any sense
+    self.minTextField.enabled = self.maxTextField.enabled = knobControl.mode == IKCMContinuous ? ! sender.on : NO;
+
+    [self updateKnobProperties];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
-
-    // inform the knob of its new parameter
-    if (textField == self.positionsTextField) {
-        knobControl.positions = textField.text.intValue;
-    }
-    else if (textField == self.minTextField) {
-        knobControl.min = textField.text.floatValue;
-    }
-    else {
-        knobControl.max = textField.text.floatValue;
-    }
-
+    [self updateKnobProperties];
     return YES;
 }
 
