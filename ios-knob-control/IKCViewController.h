@@ -10,4 +10,11 @@
 
 @interface IKCViewController : UIViewController
 
+@property IBOutlet UIView* knobControlView;
+@property IBOutlet UILabel* positionLabel;
+@property IBOutlet UILabel* indexLabel;
+@property IBOutlet UISegmentedControl* modeControl;
+@property IBOutlet UISegmentedControl* animationControl;
+@property IBOutlet UITextField* positionsTextField;
+
 @end

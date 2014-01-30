@@ -116,8 +116,10 @@
     rotationStart.x += centerFrameTranslation.x;
     rotationStart.y += centerFrameTranslation.y;
 
+    /* DEBT: Review this
     // must be at least 100 pts from the center
     if (rotationStart.x*rotationStart.x + rotationStart.y*rotationStart.y < 1.0e4) return;
+     */
 
     float position = self.position;
 
