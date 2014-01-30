@@ -73,7 +73,7 @@
                                     <segment title="discrete"/>
                                 </segments>
                             </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Ugp-3C-Pv0">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Ugp-3C-Pv0">
                                 <rect key="frame" x="8" y="272" width="304" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -95,7 +95,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="no. of positions" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ePo-7z-rG2">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="no. of positions" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ePo-7z-rG2">
                                 <rect key="frame" x="123" y="304" width="189" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
@@ -128,14 +128,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="radians" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2IP-e4-dOf">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="radians" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2IP-e4-dOf">
                                 <rect key="frame" x="123" y="376" width="189" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="0O3-7b-Uvp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="decimalPad" returnKeyType="done"/>
                             </textField>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="max." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gsB-Xh-G72">
                                 <rect key="frame" x="8" y="415" width="42" height="21"/>
@@ -147,14 +147,14 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="radians" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ygC-Iq-aMC">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="radians" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ygC-Iq-aMC">
                                 <rect key="frame" x="123" y="415" width="189" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="OBM-gM-Yhw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" keyboardType="decimalPad" returnKeyType="done"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -204,6 +204,7 @@
                         <outlet property="animationControl" destination="Ugp-3C-Pv0" id="5lT-yA-zov"/>
                         <outlet property="circularSwitch" destination="A2y-ua-nyp" id="CjQ-S5-sjz"/>
                         <outlet property="indexLabel" destination="EI9-zc-Iwm" id="tO3-hd-q1O"/>
+                        <outlet property="indexLabelLabel" destination="Iyi-nb-FHr" id="lNu-YQ-sbD"/>
                         <outlet property="knobControlView" destination="VgK-B7-VJ2" id="Uib-M4-zGD"/>
                         <outlet property="maxTextField" destination="ygC-Iq-aMC" id="eWe-Db-lPA"/>
                         <outlet property="minTextField" destination="2IP-e4-dOf" id="9Ge-uP-1Ju"/>
