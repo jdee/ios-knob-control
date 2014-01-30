@@ -23,6 +23,7 @@
 		7B199B79189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B77189ABEC9003E7F6A /* InfoPlist.strings */; };
 		7B199B7B189ABEC9003E7F6A /* ios_knob_controlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */; };
 		7B199B85189AC13D003E7F6A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B84189AC13D003E7F6A /* README.md */; };
+		7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		7B199B78189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ios_knob_controlTests.m; sourceTree = "<group>"; };
 		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSKnobControl.h; path = IOSKnobControl/IOSKnobControl.h; sourceTree = "<group>"; };
+		7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSKnobControl.m; path = IOSKnobControl/IOSKnobControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +92,7 @@
 				7B199B84189AC13D003E7F6A /* README.md */,
 				7B199B52189ABEC9003E7F6A /* ios-knob-control */,
 				7B199B74189ABEC9003E7F6A /* ios-knob-controlTests */,
+				7B199B86189AC1FD003E7F6A /* IOSKnobControl */,
 				7B199B4B189ABEC9003E7F6A /* Frameworks */,
 				7B199B4A189ABEC9003E7F6A /* Products */,
 			);
@@ -156,6 +160,15 @@
 				7B199B77189ABEC9003E7F6A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7B199B86189AC1FD003E7F6A /* IOSKnobControl */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */,
+				7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */,
+			);
+			name = IOSKnobControl;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,6 +272,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B199B5D189ABEC9003E7F6A /* IKCAppDelegate.m in Sources */,
+				7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */,
 				7B199B59189ABEC9003E7F6A /* main.m in Sources */,
 				7B199B66189ABEC9003E7F6A /* IKCViewController.m in Sources */,
 			);
@@ -479,6 +493,7 @@
 				7B199B80189ABEC9003E7F6A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-controlTests" */ = {
 			isa = XCConfigurationList;
@@ -487,6 +502,7 @@
 				7B199B83189ABEC9003E7F6A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
