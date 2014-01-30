@@ -22,6 +22,7 @@
 		7B199B71189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B79189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B77189ABEC9003E7F6A /* InfoPlist.strings */; };
 		7B199B7B189ABEC9003E7F6A /* ios_knob_controlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */; };
+		7B199B85189AC13D003E7F6A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B84189AC13D003E7F6A /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		7B199B76189ABEC9003E7F6A /* ios-knob-controlTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ios-knob-controlTests-Info.plist"; sourceTree = "<group>"; };
 		7B199B78189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ios_knob_controlTests.m; sourceTree = "<group>"; };
+		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		7B199B40189ABEC9003E7F6A = {
 			isa = PBXGroup;
 			children = (
+				7B199B84189AC13D003E7F6A /* README.md */,
 				7B199B52189ABEC9003E7F6A /* ios-knob-control */,
 				7B199B74189ABEC9003E7F6A /* ios-knob-controlTests */,
 				7B199B4B189ABEC9003E7F6A /* Frameworks */,
@@ -234,6 +237,7 @@
 			files = (
 				7B199B63189ABEC9003E7F6A /* Main_iPad.storyboard in Resources */,
 				7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */,
+				7B199B85189AC13D003E7F6A /* README.md in Resources */,
 				7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */,
 				7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */,
 			);
