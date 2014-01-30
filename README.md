@@ -19,8 +19,8 @@ of configurable modes and animations:
 The knob control can be circular, permitting the user to rotate it all the way around,
 or it can have a min. and max. angle in continuous and discrete modes.
 
-The control is distributed as a single pair of files (.h and .m), which you can simply
-drop into your project. They are located in the IOSKnobControl subdirectory.
+The control is distributed as a single pair of files (IOSKnobControl.h and IOSKnobControl.m in this directory), which you can simply
+drop into your project.
 
 The ios-knob-control.xcodeproj sample project can be used to build a simple demo app
 to exercise the different modes of the control.

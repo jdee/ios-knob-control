@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Jimmy Dee. All rights reserved.
 //
 
+#import "IOSKnobControl.h"
 #import "IKCViewController.h"
 
 @interface IKCViewController ()
@@ -18,12 +19,6 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end
