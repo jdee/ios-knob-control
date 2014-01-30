@@ -23,4 +23,6 @@ The control is distributed as a single pair of files (IOSKnobControl.h and IOSKn
 drop into your project.
 
 The ios-knob-control.xcodeproj sample project can be used to build a simple demo app
-to exercise the different modes of the control.
+to exercise the different modes of the control and provides an example of use.
+
+Copyright (C) 2014 Jimmy Dee. All rights reserved.

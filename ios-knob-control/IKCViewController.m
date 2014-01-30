@@ -22,7 +22,7 @@
     [super viewDidLoad];
 
     knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
-    knobControl.image = [UIImage imageNamed:@"knob"];
+    knobControl.image = [UIImage imageNamed:@"hexagon"];
     [self.knobControlView addSubview:knobControl];
 
     knobControl.mode = IKCMDiscrete + self.modeControl.selectedSegmentIndex;
@@ -55,20 +55,33 @@
 {
     NSLog(@"Mode index changed to %d", sender.selectedSegmentIndex);
     enum IKCMode mode = IKCMDiscrete + sender.selectedSegmentIndex;
+
+    /*
+     * Specification of animation and positions only applies to discrete mode.
+     * Index is only displayed in discrete mode. Adjust accordingly, depending
+     * on mode.
+     */
     switch (mode) {
+        case IKCMDiscrete:
+            self.animationControl.enabled = YES;
+            // for now, always use a hexagonal image, so positions is always 6
+            // self.positionsTextField.enabled = YES;
+            self.indexLabelLabel.hidden = NO;
+            self.indexLabel.hidden = NO;
+
+            knobControl.image = [UIImage imageNamed:@"hexagon"];
+
+            NSLog(@"Switched to discrete mode");
+            break;
         case IKCMContinuous:
             self.animationControl.enabled = NO;
             self.positionsTextField.enabled = NO;
             self.indexLabelLabel.hidden = YES;
             self.indexLabel.hidden = YES;
+
+            knobControl.image = [UIImage imageNamed:@"knob"];
+            
             NSLog(@"Switched to continuous mode");
-            break;
-        case IKCMDiscrete:
-            self.animationControl.enabled = YES;
-            self.positionsTextField.enabled = YES;
-            self.indexLabelLabel.hidden = NO;
-            self.indexLabel.hidden = NO;
-            NSLog(@"Switched to discrete mode");
             break;
         case ICKMRotaryDial:
             self.animationControl.enabled = NO;
@@ -79,6 +92,7 @@
             break;
     }
 
+    // inform the knob of its new mode
     knobControl.mode = mode;
 }
 
@@ -86,6 +100,8 @@
 {
     NSLog(@"Animation index changed to %d", sender.selectedSegmentIndex);
     enum IKCAnimation animation = IKCASlowReturn + sender.selectedSegmentIndex;
+
+    // inform the knob of its new animation
     knobControl.animation = animation;
 }
 
@@ -93,6 +109,8 @@
 {
     NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
     self.minTextField.enabled = self.maxTextField.enabled = ! sender.on;
+
+    // inform the knob of its new circular setting
     knobControl.circular = sender.on;
 }
 
@@ -100,6 +118,7 @@
 {
     [textField resignFirstResponder];
 
+    // inform the knob of its new parameter
     if (textField == self.positionsTextField) {
         knobControl.positions = textField.text.intValue;
     }
