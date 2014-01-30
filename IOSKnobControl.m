@@ -21,7 +21,7 @@
 
 @dynamic positionIndex, image;
 
-// returns a number in [0, 2*M_PI)
+// returns a number in [-M_PI,M_PI]
 + (double)polarAngleOfPoint:(CGPoint)point
 {
     return atan2(point.y, point.x);
@@ -205,6 +205,10 @@
             else if (delta*self.positions/M_PI < -0.9) {
                 delta = -self.positions/M_PI*0.9;
                 nearestPositionAngle = self.position + delta;
+            }
+            else {
+                // there's no animation, no snap; WoF is like continuous mode except at the boundaries
+                return;
             }
             break;
         default:
