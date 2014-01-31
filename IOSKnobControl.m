@@ -104,7 +104,7 @@
     return point;
 }
 
-// DEBT: Factor this stuff into a separate GR
+// DEBT: Factor this stuff into a separate GR?
 - (void)handlePan:(UIPanGestureRecognizer *)sender
 {
     // NSLog(@"wheel rotated");
@@ -118,10 +118,10 @@
     rotationStart.x += centerFrameTranslation.x;
     rotationStart.y += centerFrameTranslation.y;
 
-    /* DEBT: Review this
-    // must be at least 100 pts from the center
-    if (rotationStart.x*rotationStart.x + rotationStart.y*rotationStart.y < 1.0e4) return;
-     */
+    /* DEBT: Review this */
+    // must be at least 40% from the center
+    // assume a square view
+    if (rotationStart.x*rotationStart.x + rotationStart.y*rotationStart.y < 0.16 * self.bounds.size.width * self.bounds.size.width) return;
 
     float position = self.position;
 
