@@ -253,6 +253,7 @@
     // DEBT: This ought to change over time with the animation, rather than instantaneously
     // like this. Though at least the value changed event should probably only fire once, after
     // the animation has completed. And maybe the position could be assigned then too.
+    while (nearestPositionAngle >= 2.0*M_PI) nearestPositionAngle -= 2.0*M_PI;
     self.position = nearestPositionAngle;
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
