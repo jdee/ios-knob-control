@@ -99,7 +99,11 @@
 - (void)handlePan:(UIPanGestureRecognizer *)sender
 {
     // most recent position of touch in center frame of control
-    float touch = [self polarAngleOfPoint:[self transformLocationToCenterFrame:[sender locationInView:self]]];
+    CGPoint centerFrameLocation = [self transformLocationToCenterFrame:[sender locationInView:self]];
+    CGPoint centerFrameTranslation = [self transformTranslationToCenterFrame:[sender translationInView:self]];
+    centerFrameLocation.x += centerFrameTranslation.x;
+    centerFrameLocation.y += centerFrameTranslation.y;
+    float touch = [self polarAngleOfPoint:centerFrameLocation];
 
     if (sender.state == UIGestureRecognizerStateBegan) {
         touchStart = touch;
