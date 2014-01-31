@@ -20,9 +20,11 @@
 @property IBOutlet UISwitch* circularSwitch;
 @property IBOutlet UITextField* minTextField;
 @property IBOutlet UITextField* maxTextField;
+@property IBOutlet UISwitch* clockwiseSwitch;
 
 - (IBAction)modeChanged:(UISegmentedControl*)sender;
 - (IBAction)animationChanged:(UISegmentedControl*)sender;
 - (IBAction)circularChanged:(UISwitch*)sender;
+- (IBAction)clockwiseChanged:(UISwitch*)sender;
 
 @end

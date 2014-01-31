@@ -49,6 +49,7 @@
     knobControl.circular = self.circularSwitch.on;
     knobControl.min = self.minTextField.text.floatValue;
     knobControl.max = self.maxTextField.text.floatValue;
+    knobControl.clockwise = self.clockwiseSwitch.on;
 }
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
@@ -82,6 +83,8 @@
             self.indexLabel.hidden = NO;
             self.circularSwitch.on = YES;
             self.circularSwitch.enabled = NO;
+            self.clockwiseSwitch.on = YES;
+            self.clockwiseSwitch.enabled = NO;
 
             knobControl.image = [UIImage imageNamed:@"hexagon"];
 
@@ -93,6 +96,7 @@
             self.indexLabelLabel.hidden = YES;
             self.indexLabel.hidden = YES;
             self.circularSwitch.enabled = YES;
+            self.clockwiseSwitch.enabled = YES;
 
             knobControl.image = [UIImage imageNamed:@"knob"];
             
@@ -104,6 +108,7 @@
             self.indexLabelLabel.hidden = NO;
             self.indexLabel.hidden = NO;
             self.circularSwitch.enabled = NO;
+            self.clockwiseSwitch.enabled = NO;
             NSLog(@"Hello, Operator?");
             break;
     }
@@ -126,6 +131,13 @@
 
     [self updateKnobProperties];
 }
+
+- (void)clockwiseChanged:(UISwitch *)sender
+{
+    [self updateKnobProperties];
+}
+
+#pragma mark - UITextFieldDelegate
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {

@@ -22,12 +22,12 @@
 @dynamic positionIndex, image;
 
 // returns a number in [-M_PI,M_PI]
-+ (double)polarAngleOfPoint:(CGPoint)point
+- (double)polarAngleOfPoint:(CGPoint)point
 {
-    return atan2(point.y, point.x);
+    return atan2(point.y, self.clockwise ? point.x : - point.x);
 }
 
-+ (double)rotationFromPoint:(CGPoint)origin withTranslation:(CGPoint)translation
+- (double)rotationFromPoint:(CGPoint)origin withTranslation:(CGPoint)translation
 {
     CGPoint destination;
     destination.x = origin.x + translation.x;
@@ -51,6 +51,7 @@
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
+        self.clockwise = NO;
 
         panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         panGestureRecognizer.delegate = self;
@@ -112,7 +113,7 @@
     CGPoint centerFrameTranslation = [self transformTranslationToCenterFrame:translation];
 
     // DEBT: Should rotationStart always just be adjusted to [self transformLocationToCenterFrame:[touch locationInView:self]]?
-    double rotation = [self.class rotationFromPoint:rotationStart withTranslation:centerFrameTranslation];
+    double rotation = [self rotationFromPoint:rotationStart withTranslation:centerFrameTranslation];
     rotationStart.x += centerFrameTranslation.x;
     rotationStart.y += centerFrameTranslation.y;
 
@@ -142,7 +143,7 @@
     self.position = position;
 
     // while the gesture is in progress, just track the touch
-    imageLayer.transform = CATransform3DMakeRotation(position, 0, 0, 1);
+    imageLayer.transform = CATransform3DMakeRotation(self.clockwise ? position : -position, 0, 0, 1);
 
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 
@@ -224,17 +225,18 @@
 
     // TODO: Make this constant a property.
     double duration = 1.0*fabs(delta*self.positions/M_PI);
+    float actual = self.clockwise ? nearestPositionAngle : -nearestPositionAngle;
 
     [CATransaction new];
     [CATransaction setDisableActions:YES];
-    imageLayer.transform = CATransform3DMakeRotation(nearestPositionAngle, 0, 0, 1);
+    imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
     // Provide an animation
     // Key-frame animation to ensure rotates in correct direction
-    CGFloat midAngle = 0.5*(nearestPositionAngle+self.position);
+    CGFloat midAngle = 0.5*(actual+self.position);
     CAKeyframeAnimation *animation = [CAKeyframeAnimation
                                       animationWithKeyPath:@"transform.rotation.z"];
-    animation.values = @[@(self.position), @(midAngle), @(nearestPositionAngle)];
+    animation.values = @[@(self.position), @(midAngle), @(actual)];
 
     switch (self.animation) {
         case IKCAWheelOfFortune:
@@ -244,7 +246,6 @@
             animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
             break;
         case IKCARotarySwitch:
-            break;
             break;
     }
 

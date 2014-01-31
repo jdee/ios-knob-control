@@ -75,6 +75,12 @@ enum IKCAnimation {
 @property BOOL circular;
 
 /**
+ * Specifies whether the value of position increases when the knob is turned clockwise instead of counterclockwise.
+ * The default value of this property is NO.
+ */
+@property BOOL clockwise;
+
+/**
  * Minimum value of the position property if circular == NO. Default is 0.
  */
 @property float min;
