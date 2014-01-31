@@ -24,7 +24,7 @@
 // returns a number in [-M_PI,M_PI]
 - (double)polarAngleOfPoint:(CGPoint)point
 {
-    return atan2(point.y, self.clockwise ? point.x : - point.x);
+    return atan2(point.y, self.clockwise ? -point.x : point.x);
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -106,8 +106,7 @@
         positionStart = self.position;
     }
 
-    // the touch and knob position go in opposite directions.
-    float position = positionStart - touch + touchStart;
+    float position = positionStart + touch - touchStart;
 
 #if 0
     NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f",
