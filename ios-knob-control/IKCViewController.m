@@ -65,8 +65,8 @@
 
 - (void)modeChanged:(UISegmentedControl *)sender
 {
-    NSLog(@"Mode index changed to %d", sender.selectedSegmentIndex);
-    enum IKCMode mode = IKCMDiscrete + sender.selectedSegmentIndex;
+    NSLog(@"Mode index changed to %ld", (long)sender.selectedSegmentIndex);
+    enum IKCMode mode = IKCMDiscrete + (int)sender.selectedSegmentIndex;
 
     /*
      * Specification of animation and positions only applies to discrete mode.
@@ -79,6 +79,7 @@
             // for now, always use a hexagonal image, so positions is always 6
             // circular is always YES
             // self.positionsTextField.enabled = YES;
+            self.positionsTextField.enabled = NO;
             self.indexLabelLabel.hidden = NO;
             self.indexLabel.hidden = NO;
             self.circularSwitch.on = YES;
@@ -118,7 +119,7 @@
 
 - (void)animationChanged:(UISegmentedControl *)sender
 {
-    NSLog(@"Animation index changed to %d", sender.selectedSegmentIndex);
+    NSLog(@"Animation index changed to %ld", (long)sender.selectedSegmentIndex);
     [self updateKnobProperties];
 }
 

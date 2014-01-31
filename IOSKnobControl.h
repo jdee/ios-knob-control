@@ -29,7 +29,7 @@ enum IKCAnimation {
     IKCARotarySwitch    ///< TODO: Like an old-school TV channel changer. The potential well at each allowed position is deep. Animates quickly from one to the next.
 };
 
-@interface IOSKnobControl : UIControl<UIGestureRecognizerDelegate>
+@interface IOSKnobControl : UIControl
 
 /**
  * Specifies which mode to use for this knob control. IKCMDiscrete is the default.

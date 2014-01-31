@@ -54,7 +54,6 @@
         self.clockwise = NO;
 
         panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-        panGestureRecognizer.delegate = self;
         [self addGestureRecognizer:panGestureRecognizer];
     }
     return self;
@@ -112,7 +111,9 @@
     CGPoint translation = [sender translationInView:self];
     CGPoint centerFrameTranslation = [self transformTranslationToCenterFrame:translation];
 
-    // DEBT: Should rotationStart always just be adjusted to [self transformLocationToCenterFrame:[touch locationInView:self]]?
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        rotationStart = [self transformLocationToCenterFrame:[sender locationInView:self]];
+    }
     double rotation = [self rotationFromPoint:rotationStart withTranslation:centerFrameTranslation];
     rotationStart.x += centerFrameTranslation.x;
     rotationStart.y += centerFrameTranslation.y;
@@ -159,19 +160,6 @@
         default:
             break;
     }
-}
-
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
-{
-    switch (touch.phase) {
-        case UITouchPhaseBegan:
-            rotationStart = [self transformLocationToCenterFrame:[touch locationInView:self]];
-            break;
-        default:
-            break;
-    }
-
-    return YES;
 }
 
 - (void)snapToNearestPosition
