@@ -37,9 +37,9 @@ Notes
 - The min. and max. are a bit goofy. I have to come to closure on allowed ranges for angles.
   It’s easier to enforce a continuous range, and I want the default value of 0 always to be
   legal, so the min has to be less than 0, and the max has to be greater than 0. But the knob
-  reads out from 0 to 2pi (6.28). Here’s a recipe for success: Set the knob to continuous mode.
+  reads out from 0 to 2π (6.28). Here’s a recipe for success: Set the knob to continuous mode.
   Set the circular switch to OFF and then enter -2 for the min and 2 for the max. The min.
-  will be at 4.28 (2pi - 2), and the max at 2.00.
+  will be at 4.28 (2π - 2), and the max at 2.00.
 - Not all combinations of parameters work at the moment in the demo app, but many of them
   work if you do it yourself. The reason is that I always use the same hexagonal knob image
   in the demo app in discrete mode. That could be confusing with a min. and max., so I
