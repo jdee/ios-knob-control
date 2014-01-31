@@ -9,7 +9,7 @@
 #import "IOSKnobControl.h"
 
 @interface IOSKnobControl() {
-    CGPoint rotationStart;
+    float touchStart, positionStart;
     UIPanGestureRecognizer* panGestureRecognizer;
     CALayer* imageLayer;
     UIImage* _image;
@@ -25,15 +25,6 @@
 - (double)polarAngleOfPoint:(CGPoint)point
 {
     return atan2(point.y, self.clockwise ? point.x : - point.x);
-}
-
-- (double)rotationFromPoint:(CGPoint)origin withTranslation:(CGPoint)translation
-{
-    CGPoint destination;
-    destination.x = origin.x + translation.x;
-    destination.y = origin.y + translation.y;
-
-    return [self polarAngleOfPoint:destination] - [self polarAngleOfPoint:origin];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -107,57 +98,54 @@
 // DEBT: Factor this stuff into a separate GR?
 - (void)handlePan:(UIPanGestureRecognizer *)sender
 {
-    // NSLog(@"wheel rotated");
-    CGPoint translation = [sender translationInView:self];
-    CGPoint centerFrameTranslation = [self transformTranslationToCenterFrame:translation];
+    // most recent position of touch in center frame of control
+    float touch = [self polarAngleOfPoint:[self transformLocationToCenterFrame:[sender locationInView:self]]];
 
     if (sender.state == UIGestureRecognizerStateBegan) {
-        rotationStart = [self transformLocationToCenterFrame:[sender locationInView:self]];
-    }
-    double rotation = [self rotationFromPoint:rotationStart withTranslation:centerFrameTranslation];
-    rotationStart.x += centerFrameTranslation.x;
-    rotationStart.y += centerFrameTranslation.y;
-
-    /* DEBT: Review this */
-    // must be at least 40% from the center
-    // assume a square view
-    if (rotationStart.x*rotationStart.x + rotationStart.y*rotationStart.y < 0.16 * self.bounds.size.width * self.bounds.size.width) return;
-
-    float position = self.position;
-
-    position -= rotation;
-    /* keep it in [0, 2*M_PI) */
-    while (position >= 2.0*M_PI) position -= 2.0*M_PI;
-    while (position < 0.0) position += 2.0*M_PI;
-
-    if (!self.circular) {
-        // for this, convert to within (-pi, pi]
-        float converted = position;
-        if (converted > M_PI) converted -= 2.0*M_PI;
-        if (converted < self.min) converted = self.min;
-        if (converted > self.max) converted = self.max;
-
-        position = converted;
-        if (position < 0.0) position += 2.0*M_PI;
+        touchStart = touch;
+        positionStart = self.position;
     }
 
-    self.position = position;
+    // the touch and knob position go in opposite directions.
+    float position = positionStart - touch + touchStart;
 
-    // while the gesture is in progress, just track the touch
-    imageLayer.transform = CATransform3DMakeRotation(self.clockwise ? position : -position, 0, 0, 1);
-
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+#if 0
+    NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f",
+          (sender.state == UIGestureRecognizerStateBegan ? "began" :
+           sender.state == UIGestureRecognizerStateChanged ? "changed" :
+           sender.state == UIGestureRecognizerStateEnded ? "ended" : "<misc>"), touchStart, positionStart, touch, position);
+#endif
 
     switch (sender.state) {
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
-
             if (self.mode == IKCMDiscrete) {
                 [self snapToNearestPosition];
             }
 
             break;
         default:
+            /* keep it in [0, 2*M_PI) */
+            while (position >= 2.0*M_PI) position -= 2.0*M_PI;
+            while (position < 0.0) position += 2.0*M_PI;
+
+            if (!self.circular) {
+                // for this, convert to within (-pi, pi]
+                float converted = position;
+                if (converted > M_PI) converted -= 2.0*M_PI;
+                if (converted < self.min) converted = self.min;
+                if (converted > self.max) converted = self.max;
+                
+                position = converted;
+                if (position < 0.0) position += 2.0*M_PI;
+            }
+
+            self.position = position;
+
+            // while the gesture is in progress, just track the touch
+            imageLayer.transform = CATransform3DMakeRotation(self.clockwise ? position : -position, 0, 0, 1);
+
+            [self sendActionsForControlEvents:UIControlEventValueChanged];
             break;
     }
 }
