@@ -190,6 +190,8 @@
         delta += 2.0*M_PI;
     }
 
+    const float threshold = 0.9*M_PI/self.positions;
+
     switch (self.animation) {
         case IKCAWheelOfFortune:
             // Exclude the outer 10% of each segment. Otherwise, like continuous mode.
@@ -197,14 +199,14 @@
             // is the same as the slow return animation, but it returns to the nearest
             // edge of the segment interior, not the center of the segment.
 
-            // DEBT: Make this constant a property or something
-            if (delta*self.positions/M_PI > 0.9) {
-                delta = self.positions/M_PI*0.9;
-                nearestPositionAngle = self.position + delta;
+            // DEBT: Make this constant a property or #define something
+            if (delta > threshold) {
+                delta -= threshold;
+                nearestPositionAngle -= threshold;
             }
-            else if (delta*self.positions/M_PI < -0.9) {
-                delta = -self.positions/M_PI*0.9;
-                nearestPositionAngle = self.position + delta;
+            else if (delta < -threshold) {
+                delta += threshold;
+                nearestPositionAngle += threshold;
             }
             else {
                 // there's no animation, no snap; WoF is like continuous mode except at the boundaries
