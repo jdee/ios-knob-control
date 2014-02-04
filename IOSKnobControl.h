@@ -102,7 +102,23 @@ enum IKCAnimation {
  */
 @property (readonly) int positionIndex;
 
+/**
+ * Inherited from UIView and UIControl. This constructor results in a nil image property.
+ * The image property must be manually set with a call to the setImage method.
+ */
+- (id)initWithFrame:(CGRect)frame;
+
+/**
+ * Initialize the control with a specific knob image. The image argument here is the initial value of the image
+ * property of the control object. That property may be changed later.
+ */
 - (id)initWithFrame:(CGRect)frame image:(UIImage*)image;
+
+/**
+ * Initialize the control with a specific knob image. The initial value of the image property of the knob
+ * control will be [UIImage imageNamed:filename]. The specified filename must be an image in the application
+ * bundle.
+ */
 - (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)filename;
 
 @end
