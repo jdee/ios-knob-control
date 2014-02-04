@@ -58,11 +58,6 @@ enum IKCAnimation {
 @property UIImage* image;
 
 /**
- * Current angular position, in radians, of the knob. Default is 0.
- */
-@property float position;
-
-/**
  * If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to
  * continue around the circle. The min and max properties of the control are ignored.
  * If this property is set to NO, the circle is open, and the min and max properties are consulted. These may take any values in radians. Note that if min + 2*M_PI == max,
@@ -96,9 +91,18 @@ enum IKCAnimation {
 @property int positions;
 
 /**
+ * Current angular position, in radians, of the knob. Initial is 0.
+ */
+@property float position;
+
+/**
  * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max
  * properties are ignored, and then positionIndex is position/2/M_PI*positions.
+ * DEBT: Should this have a setter? Should I be able to set a discrete knob to position 3, e.g., rather than having to do it by setting the position property?
  */
 @property (readonly) int positionIndex;
+
+- (id)initWithFrame:(CGRect)frame image:(UIImage*)image;
+- (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)filename;
 
 @end

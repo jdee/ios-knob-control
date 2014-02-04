@@ -21,16 +21,13 @@
 {
     [super viewDidLoad];
 
-    // basic IOSKnobControl initialization (using default settings)
-    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
-
-    // there is no default image atm, so must always set it (should add that to the constructor)
-    knobControl.image = [UIImage imageNamed:@"hexagon"];
+    // basic IOSKnobControl initialization (using default settings) with an image from the bundle
+    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds imageNamed:@"hexagon"];
 
     // arrange to be notified whenever the knob turns
     [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
 
-    // NOW hook it up to the demo
+    // Now hook it up to the demo
     [self.knobControlView addSubview:knobControl];
 
     [self updateKnobProperties];

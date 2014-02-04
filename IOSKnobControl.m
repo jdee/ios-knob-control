@@ -21,33 +21,56 @@
 
 @dynamic positionIndex, image;
 
-// returns a number in [-M_PI,M_PI]
-- (double)polarAngleOfPoint:(CGPoint)point
-{
-    return atan2(point.y, self.clockwise ? -point.x : point.x);
-}
-
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.mode = IKCMDiscrete;
-        self.animation = IKCASlowReturn;
-        self.circular = YES;
-        self.position = 0.0;
-        self.min = 0.0;
-        self.max = 2.0*M_PI;
-        self.positions = 2;
-        self.angularMomentum = NO;
-        self.opaque = NO;
-        self.backgroundColor = [UIColor clearColor];
-        self.clipsToBounds = YES;
-        self.clockwise = NO;
-
-        panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-        [self addGestureRecognizer:panGestureRecognizer];
+        /*
+         * If this constructor is used, the image property is nil and must be
+         * set manually.
+         */
+        [self setDefaults];
     }
     return self;
+}
+
+- (id)initWithFrame:(CGRect)frame image:(UIImage *)image
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.image = image;
+        [self setDefaults];
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame imageNamed:(NSString *)filename
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.image = [UIImage imageNamed:filename];
+        [self setDefaults];
+    }
+    return self;
+}
+
+- (void)setDefaults
+{
+    self.mode = IKCMDiscrete;
+    self.animation = IKCASlowReturn;
+    self.circular = YES;
+    self.position = 0.0;
+    self.min = 0.0;
+    self.max = 2.0*M_PI;
+    self.positions = 2;
+    self.angularMomentum = NO;
+    self.opaque = NO;
+    self.backgroundColor = [UIColor clearColor];
+    self.clipsToBounds = YES;
+    self.clockwise = NO;
+
+    panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    [self addGestureRecognizer:panGestureRecognizer];
 }
 
 - (UIImage *)image
@@ -93,6 +116,12 @@
 {
     point.y = -point.y;
     return point;
+}
+
+// returns a number in [-M_PI,M_PI]
+- (double)polarAngleOfPoint:(CGPoint)point
+{
+    return atan2(point.y, self.clockwise ? -point.x : point.x);
 }
 
 // DEBT: Factor this stuff into a separate GR?
@@ -220,7 +249,7 @@
     switch (self.animation) {
         case IKCAWheelOfFortune:
         case IKCASlowReturn:
-            animation.keyTimes = @[@(0), @(0.5), @(1.0)];
+            animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
             animation.duration = duration;
             animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
             break;
