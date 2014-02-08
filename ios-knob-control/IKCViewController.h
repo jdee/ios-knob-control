@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IKCViewController : UIViewController<UITextFieldDelegate>
+@interface IKCViewController : UIViewController
 
 @property IBOutlet UIView* knobControlView;
 @property IBOutlet UILabel* positionLabel;

@@ -58,6 +58,11 @@
     maxControl.position = maxControl.position;
 
     knobControl.position = knobControl.position;
+
+    // with the current hexagonal image for discrete mode, min and max don't make much sense
+    self.minControlView.hidden = self.minLabel.hidden = self.minLabelLabel.hidden =
+        self.maxControlView.hidden = self.maxLabel.hidden = self.maxLabelLabel.hidden =
+        knobControl.mode == IKCMContinuous ? self.circularSwitch.on : YES;
 }
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
@@ -84,8 +89,8 @@
     // Both controls use the same image in continuous mode with circular set to NO. The clockwise
     // property is set to the same value as the main knob (the value of self.clockwiseSwitch.on).
     // That happens in updateKnobProperties.
-    minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds imageNamed:@"knob"];
-    maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds imageNamed:@"knob"];
+    minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds imageNamed:@"knob-85x85"];
+    maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds imageNamed:@"knob-85x85"];
 
     minControl.mode = maxControl.mode = IKCMContinuous;
     minControl.circular = maxControl.circular = NO;
@@ -94,15 +99,15 @@
     [minControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
     [maxControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
 
-    // the min. control ranges from -M_PI to 0 and starts at -M_PI
+    // the min. control ranges from -M_PI to 0 and starts at -0.5*M_PI
     minControl.min = -M_PI;
     minControl.max = 0.0;
-    minControl.position = -M_PI;
+    minControl.position = -0.5*M_PI;
 
-    // the max. control ranges from 0 to M_PI and starts at M_PI
+    // the max. control ranges from 0 to M_PI and starts at 0.5*M_PI
     maxControl.min = 0.0;
     maxControl.max = M_PI;
-    maxControl.position = M_PI;
+    maxControl.position = 0.5*M_PI;
 
     // add each to its placeholder
     [self.minControlView addSubview:minControl];
@@ -174,27 +179,12 @@
 - (void)circularChanged:(UISwitch *)sender
 {
     NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
-
-    // with the current hexagonal image for discrete mode, min and max don't make much sense
-    self.minControlView.hidden = self.minLabel.hidden = self.minLabelLabel.hidden =
-        self.maxControlView.hidden = self.maxLabel.hidden = self.maxLabelLabel.hidden =
-        knobControl.mode == IKCMContinuous ? sender.on : YES;
-
     [self updateKnobProperties];
 }
 
 - (void)clockwiseChanged:(UISwitch *)sender
 {
     [self updateKnobProperties];
-}
-
-#pragma mark - UITextFieldDelegate
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    [self updateKnobProperties];
-    return YES;
 }
 
 @end
