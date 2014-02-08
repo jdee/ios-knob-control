@@ -62,18 +62,18 @@
 
 - (void)setDefaults
 {
-    self.mode = IKCMDiscrete;
-    self.animation = IKCASlowReturn;
-    self.circular = YES;
-    self.position = 0.0;
-    self.min = 0.0;
-    self.max = 2.0*M_PI;
-    self.positions = 2;
-    self.angularMomentum = NO;
+    _mode = IKCMDiscrete;
+    _animation = IKCASlowReturn;
+    _clockwise = NO;
+    _position = 0.0;
+    _circular = YES;
+    _min = 0.0;
+    _max = 2.0*M_PI;
+    _positions = 2;
+    _angularMomentum = NO;
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.clipsToBounds = YES;
-    self.clockwise = NO;
 
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     [self addGestureRecognizer:panGestureRecognizer];
@@ -97,6 +97,18 @@
     }
 
     imageLayer.contents = (id)image.CGImage;
+}
+
+- (void)setPosition:(float)position
+{
+    [self setPosition:position animated:NO];
+}
+
+- (void)setPosition:(float)position animated:(BOOL)animated
+{
+    float delta = fabs(position - _position);
+    // DEBT: Make these constants macros, properties, something.
+    [self returnToPosition:position duration:animated ? delta*0.5/M_PI : 0.0];
 }
 
 - (int)positionIndex
@@ -247,8 +259,8 @@
             break;
     }
 
-    // TODO: Make this constant a property.
-    double duration = 1.0*fabs(delta*self.positions/M_PI);
+    // TODO: Make this constant (1.0) a property.
+    float duration = 1.0*fabs(delta*self.positions/M_PI);
     [self returnToPosition:nearestPositionAngle duration:duration];
 }
 
@@ -309,44 +321,49 @@
 
 - (void)returnToPosition:(float)position duration:(float)duration
 {
-    // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
-    // If delta is M_PI/self.positions, the duration is maximal. Otherwise, it scales linearly.
-    // Without this adjustment, the animation will seem much faster for large
-    // deltas.
-
     float actual = self.clockwise ? position : -position;
 
-    [CATransaction new];
-    [CATransaction setDisableActions:YES];
-    imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+    if (duration > 0.0) {
+        // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
+        // If delta is M_PI/self.positions, the duration is maximal. Otherwise, it scales linearly.
+        // Without this adjustment, the animation will seem much faster for large
+        // deltas.
 
-    // Provide an animation
-    // Key-frame animation to ensure rotates in correct direction
-    CGFloat midAngle = 0.5*(actual+self.position);
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation
-                                      animationWithKeyPath:@"transform.rotation.z"];
-    animation.values = @[@(self.position), @(midAngle), @(actual)];
+        [CATransaction new];
+        [CATransaction setDisableActions:YES];
+        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
-    switch (self.animation) {
-        case IKCAWheelOfFortune:
-        case IKCASlowReturn:
-            animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
-            animation.duration = duration;
-            animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-            break;
-        case IKCARotarySwitch:
-            break;
+        // Provide an animation
+        // Key-frame animation to ensure rotates in correct direction
+        CGFloat midAngle = 0.5*(actual+self.position);
+        CAKeyframeAnimation *animation = [CAKeyframeAnimation
+                                          animationWithKeyPath:@"transform.rotation.z"];
+        animation.values = @[@(self.position), @(midAngle), @(actual)];
+
+        switch (self.animation) {
+            case IKCAWheelOfFortune:
+            case IKCASlowReturn:
+                animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
+                animation.duration = duration;
+                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+                break;
+            case IKCARotarySwitch:
+                break;
+        }
+        
+        [imageLayer addAnimation:animation forKey:nil];
+        
+        [CATransaction commit];
     }
-
-    [imageLayer addAnimation:animation forKey:nil];
-
-    [CATransaction commit];
+    else {
+        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+    }
 
     // DEBT: This ought to change over time with the animation, rather than instantaneously
     // like this. Though at least the value changed event should probably only fire once, after
     // the animation has completed. And maybe the position could be assigned then too.
     while (position >= 2.0*M_PI) position -= 2.0*M_PI;
-    self.position = position;
+    _position = position;
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 

@@ -34,12 +34,12 @@ enum IKCAnimation {
 /**
  * Specifies which mode to use for this knob control. IKCMDiscrete is the default.
  */
-@property enum IKCMode mode;
+@property (nonatomic) enum IKCMode mode;
 
 /**
  * Specifies which animation style to use for IKCMDiscrete mode. IKCMSlowReturn is the default.
  */
-@property enum IKCAnimation animation;
+@property (nonatomic) enum IKCAnimation animation;
 
 /**
  * TODO: (Currently only NO supported.)
@@ -50,12 +50,12 @@ enum IKCAnimation {
  *
  * The default is NO.
  */
-@property BOOL angularMomentum;
+@property (nonatomic) BOOL angularMomentum;
 
 /**
  * Image to use for the knob. Current default is nil. The default background is transparent.
  */
-@property UIImage* image;
+@property (nonatomic) UIImage* image;
 
 /**
  * If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to
@@ -67,40 +67,40 @@ enum IKCAnimation {
  *
  * The default value of this property is YES.
  */
-@property BOOL circular;
+@property (nonatomic) BOOL circular;
 
 /**
  * Specifies whether the value of position increases when the knob is turned clockwise instead of counterclockwise.
  * The default value of this property is NO.
  */
-@property BOOL clockwise;
+@property (nonatomic) BOOL clockwise;
 
 /**
  * Minimum value of the position property if circular == NO. Default is 0.
  */
-@property float min;
+@property (nonatomic) float min;
 
 /**
  * Maximum value of the position property if circular == NO. Default is 2*M_PI.
  */
-@property float max;
+@property (nonatomic) float max;
 
 /**
  * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode.
  */
-@property int positions;
+@property (nonatomic) int positions;
 
 /**
  * Current angular position, in radians, of the knob. Initial value is 0.
  */
-@property float position;
+@property (nonatomic) float position;
 
 /**
  * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max
  * properties are ignored, and then positionIndex is position/2/M_PI*positions.
  * DEBT: Should this have a setter? Should I be able to set a discrete knob to position 3, e.g., rather than having to do it by setting the position property?
  */
-@property (readonly) int positionIndex;
+@property (readonly, nonatomic) int positionIndex;
 
 /**
  * Inherited from UIView and UIControl. This constructor results in a nil image property.
@@ -120,5 +120,10 @@ enum IKCAnimation {
  * bundle.
  */
 - (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)filename;
+
+/**
+ * Set the position property of the control with or without animation.
+ */
+- (void)setPosition:(float)position animated:(BOOL)animated;
 
 @end

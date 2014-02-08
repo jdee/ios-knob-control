@@ -17,10 +17,14 @@
 @property IBOutlet UISegmentedControl* modeControl;
 @property IBOutlet UISegmentedControl* animationControl;
 @property IBOutlet UITextField* positionsTextField;
-@property IBOutlet UISwitch* circularSwitch;
-@property IBOutlet UITextField* minTextField;
-@property IBOutlet UITextField* maxTextField;
 @property IBOutlet UISwitch* clockwiseSwitch;
+@property IBOutlet UISwitch* circularSwitch;
+@property IBOutlet UIView* minControlView;
+@property IBOutlet UIView* maxControlView;
+@property IBOutlet UILabel* minLabel;
+@property IBOutlet UILabel* maxLabel;
+@property IBOutlet UILabel* minLabelLabel;
+@property IBOutlet UILabel* maxLabelLabel;
 
 - (IBAction)modeChanged:(UISegmentedControl*)sender;
 - (IBAction)animationChanged:(UISegmentedControl*)sender;

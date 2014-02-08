@@ -11,6 +11,8 @@
 
 @interface IKCViewController () {
     IOSKnobControl* knobControl;
+    IOSKnobControl* minControl;
+    IOSKnobControl* maxControl;
 }
 
 @end
@@ -30,6 +32,8 @@
     // Now hook it up to the demo
     [self.knobControlView addSubview:knobControl];
 
+    [self setupMinAndMaxControls];
+
     [self updateKnobProperties];
 
     if (knobControl.mode == IKCMContinuous) {
@@ -44,18 +48,51 @@
     knobControl.animation = IKCASlowReturn + self.animationControl.selectedSegmentIndex;
     knobControl.positions = self.positionsTextField.text.intValue;
     knobControl.circular = self.circularSwitch.on;
-    knobControl.min = self.minTextField.text.floatValue;
-    knobControl.max = self.maxTextField.text.floatValue;
+    knobControl.min = minControl.position;
+    knobControl.max = maxControl.position;
     knobControl.clockwise = self.clockwiseSwitch.on;
+
+    minControl.clockwise = maxControl.clockwise = knobControl.clockwise;
 }
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
 {
-    self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
+    if (sender == knobControl) {
+        self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
 
-    if (knobControl.mode != IKCMContinuous) {
-        self.indexLabel.text = [NSString stringWithFormat:@"%d", knobControl.positionIndex];
+        if (knobControl.mode != IKCMContinuous) {
+            self.indexLabel.text = [NSString stringWithFormat:@"%d", knobControl.positionIndex];
+        }
     }
+    else if (sender == minControl) {
+        self.minLabel.text = [NSString stringWithFormat:@"%.2f", minControl.position];
+        knobControl.min = minControl.position;
+    }
+    else if (sender == maxControl) {
+        self.maxLabel.text = [NSString stringWithFormat:@"%.2f", maxControl.position];
+        knobControl.max = maxControl.position;
+    }
+}
+
+- (void)setupMinAndMaxControls
+{
+    minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds imageNamed:@"knob"];
+    maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds imageNamed:@"knob"];
+
+    [minControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
+    [maxControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
+
+    minControl.mode = maxControl.mode = IKCMContinuous;
+    minControl.circular = maxControl.circular = NO;
+    minControl.min = -M_PI;
+    minControl.max = 0.0;
+    minControl.position = -M_PI;
+    maxControl.min = 0.0;
+    maxControl.max = M_PI;
+    maxControl.position = M_PI;
+
+    [self.minControlView addSubview:minControl];
+    [self.maxControlView addSubview:maxControl];
 }
 
 #pragma mark - Handlers for configuration controls
@@ -124,8 +161,9 @@
 {
     NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
 
-    // with the hexagonal image for discrete mode, min and max don't make much sense
-    self.minTextField.enabled = self.maxTextField.enabled = knobControl.mode == IKCMContinuous ? ! sender.on : NO;
+    // with the current hexagonal image for discrete mode, min and max don't make much sense
+    self.minControlView.hidden = self.minLabel.hidden = self.minLabelLabel.hidden =
+        self.maxControlView.hidden = self.maxLabel.hidden = self.maxLabelLabel.hidden == IKCMContinuous ? !sender.on : YES;
 
     [self updateKnobProperties];
 }
