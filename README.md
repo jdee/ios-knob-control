@@ -49,6 +49,14 @@ Notes
 - The text inputs for min and max have been replaced with--you guessed it--knobs. This gives
   a further example of use and a visual representation of the min and max for those not
   used to thinking in radians.
-
+- There is one known issue involving the min and max. In order to make 0 always be an
+  acceptable value, the min and max should be limited to [-M_PI,0] and [0,M_PI],
+  respectively. This is not currently enforced by the knob control itself, though the
+  smaller min and max knobs respect those ranges in the sample app. However, it is possible
+  to set these values close enough together that the user can effectively jump the min/max
+  divide. In particular, if min == -M_PI and max == M_PI, in effect circular == YES. It
+  should, in that case, be possible to turn the knob to any position, but only by going in
+  the right direction, without crossing the space > max and < min. This will be addressed
+  in the near future.
 
 Copyright (C) 2014 Jimmy Dee. All rights reserved.
