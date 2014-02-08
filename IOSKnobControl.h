@@ -76,12 +76,12 @@ enum IKCAnimation {
 @property (nonatomic) BOOL clockwise;
 
 /**
- * Minimum value of the position property if circular == NO. Default is 0.
+ * Minimum value of the position property if circular == NO. Default is -M_PI.
  */
 @property (nonatomic) float min;
 
 /**
- * Maximum value of the position property if circular == NO. Default is 2*M_PI.
+ * Maximum value of the position property if circular == NO. Default is M_PI.
  */
 @property (nonatomic) float max;
 

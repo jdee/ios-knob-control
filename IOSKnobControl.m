@@ -67,8 +67,8 @@
     _clockwise = NO;
     _position = 0.0;
     _circular = YES;
-    _min = 0.0;
-    _max = 2.0*M_PI;
+    _min = -M_PI;
+    _max = M_PI;
     _positions = 2;
     _angularMomentum = NO;
     self.opaque = NO;
@@ -106,6 +106,10 @@
 
 - (void)setPosition:(float)position animated:(BOOL)animated
 {
+    // enforce min and max
+    if (position < _min) position = _min;
+    if (position > _max) position = _max;
+
     float delta = fabs(position - _position);
     // DEBT: Make these constants macros, properties, something.
     [self returnToPosition:position duration:animated ? delta*0.5/M_PI : 0.0];
@@ -178,19 +182,13 @@
 
             break;
         default:
-            /* keep it in [0, 2*M_PI) */
-            while (position >= 2.0*M_PI) position -= 2.0*M_PI;
-            while (position < 0.0) position += 2.0*M_PI;
+            /* keep it in (-M_PI, M_PI] */
+            while (position > M_PI) position -= 2.0*M_PI;
+            while (position <= -M_PI) position += 2.0*M_PI;
 
             if (!self.circular) {
-                // for this, convert to within (-pi, pi]
-                float converted = position;
-                if (converted > M_PI) converted -= 2.0*M_PI;
-                if (converted < self.min) converted = self.min;
-                if (converted > self.max) converted = self.max;
-                
-                position = converted;
-                if (position < 0.0) position += 2.0*M_PI;
+                if (position < self.min) position = self.min;
+                if (position > self.max) position = self.max;
             }
 
             if (self.mode == IKCMDiscrete && self.animation == IKCARotarySwitch && fabs(touch - touchStart) > threshold) {
@@ -214,6 +212,13 @@
     }
 }
 
+/*
+ * DEBT: This works correctly when circular is YES. Otherwise, the min and max
+ * need to be considered. You could have a situation, e.g., with min = - M_PI and
+ * max = M_PI, where the nearest position could be across the min/max boundary.
+ * In that case, we need to choose the other adjacent position, even if it's
+ * actually farther away.
+ */
 - (void)snapToNearestPosition
 {
     /*
