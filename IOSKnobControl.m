@@ -15,18 +15,24 @@
     UIImage* _image;
 }
 - (void)handlePan:(UIPanGestureRecognizer*)sender;
+- (void)returnToPosition:(float)position duration:(float)duration;
+
+/*
+ * Returns the nearest allowed position
+ */
+@property (readonly) float nearestPosition;
 @end
 
 @implementation IOSKnobControl
 
-@dynamic positionIndex, image;
+@dynamic positionIndex, image, nearestPosition;
 
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         /*
-         * If this constructor is used, the image property is nil and must be
+         * If this constructor is used, the image property is initialized to nil and must be
          * set manually.
          */
         [self setDefaults];
@@ -141,6 +147,9 @@
 
     float position = positionStart + touch - touchStart;
 
+    // DEBT: Make these constants macros, properties, something.
+    const float threshold = M_PI/self.positions * 0.2;
+
 #if 0
     NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f",
           (sender.state == UIGestureRecognizerStateBegan ? "began" :
@@ -172,6 +181,17 @@
                 if (position < 0.0) position += 2.0*M_PI;
             }
 
+            if (self.mode == IKCMDiscrete && self.animation == IKCARotarySwitch && fabs(touch - touchStart) > threshold) {
+                if (position > self.position) {
+                    [self snapToNextPosition];
+                }
+                else {
+                    [self snapToPreviousPosition];
+                }
+
+                return;
+            }
+
             self.position = position;
 
             // while the gesture is in progress, just track the touch
@@ -187,8 +207,8 @@
     /*
      * Animate return to nearest position
      */
-    double nearestPositionAngle = self.positionIndex*M_PI*2.0/self.positions;
-    double delta = nearestPositionAngle - self.position;
+    float nearestPositionAngle = self.nearestPosition;
+    float delta = nearestPositionAngle - self.position;
 
     while (delta > M_PI) {
         nearestPositionAngle -= 2.0*M_PI;
@@ -199,6 +219,7 @@
         delta += 2.0*M_PI;
     }
 
+    // DEBT: Make these constants macros, properties, something.
     const float threshold = 0.9*M_PI/self.positions;
 
     switch (self.animation) {
@@ -226,14 +247,74 @@
             break;
     }
 
+    // TODO: Make this constant a property.
+    double duration = 1.0*fabs(delta*self.positions/M_PI);
+    [self returnToPosition:nearestPositionAngle duration:duration];
+}
+
+- (void)snapToNextPosition
+{
+    // for now, assume positionStart is an allowed position, so positionStart/M_PI*0.5*self.positions is an
+    // integer
+    int originalIndex = positionStart/M_PI*0.5*self.positions;
+    int nextIndex = originalIndex + 1;
+    if (nextIndex >= self.positions) nextIndex -= self.positions;
+
+    float nextPositionAngle = nextIndex * 2.0 * M_PI / self.positions;
+    float delta = nextPositionAngle - self.position;
+
+    while (delta > M_PI) {
+        nextPositionAngle -= 2.0*M_PI;
+        delta -= 2.0*M_PI;
+    }
+    while (delta <= -M_PI) {
+        nextPositionAngle += 2.0*M_PI;
+        delta += 2.0*M_PI;
+    }
+
+    // TODO: Make this constant a property.
+    double duration = 0.1*fabs(delta*self.positions/M_PI);
+    [self returnToPosition:nextPositionAngle duration:duration];
+}
+
+- (void)snapToPreviousPosition
+{
+    // for now, assume positionStart is an allowed position, so positionStart/M_PI*0.5*self.positions is an
+    // integer
+    int originalIndex = positionStart/M_PI*0.5*self.positions;
+    int prevIndex = originalIndex - 1;
+    if (prevIndex < 0) prevIndex += self.positions;
+
+    float prevPositionAngle = prevIndex * 2.0 * M_PI / self.positions;
+    float delta = prevPositionAngle - self.position;
+
+    while (delta > M_PI) {
+        prevPositionAngle -= 2.0*M_PI;
+        delta -= 2.0*M_PI;
+    }
+    while (delta <= -M_PI) {
+        prevPositionAngle += 2.0*M_PI;
+        delta += 2.0*M_PI;
+    }
+
+    // TODO: Make this constant a property.
+    double duration = 0.1*fabs(delta*self.positions/M_PI);
+    [self returnToPosition:prevPositionAngle duration:duration];
+}
+
+- (float)nearestPosition
+{
+    return self.positionIndex*M_PI*2.0/self.positions;
+}
+
+- (void)returnToPosition:(float)position duration:(float)duration
+{
     // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
     // If delta is M_PI/self.positions, the duration is maximal. Otherwise, it scales linearly.
     // Without this adjustment, the animation will seem much faster for large
     // deltas.
 
-    // TODO: Make this constant a property.
-    double duration = 1.0*fabs(delta*self.positions/M_PI);
-    float actual = self.clockwise ? nearestPositionAngle : -nearestPositionAngle;
+    float actual = self.clockwise ? position : -position;
 
     [CATransaction new];
     [CATransaction setDisableActions:YES];
@@ -264,8 +345,8 @@
     // DEBT: This ought to change over time with the animation, rather than instantaneously
     // like this. Though at least the value changed event should probably only fire once, after
     // the animation has completed. And maybe the position could be assigned then too.
-    while (nearestPositionAngle >= 2.0*M_PI) nearestPositionAngle -= 2.0*M_PI;
-    self.position = nearestPositionAngle;
+    while (position >= 2.0*M_PI) position -= 2.0*M_PI;
+    self.position = position;
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
