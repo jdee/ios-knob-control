@@ -15,7 +15,7 @@
 enum IKCMode {
     IKCMDiscrete,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position.
     IKCMContinuous, ///< Like a circular generalization of the slider control.
-    ICKMRotaryDial  ///< TODO: Like an old-school telephone dial.
+    IKCMRotaryDial  ///< TODO: Like an old-school telephone dial.
 };
 
 /**
@@ -86,12 +86,12 @@ enum IKCAnimation {
 @property float max;
 
 /**
- * Number of discrete positions. Default and minimum are 2. No maximum. (Should there be some practical max?) Not consulted in continuous mode.
+ * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode.
  */
 @property int positions;
 
 /**
- * Current angular position, in radians, of the knob. Initial is 0.
+ * Current angular position, in radians, of the knob. Initial value is 0.
  */
 @property float position;
 

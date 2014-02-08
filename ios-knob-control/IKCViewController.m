@@ -100,7 +100,7 @@
             
             NSLog(@"Switched to continuous mode");
             break;
-        case ICKMRotaryDial:
+        case IKCMRotaryDial:
             self.animationControl.enabled = NO;
             self.positionsTextField.enabled = NO;
             self.indexLabelLabel.hidden = NO;
