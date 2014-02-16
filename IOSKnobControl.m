@@ -45,9 +45,6 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self setImage:image forState:UIControlStateNormal];
-        [self setImage:image forState:UIControlStateHighlighted];
-        [self setImage:image forState:UIControlStateDisabled];
-        [self setImage:image forState:UIControlStateSelected];
         [self setDefaults];
     }
     return self;
@@ -59,9 +56,6 @@
     if (self) {
         UIImage* image = [UIImage imageNamed:filename];
         [self setImage:image forState:UIControlStateNormal];
-        [self setImage:image forState:UIControlStateHighlighted];
-        [self setImage:image forState:UIControlStateDisabled];
-        [self setImage:image forState:UIControlStateSelected];
         [self setDefaults];
     }
     return self;
