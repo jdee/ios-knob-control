@@ -80,7 +80,7 @@
     panGestureRecognizer.enabled = self.enabled;
     [self addGestureRecognizer:panGestureRecognizer];
 
-    self.image = [self imageForState:self.state];
+    [self updateImage];
 }
 
 - (UIImage *)imageForState:(UIControlState)state
@@ -103,7 +103,7 @@
     if (state == UIControlStateNormal || state == UIControlStateHighlighted || state == UIControlStateDisabled || state == UIControlStateSelected) {
         images[index] = image;
         if (state == self.state) {
-            self.image = image;
+            [self updateImage];
         }
     }
 }
@@ -127,10 +127,9 @@
 }
 
 /*
- * Sets the current image. Not directly called by clients. Called by observeValueForKeyPath:blah
- * when the state changes.
+ * Sets the current image. Not directly called by clients.
  */
-- (void)setImage:(UIImage *)image
+- (void)updateImage
 {
     if (!imageLayer) {
         imageLayer = [CALayer layer];
@@ -140,7 +139,7 @@
         [self.layer addSublayer:imageLayer];
     }
 
-    imageLayer.contents = (id)image.CGImage;
+    imageLayer.contents = (id)[self imageForState:self.state].CGImage;
 }
 
 - (void)setEnabled:(BOOL)enabled
@@ -148,19 +147,19 @@
     [super setEnabled:enabled];
     panGestureRecognizer.enabled = enabled;
 
-    self.image = [self imageForState:self.state];
+    [self updateImage];
 }
 
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    self.image = [self imageForState:self.state];
+    [self updateImage];
 }
 
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
-    self.image = [self imageForState:self.state];
+    [self updateImage];
 }
 
 - (void)setPosition:(float)position
