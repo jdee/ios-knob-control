@@ -79,6 +79,12 @@
     [self addGestureRecognizer:panGestureRecognizer];
 }
 
+- (void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+    panGestureRecognizer.enabled = enabled;
+}
+
 - (UIImage *)image
 {
     return _image;
@@ -216,8 +222,8 @@
  * DEBT: This works correctly when circular is YES. Otherwise, the min and max
  * need to be considered. You could have a situation, e.g., with min = - M_PI and
  * max = M_PI, where the nearest position could be across the min/max boundary.
- * In that case, we need to choose the other adjacent position, even if it's
- * actually farther away.
+ * In that case, we should just ignore the snap and return to the original position
+ * when released.
  */
 - (void)snapToNearestPosition
 {
