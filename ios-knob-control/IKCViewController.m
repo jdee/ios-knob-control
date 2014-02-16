@@ -60,9 +60,9 @@
     knobControl.position = knobControl.position;
 
     // with the current hexagonal image for discrete mode, min and max don't make much sense
-    self.minControlView.hidden = self.minLabel.hidden = self.minLabelLabel.hidden =
-        self.maxControlView.hidden = self.maxLabel.hidden = self.maxLabelLabel.hidden =
-        knobControl.mode == IKCMContinuous ? self.circularSwitch.on : YES;
+    minControl.enabled = maxControl.enabled = knobControl.mode == IKCMContinuous ? self.circularSwitch.on == NO : NO;
+
+    NSLog(@"Enabled is %s. State is %d", (minControl.enabled == YES ? "YES" : "NO"), minControl.state);
 }
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
@@ -89,8 +89,13 @@
     // Both controls use the same image in continuous mode with circular set to NO. The clockwise
     // property is set to the same value as the main knob (the value of self.clockwiseSwitch.on).
     // That happens in updateKnobProperties.
-    minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds imageNamed:@"knob-85x85"];
-    maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds imageNamed:@"knob-85x85"];
+    minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds];
+    maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds];
+
+    [minControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
+    [minControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
+    [maxControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
+    [maxControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
 
     minControl.mode = maxControl.mode = IKCMContinuous;
     minControl.circular = maxControl.circular = NO;
@@ -140,7 +145,12 @@
             self.clockwiseSwitch.on = YES;
             self.clockwiseSwitch.enabled = NO;
 
-            knobControl.image = [UIImage imageNamed:@"hexagon"];
+            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateNormal];
+            /* Not necessary to call these if not different from UIControlStateNormal
+            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateHighlighted];
+            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateDisabled];
+            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateSelected];
+             */
 
             NSLog(@"Switched to discrete mode");
             break;
@@ -152,8 +162,11 @@
             self.circularSwitch.enabled = YES;
             self.clockwiseSwitch.enabled = YES;
 
-            knobControl.image = [UIImage imageNamed:@"knob"];
-            
+            [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateNormal];
+            // [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateHighlighted];
+            [knobControl setImage:[UIImage imageNamed:@"knob-disabled"] forState:UIControlStateDisabled];
+            // [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateSelected];
+
             NSLog(@"Switched to continuous mode");
             break;
         case IKCMRotaryDial:

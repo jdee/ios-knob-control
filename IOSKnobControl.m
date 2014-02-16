@@ -12,7 +12,7 @@
     float touchStart, positionStart;
     UIPanGestureRecognizer* panGestureRecognizer;
     CALayer* imageLayer;
-    UIImage* _image;
+    UIImage* images[4];
 }
 - (void)handlePan:(UIPanGestureRecognizer*)sender;
 - (void)returnToPosition:(float)position duration:(float)duration;
@@ -25,7 +25,7 @@
 
 @implementation IOSKnobControl
 
-@dynamic positionIndex, image, nearestPosition;
+@dynamic positionIndex, nearestPosition;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -44,7 +44,10 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.image = image;
+        [self setImage:image forState:UIControlStateNormal];
+        [self setImage:image forState:UIControlStateHighlighted];
+        [self setImage:image forState:UIControlStateDisabled];
+        [self setImage:image forState:UIControlStateSelected];
         [self setDefaults];
     }
     return self;
@@ -54,7 +57,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.image = [UIImage imageNamed:filename];
+        UIImage* image = [UIImage imageNamed:filename];
+        [self setImage:image forState:UIControlStateNormal];
+        [self setImage:image forState:UIControlStateHighlighted];
+        [self setImage:image forState:UIControlStateDisabled];
+        [self setImage:image forState:UIControlStateSelected];
         [self setDefaults];
     }
     return self;
@@ -76,24 +83,61 @@
     self.clipsToBounds = YES;
 
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    panGestureRecognizer.enabled = self.enabled;
     [self addGestureRecognizer:panGestureRecognizer];
+
+    self.image = [self imageForState:self.state];
 }
 
-- (void)setEnabled:(BOOL)enabled
+- (UIImage *)imageForState:(UIControlState)state
 {
-    [super setEnabled:enabled];
-    panGestureRecognizer.enabled = enabled;
+    int index = [self indexForState:state];
+    /*
+     * Like UIButton, use the image for UIControlStateNormal if none present.
+     */
+    return index >= 0 && images[index] ? images[index] : images[[self indexForState:UIControlStateNormal]];
 }
 
-- (UIImage *)image
+- (void)setImage:(UIImage *)image forState:(UIControlState)state
 {
-    return _image;
+    int index = [self indexForState:state];
+    /*
+     * Don't accept mixed states here. Cannot pass, e.g., UIControlStateHighlighted & UIControlStateDisabled.
+     * Those values are ignored here.
+     * DEBT: Add this to the doc for the method.
+     */
+    if (state == UIControlStateNormal || state == UIControlStateHighlighted || state == UIControlStateDisabled || state == UIControlStateSelected) {
+        images[index] = image;
+        if (state == self.state) {
+            self.image = image;
+        }
+    }
 }
 
+/*
+ * Private method used by imageForState: and setImage:forState:.
+ * For a pure state (only one bit set) other than normal, returns that bit + 1. If no
+ * bits set, returns 0. If more than one bit set, returns the
+ * index corresponding to the highest bit. So for state == UIControlStateNormal,
+ * returns 0. For state == UIControlStateDisabled, returns 2. For
+ * state == UIControlStateDisabled & UIControlStateSelected, returns 3.
+ * Does not currently support UIControlStateApplication. Returns -1 if those bits are set.
+ */
+- (int)indexForState:(UIControlState)state
+{
+    if ((state & UIControlStateApplication) != 0) return -1;
+    if ((state & UIControlStateSelected) != 0) return 3;
+    if ((state & UIControlStateDisabled) != 0) return 2;
+    if ((state & UIControlStateHighlighted) != 0) return 1;
+    return 0;
+}
+
+/*
+ * Sets the current image. Not directly called by clients. Called by observeValueForKeyPath:blah
+ * when the state changes.
+ */
 - (void)setImage:(UIImage *)image
 {
-    _image = image;
-
     if (!imageLayer) {
         imageLayer = [CALayer layer];
         imageLayer.frame = self.frame;
@@ -103,6 +147,26 @@
     }
 
     imageLayer.contents = (id)image.CGImage;
+}
+
+- (void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+    panGestureRecognizer.enabled = enabled;
+
+    self.image = [self imageForState:self.state];
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+    [super setHighlighted:highlighted];
+    self.image = [self imageForState:self.state];
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    [super setSelected:selected];
+    self.image = [self imageForState:self.state];
 }
 
 - (void)setPosition:(float)position

@@ -53,11 +53,6 @@ enum IKCAnimation {
 @property (nonatomic) BOOL angularMomentum;
 
 /**
- * Image to use for the knob. Current default is nil. The default background is transparent.
- */
-@property (nonatomic) UIImage* image;
-
-/**
  * If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to
  * continue around the circle. The min and max properties of the control are ignored.
  * If this property is set to NO, the circle is open, and the min and max properties are consulted. These may take any values in radians. Note that if min + 2*M_PI == max,
@@ -125,5 +120,12 @@ enum IKCAnimation {
  * Set the position property of the control with or without animation.
  */
 - (void)setPosition:(float)position animated:(BOOL)animated;
+
+/**
+ * Copied and pasted from UIButton. For each possible control state, optionally
+ * specify an image.
+ */
+- (UIImage *)imageForState:(UIControlState)state;
+- (void)setImage:(UIImage *)image forState:(UIControlState)state;
 
 @end
