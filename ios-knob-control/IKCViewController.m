@@ -94,8 +94,10 @@
 
     [minControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
     [minControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
+    [minControl setImage:[UIImage imageNamed:@"knob-highlighted-85x85"] forState:UIControlStateHighlighted];
     [maxControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
     [maxControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
+    [maxControl setImage:[UIImage imageNamed:@"knob-highlighted-85x85"] forState:UIControlStateHighlighted];
 
     minControl.mode = maxControl.mode = IKCMContinuous;
     minControl.circular = maxControl.circular = NO;
@@ -146,11 +148,7 @@
             self.clockwiseSwitch.enabled = NO;
 
             [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateNormal];
-            /* Not necessary to call these if not different from UIControlStateNormal
-            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateHighlighted];
-            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateDisabled];
-            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateSelected];
-             */
+            [knobControl setImage:nil forState:UIControlStateHighlighted];
 
             NSLog(@"Switched to discrete mode");
             break;
@@ -163,7 +161,7 @@
             self.clockwiseSwitch.enabled = YES;
 
             [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateNormal];
-            // [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateHighlighted];
+            [knobControl setImage:[UIImage imageNamed:@"knob-highlighted"] forState:UIControlStateHighlighted];
             [knobControl setImage:[UIImage imageNamed:@"knob-disabled"] forState:UIControlStateDisabled];
             // [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateSelected];
 

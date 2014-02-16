@@ -242,6 +242,7 @@
             if (self.mode == IKCMDiscrete) {
                 [self snapToNearestPosition];
             }
+            self.highlighted = NO;
 
             break;
         default:
@@ -269,6 +270,8 @@
 
             // while the gesture is in progress, just track the touch
             imageLayer.transform = CATransform3DMakeRotation(self.clockwise ? position : -position, 0, 0, 1);
+
+            self.highlighted = YES;
 
             [self sendActionsForControlEvents:UIControlEventValueChanged];
             break;
