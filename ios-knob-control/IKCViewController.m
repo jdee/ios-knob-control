@@ -95,9 +95,11 @@
     minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds];
     maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds];
 
+    // Use the same three images for each knob.
     [minControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
     [minControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
     [minControl setImage:[UIImage imageNamed:@"knob-highlighted-85x85"] forState:UIControlStateHighlighted];
+
     [maxControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
     [maxControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
     [maxControl setImage:[UIImage imageNamed:@"knob-highlighted-85x85"] forState:UIControlStateHighlighted];
@@ -149,6 +151,7 @@
             self.circularSwitch.enabled = NO;
             self.clockwiseSwitch.on = YES;
             self.clockwiseSwitch.enabled = NO;
+            self.timeScaleControl.enabled = YES;
 
             [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateNormal];
             [knobControl setImage:nil forState:UIControlStateHighlighted];
@@ -161,6 +164,7 @@
             self.indexLabel.hidden = YES;
             self.circularSwitch.enabled = YES;
             self.clockwiseSwitch.enabled = YES;
+            self.timeScaleControl.enabled = NO;
 
             [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateNormal];
             [knobControl setImage:[UIImage imageNamed:@"knob-highlighted"] forState:UIControlStateHighlighted];
@@ -169,14 +173,9 @@
 
             NSLog(@"Switched to continuous mode");
             break;
-        case IKCMRotaryDial:
-            self.positionsTextField.enabled = NO;
-            self.indexLabelLabel.hidden = NO;
-            self.indexLabel.hidden = NO;
-            self.circularSwitch.enabled = NO;
-            self.clockwiseSwitch.enabled = NO;
-            NSLog(@"Hello, Operator?");
-            break;
+        default:
+            NSLog(@"Error: unsupported mode selected");
+            abort();
     }
 
     [self updateKnobProperties];
