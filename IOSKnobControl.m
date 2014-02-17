@@ -21,11 +21,12 @@
  * Returns the nearest allowed position
  */
 @property (readonly) float nearestPosition;
+@property (readonly) UIImage* imageForCurrentState;
 @end
 
 @implementation IOSKnobControl
 
-@dynamic positionIndex, nearestPosition;
+@dynamic positionIndex, nearestPosition, imageForCurrentState;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -36,6 +37,13 @@
          * set manually.
          */
         [self setDefaults];
+        [self setupGestureRecognizer];
+
+        /*
+         * Should we call [self updateImage] here? The control cannot be used in this condition,
+         * until setImage:forState: is called, which will properly update the image. updateImage
+         * could potentially even crash with a nil image.
+         */
     }
     return self;
 }
@@ -46,6 +54,8 @@
     if (self) {
         [self setImage:image forState:UIControlStateNormal];
         [self setDefaults];
+        [self setupGestureRecognizer];
+        [self updateImage];
     }
     return self;
 }
@@ -57,6 +67,8 @@
         UIImage* image = [UIImage imageNamed:filename];
         [self setImage:image forState:UIControlStateNormal];
         [self setDefaults];
+        [self setupGestureRecognizer];
+        [self updateImage];
     }
     return self;
 }
@@ -75,14 +87,15 @@
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.clipsToBounds = YES;
+}
 
+- (void)setupGestureRecognizer
+{
     if (panGestureRecognizer) [self removeGestureRecognizer:panGestureRecognizer];
 
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     panGestureRecognizer.enabled = self.enabled; // YES at initialization. This line usually does nothing.
     [self addGestureRecognizer:panGestureRecognizer];
-
-    [self updateImage];
 }
 
 - (UIImage *)imageForState:(UIControlState)state
@@ -91,6 +104,7 @@
     /*
      * Like UIButton, use the image for UIControlStateNormal if none present.
      */
+    // Mmmm. Double square brackets in the last expression of the ternary conditional: outer for the array subscript, inner for a method call.
     return index >= 0 && images[index] ? images[index] : images[[self indexForState:UIControlStateNormal]];
 }
 
@@ -104,10 +118,25 @@
      */
     if (state == UIControlStateNormal || state == UIControlStateHighlighted || state == UIControlStateDisabled || state == UIControlStateSelected) {
         images[index] = image;
-        if (state == self.state) {
+
+        /*
+         * The method parameter state must be one of the four enumerated values listed above.
+         * But self.state could be a mixed state. Conceivably, the control could be
+         * both disabled and highlighted. In that case, since disabled is numerically
+         * greater than highlighted, we return the index/image for UIControlStateDisabled.
+         * (See indexForState: below.) That is to say, the following expression is always true:
+         * [self indexForState:UIControlStateDisabled] == [self indexForState:UIControlStateHighlighted|UIControlStateDisabled]
+         * If we just changed the image currently in use (for the current state), update it now.
+         */
+        if ([self indexForState:state] == [self indexForState:self.state]) {
             [self updateImage];
         }
     }
+}
+
+- (UIImage*)imageForCurrentState
+{
+    return [self imageForState:self.state];
 }
 
 /*
@@ -116,7 +145,7 @@
  * bits set, returns 0. If more than one bit set, returns the
  * index corresponding to the highest bit. So for state == UIControlStateNormal,
  * returns 0. For state == UIControlStateDisabled, returns 2. For
- * state == UIControlStateDisabled & UIControlStateSelected, returns 3.
+ * state == UIControlStateDisabled | UIControlStateSelected, returns 3.
  * Does not currently support UIControlStateApplication. Returns -1 if those bits are set.
  */
 - (int)indexForState:(UIControlState)state
@@ -141,7 +170,10 @@
         [self.layer addSublayer:imageLayer];
     }
 
-    imageLayer.contents = (id)[self imageForState:self.state].CGImage;
+    UIImage* image = self.imageForCurrentState;
+    if (image) {
+        imageLayer.contents = (id)image.CGImage;
+    }
 }
 
 - (void)setEnabled:(BOOL)enabled
