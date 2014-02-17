@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * Default is 1.0. The duration of the animation is proportional to this property.
  * Set the number below 1.0 to speed up the animation, and above to slow it down.
  */
-@property (nonatomic) float scale;
+@property (nonatomic) float timeScale;
 
 /**
  * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max

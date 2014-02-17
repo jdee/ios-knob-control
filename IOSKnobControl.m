@@ -8,6 +8,11 @@
 
 #import "IOSKnobControl.h"
 
+/*
+ * Return animations rotate through this many radians per second when self.timeScale == 1.0.
+ */
+#define IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 0.52359878163217 // M_PI/6.0
+
 @interface IOSKnobControl()
 /*
  * Returns the nearest allowed position
@@ -81,7 +86,7 @@
     _min = -M_PI;
     _max = M_PI;
     _positions = 2;
-    _scale = 1.0;
+    _timeScale = 1.0;
 
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
@@ -161,12 +166,8 @@
 
     float delta = fabs(position - _position);
 
-    /*
-     * Can't use the same duration as the snapToNearestPosition method, since this may
-     * be IKCMContinuous. This duration is chosen so that it takes self.scale s to rotate
-     * through 2*M_PI.
-     */
-    [self returnToPosition:position duration:animated ? _scale*delta*0.5/M_PI : 0.0];
+    // ignore _timeScale. rotate through 2*M_PI in 1 s.
+    [self returnToPosition:position duration:animated ? delta*0.5/M_PI : 0.0];
 }
 
 - (int)positionIndex
@@ -263,7 +264,7 @@
             break;
     }
 
-    float duration = _scale*fabs(delta*self.positions/M_PI);
+    float duration = _timeScale/IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*fabs(delta);
     [self returnToPosition:nearestPositionAngle duration:duration];
 }
 

@@ -187,7 +187,7 @@
                                     <action selector="scaleChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Gf2-1x-pGq"/>
                                 </connections>
                             </slider>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0b0-no-DZj">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="time scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0b0-no-DZj">
                                 <rect key="frame" x="20" y="313" width="135" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -247,7 +247,7 @@
                         <outlet property="modeControl" destination="Zh9-bN-qYe" id="XIS-Bo-25V"/>
                         <outlet property="positionLabel" destination="osd-CW-dG7" id="tdF-34-ddm"/>
                         <outlet property="positionsTextField" destination="ls0-Eg-UlV" id="eHb-NM-RS6"/>
-                        <outlet property="scaleControl" destination="Agi-Aa-6rd" id="qDE-He-ZYP"/>
+                        <outlet property="timeScaleControl" destination="Agi-Aa-6rd" id="SeY-D7-6zj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

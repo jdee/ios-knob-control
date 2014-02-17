@@ -179,7 +179,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W0x-H6-lPL">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="time scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W0x-H6-lPL">
                                 <rect key="frame" x="8" y="312" width="99" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -245,7 +245,7 @@
                         <outlet property="modeControl" destination="dZQ-io-G3R" id="5mV-QU-1Kn"/>
                         <outlet property="positionLabel" destination="6XS-jD-4bt" id="VXa-Eo-z59"/>
                         <outlet property="positionsTextField" destination="ePo-7z-rG2" id="cVi-9I-uMD"/>
-                        <outlet property="scaleControl" destination="YUH-0z-ZXS" id="s84-BZ-vr3"/>
+                        <outlet property="timeScaleControl" destination="YUH-0z-ZXS" id="bvq-AC-pKE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

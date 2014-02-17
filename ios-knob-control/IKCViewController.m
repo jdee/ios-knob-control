@@ -55,7 +55,7 @@
      * The control ranges from -1 to 1, starting at 0. This avoids compressing the
      * scale in the range below 0.
      */
-    knobControl.scale = exp(self.scaleControl.value);
+    knobControl.timeScale = exp(self.timeScaleControl.value);
 
     minControl.clockwise = maxControl.clockwise = knobControl.clockwise;
 
