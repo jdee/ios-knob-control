@@ -19,6 +19,12 @@ typedef NS_ENUM(NSInteger, IKCMode) {
     IKCMRotaryDial      ///< TODO: Like an old-school telephone dial. (Currently unimplemented.)
 };
 
+/**
+ * A simple, reusable rotary control. You must provide at least one image. The control chooses an image based on state,
+ * like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and
+ * animates rotation of the current image in response, programmatically reading out the current angular position of the knob
+ * and generating a UIControlEventValueChanged each time the knob rotates.
+ */
 @interface IOSKnobControl : UIControl
 
 #pragma mark - Properties
@@ -70,6 +76,8 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * Used by the linear return mode to specify the time scale for the animation.
  * Default is 1.0. The duration of the animation is proportional to this property.
  * Set the number below 1.0 to speed up the animation, and above to slow it down.
+ * Return animations will rotate through M_PI/6/timeScale radians per second or
+ * through 2*M_PI in 12*timeScale s.
  */
 @property (nonatomic) float timeScale;
 
