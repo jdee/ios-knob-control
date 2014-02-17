@@ -181,7 +181,7 @@
 
     /*
      * Can't use the same duration as the snapToNearestPosition method, since this may
-     * be IKCMContinuous. This duration is chosen so that it takes self.scale s to rotate 
+     * be IKCMContinuous. This duration is chosen so that it takes self.scale s to rotate
      * through 2*M_PI.
      */
     [self returnToPosition:position duration:animated ? _scale*delta*0.5/M_PI : 0.0];
@@ -310,7 +310,6 @@
             // is the same as the slow return animation, but it returns to the nearest
             // edge of the segment interior, not the center of the segment.
 
-            // DEBT: Make this constant a property or #define something
             if (delta > threshold) {
                 delta -= threshold;
                 nearestPositionAngle -= threshold;
