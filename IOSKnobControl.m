@@ -70,14 +70,16 @@
     _min = -M_PI;
     _max = M_PI;
     _positions = 2;
-    _angularMomentum = NO;
     _scale = 1.0;
+
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.clipsToBounds = YES;
 
+    if (panGestureRecognizer) [self removeGestureRecognizer:panGestureRecognizer];
+
     panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    panGestureRecognizer.enabled = self.enabled;
+    panGestureRecognizer.enabled = self.enabled; // YES at initialization. This line usually does nothing.
     [self addGestureRecognizer:panGestureRecognizer];
 
     [self updateImage];

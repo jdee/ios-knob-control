@@ -27,17 +27,6 @@ enum IKCMode {
 @property (nonatomic) enum IKCMode mode;
 
 /**
- * TODO: (Currently only NO supported.)
- *
- * Specifies whether the knob continues to rotate after the user releases it. This applies both to discrete
- * and continuous modes. It can apply whether circular is YES or NO. If circular is NO, and angularMomentum is
- * YES, the control will usually continue animating to the min or max when released.
- *
- * The default is NO.
- */
-@property (nonatomic) BOOL angularMomentum;
-
-/**
  * If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to
  * continue around the circle. The min and max properties of the control are ignored.
  * If this property is set to NO, the circle is open, and the min and max properties are consulted. These may take any values in radians. Note that if min + 2*M_PI == max,
