@@ -14,7 +14,7 @@
  */
 enum IKCMode {
     IKCMLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
-    IKCMWheelOfFortune, ///<
+    IKCMWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
     IKCMContinuous,     ///< Like a circular generalization of the slider control.
     IKCMRotaryDial      ///< TODO: Like an old-school telephone dial.
 };
