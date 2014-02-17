@@ -8,15 +8,7 @@
 
 #import "IOSKnobControl.h"
 
-@interface IOSKnobControl() {
-    float touchStart, positionStart;
-    UIPanGestureRecognizer* panGestureRecognizer;
-    CALayer* imageLayer;
-    UIImage* images[4];
-}
-- (void)handlePan:(UIPanGestureRecognizer*)sender;
-- (void)returnToPosition:(float)position duration:(float)duration;
-
+@interface IOSKnobControl()
 /*
  * Returns the nearest allowed position
  */
@@ -24,9 +16,16 @@
 @property (readonly) UIImage* imageForCurrentState;
 @end
 
-@implementation IOSKnobControl
+@implementation IOSKnobControl {
+    float touchStart, positionStart;
+    UIPanGestureRecognizer* panGestureRecognizer;
+    CALayer* imageLayer;
+    UIImage* images[4];
+}
 
 @dynamic positionIndex, nearestPosition, imageForCurrentState;
+
+#pragma mark - Object Lifecycle
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -89,14 +88,7 @@
     self.clipsToBounds = YES;
 }
 
-- (void)setupGestureRecognizer
-{
-    if (panGestureRecognizer) [self removeGestureRecognizer:panGestureRecognizer];
-
-    panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    panGestureRecognizer.enabled = self.enabled; // YES at initialization. This line usually does nothing.
-    [self addGestureRecognizer:panGestureRecognizer];
-}
+#pragma mark - Public Methods, Properties and Overrides
 
 - (UIImage *)imageForState:(UIControlState)state
 {
@@ -131,48 +123,6 @@
         if ([self indexForState:state] == [self indexForState:self.state]) {
             [self updateImage];
         }
-    }
-}
-
-- (UIImage*)imageForCurrentState
-{
-    return [self imageForState:self.state];
-}
-
-/*
- * Private method used by imageForState: and setImage:forState:.
- * For a pure state (only one bit set) other than normal, returns that bit + 1. If no
- * bits set, returns 0. If more than one bit set, returns the
- * index corresponding to the highest bit. So for state == UIControlStateNormal,
- * returns 0. For state == UIControlStateDisabled, returns 2. For
- * state == UIControlStateDisabled | UIControlStateSelected, returns 3.
- * Does not currently support UIControlStateApplication. Returns -1 if those bits are set.
- */
-- (int)indexForState:(UIControlState)state
-{
-    if ((state & UIControlStateApplication) != 0) return -1;
-    if ((state & UIControlStateSelected) != 0) return 3;
-    if ((state & UIControlStateDisabled) != 0) return 2;
-    if ((state & UIControlStateHighlighted) != 0) return 1;
-    return 0;
-}
-
-/*
- * Sets the current image. Not directly called by clients.
- */
-- (void)updateImage
-{
-    if (!imageLayer) {
-        imageLayer = [CALayer layer];
-        imageLayer.frame = self.frame;
-        imageLayer.backgroundColor = [UIColor clearColor].CGColor;
-        imageLayer.opaque = NO;
-        [self.layer addSublayer:imageLayer];
-    }
-
-    UIImage* image = self.imageForCurrentState;
-    if (image) {
-        imageLayer.contents = (id)image.CGImage;
     }
 }
 
@@ -234,6 +184,8 @@
     return index;
 }
 
+#pragma mark - Private Methods: Geometry
+
 - (CGPoint)transformLocationToCenterFrame:(CGPoint)point
 {
     point.x -= self.bounds.size.width*0.5;
@@ -251,6 +203,127 @@
 - (double)polarAngleOfPoint:(CGPoint)point
 {
     return atan2(point.y, self.clockwise ? -point.x : point.x);
+}
+
+- (float)nearestPosition
+{
+    return self.positionIndex*M_PI*2.0/self.positions;
+}
+
+#pragma mark - Private Methods: Animation
+
+/*
+ * DEBT: This works correctly when circular is YES. Otherwise, the min and max
+ * need to be considered. You could have a situation, e.g., with min = - M_PI and
+ * max = M_PI, where the nearest position could be across the min/max boundary.
+ * In that case, we should just ignore the snap and return to the original position
+ * when released.
+ */
+- (void)snapToNearestPosition
+{
+    /*
+     * Animate return to nearest position
+     */
+    float nearestPositionAngle = self.nearestPosition;
+    float delta = nearestPositionAngle - self.position;
+
+    while (delta > M_PI) {
+        nearestPositionAngle -= 2.0*M_PI;
+        delta -= 2.0*M_PI;
+    }
+    while (delta <= -M_PI) {
+        nearestPositionAngle += 2.0*M_PI;
+        delta += 2.0*M_PI;
+    }
+
+    // DEBT: Make these constants macros, properties, something.
+    const float threshold = 0.9*M_PI/self.positions;
+
+    switch (self.mode) {
+        case IKCMWheelOfFortune:
+            // Exclude the outer 10% of each segment. Otherwise, like continuous mode.
+            // If it has to be returned to the interior of the segment, the animation
+            // is the same as the slow return animation, but it returns to the nearest
+            // edge of the segment interior, not the center of the segment.
+
+            if (delta > threshold) {
+                delta -= threshold;
+                nearestPositionAngle -= threshold;
+            }
+            else if (delta < -threshold) {
+                delta += threshold;
+                nearestPositionAngle += threshold;
+            }
+            else {
+                // there's no animation, no snap; WoF is like continuous mode except at the boundaries
+                return;
+            }
+            break;
+        default:
+            break;
+    }
+
+    float duration = _scale*fabs(delta*self.positions/M_PI);
+    [self returnToPosition:nearestPositionAngle duration:duration];
+}
+
+- (void)returnToPosition:(float)position duration:(float)duration
+{
+    float actual = self.clockwise ? position : -position;
+
+    if (duration > 0.0) {
+        // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
+        // If delta is M_PI/self.positions, the duration is maximal. Otherwise, it scales linearly.
+        // Without this adjustment, the animation will seem much faster for large
+        // deltas.
+
+        [CATransaction new];
+        [CATransaction setDisableActions:YES];
+        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+
+        // Provide an animation
+        // Key-frame animation to ensure rotates in correct direction
+        CGFloat midAngle = 0.5*(actual+self.position);
+        CAKeyframeAnimation *animation = [CAKeyframeAnimation
+                                          animationWithKeyPath:@"transform.rotation.z"];
+        animation.values = @[@(self.position), @(midAngle), @(actual)];
+
+        switch (self.mode) {
+            case IKCMWheelOfFortune:
+            case IKCMLinearReturn:
+                animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
+                animation.duration = duration;
+                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+                break;
+            default:
+                break;
+        }
+        
+        [imageLayer addAnimation:animation forKey:nil];
+        
+        [CATransaction commit];
+    }
+    else {
+        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+    }
+
+    // DEBT: This ought to change over time with the animation, rather than instantaneously
+    // like this. Though at least the value changed event should probably only fire once, after
+    // the animation has completed. And maybe the position could be assigned then too.
+    while (position >= 2.0*M_PI) position -= 2.0*M_PI;
+    _position = position;
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
+#pragma mark - Private Methods: Gesture Recognition
+
+- (void)setupGestureRecognizer
+{
+    if (panGestureRecognizer) [self removeGestureRecognizer:panGestureRecognizer];
+
+    panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    panGestureRecognizer.enabled = self.enabled; // YES at initialization. This line usually does nothing.
+    [self addGestureRecognizer:panGestureRecognizer];
 }
 
 // DEBT: Factor this stuff into a separate GR?
@@ -308,112 +381,48 @@
     }
 }
 
+#pragma mark - Private Methods: Image Management
+
+- (UIImage*)imageForCurrentState
+{
+    return [self imageForState:self.state];
+}
+
 /*
- * DEBT: This works correctly when circular is YES. Otherwise, the min and max
- * need to be considered. You could have a situation, e.g., with min = - M_PI and
- * max = M_PI, where the nearest position could be across the min/max boundary.
- * In that case, we should just ignore the snap and return to the original position
- * when released.
+ * Private method used by imageForState: and setImage:forState:.
+ * For a pure state (only one bit set) other than normal, returns that bit + 1. If no
+ * bits set, returns 0. If more than one bit set, returns the
+ * index corresponding to the highest bit. So for state == UIControlStateNormal,
+ * returns 0. For state == UIControlStateDisabled, returns 2. For
+ * state == UIControlStateDisabled | UIControlStateSelected, returns 3.
+ * Does not currently support UIControlStateApplication. Returns -1 if those bits are set.
  */
-- (void)snapToNearestPosition
+- (int)indexForState:(UIControlState)state
 {
-    /*
-     * Animate return to nearest position
-     */
-    float nearestPositionAngle = self.nearestPosition;
-    float delta = nearestPositionAngle - self.position;
-
-    while (delta > M_PI) {
-        nearestPositionAngle -= 2.0*M_PI;
-        delta -= 2.0*M_PI;
-    }
-    while (delta <= -M_PI) {
-        nearestPositionAngle += 2.0*M_PI;
-        delta += 2.0*M_PI;
-    }
-
-    // DEBT: Make these constants macros, properties, something.
-    const float threshold = 0.9*M_PI/self.positions;
-
-    switch (self.mode) {
-        case IKCMWheelOfFortune:
-            // Exclude the outer 10% of each segment. Otherwise, like continuous mode.
-            // If it has to be returned to the interior of the segment, the animation
-            // is the same as the slow return animation, but it returns to the nearest
-            // edge of the segment interior, not the center of the segment.
-
-            if (delta > threshold) {
-                delta -= threshold;
-                nearestPositionAngle -= threshold;
-            }
-            else if (delta < -threshold) {
-                delta += threshold;
-                nearestPositionAngle += threshold;
-            }
-            else {
-                // there's no animation, no snap; WoF is like continuous mode except at the boundaries
-                return;
-            }
-            break;
-        default:
-            break;
-    }
-
-    float duration = _scale*fabs(delta*self.positions/M_PI);
-    [self returnToPosition:nearestPositionAngle duration:duration];
+    if ((state & UIControlStateApplication) != 0) return -1;
+    if ((state & UIControlStateSelected) != 0) return 3;
+    if ((state & UIControlStateDisabled) != 0) return 2;
+    if ((state & UIControlStateHighlighted) != 0) return 1;
+    return 0;
 }
 
-- (float)nearestPosition
+/*
+ * Sets the current image. Not directly called by clients.
+ */
+- (void)updateImage
 {
-    return self.positionIndex*M_PI*2.0/self.positions;
-}
-
-- (void)returnToPosition:(float)position duration:(float)duration
-{
-    float actual = self.clockwise ? position : -position;
-
-    if (duration > 0.0) {
-        // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
-        // If delta is M_PI/self.positions, the duration is maximal. Otherwise, it scales linearly.
-        // Without this adjustment, the animation will seem much faster for large
-        // deltas.
-
-        [CATransaction new];
-        [CATransaction setDisableActions:YES];
-        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
-
-        // Provide an animation
-        // Key-frame animation to ensure rotates in correct direction
-        CGFloat midAngle = 0.5*(actual+self.position);
-        CAKeyframeAnimation *animation = [CAKeyframeAnimation
-                                          animationWithKeyPath:@"transform.rotation.z"];
-        animation.values = @[@(self.position), @(midAngle), @(actual)];
-
-        switch (self.mode) {
-            case IKCMWheelOfFortune:
-            case IKCMLinearReturn:
-                animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
-                animation.duration = duration;
-                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-                break;
-            default:
-                break;
-        }
-        
-        [imageLayer addAnimation:animation forKey:nil];
-        
-        [CATransaction commit];
-    }
-    else {
-        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+    if (!imageLayer) {
+        imageLayer = [CALayer layer];
+        imageLayer.frame = self.frame;
+        imageLayer.backgroundColor = [UIColor clearColor].CGColor;
+        imageLayer.opaque = NO;
+        [self.layer addSublayer:imageLayer];
     }
 
-    // DEBT: This ought to change over time with the animation, rather than instantaneously
-    // like this. Though at least the value changed event should probably only fire once, after
-    // the animation has completed. And maybe the position could be assigned then too.
-    while (position >= 2.0*M_PI) position -= 2.0*M_PI;
-    _position = position;
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+    UIImage* image = self.imageForCurrentState;
+    if (image) {
+        imageLayer.contents = (id)image.CGImage;
+    }
 }
 
 @end

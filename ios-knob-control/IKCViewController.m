@@ -129,7 +129,7 @@
 - (void)modeChanged:(UISegmentedControl *)sender
 {
     NSLog(@"Mode index changed to %ld", (long)sender.selectedSegmentIndex);
-    enum IKCMode mode = IKCMLinearReturn + (int)sender.selectedSegmentIndex;
+    IKCMode mode = IKCMLinearReturn + (int)sender.selectedSegmentIndex;
 
     /*
      * Specification of animation and positions only applies to discrete mode.

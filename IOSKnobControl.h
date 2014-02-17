@@ -12,19 +12,21 @@
  * The knob control is like a circular generalization of either a picker view or a slider control.
  * In both cases, the circle may or may not be closed.
  */
-enum IKCMode {
+typedef NS_ENUM(NSInteger, IKCMode) {
     IKCMLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
     IKCMWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
     IKCMContinuous,     ///< Like a circular generalization of the slider control.
-    IKCMRotaryDial      ///< TODO: Like an old-school telephone dial.
+    IKCMRotaryDial      ///< TODO: Like an old-school telephone dial. (Currently unimplemented.)
 };
 
 @interface IOSKnobControl : UIControl
 
+#pragma mark - Properties
+
 /**
  * Specifies which mode to use for this knob control. IKCMDiscrete is the default.
  */
-@property (nonatomic) enum IKCMode mode;
+@property (nonatomic) IKCMode mode;
 
 /**
  * If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to
@@ -81,6 +83,8 @@ enum IKCMode {
  */
 @property (readonly, nonatomic) int positionIndex;
 
+#pragma mark - Object Lifecycle
+
 /**
  * Inherited from UIView and UIControl. This constructor results in a nil image property.
  * The image property must be manually set with a call to the setImage method.
@@ -99,6 +103,8 @@ enum IKCMode {
  * bundle.
  */
 - (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)filename;
+
+#pragma mark - Public Methods
 
 /**
  * Set the position property of the control with or without animation.
