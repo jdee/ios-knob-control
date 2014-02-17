@@ -30,11 +30,6 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 #pragma mark - Properties
 
 /**
- * Specifies which mode to use for this knob control. IKCMDiscrete is the default.
- */
-@property (nonatomic) IKCMode mode;
-
-/**
  * If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to
  * continue around the circle. The min and max properties of the control are ignored.
  * If this property is set to NO, the circle is open, and the min and max properties are consulted. These may take any values in radians. Note that if min + 2*M_PI == max,
@@ -63,23 +58,14 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 @property (nonatomic) float max;
 
 /**
- * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode.
+ * Specifies which mode to use for this knob control. IKCMDiscrete is the default.
  */
-@property (nonatomic) int positions;
+@property (nonatomic) IKCMode mode;
 
 /**
  * Current angular position, in radians, of the knob. Initial value is 0.
  */
 @property (nonatomic) float position;
-
-/**
- * Used by the linear return mode to specify the time scale for the animation.
- * Default is 1.0. The duration of the animation is proportional to this property.
- * Set the number below 1.0 to speed up the animation, and above to slow it down.
- * Return animations will rotate through M_PI/6/timeScale radians per second or
- * through 2*M_PI in 12*timeScale s.
- */
-@property (nonatomic) float timeScale;
 
 /**
  * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max
@@ -90,6 +76,20 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * DEBT: Should this have a setter? Should I be able to set a discrete knob to position 3, e.g., rather than having to do it by setting the position property?
  */
 @property (readonly, nonatomic) int positionIndex;
+
+/**
+ * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode.
+ */
+@property (nonatomic) int positions;
+
+/**
+ * Used by the linear return mode to specify the time scale for the animation.
+ * Default is 1.0. The duration of the animation is proportional to this property.
+ * Set the number below 1.0 to speed up the animation, and above to slow it down.
+ * Return animations will rotate through M_PI/6/timeScale radians per second or
+ * through 2*M_PI in 12*timeScale s.
+ */
+@property (nonatomic) float timeScale;
 
 #pragma mark - Object Lifecycle
 
@@ -128,8 +128,6 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * @param animated if YES, animate the transition to the new position; otherwise, the transition is instantaneous
  */
 - (void)setPosition:(float)position animated:(BOOL)animated;
-
-// The following copied and pasted from UIButton. For each possible control state, optionally specify an image.
 
 /**
  * Retrieve the image to use for a particular control state. The @a state argument may be any bitwise combination
