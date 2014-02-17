@@ -6,21 +6,29 @@ You provide any image for the knob. The control animates rotation of the image
 in response to a one-finger rotation gesture from the user. The knob has a number
 of configurable modes and animations:
 
+- Linear return mode: Like a circular generalization of the UIPickerView control.
+  Only certain discrete positions are allowed. The knob rotates
+  to follow the user's gesture, but on release returns to an allowed position with
+  one of several available animations. The time scale for the return animation may
+  be specified.
+- Wheel of Fortune mode: Like linear return, except for the animation after the
+  user releases the knob. Only a narrow strip between each segment is excluded. If
+  the knob was released in one of those small excluded strips, it rotates just far
+  enough to exit the excluded strip. Otherwise, the knob stays where the user leaves
+  it. This mode is like continuous mode except for the behavior in the excluded
+  strips.
 - Continuous mode: Like a circular generalization of the UISlider control or a
   potentiometer/volume knob. Usually used with min. and max. angles, but can also
   be circular. Knob remains wherever the user leaves it and can attain any value
   between the min. and max. equally.
-- Discrete mode: Like a circular generalization of the UIPickerView control.
-  Only certain discrete positions are allowed. The knob rotates
-  to follow the user's gesture, but on release returns to an allowed position with
-  one of several available animations.
 - Rotary dial mode (not available yet): Like an old-school telephone dial.
 
 The knob control can be circular, permitting the user to rotate it all the way around,
 or it can have a min. and max. angle in continuous and discrete modes.
 
 The control is distributed as a single pair of files (IOSKnobControl.h and IOSKnobControl.m in this directory), which you can simply
-drop into your project.
+drop into your project. You have to provide at least one image for the knob. You may use any of the images in this project or
+supply your own.
 
 The ios-knob-control.xcodeproj sample project can be used to build a simple demo app
 to exercise the different modes of the control and provides an example of use.
@@ -30,10 +38,6 @@ to exercise the different modes of the control and provides an example of use.
 Notes
 -----
 
-- The rotary switch animation is not done. The intention of this animation is that if you rotate
-  the knob with your finger a small distance away from an allowed position, it will snap to the
-  next or previous position very quickly, even before the gesture is complete. That complicates
-  matters. This animation might be removed. At any rate, it's currently buggy.
 - I finally changed all angular parameters (position, min, max, etc.) to be in (-M_PI, M_PI].
   The min and max parameters are not currently validated, but they should be in that range.
 - Not all combinations of parameters work at the moment in the demo app, but many of them
@@ -58,5 +62,14 @@ Notes
   should, in that case, be possible to turn the knob to any position, but only by going in
   the right direction, without crossing the space > max and < min. This will be addressed
   in the near future.
+- I got rid of the enumerated animation property, removing the rotary switch animation, which
+  is troublesome, and combining the contents of the mode and animation enumerations into a
+  single IKCMode enumeration. There are four defined values: IKCMLinearReturn, IKCMWheelOfFortune,
+  IKCMContinuous and IKCMRotaryDial. Since rotary dial is being postponed until after the
+  initial release, the first three now appear as options in a single segmented control
+  in the demo app. In addition, there is now a scale property that specifies the time scale of
+  the return animations for linear return and WoF modes. That is mapped to the value of a slider
+  in the demo app. Slide to the left to reduce the time scale and speed up the animations. Slide to
+  the right to include the time scale and slow animations.
 
 Copyright (C) 2014 Jimmy Dee. All rights reserved.
