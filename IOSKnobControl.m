@@ -169,9 +169,11 @@
 
 - (void)setPosition:(float)position animated:(BOOL)animated
 {
-    // enforce min and max
-    if (position < _min) position = _min;
-    if (position > _max) position = _max;
+    if (_circular == NO) {
+        // enforce min and max
+        if (position < _min) position = _min;
+        if (position > _max) position = _max;
+    }
 
     float delta = fabs(position - _position);
     // DEBT: Make these constants macros, properties, something.
