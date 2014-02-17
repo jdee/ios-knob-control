@@ -15,7 +15,7 @@
 @property IBOutlet UILabel* indexLabelLabel;
 @property IBOutlet UILabel* indexLabel;
 @property IBOutlet UISegmentedControl* modeControl;
-@property IBOutlet UISegmentedControl* animationControl;
+@property IBOutlet UISlider* scaleControl;
 @property IBOutlet UITextField* positionsTextField;
 @property IBOutlet UISwitch* clockwiseSwitch;
 @property IBOutlet UISwitch* circularSwitch;
@@ -27,8 +27,8 @@
 @property IBOutlet UILabel* maxLabelLabel;
 
 - (IBAction)modeChanged:(UISegmentedControl*)sender;
-- (IBAction)animationChanged:(UISegmentedControl*)sender;
 - (IBAction)circularChanged:(UISwitch*)sender;
 - (IBAction)clockwiseChanged:(UISwitch*)sender;
+- (IBAction)scaleChanged:(UISlider*)sender;
 
 @end

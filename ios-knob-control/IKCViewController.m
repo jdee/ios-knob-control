@@ -44,13 +44,18 @@
 
 - (void)updateKnobProperties
 {
-    knobControl.mode = IKCMDiscrete + self.modeControl.selectedSegmentIndex;
-    knobControl.animation = IKCASlowReturn + self.animationControl.selectedSegmentIndex;
+    knobControl.mode = IKCMLinearReturn + self.modeControl.selectedSegmentIndex;
     knobControl.positions = self.positionsTextField.text.intValue;
     knobControl.circular = self.circularSwitch.on;
     knobControl.min = minControl.position;
     knobControl.max = maxControl.position;
     knobControl.clockwise = self.clockwiseSwitch.on;
+
+    /*
+     * The control ranges from -1 to 1, starting at 0. This avoids compressing the
+     * scale in the range below 0.
+     */
+    knobControl.scale = exp(self.scaleControl.value);
 
     minControl.clockwise = maxControl.clockwise = knobControl.clockwise;
 
@@ -61,8 +66,6 @@
 
     // with the current hexagonal image for discrete mode, min and max don't make much sense
     minControl.enabled = maxControl.enabled = knobControl.mode == IKCMContinuous ? self.circularSwitch.on == NO : NO;
-
-    NSLog(@"Enabled is %s. State is %d", (minControl.enabled == YES ? "YES" : "NO"), minControl.state);
 }
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
@@ -126,7 +129,7 @@
 - (void)modeChanged:(UISegmentedControl *)sender
 {
     NSLog(@"Mode index changed to %ld", (long)sender.selectedSegmentIndex);
-    enum IKCMode mode = IKCMDiscrete + (int)sender.selectedSegmentIndex;
+    enum IKCMode mode = IKCMLinearReturn + (int)sender.selectedSegmentIndex;
 
     /*
      * Specification of animation and positions only applies to discrete mode.
@@ -134,8 +137,8 @@
      * on mode.
      */
     switch (mode) {
-        case IKCMDiscrete:
-            self.animationControl.enabled = YES;
+        case IKCMLinearReturn:
+        case IKCMWheelOfFortune:
             // for now, always use a hexagonal image, so positions is always 6
             // circular is always YES
             // self.positionsTextField.enabled = YES;
@@ -153,7 +156,6 @@
             NSLog(@"Switched to discrete mode");
             break;
         case IKCMContinuous:
-            self.animationControl.enabled = NO;
             self.positionsTextField.enabled = NO;
             self.indexLabelLabel.hidden = YES;
             self.indexLabel.hidden = YES;
@@ -168,7 +170,6 @@
             NSLog(@"Switched to continuous mode");
             break;
         case IKCMRotaryDial:
-            self.animationControl.enabled = NO;
             self.positionsTextField.enabled = NO;
             self.indexLabelLabel.hidden = NO;
             self.indexLabel.hidden = NO;
@@ -181,12 +182,6 @@
     [self updateKnobProperties];
 }
 
-- (void)animationChanged:(UISegmentedControl *)sender
-{
-    NSLog(@"Animation index changed to %ld", (long)sender.selectedSegmentIndex);
-    [self updateKnobProperties];
-}
-
 - (void)circularChanged:(UISwitch *)sender
 {
     NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
@@ -194,6 +189,11 @@
 }
 
 - (void)clockwiseChanged:(UISwitch *)sender
+{
+    [self updateKnobProperties];
+}
+
+- (void)scaleChanged:(UISlider *)sender
 {
     [self updateKnobProperties];
 }

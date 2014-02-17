@@ -63,8 +63,7 @@
 
 - (void)setDefaults
 {
-    _mode = IKCMDiscrete;
-    _animation = IKCASlowReturn;
+    _mode = IKCMLinearReturn;
     _clockwise = NO;
     _position = 0.0;
     _circular = YES;
@@ -72,6 +71,7 @@
     _max = M_PI;
     _positions = 2;
     _angularMomentum = NO;
+    _scale = 1.0;
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.clipsToBounds = YES;
@@ -226,9 +226,6 @@
 
     float position = positionStart + touch - touchStart;
 
-    // DEBT: Make these constants macros, properties, something.
-    const float threshold = M_PI/self.positions * 0.2;
-
 #if 0
     NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f",
           (sender.state == UIGestureRecognizerStateBegan ? "began" :
@@ -239,7 +236,7 @@
     switch (sender.state) {
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
-            if (self.mode == IKCMDiscrete) {
+            if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
                 [self snapToNearestPosition];
             }
             self.highlighted = NO;
@@ -253,17 +250,6 @@
             if (!self.circular) {
                 if (position < self.min) position = self.min;
                 if (position > self.max) position = self.max;
-            }
-
-            if (self.mode == IKCMDiscrete && self.animation == IKCARotarySwitch && fabs(touch - touchStart) > threshold) {
-                if (position > self.position) {
-                    [self snapToNextPosition];
-                }
-                else {
-                    [self snapToPreviousPosition];
-                }
-
-                return;
             }
 
             self.position = position;
@@ -305,8 +291,8 @@
     // DEBT: Make these constants macros, properties, something.
     const float threshold = 0.9*M_PI/self.positions;
 
-    switch (self.animation) {
-        case IKCAWheelOfFortune:
+    switch (self.mode) {
+        case IKCMWheelOfFortune:
             // Exclude the outer 10% of each segment. Otherwise, like continuous mode.
             // If it has to be returned to the interior of the segment, the animation
             // is the same as the slow return animation, but it returns to the nearest
@@ -330,59 +316,8 @@
             break;
     }
 
-    // TODO: Make this constant (1.0) a property.
-    float duration = 1.0*fabs(delta*self.positions/M_PI);
+    float duration = _scale*fabs(delta*self.positions/M_PI);
     [self returnToPosition:nearestPositionAngle duration:duration];
-}
-
-- (void)snapToNextPosition
-{
-    // for now, assume positionStart is an allowed position, so positionStart/M_PI*0.5*self.positions is an
-    // integer
-    int originalIndex = positionStart/M_PI*0.5*self.positions;
-    int nextIndex = originalIndex + 1;
-    if (nextIndex >= self.positions) nextIndex -= self.positions;
-
-    float nextPositionAngle = nextIndex * 2.0 * M_PI / self.positions;
-    float delta = nextPositionAngle - self.position;
-
-    while (delta > M_PI) {
-        nextPositionAngle -= 2.0*M_PI;
-        delta -= 2.0*M_PI;
-    }
-    while (delta <= -M_PI) {
-        nextPositionAngle += 2.0*M_PI;
-        delta += 2.0*M_PI;
-    }
-
-    // TODO: Make this constant a property.
-    double duration = 0.1*fabs(delta*self.positions/M_PI);
-    [self returnToPosition:nextPositionAngle duration:duration];
-}
-
-- (void)snapToPreviousPosition
-{
-    // for now, assume positionStart is an allowed position, so positionStart/M_PI*0.5*self.positions is an
-    // integer
-    int originalIndex = positionStart/M_PI*0.5*self.positions;
-    int prevIndex = originalIndex - 1;
-    if (prevIndex < 0) prevIndex += self.positions;
-
-    float prevPositionAngle = prevIndex * 2.0 * M_PI / self.positions;
-    float delta = prevPositionAngle - self.position;
-
-    while (delta > M_PI) {
-        prevPositionAngle -= 2.0*M_PI;
-        delta -= 2.0*M_PI;
-    }
-    while (delta <= -M_PI) {
-        prevPositionAngle += 2.0*M_PI;
-        delta += 2.0*M_PI;
-    }
-
-    // TODO: Make this constant a property.
-    double duration = 0.1*fabs(delta*self.positions/M_PI);
-    [self returnToPosition:prevPositionAngle duration:duration];
 }
 
 - (float)nearestPosition
@@ -411,14 +346,14 @@
                                           animationWithKeyPath:@"transform.rotation.z"];
         animation.values = @[@(self.position), @(midAngle), @(actual)];
 
-        switch (self.animation) {
-            case IKCAWheelOfFortune:
-            case IKCASlowReturn:
+        switch (self.mode) {
+            case IKCMWheelOfFortune:
+            case IKCMLinearReturn:
                 animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
                 animation.duration = duration;
                 animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
                 break;
-            case IKCARotarySwitch:
+            default:
                 break;
         }
         

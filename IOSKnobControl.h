@@ -13,20 +13,10 @@
  * In both cases, the circle may or may not be closed.
  */
 enum IKCMode {
-    IKCMDiscrete,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position.
-    IKCMContinuous, ///< Like a circular generalization of the slider control.
-    IKCMRotaryDial  ///< TODO: Like an old-school telephone dial.
-};
-
-/**
- * This enumeration specifies which animation to use with discrete
- * mode, when the knob has to be returned to an allowed position.
- * In other modes, only the default animation is available.
- */
-enum IKCAnimation {
-    IKCASlowReturn,     ///< The potential well around each allowed position is shallow. Drifts over hundreds of ms to the nearest allowed position after being released.
-    IKCAWheelOfFortune, ///< The potential well around each allowed position is flat, with high, narrow barriers between segments. Stops anywhere in a broad slot around a position. Does not rotate to the center of the position. Cannot stop between slots.
-    IKCARotarySwitch    ///< TODO: Like an old-school TV channel changer. The potential well at each allowed position is deep. Animates quickly from one to the next.
+    IKCMLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
+    IKCMWheelOfFortune, ///<
+    IKCMContinuous,     ///< Like a circular generalization of the slider control.
+    IKCMRotaryDial      ///< TODO: Like an old-school telephone dial.
 };
 
 @interface IOSKnobControl : UIControl
@@ -35,11 +25,6 @@ enum IKCAnimation {
  * Specifies which mode to use for this knob control. IKCMDiscrete is the default.
  */
 @property (nonatomic) enum IKCMode mode;
-
-/**
- * Specifies which animation style to use for IKCMDiscrete mode. IKCMSlowReturn is the default.
- */
-@property (nonatomic) enum IKCAnimation animation;
 
 /**
  * TODO: (Currently only NO supported.)
@@ -89,6 +74,13 @@ enum IKCAnimation {
  * Current angular position, in radians, of the knob. Initial value is 0.
  */
 @property (nonatomic) float position;
+
+/**
+ * Used by the linear return mode to specify the time scale for the animation.
+ * Default is 1.0. The duration of the animation is proportional to this property.
+ * Set the number below 1.0 to speed up the animation, and above to slow it down.
+ */
+@property (nonatomic) float scale;
 
 /**
  * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max
