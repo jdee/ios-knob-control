@@ -178,8 +178,13 @@
     }
 
     float delta = fabs(position - _position);
-    // DEBT: Make these constants macros, properties, something.
-    [self returnToPosition:position duration:animated ? delta*0.5/M_PI : 0.0];
+
+    /*
+     * Can't use the same duration as the snapToNearestPosition method, since this may
+     * be IKCMContinuous. This duration is chosen so that it takes self.scale s to rotate 
+     * through 2*M_PI.
+     */
+    [self returnToPosition:position duration:animated ? _scale*delta*0.5/M_PI : 0.0];
 }
 
 - (int)positionIndex
