@@ -184,10 +184,13 @@
 {
     if (self.mode == IKCMContinuous) return -1;
 
-    int index = self.circular ? self.position*0.5/M_PI*self.positions+0.5 : (self.position-self.min)/(self.max-self.min)*self.positions+0.5;
+    float converted = self.position;
+    if (converted < 0) converted += 2.0*M_PI;
 
-    // basically just handle the last half segment before 2*M_PI
+    int index = self.circular ? converted*0.5/M_PI*self.positions+0.5 : (self.position-self.min)/(self.max-self.min)*self.positions+0.5;
+
     while (index >= self.positions) index -= self.positions;
+    while (index < 0) index += self.positions;
 
     return index;
 }
