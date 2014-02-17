@@ -64,11 +64,11 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame imageNamed:(NSString *)filename
+- (id)initWithFrame:(CGRect)frame imageNamed:(NSString *)imageSetName
 {
     self = [super initWithFrame:frame];
     if (self) {
-        UIImage* image = [UIImage imageNamed:filename];
+        UIImage* image = [UIImage imageNamed:imageSetName];
         [self setImage:image forState:UIControlStateNormal];
         [self setDefaults];
         [self setupGestureRecognizer];
@@ -123,7 +123,7 @@
          * greater than highlighted, we return the index/image for UIControlStateDisabled.
          * (See indexForState: below.) That is to say, the following expression is always true:
          * [self indexForState:UIControlStateDisabled] == [self indexForState:UIControlStateHighlighted|UIControlStateDisabled]
-         * If we just changed the image currently in use (for the current state), update it now.
+         * If we just now changed the image currently in use (the image for the current state), update it now.
          */
         if ([self indexForState:state] == [self indexForState:self.state]) {
             [self updateImage];

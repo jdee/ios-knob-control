@@ -86,36 +86,59 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 #pragma mark - Object Lifecycle
 
 /**
- * Inherited from UIView and UIControl. This constructor results in a nil image property.
- * The image property must be manually set with a call to the setImage method.
+ * Inherited from UIView and UIControl. No image is yet specified. Must subsequently call at least
+ * setImage:forState: for the UIControlStateNormal state.
+ * @param frame the initial frame for the control
  */
 - (id)initWithFrame:(CGRect)frame;
 
 /**
- * Initialize the control with a specific knob image. The image argument here is the initial value of the image
- * property of the control object. That property may be changed later.
+ * Initialize the control with a specific knob image for the UIControlStateNormal state.
+ * @param frame the initial frame for the control
+ * @param image an image to use for the control's normal state
  */
 - (id)initWithFrame:(CGRect)frame image:(UIImage*)image;
 
 /**
- * Initialize the control with a specific knob image. The initial value of the image property of the knob
- * control will be [UIImage imageNamed:filename]. The specified filename must be an image in the application
- * bundle.
+ * Initialize the control with a specific knob image for the UIControlStateNormal state. 
+ * The image used will be [UIImage imageNamed:imageSetName]. The image will be selected appropriately for the screen density
+ * from the specified image set in the application's asset catalog named @a imageSetName.
+ * @param frame the initial frame for the control
+ * @param imageSetName the name of an image set in the application's asset catalog
  */
-- (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)filename;
+- (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)imageSetName;
 
 #pragma mark - Public Methods
 
 /**
  * Set the position property of the control with or without animation.
+ * @param position the new angular position for the knob; will be adjusted to lie within (-M_PI,M_PI]
+ * @param animated if YES, animate the transition to the new position; otherwise, the transition is instantaneous
  */
 - (void)setPosition:(float)position animated:(BOOL)animated;
 
+// The following copied and pasted from UIButton. For each possible control state, optionally specify an image.
+
 /**
- * Copied and pasted from UIButton. For each possible control state, optionally
- * specify an image.
+ * Retrieve the image to use for a particular control state. The @a state argument may be any bitwise combination
+ * of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The image for the
+ * higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
+ * the disabled image will be returned. If no image has been configured for the specified state (e.g., in this example,
+ * if there were no disabled image specified), returns the image for UIControlStateNormal, if any has been set.
+ * If any of the UIControlStateApplication bits is set, returns the image for UIControlStateNormal.
+ * @param state any valid control state
+ * @return the image to use for the specified state
  */
 - (UIImage *)imageForState:(UIControlState)state;
+
+/**
+ * Set the image to use for a specific control state. Unlike the case with imageForState:, the @a state parameter
+ * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+ * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no image values will be
+ * modified.
+ * @param image the image to use for the specified state
+ * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
+ */
 - (void)setImage:(UIImage *)image forState:(UIControlState)state;
 
 @end
