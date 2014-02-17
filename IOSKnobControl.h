@@ -119,8 +119,12 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 #pragma mark - Public Methods
 
 /**
- * Set the position property of the control with or without animation.
- * @param position the new angular position for the knob; will be adjusted to lie within (-M_PI,M_PI]
+ * Set the position property of the control with or without animation. The position will be constrained to lie between min
+ * and max if circular == NO, but it may otherwise be set to a disallowed position. That is, if mode is IKCMLinearReturn, the
+ * knob may be positioned between discrete positions, and if mode is IKCMWheelOfFortune, the knob may be positioned exactly
+ * on a boundary between segments. If the control is enabled, any subsequent gesture will probably result in a return
+ * animation to the nearest allowed position.
+ * @param position the new angular position for the knob; will be adjusted to lie within (-M_PI,M_PI] and respect the min and max properties if circular is NO
  * @param animated if YES, animate the transition to the new position; otherwise, the transition is instantaneous
  */
 - (void)setPosition:(float)position animated:(BOOL)animated;
