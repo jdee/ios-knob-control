@@ -12,16 +12,16 @@
 		7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B55189ABEC9003E7F6A /* InfoPlist.strings */; };
 		7B199B59189ABEC9003E7F6A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
-		7B199B5D189ABEC9003E7F6A /* IKCAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B5C189ABEC9003E7F6A /* IKCAppDelegate.m */; };
+		7B199B5D189ABEC9003E7F6A /* KCDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */; };
 		7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */; };
 		7B199B63189ABEC9003E7F6A /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B61189ABEC9003E7F6A /* Main_iPad.storyboard */; };
-		7B199B66189ABEC9003E7F6A /* IKCViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B65189ABEC9003E7F6A /* IKCViewController.m */; };
+		7B199B66189ABEC9003E7F6A /* KCDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B65189ABEC9003E7F6A /* KCDViewController.m */; };
 		7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B67189ABEC9003E7F6A /* Images.xcassets */; };
 		7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B6E189ABEC9003E7F6A /* XCTest.framework */; };
 		7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
 		7B199B71189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B79189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B77189ABEC9003E7F6A /* InfoPlist.strings */; };
-		7B199B7B189ABEC9003E7F6A /* ios_knob_controlTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */; };
+		7B199B7B189ABEC9003E7F6A /* KnobControlDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */; };
 		7B199B85189AC13D003E7F6A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B84189AC13D003E7F6A /* README.md */; };
 		7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */; };
 /* End PBXBuildFile section */
@@ -37,26 +37,26 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7B199B49189ABEC9003E7F6A /* ios-knob-control.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ios-knob-control.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B199B49189ABEC9003E7F6A /* KnobControlDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KnobControlDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B199B4C189ABEC9003E7F6A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7B199B50189ABEC9003E7F6A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		7B199B54189ABEC9003E7F6A /* ios-knob-control-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ios-knob-control-Info.plist"; sourceTree = "<group>"; };
+		7B199B54189ABEC9003E7F6A /* KnobControlDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemo-Info.plist"; sourceTree = "<group>"; };
 		7B199B56189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7B199B58189ABEC9003E7F6A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		7B199B5A189ABEC9003E7F6A /* ios-knob-control-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ios-knob-control-Prefix.pch"; sourceTree = "<group>"; };
-		7B199B5B189ABEC9003E7F6A /* IKCAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKCAppDelegate.h; sourceTree = "<group>"; };
-		7B199B5C189ABEC9003E7F6A /* IKCAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IKCAppDelegate.m; sourceTree = "<group>"; };
+		7B199B5A189ABEC9003E7F6A /* KnobControlDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KnobControlDemo-Prefix.pch"; sourceTree = "<group>"; };
+		7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDAppDelegate.h; sourceTree = "<group>"; };
+		7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDAppDelegate.m; sourceTree = "<group>"; };
 		7B199B5F189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		7B199B62189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		7B199B64189ABEC9003E7F6A /* IKCViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKCViewController.h; sourceTree = "<group>"; };
-		7B199B65189ABEC9003E7F6A /* IKCViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IKCViewController.m; sourceTree = "<group>"; };
+		7B199B64189ABEC9003E7F6A /* KCDViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDViewController.h; sourceTree = "<group>"; };
+		7B199B65189ABEC9003E7F6A /* KCDViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDViewController.m; sourceTree = "<group>"; };
 		7B199B67189ABEC9003E7F6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		7B199B6D189ABEC9003E7F6A /* ios-knob-controlTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ios-knob-controlTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnobControlDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B199B6E189ABEC9003E7F6A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		7B199B76189ABEC9003E7F6A /* ios-knob-controlTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ios-knob-controlTests-Info.plist"; sourceTree = "<group>"; };
+		7B199B76189ABEC9003E7F6A /* KnobControlDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemoTests-Info.plist"; sourceTree = "<group>"; };
 		7B199B78189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ios_knob_controlTests.m; sourceTree = "<group>"; };
+		7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KnobControlDemoTests.m; sourceTree = "<group>"; };
 		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSKnobControl.h; sourceTree = "<group>"; };
 		7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOSKnobControl.m; sourceTree = "<group>"; };
@@ -90,8 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				7B199B84189AC13D003E7F6A /* README.md */,
-				7B199B52189ABEC9003E7F6A /* ios-knob-control */,
-				7B199B74189ABEC9003E7F6A /* ios-knob-controlTests */,
+				7B199B52189ABEC9003E7F6A /* KnobControlDemo */,
+				7B199B74189ABEC9003E7F6A /* KnobControlDemo */,
 				7B199B86189AC1FD003E7F6A /* IOSKnobControl */,
 				7B199B4B189ABEC9003E7F6A /* Frameworks */,
 				7B199B4A189ABEC9003E7F6A /* Products */,
@@ -101,8 +101,8 @@
 		7B199B4A189ABEC9003E7F6A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B49189ABEC9003E7F6A /* ios-knob-control.app */,
-				7B199B6D189ABEC9003E7F6A /* ios-knob-controlTests.xctest */,
+				7B199B49189ABEC9003E7F6A /* KnobControlDemo.app */,
+				7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,45 +118,47 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7B199B52189ABEC9003E7F6A /* ios-knob-control */ = {
+		7B199B52189ABEC9003E7F6A /* KnobControlDemo */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B5B189ABEC9003E7F6A /* IKCAppDelegate.h */,
-				7B199B5C189ABEC9003E7F6A /* IKCAppDelegate.m */,
+				7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */,
+				7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */,
 				7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */,
 				7B199B61189ABEC9003E7F6A /* Main_iPad.storyboard */,
-				7B199B64189ABEC9003E7F6A /* IKCViewController.h */,
-				7B199B65189ABEC9003E7F6A /* IKCViewController.m */,
+				7B199B64189ABEC9003E7F6A /* KCDViewController.h */,
+				7B199B65189ABEC9003E7F6A /* KCDViewController.m */,
 				7B199B67189ABEC9003E7F6A /* Images.xcassets */,
 				7B199B53189ABEC9003E7F6A /* Supporting Files */,
 			);
+			name = KnobControlDemo;
 			path = "ios-knob-control";
 			sourceTree = "<group>";
 		};
 		7B199B53189ABEC9003E7F6A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B54189ABEC9003E7F6A /* ios-knob-control-Info.plist */,
+				7B199B54189ABEC9003E7F6A /* KnobControlDemo-Info.plist */,
 				7B199B55189ABEC9003E7F6A /* InfoPlist.strings */,
 				7B199B58189ABEC9003E7F6A /* main.m */,
-				7B199B5A189ABEC9003E7F6A /* ios-knob-control-Prefix.pch */,
+				7B199B5A189ABEC9003E7F6A /* KnobControlDemo-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		7B199B74189ABEC9003E7F6A /* ios-knob-controlTests */ = {
+		7B199B74189ABEC9003E7F6A /* KnobControlDemo */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B7A189ABEC9003E7F6A /* ios_knob_controlTests.m */,
+				7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */,
 				7B199B75189ABEC9003E7F6A /* Supporting Files */,
 			);
+			name = KnobControlDemo;
 			path = "ios-knob-controlTests";
 			sourceTree = "<group>";
 		};
 		7B199B75189ABEC9003E7F6A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B76189ABEC9003E7F6A /* ios-knob-controlTests-Info.plist */,
+				7B199B76189ABEC9003E7F6A /* KnobControlDemoTests-Info.plist */,
 				7B199B77189ABEC9003E7F6A /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -174,9 +176,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7B199B48189ABEC9003E7F6A /* ios-knob-control */ = {
+		7B199B48189ABEC9003E7F6A /* KnobControlDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-control" */;
+			buildConfigurationList = 7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo" */;
 			buildPhases = (
 				7B199B45189ABEC9003E7F6A /* Sources */,
 				7B199B46189ABEC9003E7F6A /* Frameworks */,
@@ -186,14 +188,14 @@
 			);
 			dependencies = (
 			);
-			name = "ios-knob-control";
+			name = KnobControlDemo;
 			productName = "ios-knob-control";
-			productReference = 7B199B49189ABEC9003E7F6A /* ios-knob-control.app */;
+			productReference = 7B199B49189ABEC9003E7F6A /* KnobControlDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7B199B6C189ABEC9003E7F6A /* ios-knob-controlTests */ = {
+		7B199B6C189ABEC9003E7F6A /* KnobControlDemoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-controlTests" */;
+			buildConfigurationList = 7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemoTests" */;
 			buildPhases = (
 				7B199B69189ABEC9003E7F6A /* Sources */,
 				7B199B6A189ABEC9003E7F6A /* Frameworks */,
@@ -204,9 +206,9 @@
 			dependencies = (
 				7B199B73189ABEC9003E7F6A /* PBXTargetDependency */,
 			);
-			name = "ios-knob-controlTests";
+			name = KnobControlDemoTests;
 			productName = "ios-knob-controlTests";
-			productReference = 7B199B6D189ABEC9003E7F6A /* ios-knob-controlTests.xctest */;
+			productReference = 7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -215,7 +217,7 @@
 		7B199B41189ABEC9003E7F6A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				CLASSPREFIX = IKC;
+				CLASSPREFIX = KCD;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Jimmy Dee";
 				TargetAttributes = {
@@ -224,7 +226,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "ios-knob-control" */;
+			buildConfigurationList = 7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "KnobControlDemo" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -237,8 +239,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7B199B48189ABEC9003E7F6A /* ios-knob-control */,
-				7B199B6C189ABEC9003E7F6A /* ios-knob-controlTests */,
+				7B199B48189ABEC9003E7F6A /* KnobControlDemo */,
+				7B199B6C189ABEC9003E7F6A /* KnobControlDemoTests */,
 			);
 		};
 /* End PBXProject section */
@@ -271,10 +273,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B199B5D189ABEC9003E7F6A /* IKCAppDelegate.m in Sources */,
+				7B199B5D189ABEC9003E7F6A /* KCDAppDelegate.m in Sources */,
 				7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */,
 				7B199B59189ABEC9003E7F6A /* main.m in Sources */,
-				7B199B66189ABEC9003E7F6A /* IKCViewController.m in Sources */,
+				7B199B66189ABEC9003E7F6A /* KCDViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,7 +284,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B199B7B189ABEC9003E7F6A /* ios_knob_controlTests.m in Sources */,
+				7B199B7B189ABEC9003E7F6A /* KnobControlDemoTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,7 +293,7 @@
 /* Begin PBXTargetDependency section */
 		7B199B73189ABEC9003E7F6A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7B199B48189ABEC9003E7F6A /* ios-knob-control */;
+			target = 7B199B48189ABEC9003E7F6A /* KnobControlDemo */;
 			targetProxy = 7B199B72189ABEC9003E7F6A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -412,9 +414,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
-				INFOPLIST_FILE = "ios-knob-control/ios-knob-control-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "ios-knob-control/KnobControlDemo-Prefix.pch";
+				INFOPLIST_FILE = "ios-knob-control/KnobControlDemo-Info.plist";
+				PRODUCT_NAME = KnobControlDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -425,9 +427,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
-				INFOPLIST_FILE = "ios-knob-control/ios-knob-control-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				GCC_PREFIX_HEADER = "ios-knob-control/KnobControlDemo-Prefix.pch";
+				INFOPLIST_FILE = "ios-knob-control/KnobControlDemo-Info.plist";
+				PRODUCT_NAME = KnobControlDemo;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -448,8 +450,8 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = "ios-knob-controlTests/ios-knob-controlTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "ios-knob-controlTests/KnobControlDemoTests-Info.plist";
+				PRODUCT_NAME = KnobControlDemoTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -467,8 +469,8 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
-				INFOPLIST_FILE = "ios-knob-controlTests/ios-knob-controlTests-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "ios-knob-controlTests/KnobControlDemoTests-Info.plist";
+				PRODUCT_NAME = KnobControlDemoTests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -477,7 +479,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "ios-knob-control" */ = {
+		7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "KnobControlDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B199B7C189ABEC9003E7F6A /* Debug */,
@@ -486,7 +488,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-control" */ = {
+		7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B199B7F189ABEC9003E7F6A /* Debug */,
@@ -495,7 +497,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "ios-knob-controlTests" */ = {
+		7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B199B82189ABEC9003E7F6A /* Debug */,

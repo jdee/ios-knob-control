@@ -8,11 +8,11 @@
 
 #import <XCTest/XCTest.h>
 
-@interface ios_knob_controlTests : XCTestCase
+@interface KnobControlDemoTests : XCTestCase
 
 @end
 
-@implementation ios_knob_controlTests
+@implementation KnobControlDemoTests
 
 - (void)setUp
 {

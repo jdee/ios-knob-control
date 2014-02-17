@@ -7,9 +7,9 @@
 //
 
 #import "IOSKnobControl.h"
-#import "IKCViewController.h"
+#import "KCDViewController.h"
 
-@interface IKCViewController () {
+@interface KCDViewController () {
     IOSKnobControl* knobControl;
     IOSKnobControl* minControl;
     IOSKnobControl* maxControl;
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation IKCViewController
+@implementation KCDViewController
 
 - (void)viewDidLoad
 {

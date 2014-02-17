@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Jimmy Dee. All rights reserved.
 //
 
-#import "IKCAppDelegate.h"
+#import "KCDAppDelegate.h"
 
-@implementation IKCAppDelegate
+@implementation KCDAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7B199B48189ABEC9003E7F6A"
-               BuildableName = "ios-knob-control.app"
-               BlueprintName = "ios-knob-control"
-               ReferencedContainer = "container:ios-knob-control.xcodeproj">
+               BuildableName = "KnobControlDemo.app"
+               BlueprintName = "KnobControlDemo"
+               ReferencedContainer = "container:KnobControlDemo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7B199B6C189ABEC9003E7F6A"
-               BuildableName = "ios-knob-controlTests.xctest"
-               BlueprintName = "ios-knob-controlTests"
-               ReferencedContainer = "container:ios-knob-control.xcodeproj">
+               BuildableName = "KnobControlDemoTests.xctest"
+               BlueprintName = "KnobControlDemoTests"
+               ReferencedContainer = "container:KnobControlDemo.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7B199B48189ABEC9003E7F6A"
-            BuildableName = "ios-knob-control.app"
-            BlueprintName = "ios-knob-control"
-            ReferencedContainer = "container:ios-knob-control.xcodeproj">
+            BuildableName = "KnobControlDemo.app"
+            BlueprintName = "KnobControlDemo"
+            ReferencedContainer = "container:KnobControlDemo.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7B199B48189ABEC9003E7F6A"
-            BuildableName = "ios-knob-control.app"
-            BlueprintName = "ios-knob-control"
-            ReferencedContainer = "container:ios-knob-control.xcodeproj">
+            BuildableName = "KnobControlDemo.app"
+            BlueprintName = "KnobControlDemo"
+            ReferencedContainer = "container:KnobControlDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -80,9 +80,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7B199B48189ABEC9003E7F6A"
-            BuildableName = "ios-knob-control.app"
-            BlueprintName = "ios-knob-control"
-            ReferencedContainer = "container:ios-knob-control.xcodeproj">
+            BuildableName = "KnobControlDemo.app"
+            BlueprintName = "KnobControlDemo"
+            ReferencedContainer = "container:KnobControlDemo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

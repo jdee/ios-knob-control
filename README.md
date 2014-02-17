@@ -30,8 +30,8 @@ The control is distributed as a single pair of files (IOSKnobControl.h and IOSKn
 drop into your project. You have to provide at least one image for the knob. You may use any of the images in this project or
 supply your own.
 
-The ios-knob-control.xcodeproj sample project can be used to build a simple demo app
-to exercise the different modes of the control and provides an example of use.
+The KnobControlDemo.xcodeproj sample project can be used to build a simple demo app
+to exercise the different modes of the control and provides examples of use.
 
 ---
 

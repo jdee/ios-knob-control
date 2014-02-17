@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IKCViewController : UIViewController
+@interface KCDViewController : UIViewController
 
 @property IBOutlet UIView* knobControlView;
 @property IBOutlet UILabel* positionLabel;

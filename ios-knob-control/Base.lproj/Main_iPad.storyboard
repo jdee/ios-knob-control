@@ -7,7 +7,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="IKCViewController" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="KCDViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="W6c-Za-hpA"/>
                         <viewControllerLayoutGuide type="bottom" id="Dii-JR-NvW"/>
