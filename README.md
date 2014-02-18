@@ -41,6 +41,8 @@ project will not build if the iOS Deployment Target is set below 6.0 for reasons
 nothing to do with the control. The control uses ARC, so it cannot be used below iOS 5.0
 without modification.
 
+Known bugs and other issues are tracked on [Github](https://github.com/jdee/ios-knob-control/issues).
+
 ---
 
 Notes
@@ -89,7 +91,7 @@ License
 
 Software
 --------
-This software is available under [The BSD 3-Clause license](http://opensource.org/licenses/BSD-3-Clause):
+This software is available under [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause):
 
 ```
 Copyright (c) 2013-14, Jimmy Dee
@@ -98,8 +100,8 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted
 provided that the following conditions are met:
 
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and
-   the following disclaimer.
+1. Redistributions of source code must retain the above copyright notice, this list of conditions
+   and the following disclaimer.
 
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions
    and the following disclaimer in the documentation and/or other materials provided with the
