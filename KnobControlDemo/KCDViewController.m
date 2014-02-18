@@ -9,15 +9,11 @@
 #import "IOSKnobControl.h"
 #import "KCDViewController.h"
 
-@interface KCDViewController () {
+@implementation KCDViewController {
     IOSKnobControl* knobControl;
     IOSKnobControl* minControl;
     IOSKnobControl* maxControl;
 }
-
-@end
-
-@implementation KCDViewController
 
 - (void)viewDidLoad
 {

@@ -278,6 +278,7 @@
         // Without this adjustment, the animation will seem much faster for large
         // deltas.
 
+        // Gratefully borrowed from http://www.raywenderlich.com/56885/custom-control-for-ios-tutorial-a-reusable-knob
         [CATransaction new];
         [CATransaction setDisableActions:YES];
         imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
@@ -288,18 +289,10 @@
         CAKeyframeAnimation *animation = [CAKeyframeAnimation
                                           animationWithKeyPath:@"transform.rotation.z"];
         animation.values = @[@(self.position), @(midAngle), @(actual)];
+        animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
+        animation.duration = duration;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 
-        switch (self.mode) {
-            case IKCMWheelOfFortune:
-            case IKCMLinearReturn:
-                animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
-                animation.duration = duration;
-                animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-                break;
-            default:
-                break;
-        }
-        
         [imageLayer addAnimation:animation forKey:nil];
         
         [CATransaction commit];
