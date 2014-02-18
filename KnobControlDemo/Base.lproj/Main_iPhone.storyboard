@@ -190,7 +190,7 @@
                                 <rect key="frame" x="121" y="306" width="193" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
-                                    <action selector="scaleChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="NDF-rk-Zdy"/>
+                                    <action selector="timeScaleChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="zE6-3J-c7g"/>
                                 </connections>
                             </slider>
                         </subviews>

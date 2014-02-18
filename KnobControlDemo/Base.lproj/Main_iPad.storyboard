@@ -184,7 +184,7 @@
                                 <rect key="frame" x="171" y="301" width="579" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
-                                    <action selector="scaleChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="Gf2-1x-pGq"/>
+                                    <action selector="timeScaleChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="DVn-d4-uoy"/>
                                 </connections>
                             </slider>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="time scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0b0-no-DZj">

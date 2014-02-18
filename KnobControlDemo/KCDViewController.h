@@ -36,6 +36,6 @@
 - (IBAction)modeChanged:(UISegmentedControl*)sender;
 - (IBAction)circularChanged:(UISwitch*)sender;
 - (IBAction)clockwiseChanged:(UISwitch*)sender;
-- (IBAction)scaleChanged:(UISlider*)sender;
+- (IBAction)timeScaleChanged:(UISlider*)sender;
 
 @end

@@ -195,7 +195,7 @@
     [self updateKnobProperties];
 }
 
-- (void)scaleChanged:(UISlider *)sender
+- (void)timeScaleChanged:(UISlider *)sender
 {
     [self updateKnobProperties];
 }
