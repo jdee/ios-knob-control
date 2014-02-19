@@ -29,8 +29,7 @@ or it can have a min. and max. angle in continuous and discrete modes.
 
 The control is distributed as a single pair of files (IOSKnobControl.h and IOSKnobControl.m
 in this directory), which you can simply drop into your project. You have to provide at
-least one image for the knob. You may use any of the images in this project (subject to
-the license conditions below) or supply your own.
+least one image for the knob. You may use any of the images in this project or supply your own.
 
 The knob control and all images must be square. Images will usually be circles or regular polygons, with a
 transparent background or a solid one that matches the view behind it. However, the aspect
@@ -103,12 +102,15 @@ Notes
   in the demo app. Slide to the left to reduce the time scale and speed up the animations. Slide to
   the right to include the time scale and slow animations.
 
+Media
+-----
+
+Some images (the nice ones) courtesy of Mike Calvert (@bloodymonster).
+
 License
 =======
 
-Software
---------
-This software is available under [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause):
+The software and media here are available under [The BSD 3-Clause License](http://opensource.org/licenses/BSD-3-Clause):
 
 ```
 Copyright (c) 2013-14, Jimmy Dee
@@ -136,12 +138,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
     THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
     OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
     POSSIBILITY OF SUCH DAMAGE.
-```
-
-Artwork
--------
-(Placeholder.)
-```
-All images Copyright (c) 2014, Mike Calvert
-All rights reserved.
 ```
