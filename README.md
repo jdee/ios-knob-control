@@ -2,7 +2,7 @@ iOS Knob Control
 ================
 
 This is a generic, reusable knob control you can insert into any application.
-You provide any image for the knob. The control animates rotation of the image
+You provide any square image for the knob. The control animates rotation of the image
 in response to a one-finger rotation gesture from the user. The knob has a number
 of configurable modes:
 
@@ -12,7 +12,7 @@ of configurable modes:
   one of several available animations. The time scale for the return animation may
   be configured as a property of the control.
 - Wheel of Fortune mode: Like linear return, except for the animation after the
-  user releases the knob. Only a narrow strip between each segment is excluded, like
+  user releases the knob. Only a narrow strip between each pair of segments is excluded, like
   the pegs on the rim of a carnival wheel. If the knob was released in one of those
   small excluded strips, it rotates just far enough to exit the excluded strip.
   Otherwise, the knob stays where the user leaves it. This mode is like continuous
@@ -32,14 +32,31 @@ in this directory), which you can simply drop into your project. You have to pro
 least one image for the knob. You may use any of the images in this project (subject to
 the license conditions below) or supply your own.
 
+The knob control and all images must be square. Images will usually be circles or regular polygons, with a
+transparent background or a solid one that matches the view behind it. However, the aspect
+ratio must be 1:1. The effect of the animation is circular rotation. This only works if the control
+is square. You can produce other effects, for example, by partially clipping a square control
+or using an oblong background. But the control itself always has to be square.
+
+DEBT: Should this be enforced?
+
+The control honors the enabled property. That is, if you set enabled to NO, it enters the
+UIControlStateDisabled and stops responding to user input. If specified, a disabled image is displayed
+instead of the normal image. Even when disabled, the control's position may always be specified
+at any time programmatically, with or without animation. With appropriate foreground and background
+images, a disabled knob control may be used as a dial view to display a numeric value.
+
 The KnobControlDemo.xcodeproj sample project can be used to build a simple demo app
 to exercise the different modes of the control and provides examples of use. This demo project
-uses storyboards and autolayout and so iOS 6.0 or greater.
+uses storyboards and autolayout and so iOS 6.0 or greater. The control may easily be used in a
+64-bit binary without problem. The demo project is configured to build a 64-bit binary and does
+so without complaint.
 
 The control itself, the IOSKnobControl class, may be compiled down to iOS 5.0, but the demo
 project will not build if the iOS Deployment Target is set below 6.0 for reasons that have
 nothing to do with the control. The control uses ARC, so it cannot be used below iOS 5.0
-without modification. It has not been tested below iOS 6.0, however.
+without modification. It has not been tested below iOS 6.1, however, and there may be problems
+there that have not yet been discovered.
 
 Known bugs and other issues are tracked on [Github](https://github.com/jdee/ios-knob-control/issues).
 

@@ -118,7 +118,6 @@
     /*
      * Don't accept mixed states here. Cannot pass, e.g., UIControlStateHighlighted & UIControlStateDisabled.
      * Those values are ignored here.
-     * DEBT: Add this to the doc for the method.
      */
     if (state == UIControlStateNormal || state == UIControlStateHighlighted || state == UIControlStateDisabled || state == UIControlStateSelected) {
         images[index] = image;

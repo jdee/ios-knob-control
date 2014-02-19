@@ -31,6 +31,12 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and
  * animates rotation of the current image in response, programmatically reading out the current angular position of the knob
  * and generating a UIControlEventValueChanged each time the knob rotates.
+ *
+ * The knob control and all images must be square. Images will usually be circles or regular polygons, with a
+ * transparent background or a solid one that matches the view behind it. However, the aspect
+ * ratio must be 1:1. The effect of the animation is circular rotation. This only works if the control
+ * is square. You can produce other effects, for example, by partially clipping a square control
+ * or using an oblong background. But the control itself always has to be square.
  */
 @interface IOSKnobControl : UIControl
 
