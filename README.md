@@ -34,12 +34,12 @@ the license conditions below) or supply your own.
 
 The KnobControlDemo.xcodeproj sample project can be used to build a simple demo app
 to exercise the different modes of the control and provides examples of use. This demo project
-uses storyboards and autolayout and so can run on any version of iOS down to 6.0.
+uses storyboards and autolayout and so iOS 6.0 or greater.
 
 The control itself, the IOSKnobControl class, may be compiled down to iOS 5.0, but the demo
 project will not build if the iOS Deployment Target is set below 6.0 for reasons that have
 nothing to do with the control. The control uses ARC, so it cannot be used below iOS 5.0
-without modification.
+without modification. It has not been tested below iOS 6.0, however.
 
 Known bugs and other issues are tracked on [Github](https://github.com/jdee/ios-knob-control/issues).
 
