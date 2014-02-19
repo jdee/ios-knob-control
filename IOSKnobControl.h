@@ -16,6 +16,12 @@
 #import <UIKit/UIKit.h>
 
 /**
+ * @mainpage iOS Knob Control
+ *
+ * A simple, reusable knob control. See the @ref IOSKnobControl class reference for details.
+ */
+
+/**
  * The knob control is like a circular generalization of either a picker view or a slider control.
  * In both cases, the circle may or may not be closed.
  */
