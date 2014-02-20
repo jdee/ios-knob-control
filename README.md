@@ -37,8 +37,6 @@ ratio must be 1:1. The effect of the animation is circular rotation. This only w
 is square. You can produce other effects, for example, by partially clipping a square control
 or using an oblong background. But the control itself always has to be square.
 
-DEBT: Should this be enforced?
-
 The control honors the enabled property. That is, if you set enabled to NO, it enters the
 UIControlStateDisabled and stops responding to user input. If specified, a disabled image is displayed
 instead of the normal image. Even when disabled, the control's position may always be specified

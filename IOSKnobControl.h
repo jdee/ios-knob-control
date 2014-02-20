@@ -43,6 +43,8 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * ratio must be 1:1. The effect of the animation is circular rotation. This only works if the control
  * is square. You can produce other effects, for example, by partially clipping a square control
  * or using an oblong background. But the control itself always has to be square.
+ *
+ * DEBT: Enforce this. https://github.com/jdee/ios-knob-control/issues/5
  */
 @interface IOSKnobControl : UIControl
 
