@@ -84,7 +84,8 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 @property (nonatomic) IKCMode mode;
 
 /**
- * Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI].
+ * Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI]. See @ref setPosition:animated: for more details,
+ * including the role of the @ref circular, @ref min and @ref max properties. Assigning to this property results in a call to that method, with animated = NO.
  */
 @property (nonatomic) float position;
 
@@ -140,8 +141,15 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 #pragma mark - Public Methods
 
 /**
- * Set the position property of the control with or without animation. The position will be constrained to lie between min
- * and max if circular == NO, but it may otherwise be set to a disallowed position. That is, if mode is IKCMLinearReturn, the
+ * Set the @ref position property of the control with or without animation. The specified @a position will first be constrained to lie between min
+ * and max if circular == NO. If the @a position is greater than max or less than min, it is adjusted to the closest of those values.
+ * Next, the value of @a position is constrained to lie in (-M_PI,M_PI] by adding a (possibly zero or negative) integer multiple of 2*M_PI.
+ * Finally, the @ref position property is set to this value. If @a animated is YES, the knob image gradually rotates to the new position;
+ * otherwise the visual change is immediate. In either case, the @ref position property changes its value immediately, and a
+ * UIControlEventValueChanged is generated.
+ *
+ * Though the @a position will be forced to lie between the @ref min and @ref max properties, it may otherwise be set to a disallowed position.
+ * That is, if mode is IKCMLinearReturn, the
  * knob may be positioned between discrete positions, and if mode is IKCMWheelOfFortune, the knob may be positioned exactly
  * on a boundary between segments. If the control is enabled, any subsequent gesture will probably result in a return
  * animation to the nearest allowed position.

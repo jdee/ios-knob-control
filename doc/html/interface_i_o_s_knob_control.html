@@ -313,7 +313,8 @@ Properties</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the position property of the control with or without animation. The position will be constrained to lie between min and max if circular == NO, but it may otherwise be set to a disallowed position. That is, if mode is IKCMLinearReturn, the knob may be positioned between discrete positions, and if mode is IKCMWheelOfFortune, the knob may be positioned exactly on a boundary between segments. If the control is enabled, any subsequent gesture will probably result in a return animation to the nearest allowed position. </p>
+<p>Set the <a class="el" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">position</a> property of the control with or without animation. The specified <em>position</em> will first be constrained to lie between min and max if circular == NO. If the <em>position</em> is greater than max or less than min, it is adjusted to the closest of those values. Next, the value of <em>position</em> is constrained to lie in (-M_PI,M_PI] by adding a (possibly zero or negative) integer multiple of 2*M_PI. Finally, the <a class="el" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">position</a> property is set to this value. If <em>animated</em> is YES, the knob image gradually rotates to the new position; otherwise the visual change is immediate. In either case, the <a class="el" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">position</a> property changes its value immediately, and a UIControlEventValueChanged is generated.</p>
+<p>Though the <em>position</em> will be forced to lie between the <a class="el" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">min</a> and <a class="el" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">max</a> properties, it may otherwise be set to a disallowed position. That is, if mode is IKCMLinearReturn, the knob may be positioned between discrete positions, and if mode is IKCMWheelOfFortune, the knob may be positioned exactly on a boundary between segments. If the control is enabled, any subsequent gesture will probably result in a return animation to the nearest allowed position. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">position</td><td>the new angular position for the knob; will be adjusted to lie within (-M_PI,M_PI] and respect the min and max properties if circular is NO </td></tr>
@@ -449,7 +450,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI]. </p>
+<p>Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI]. See <a class="el" href="interface_i_o_s_knob_control.html#a40053d216509bab1ac68fe3c56cc7258">setPosition:animated:</a> for more details, including the role of the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a>, <a class="el" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">min</a> and <a class="el" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">max</a> properties. Assigning to this property results in a call to that method, with animated = NO. </p>
 
 </div>
 </div>
@@ -522,7 +523,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Feb 20 2014 15:05:42 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 20 2014 15:53:06 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
