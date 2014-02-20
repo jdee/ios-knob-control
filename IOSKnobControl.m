@@ -361,11 +361,11 @@
     }
 
     if (currentTouch > 0.5*M_PI && currentTouch < M_PI && touch < -0.5*M_PI && touch > -M_PI) {
-        // sudden jump from 2nd to third quadrant. preserve continuity of the gesture by adjust touchStart.
+        // sudden jump from 2nd to 3rd quadrant. preserve continuity of the gesture by adjusting touchStart.
         touchStart -= 2.0*M_PI;
     }
     else if (currentTouch < -0.5*M_PI && currentTouch > -M_PI && touch > 0.5*M_PI && touch < M_PI) {
-        // sudden jump from 3rd to second quadrant preserve continuity of the gesture by adjust touchStart.
+        // sudden jump from 3rd to 2nd quadrant. preserve continuity of the gesture by adjusting touchStart.
         touchStart += 2.0*M_PI;
     }
 
