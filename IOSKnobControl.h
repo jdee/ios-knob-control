@@ -51,11 +51,11 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 #pragma mark - Properties
 
 /**
- * If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to
+ * If this property is set to YES, the circle is closed. That is, all angular positions in (-M_PI,M_PI] are allowed, and -M_PI is identified with M_PI, so it is possible to
  * continue around the circle. The min and max properties of the control are ignored.
- * If this property is set to NO, the circle is open, and the min and max properties are consulted. These may take any values in radians. Note that if min + 2*M_PI == max,
- * then all positions in [min, min+2*M_PI) are allowed, but it is not possible to continue around the circle below min or above max. It is assumed that 0.0, the initial value,
- * is allowed, so min must be within [-M_PI,0] and max must be within [0,M_PI].
+ *
+ * If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value,
+ * is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI).
  * TODO: Validate/enforce the ranges of min and max.
  *
  * The default value of this property is YES.
@@ -69,12 +69,12 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 @property (nonatomic) BOOL clockwise;
 
 /**
- * Minimum value of the position property if circular == NO. Default is -M_PI.
+ * Minimum value of the position property if circular == NO. Default is -M_PI + 1e-7. See the @ref circular property for details.
  */
 @property (nonatomic) float min;
 
 /**
- * Maximum value of the position property if circular == NO. Default is M_PI.
+ * Maximum value of the position property if circular == NO. Default is M_PI - 1e-7. See the @ref circular property for details.
  */
 @property (nonatomic) float max;
 
@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 @property (nonatomic) IKCMode mode;
 
 /**
- * Current angular position, in radians, of the knob. Initial value is 0.
+ * Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI].
  */
 @property (nonatomic) float position;
 

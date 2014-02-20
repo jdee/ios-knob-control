@@ -115,13 +115,13 @@
     [maxControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
 
     // the min. control ranges from -M_PI to 0 and starts at -0.5*M_PI
-    minControl.min = -M_PI;
+    minControl.min = -M_PI + 1e-7;
     minControl.max = 0.0;
     minControl.position = -0.5*M_PI;
 
     // the max. control ranges from 0 to M_PI and starts at 0.5*M_PI
     maxControl.min = 0.0;
-    maxControl.max = M_PI;
+    maxControl.max = M_PI - 1e-7;
     maxControl.position = 0.5*M_PI;
 
     // add each to its placeholder

@@ -29,7 +29,7 @@
 @end
 
 @implementation IOSKnobControl {
-    float touchStart, positionStart;
+    float touchStart, positionStart, currentTouch;
     UIPanGestureRecognizer* panGestureRecognizer;
     CALayer* imageLayer;
     UIImage* images[4];
@@ -90,8 +90,8 @@
     _clockwise = NO;
     _position = 0.0;
     _circular = YES;
-    _min = -M_PI;
-    _max = M_PI;
+    _min = -M_PI + 1e-7;
+    _max = M_PI - 1e-7;
     _positions = 2;
     _timeScale = 1.0;
 
@@ -164,12 +164,11 @@
 
 - (void)setPosition:(float)position animated:(BOOL)animated
 {
+    // for this purpose, don't normalize to [-M_PI,M_PI].
     if (_circular == NO) {
-        // enforce min and max
-        if (position < _min) position = _min;
-        if (position > _max) position = _max;
+        position = MAX(position, _min);
+        position = MIN(position, _max);
     }
-
     float delta = fabs(position - _position);
 
     // ignore _timeScale. rotate through 2*M_PI in 1 s.
@@ -212,13 +211,6 @@
     return atan2(point.y, self.clockwise ? -point.x : point.x);
 }
 
-- (float)nearestPosition
-{
-    return self.positionIndex*M_PI*2.0/self.positions;
-}
-
-#pragma mark - Private Methods: Animation
-
 /*
  * DEBT: This works correctly when circular is YES. Otherwise, the min and max
  * need to be considered. You could have a situation, e.g., with min = - M_PI and
@@ -226,6 +218,32 @@
  * In that case, we should just ignore the snap and return to the original position
  * when released.
  */
+- (float)nearestPosition
+{
+    return self.positionIndex*M_PI*2.0/self.positions;
+}
+
+/* keep it in (-M_PI, M_PI] and enforce min/max when so configured */
+- (float)normalizePosition:(float)position
+{
+    // first limit to (-M_PI, M_PI]
+    while (position >  M_PI) position -= 2.0*M_PI;
+    while (position <= -M_PI) position += 2.0*M_PI;
+
+#if 0
+    // now done elsewhere
+    if (_circular == NO) {
+        // enforce min and max
+        position = MAX(position, _min);
+        position = MIN(position, _max);
+    }
+#endif
+
+    return position;
+}
+
+#pragma mark - Private Methods: Animation
+
 - (void)snapToNearestPosition
 {
     /*
@@ -310,8 +328,7 @@
     // DEBT: This ought to change over time with the animation, rather than instantaneously
     // like this. Though at least the value changed event should probably only fire once, after
     // the animation has completed. And maybe the position could be assigned then too.
-    while (position >= 2.0*M_PI) position -= 2.0*M_PI;
-    _position = position;
+    _position = [self normalizePosition:position];
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
@@ -329,19 +346,32 @@
 // DEBT: Factor this stuff into a separate GR?
 - (void)handlePan:(UIPanGestureRecognizer *)sender
 {
-    // most recent position of touch in center frame of control
-    CGPoint centerFrameLocation = [self transformLocationToCenterFrame:[sender locationInView:self]];
+    // most recent position of touch in center frame of control.
+    CGPoint centerFrameBegin = [self transformLocationToCenterFrame:[sender locationInView:self]];
     CGPoint centerFrameTranslation = [self transformTranslationToCenterFrame:[sender translationInView:self]];
-    centerFrameLocation.x += centerFrameTranslation.x;
-    centerFrameLocation.y += centerFrameTranslation.y;
-    float touch = [self polarAngleOfPoint:centerFrameLocation];
+    CGPoint centerFrameEnd = centerFrameBegin;
+    centerFrameEnd.x += centerFrameTranslation.x;
+    centerFrameEnd.y += centerFrameTranslation.y;
+    float touch = [self polarAngleOfPoint:centerFrameEnd];
 
     if (sender.state == UIGestureRecognizerStateBegan) {
         touchStart = touch;
         positionStart = self.position;
+        currentTouch = touch;
+    }
+
+    if (currentTouch > 0.5*M_PI && currentTouch < M_PI && touch < -0.5*M_PI && touch > -M_PI) {
+        // sudden jump from 2nd to third quadrant. preserve continuity of the gesture by adjust touchStart.
+        touchStart -= 2.0*M_PI;
+    }
+    else if (currentTouch < -0.5*M_PI && currentTouch > -M_PI && touch > 0.5*M_PI && touch < M_PI) {
+        // sudden jump from 3rd to second quadrant preserve continuity of the gesture by adjust touchStart.
+        touchStart += 2.0*M_PI;
     }
 
     float position = positionStart + touch - touchStart;
+
+    currentTouch = touch;
 
 #if 0
     NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f",
@@ -357,26 +387,11 @@
                 [self snapToNearestPosition];
             }
             self.highlighted = NO;
-
             break;
         default:
-            /* keep it in (-M_PI, M_PI] */
-            while (position > M_PI) position -= 2.0*M_PI;
-            while (position <= -M_PI) position += 2.0*M_PI;
-
-            if (!self.circular) {
-                if (position < self.min) position = self.min;
-                if (position > self.max) position = self.max;
-            }
-
+            // just track the touch while the gesture is in progress
             self.position = position;
-
-            // while the gesture is in progress, just track the touch
-            imageLayer.transform = CATransform3DMakeRotation(self.clockwise ? position : -position, 0, 0, 1);
-
             self.highlighted = YES;
-
-            [self sendActionsForControlEvents:UIControlEventValueChanged];
             break;
     }
 }
