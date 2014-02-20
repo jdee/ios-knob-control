@@ -184,7 +184,7 @@
 			dependencies = (
 			);
 			name = KnobControlDemo;
-			productName = "ios-knob-control";
+			productName = "KnobControlDemo";
 			productReference = 7B199B49189ABEC9003E7F6A /* KnobControlDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -202,7 +202,7 @@
 				7B199B73189ABEC9003E7F6A /* PBXTargetDependency */,
 			);
 			name = KnobControlDemoTests;
-			productName = "ios-knob-controlTests";
+			productName = "KnobControlDemoTests";
 			productReference = 7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
