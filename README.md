@@ -66,9 +66,7 @@ Notes
   It also enters the highlighted mode any time there is a touch down in the control, particularly
   while being dragged. This is analogous to the behavior of the UIButton control, which remains
   in the UIControlStateHighlighted as long as a touch is down in the control's frame.
-- I finally changed all angular parameters (position, min, max, etc.) to be in (-M_PI, M_PI].
-  The min and max parameters are not currently validated, but they should be in that range.
-- Not all combinations of parameters work at the moment in the demo app, but many of them
+- Not all combinations of parameters work at the moment in the demo app, but most combinations
   work if you do it yourself. The reason is that I always use the same hexagonal knob image
   in the demo app in discrete mode. That could be confusing with a min. and max., so I
   disabled the circular switch and the min. and max. fields in discrete mode. But the
@@ -77,28 +75,6 @@ Notes
   imageNamed:@"hexagon" and make sure to always use imageNamed:@"knob", enable all the
   controls and observe the behavior with just about any combination of parameters. Meaning
   and usage is explained for everything in the IOSKnobControl.h file.
-- The new round knob images are courtesy of Mike Calvert (@bloodymonster).
-- The text inputs for min and max have been replaced with--you guessed it--knobs. This gives
-  a further example of use and a visual representation of the min and max for those not
-  used to thinking in radians.
-- There is one known issue involving the min and max. In order to make 0 always be an
-  acceptable value, the min and max should be limited to [-M_PI,0] and [0,M_PI],
-  respectively. This is not currently enforced by the knob control itself, though the
-  smaller min and max knobs respect those ranges in the sample app. However, it is possible
-  to set these values close enough together that the user can effectively jump the min/max
-  divide. In particular, if min == -M_PI and max == M_PI, in effect circular == YES. It
-  should, in that case, be possible to turn the knob to any position, but only by going in
-  the right direction, without crossing the space > max and < min. This will be addressed
-  in the near future.
-- I got rid of the enumerated animation property, removing the rotary switch animation, which
-  is troublesome, and combining the contents of the mode and animation enumerations into a
-  single IKCMode enumeration. There are four defined values: IKCMLinearReturn, IKCMWheelOfFortune,
-  IKCMContinuous and IKCMRotaryDial. Since rotary dial is being postponed until after the
-  initial release, the first three now appear as options in a single segmented control
-  in the demo app. In addition, there is now a scale property that specifies the time scale of
-  the return animations for linear return and WoF modes. That is mapped to the value of a slider
-  in the demo app. Slide to the left to reduce the time scale and speed up the animations. Slide to
-  the right to include the time scale and slow animations.
 
 Media
 -----
