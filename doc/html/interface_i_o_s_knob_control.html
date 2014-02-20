@@ -342,7 +342,8 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>If this property is set to YES, the circle is closed. That is, all angular positions in [0,2*M_PI) are allowed, and 0 is identified with 2*M_PI, so it is possible to continue around the circle. The min and max properties of the control are ignored. If this property is set to NO, the circle is open, and the min and max properties are consulted. These may take any values in radians. Note that if min + 2*M_PI == max, then all positions in [min, min+2*M_PI) are allowed, but it is not possible to continue around the circle below min or above max. It is assumed that 0.0, the initial value, is allowed, so min must be within [-M_PI,0] and max must be within [0,M_PI]. TODO: Validate/enforce the ranges of min and max.</p>
+<p>If this property is set to YES, the circle is closed. That is, all angular positions in (-M_PI,M_PI] are allowed, and -M_PI is identified with M_PI, so it is possible to continue around the circle. The min and max properties of the control are ignored.</p>
+<p>If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value, is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI). TODO: Validate/enforce the ranges of min and max.</p>
 <p>The default value of this property is YES. </p>
 
 </div>
@@ -385,7 +386,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Maximum value of the position property if circular == NO. Default is M_PI. </p>
+<p>Maximum value of the position property if circular == NO. Default is M_PI - 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for details. </p>
 
 </div>
 </div>
@@ -406,7 +407,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Minimum value of the position property if circular == NO. Default is -M_PI. </p>
+<p>Minimum value of the position property if circular == NO. Default is -M_PI + 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for details. </p>
 
 </div>
 </div>
@@ -448,7 +449,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Current angular position, in radians, of the knob. Initial value is 0. </p>
+<p>Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI]. </p>
 
 </div>
 </div>
@@ -521,7 +522,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Feb 20 2014 08:52:35 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Feb 20 2014 15:05:42 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
