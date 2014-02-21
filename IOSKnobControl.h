@@ -1,5 +1,13 @@
 #import <UIKit/UIKit.h>
 
+#if !__has_feature(objc_arc)
+#error IOSKnobControl requires automatic reference counting.
+#endif // objc_arc
+
+#define IKC_VERSION_STRING @"1.0.0"
+#define IKC_VERSION 0x010000
+#define IKC_BUILD 1
+
 /**
  * @mainpage iOS Knob Control
  *
@@ -29,7 +37,7 @@ typedef NS_ENUM(NSInteger, IKCMode) {
     IKCMLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
     IKCMWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
     IKCMContinuous,     ///< Like a circular generalization of the slider control.
-    IKCMRotaryDial      ///< TODO: Like an old-school telephone dial. (Currently unimplemented.)
+    IKCMRotaryDial      ///< TODO: Like an old rotary telephone dial. (Currently unimplemented.)
 };
 
 /**
@@ -45,6 +53,8 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * or using an oblong background. But the control itself always has to be square.
  *
  * DEBT: Enforce this. https://github.com/jdee/ios-knob-control/issues/5
+ *
+ * The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1.
  */
 @interface IOSKnobControl : UIControl
 

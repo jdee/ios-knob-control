@@ -21,6 +21,18 @@
 #define IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 0.52359878163217 // M_PI/6.0
 #define IKC_EPSILON 1e-7
 
+// Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
+#define IKC_TARGET_VERSION 0x010000
+#define IKC_TARGET_BUILD 1
+
+/*
+ * DEBT: Should also do a runtime check in the constructors in case the control is ever built
+ * into a library.
+ */
+#if IKC_TARGET_VERSION != IKC_VERSION || IKC_TARGET_BUILD != IKC_BUILD
+#error IOSKnobControl.h version and build do not match IOSKnobControl.m.
+#endif // target version/build check
+
 static float normalizePosition(float position) {
     while (position >   M_PI) position -= 2.0*M_PI;
     while (position <= -M_PI) position += 2.0*M_PI;
