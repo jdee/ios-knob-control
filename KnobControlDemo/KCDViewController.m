@@ -27,7 +27,7 @@
     [super viewDidLoad];
 
     // basic IOSKnobControl initialization (using default settings) with an image from the bundle
-    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds imageNamed:@"hexagon"];
+    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds imageNamed:@"hexagon-ccw"];
 
     // arrange to be notified whenever the knob turns
     [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
@@ -152,11 +152,9 @@
             self.indexLabel.hidden = NO;
             self.circularSwitch.on = YES;
             self.circularSwitch.enabled = NO;
-            self.clockwiseSwitch.on = YES;
-            self.clockwiseSwitch.enabled = NO;
             self.timeScaleControl.enabled = YES;
 
-            [knobControl setImage:[UIImage imageNamed:@"hexagon"] forState:UIControlStateNormal];
+            [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
             [knobControl setImage:nil forState:UIControlStateHighlighted];
 
             NSLog(@"Switched to discrete mode");
@@ -166,7 +164,6 @@
             self.indexLabelLabel.hidden = YES;
             self.indexLabel.hidden = YES;
             self.circularSwitch.enabled = YES;
-            self.clockwiseSwitch.enabled = YES;
             self.timeScaleControl.enabled = NO;
 
             [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateNormal];
@@ -192,6 +189,16 @@
 
 - (void)clockwiseChanged:(UISwitch *)sender
 {
+
+    switch (knobControl.mode) {
+        case IKCMLinearReturn:
+        case IKCMWheelOfFortune:
+            [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
+            break;
+        default:
+            break;
+    }
+
     [self updateKnobProperties];
 }
 
