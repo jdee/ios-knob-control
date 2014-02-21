@@ -19,6 +19,14 @@
  * Return animations rotate through this many radians per second when self.timeScale == 1.0.
  */
 #define IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 0.52359878163217 // M_PI/6.0
+#define IKC_EPSILON 1e-7
+
+static float normalizePosition(float position) {
+    while (position >   M_PI) position -= 2.0*M_PI;
+    while (position <= -M_PI) position += 2.0*M_PI;
+
+    return position;
+}
 
 @interface IOSKnobControl()
 /*
@@ -91,8 +99,8 @@
     _clockwise = NO;
     _position = 0.0;
     _circular = YES;
-    _min = -M_PI + 1e-7;
-    _max = M_PI - 1e-7;
+    _min = -M_PI + IKC_EPSILON;
+    _max = M_PI - IKC_EPSILON;
     _positions = 2;
     _timeScale = 1.0;
 
@@ -198,11 +206,7 @@
  */
 - (BOOL)isHighlighted
 {
-    BOOL superIsHighlighted = [super isHighlighted];
-#if 0
-    NSLog(@"control is %@rotating, %@highlighted", (rotating ? @"" : @"not "), (superIsHighlighted ? @"" : @"not "));
-#endif
-    return rotating || superIsHighlighted;
+    return rotating || [super isHighlighted];
 }
 
 #pragma mark - Private Methods: Geometry
@@ -235,25 +239,14 @@
  */
 - (float)nearestPosition
 {
-    return self.positionIndex*M_PI*2.0/self.positions;
-}
-
-/* keep it in (-M_PI, M_PI] and enforce min/max when so configured */
-- (float)normalizePosition:(float)position
-{
-    // first limit to (-M_PI, M_PI]
-    while (position >  M_PI) position -= 2.0*M_PI;
-    while (position <= -M_PI) position += 2.0*M_PI;
-
-#if 0
-    // now done elsewhere
-    if (_circular == NO) {
-        // enforce min and max
-        position = MAX(position, _min);
-        position = MIN(position, _max);
+    float position = self.positionIndex*M_PI*2.0/self.positions;
+    if (2*self.positionIndex == self.positions) {
+        /*
+         * Try to keep things confined to (-M_PI,M_PI] and avoid a return to -M_PI.
+         * https://github.com/jdee/ios-knob-control/issues/7
+         */
+        return M_PI - IKC_EPSILON;
     }
-#endif
-
     return position;
 }
 
@@ -343,7 +336,7 @@
     // DEBT: This ought to change over time with the animation, rather than instantaneously
     // like this. Though at least the value changed event should probably only fire once, after
     // the animation has completed. And maybe the position could be assigned then too.
-    _position = [self normalizePosition:position];
+    _position = normalizePosition(position);
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
 
