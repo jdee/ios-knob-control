@@ -259,20 +259,16 @@ static float normalizePosition(float position) {
 }
 
 /*
- * DEBT: This works correctly when circular is YES. Otherwise, the min and max
- * need to be considered. You could have a situation, e.g., with min = - M_PI and
- * max = M_PI, where the nearest position could be across the min/max boundary.
- * In that case, we should just ignore the snap and return to the original position
- * when released.
- * https://github.com/jdee/ios-knob-control/issues/2
- * At this stage, I think this concern is bogus, but I haven't sorted it all out yet.
+ * Not normalized to (-M_PI,M_PI].
  */
 - (float)nearestPosition
 {
-    float position = self.positionIndex*M_PI*2.0/self.positions;
-    if (2*self.positionIndex == self.positions) {
+    float range = self.circular ? 2.0*M_PI : self.max - self.min;
+    float position = self.positionIndex*range/self.positions;
+    if (2*self.positionIndex == self.positions && self.circular == YES) {
         /*
          * Try to keep things confined to (-M_PI,M_PI] and avoid a return to -M_PI.
+         * This only happens when circular is YES.
          * https://github.com/jdee/ios-knob-control/issues/7
          */
         return M_PI - IKC_EPSILON;

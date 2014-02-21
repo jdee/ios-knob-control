@@ -102,7 +102,7 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max
  * properties are ignored, and then positionIndex is position/2/M_PI*positions.
  * This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from
- * 0 to positions-1. For example, if positions is 6, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from
+ * 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from
  * -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1.
  * DEBT: Should this have a setter? Should I be able to set a discrete knob to position 3, e.g., rather than having to do it by setting the position property?
  */
