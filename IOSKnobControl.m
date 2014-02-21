@@ -33,6 +33,7 @@
     UIPanGestureRecognizer* panGestureRecognizer;
     CALayer* imageLayer;
     UIImage* images[4];
+    BOOL rotating;
 }
 
 @dynamic positionIndex, nearestPosition, imageForCurrentState;
@@ -94,6 +95,8 @@
     _max = M_PI - 1e-7;
     _positions = 2;
     _timeScale = 1.0;
+
+    rotating = NO;
 
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
@@ -188,6 +191,18 @@
     while (index < 0) index += self.positions;
 
     return index;
+}
+
+/*
+ * This override is to fix #3.
+ */
+- (BOOL)isHighlighted
+{
+    BOOL superIsHighlighted = [super isHighlighted];
+#if 0
+    NSLog(@"control is %@rotating, %@highlighted", (rotating ? @"" : @"not "), (superIsHighlighted ? @"" : @"not "));
+#endif
+    return rotating || superIsHighlighted;
 }
 
 #pragma mark - Private Methods: Geometry
@@ -311,8 +326,7 @@
         // Provide an animation
         // Key-frame animation to ensure rotates in correct direction
         CGFloat midAngle = 0.5*(actual+current);
-        CAKeyframeAnimation *animation = [CAKeyframeAnimation
-                                          animationWithKeyPath:@"transform.rotation.z"];
+        CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
         animation.values = @[@(current), @(midAngle), @(actual)];
         animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
         animation.duration = duration;
@@ -387,12 +401,16 @@
             if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
                 [self snapToNearestPosition];
             }
-            self.highlighted = NO;
+            rotating = NO;
+            [self updateImage];
             break;
         default:
             // just track the touch while the gesture is in progress
             self.position = position;
-            self.highlighted = YES;
+            if (rotating == NO) {
+                rotating = YES;
+                [self updateImage];
+            }
             break;
     }
 }
