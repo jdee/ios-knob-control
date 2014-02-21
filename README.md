@@ -19,7 +19,7 @@ of configurable modes:
   mode except for the behavior in the excluded strips and the availability of the
   positionIndex property.
 - Continuous mode: Like a circular generalization of the UISlider control or a
-  potentiometer/volume knob. Usually used with min. and max. angles, but can also
+  potentiometer/volume knob. Often used with min. and max. angles, but can also
   be circular. Knob remains wherever the user leaves it and can attain any value
   between the min. and max. equally.
 - Rotary dial mode (not available yet): Like an old rotary telephone dial.
@@ -45,9 +45,8 @@ images, a disabled knob control may be used as a dial view to display a numeric 
 
 The KnobControlDemo.xcodeproj sample project can be used to build a simple demo app
 to exercise the different modes of the control and provides examples of use. This demo project
-uses storyboards and autolayout and so iOS 6.0 or greater. The control may easily be used in a
-64-bit binary without problem. The demo project is configured to build a 64-bit binary and does
-so without complaint.
+uses storyboards and autolayout and so requires iOS 6.0 or greater. The control may easily be used in a
+64-bit binary without problem. The demo project is configured to build a 64-bit binary.
 
 The control itself, the IOSKnobControl class, may be compiled down to iOS 5.0, but the demo
 project will not build if the iOS Deployment Target is set below 6.0 for reasons that have
@@ -55,26 +54,16 @@ nothing to do with the control. The control uses ARC, so it cannot be used below
 without modification. It has not been tested below iOS 6.1, however, and there may be problems
 there that have not yet been discovered.
 
-Known bugs and other issues are tracked on [Github](https://github.com/jdee/ios-knob-control/issues).
+Documentation
+-------------
 
----
+All API documentation can be found in IOSKnobControl.h. Browsable HTML documentation generated from this source is
+checked into this repository in the doc/html subdirectory. See doc/html/index.html.
 
-Notes
------
+Known Issues
+------------
 
-- The control now supports a different image for each control state, like the UIButton control.
-  It also enters the highlighted mode any time there is a touch down in the control, particularly
-  while being dragged. This is analogous to the behavior of the UIButton control, which remains
-  in the UIControlStateHighlighted as long as a touch is down in the control's frame.
-- Not all combinations of parameters work at the moment in the demo app, but most combinations
-  work if you do it yourself. The reason is that I always use the same hexagonal knob image
-  in the demo app in discrete mode. That could be confusing with a min. and max., so I
-  disabled the circular switch and the min. and max. fields in discrete mode. But the
-  control should work with that combination, if you have an image that makes sense for it.
-  You can certainly go into the sample project and comment out all use of the
-  imageNamed:@"hexagon" and make sure to always use imageNamed:@"knob", enable all the
-  controls and observe the behavior with just about any combination of parameters. Meaning
-  and usage is explained for everything in the IOSKnobControl.h file.
+Known bugs, planned enhancements and other issues are tracked on [Github](https://github.com/jdee/ios-knob-control/issues).
 
 Media
 -----
