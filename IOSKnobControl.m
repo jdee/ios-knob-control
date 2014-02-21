@@ -295,6 +295,7 @@
 - (void)returnToPosition:(float)position duration:(float)duration
 {
     float actual = self.clockwise ? position : -position;
+    float current = self.clockwise ? self.position : -self.position;
 
     if (duration > 0.0) {
         // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
@@ -309,10 +310,10 @@
 
         // Provide an animation
         // Key-frame animation to ensure rotates in correct direction
-        CGFloat midAngle = 0.5*(actual+self.position);
+        CGFloat midAngle = 0.5*(actual+current);
         CAKeyframeAnimation *animation = [CAKeyframeAnimation
                                           animationWithKeyPath:@"transform.rotation.z"];
-        animation.values = @[@(self.position), @(midAngle), @(actual)];
+        animation.values = @[@(current), @(midAngle), @(actual)];
         animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
         animation.duration = duration;
         animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
