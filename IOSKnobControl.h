@@ -66,7 +66,6 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  *
  * If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value,
  * is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI).
- * TODO: Validate/enforce the ranges of min and max.
  *
  * The default value of this property is YES.
  */
