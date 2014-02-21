@@ -79,12 +79,12 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 @property (nonatomic) BOOL clockwise;
 
 /**
- * Minimum value of the position property if circular == NO. Default is -M_PI + 1e-7. See the @ref circular property for details.
+ * Minimum value of the position property if circular == NO. Must be in the range (-M_PI,0]. -M_PI is not a permitted value, but any value between that and 0 is. Default is -M_PI + 1e-7. See the @ref circular property for further details.
  */
 @property (nonatomic) float min;
 
 /**
- * Maximum value of the position property if circular == NO. Default is M_PI - 1e-7. See the @ref circular property for details.
+ * Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. See the @ref circular property for further details.
  */
 @property (nonatomic) float max;
 

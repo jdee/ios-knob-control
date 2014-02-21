@@ -139,7 +139,8 @@ Properties</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A simple, reusable rotary control. You must provide at least one image. The control chooses an image based on state, like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and animates rotation of the current image in response, programmatically reading out the current angular position of the knob and generating a UIControlEventValueChanged each time the knob rotates.</p>
 <p>The knob control and all images must be square. Images will usually be circles or regular polygons, with a transparent background or a solid one that matches the view behind it. However, the aspect ratio must be 1:1. The effect of the animation is circular rotation. This only works if the control is square. You can produce other effects, for example, by partially clipping a square control or using an oblong background. But the control itself always has to be square.</p>
-<p>DEBT: Enforce this. <a href="https://github.com/jdee/ios-knob-control/issues/5">https://github.com/jdee/ios-knob-control/issues/5</a> </p>
+<p>DEBT: Enforce this. <a href="https://github.com/jdee/ios-knob-control/issues/5">https://github.com/jdee/ios-knob-control/issues/5</a></p>
+<p>The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1. </p>
 </div><h2 class="groupheader">Method Documentation</h2>
 <a class="anchor" id="af98a625e550749085f3263601987bd84"></a>
 <div class="memitem">
@@ -387,7 +388,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Maximum value of the position property if circular == NO. Default is M_PI - 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for details. </p>
+<p>Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for further details. </p>
 
 </div>
 </div>
@@ -408,7 +409,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Minimum value of the position property if circular == NO. Default is -M_PI + 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for details. </p>
+<p>Minimum value of the position property if circular == NO. Must be in the range (-M_PI,0]. -M_PI is not a permitted value, but any value between that and 0 is. Default is -M_PI + 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for further details. </p>
 
 </div>
 </div>
@@ -523,7 +524,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Feb 20 2014 15:53:06 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 21 2014 09:28:33 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

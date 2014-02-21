@@ -84,66 +84,74 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#import &lt;UIKit/UIKit.h&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">typedef</span> NS_ENUM(NSInteger, IKCMode) {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    IKCMLinearReturn,   </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    IKCMWheelOfFortune, </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    IKCMContinuous,     </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    IKCMRotaryDial      </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;};</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html">   49</a></span>&#160;<span class="keyword">@interface </span><a class="code" href="interface_i_o_s_knob_control.html">IOSKnobControl</a> : UIControl</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#pragma mark - Properties</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">   63</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">   69</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">clockwise</a>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">   74</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">min</a>;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">   79</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">max</a>;</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#if !__has_feature(objc_arc)</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#error IOSKnobControl requires automatic reference counting.</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#endif // objc_arc</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#define IKC_VERSION_STRING @&quot;1.0.0&quot;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define IKC_VERSION 0x010000</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor"></span><span class="preprocessor">#define IKC_BUILD 1</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">typedef</span> NS_ENUM(NSInteger, IKCMode) {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    IKCMLinearReturn,   </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    IKCMWheelOfFortune, </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    IKCMContinuous,     </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    IKCMRotaryDial      </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;};</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html">   59</a></span>&#160;<span class="keyword">@interface </span><a class="code" href="interface_i_o_s_knob_control.html">IOSKnobControl</a> : UIControl</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#pragma mark - Properties</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">   73</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">   79</a></span>&#160;<span class="keyword">@property</span> (nonatomic) BOOL <a class="code" href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">clockwise</a>;</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a2c6fe54e7624e3612f558e31155f1405">   84</a></span>&#160;<span class="keyword">@property</span> (nonatomic) IKCMode <a class="code" href="interface_i_o_s_knob_control.html#a2c6fe54e7624e3612f558e31155f1405">mode</a>;</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">   84</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">min</a>;</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
-<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">   90</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">position</a>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a29fee3098a484f4dc4468794545f99f0">  100</a></span>&#160;<span class="keyword">@property</span> (readonly, nonatomic) <span class="keywordtype">int</span> <a class="code" href="interface_i_o_s_knob_control.html#a29fee3098a484f4dc4468794545f99f0">positionIndex</a>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">   89</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">max</a>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a2c6fe54e7624e3612f558e31155f1405">   94</a></span>&#160;<span class="keyword">@property</span> (nonatomic) IKCMode <a class="code" href="interface_i_o_s_knob_control.html#a2c6fe54e7624e3612f558e31155f1405">mode</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">  100</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">position</a>;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a96f06067ea331c5e20838872df839247">  105</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">int</span> <a class="code" href="interface_i_o_s_knob_control.html#a96f06067ea331c5e20838872df839247">positions</a>;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;</div>
-<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad">  114</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad">timeScale</a>;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#pragma mark - Object Lifecycle</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;- (id)initWithFrame:(CGRect)frame;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;- (id)initWithFrame:(CGRect)frame image:(UIImage*)image;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;- (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)imageSetName;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="preprocessor">#pragma mark - Public Methods</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;- (void)setPosition:(<span class="keywordtype">float</span>)position animated:(BOOL)animated;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;- (UIImage *)imageForState:(UIControlState)state;</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;- (void)setImage:(UIImage *)image forState:(UIControlState)state;</div>
+<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a29fee3098a484f4dc4468794545f99f0">  110</a></span>&#160;<span class="keyword">@property</span> (readonly, nonatomic) <span class="keywordtype">int</span> <a class="code" href="interface_i_o_s_knob_control.html#a29fee3098a484f4dc4468794545f99f0">positionIndex</a>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a96f06067ea331c5e20838872df839247">  115</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">int</span> <a class="code" href="interface_i_o_s_knob_control.html#a96f06067ea331c5e20838872df839247">positions</a>;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad">  124</a></span>&#160;<span class="keyword">@property</span> (nonatomic) <span class="keywordtype">float</span> <a class="code" href="interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad">timeScale</a>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="preprocessor">#pragma mark - Object Lifecycle</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;- (id)initWithFrame:(CGRect)frame;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;- (id)initWithFrame:(CGRect)frame image:(UIImage*)image;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;- (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)imageSetName;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">#pragma mark - Public Methods</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;- (void)setPosition:(<span class="keywordtype">float</span>)position animated:(BOOL)animated;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;- (UIImage *)imageForState:(UIControlState)state;</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="keyword">@end</span></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_aa94f3ab453d2f53554a75acea661fb55"><div class="ttname"><a href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">IOSKnobControl::clockwise</a></div><div class="ttdeci">BOOL clockwise</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:69</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_a5a432d17639cf2b2ea1a61916215d6ad"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad">IOSKnobControl::timeScale</a></div><div class="ttdeci">float timeScale</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:114</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_aafe8f96b875f1d3b9284991e65fdd0d6"><div class="ttname"><a href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">IOSKnobControl::circular</a></div><div class="ttdeci">BOOL circular</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:63</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_a96f06067ea331c5e20838872df839247"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a96f06067ea331c5e20838872df839247">IOSKnobControl::positions</a></div><div class="ttdeci">int positions</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:105</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_a9fd561975d0ccc747d3b40b5d4377d39"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">IOSKnobControl::position</a></div><div class="ttdeci">float position</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:90</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_a87da6a7b914df1d01d27e1a03221f659"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">IOSKnobControl::min</a></div><div class="ttdeci">float min</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:74</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_ab40fa89f61337b948f719a23cc847abc"><div class="ttname"><a href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">IOSKnobControl::max</a></div><div class="ttdeci">float max</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:79</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html"><div class="ttname"><a href="interface_i_o_s_knob_control.html">IOSKnobControl</a></div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:49</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_a29fee3098a484f4dc4468794545f99f0"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a29fee3098a484f4dc4468794545f99f0">IOSKnobControl::positionIndex</a></div><div class="ttdeci">int positionIndex</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:100</div></div>
-<div class="ttc" id="interface_i_o_s_knob_control_html_a2c6fe54e7624e3612f558e31155f1405"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a2c6fe54e7624e3612f558e31155f1405">IOSKnobControl::mode</a></div><div class="ttdeci">IKCMode mode</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:84</div></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;- (void)setImage:(UIImage *)image forState:(UIControlState)state;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="keyword">@end</span></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_aa94f3ab453d2f53554a75acea661fb55"><div class="ttname"><a href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">IOSKnobControl::clockwise</a></div><div class="ttdeci">BOOL clockwise</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:79</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_a5a432d17639cf2b2ea1a61916215d6ad"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad">IOSKnobControl::timeScale</a></div><div class="ttdeci">float timeScale</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:124</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_aafe8f96b875f1d3b9284991e65fdd0d6"><div class="ttname"><a href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">IOSKnobControl::circular</a></div><div class="ttdeci">BOOL circular</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:73</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_a96f06067ea331c5e20838872df839247"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a96f06067ea331c5e20838872df839247">IOSKnobControl::positions</a></div><div class="ttdeci">int positions</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:115</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_a9fd561975d0ccc747d3b40b5d4377d39"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">IOSKnobControl::position</a></div><div class="ttdeci">float position</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:100</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_a87da6a7b914df1d01d27e1a03221f659"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">IOSKnobControl::min</a></div><div class="ttdeci">float min</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:84</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_ab40fa89f61337b948f719a23cc847abc"><div class="ttname"><a href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">IOSKnobControl::max</a></div><div class="ttdeci">float max</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:89</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html"><div class="ttname"><a href="interface_i_o_s_knob_control.html">IOSKnobControl</a></div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:59</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_a29fee3098a484f4dc4468794545f99f0"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a29fee3098a484f4dc4468794545f99f0">IOSKnobControl::positionIndex</a></div><div class="ttdeci">int positionIndex</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:110</div></div>
+<div class="ttc" id="interface_i_o_s_knob_control_html_a2c6fe54e7624e3612f558e31155f1405"><div class="ttname"><a href="interface_i_o_s_knob_control.html#a2c6fe54e7624e3612f558e31155f1405">IOSKnobControl::mode</a></div><div class="ttdeci">IKCMode mode</div><div class="ttdef"><b>Definition:</b> IOSKnobControl.h:94</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Feb 20 2014 15:53:06 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 21 2014 09:28:33 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

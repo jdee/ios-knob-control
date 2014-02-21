@@ -221,6 +221,22 @@ static float normalizePosition(float position) {
     return rotating || [super isHighlighted];
 }
 
+- (void)setMin:(float)min
+{
+    min = normalizePosition(min);
+    if (min > 0.0) min = 0.0;
+    if (min <= -M_PI) min = -M_PI + IKC_EPSILON;
+    _min = min;
+}
+
+- (void)setMax:(float)max
+{
+    max = normalizePosition(max);
+    if (max < 0.0) max = 0.0;
+    if (max >= M_PI) max = M_PI - IKC_EPSILON;
+    _max = max;
+}
+
 #pragma mark - Private Methods: Geometry
 
 - (CGPoint)transformLocationToCenterFrame:(CGPoint)point
