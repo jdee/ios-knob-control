@@ -236,6 +236,8 @@ static float normalizePosition(float position) {
  * max = M_PI, where the nearest position could be across the min/max boundary.
  * In that case, we should just ignore the snap and return to the original position
  * when released.
+ * https://github.com/jdee/ios-knob-control/issues/2
+ * At this stage, I think this concern is bogus, but I haven't sorted it all out yet.
  */
 - (float)nearestPosition
 {
@@ -333,9 +335,6 @@ static float normalizePosition(float position) {
         imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
     }
 
-    // DEBT: This ought to change over time with the animation, rather than instantaneously
-    // like this. Though at least the value changed event should probably only fire once, after
-    // the animation has completed. And maybe the position could be assigned then too.
     _position = normalizePosition(position);
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 }
@@ -368,11 +367,11 @@ static float normalizePosition(float position) {
         currentTouch = touch;
     }
 
-    if (currentTouch > 0.5*M_PI && currentTouch < M_PI && touch < -0.5*M_PI && touch > -M_PI) {
+    if (currentTouch > M_PI_2 && currentTouch < M_PI && touch < -M_PI_2 && touch > -M_PI) {
         // sudden jump from 2nd to 3rd quadrant. preserve continuity of the gesture by adjusting touchStart.
         touchStart -= 2.0*M_PI;
     }
-    else if (currentTouch < -0.5*M_PI && currentTouch > -M_PI && touch > 0.5*M_PI && touch < M_PI) {
+    else if (currentTouch < -M_PI_2 && currentTouch > -M_PI && touch > M_PI_2 && touch < M_PI) {
         // sudden jump from 3rd to 2nd quadrant. preserve continuity of the gesture by adjusting touchStart.
         touchStart += 2.0*M_PI;
     }
