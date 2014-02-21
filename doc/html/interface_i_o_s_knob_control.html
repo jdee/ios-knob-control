@@ -121,10 +121,10 @@ Properties</h2></td></tr>
 <tr class="separator:aafe8f96b875f1d3b9284991e65fdd0d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa94f3ab453d2f53554a75acea661fb55"><td class="memItemLeft" align="right" valign="top">BOOL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">clockwise</a></td></tr>
 <tr class="separator:aa94f3ab453d2f53554a75acea661fb55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87da6a7b914df1d01d27e1a03221f659"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">min</a></td></tr>
-<tr class="separator:a87da6a7b914df1d01d27e1a03221f659"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab40fa89f61337b948f719a23cc847abc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">max</a></td></tr>
 <tr class="separator:ab40fa89f61337b948f719a23cc847abc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87da6a7b914df1d01d27e1a03221f659"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a87da6a7b914df1d01d27e1a03221f659">min</a></td></tr>
+<tr class="separator:a87da6a7b914df1d01d27e1a03221f659"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c6fe54e7624e3612f558e31155f1405"><td class="memItemLeft" align="right" valign="top">IKCMode&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a2c6fe54e7624e3612f558e31155f1405">mode</a></td></tr>
 <tr class="separator:a2c6fe54e7624e3612f558e31155f1405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fd561975d0ccc747d3b40b5d4377d39"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">position</a></td></tr>
@@ -345,7 +345,7 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>If this property is set to YES, the circle is closed. That is, all angular positions in (-M_PI,M_PI] are allowed, and -M_PI is identified with M_PI, so it is possible to continue around the circle. The min and max properties of the control are ignored.</p>
-<p>If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value, is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI). TODO: Validate/enforce the ranges of min and max.</p>
+<p>If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value, is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI).</p>
 <p>The default value of this property is YES. </p>
 
 </div>
@@ -524,7 +524,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 21 2014 09:28:33 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 21 2014 09:41:58 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
