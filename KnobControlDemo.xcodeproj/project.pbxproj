@@ -217,7 +217,7 @@
 			attributes = {
 				CLASSPREFIX = KCD;
 				LastUpgradeCheck = 0510;
-				ORGANIZATIONNAME = "Jimmy Dee";
+				ORGANIZATIONNAME = "Your Organization";
 				TargetAttributes = {
 					7B199B6C189ABEC9003E7F6A = {
 						TestTargetID = 7B199B48189ABEC9003E7F6A;
