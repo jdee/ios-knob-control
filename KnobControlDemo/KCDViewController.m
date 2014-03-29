@@ -99,13 +99,13 @@
     maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds];
 
     // Use the same three images for each knob.
-    [minControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
-    [minControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
-    [minControl setImage:[UIImage imageNamed:@"knob-highlighted-85x85"] forState:UIControlStateHighlighted];
+    [minControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
+    [minControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
+    [minControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
 
-    [maxControl setImage:[UIImage imageNamed:@"knob-85x85"] forState:UIControlStateNormal];
-    [maxControl setImage:[UIImage imageNamed:@"knob-disabled-85x85"] forState:UIControlStateDisabled];
-    [maxControl setImage:[UIImage imageNamed:@"knob-highlighted-85x85"] forState:UIControlStateHighlighted];
+    [maxControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
+    [maxControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
+    [maxControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
 
     minControl.mode = maxControl.mode = IKCMContinuous;
     minControl.circular = maxControl.circular = NO;
@@ -166,9 +166,9 @@
             self.circularSwitch.enabled = YES;
             self.timeScaleControl.enabled = NO;
 
-            [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateNormal];
-            [knobControl setImage:[UIImage imageNamed:@"knob-highlighted"] forState:UIControlStateHighlighted];
-            [knobControl setImage:[UIImage imageNamed:@"knob-disabled"] forState:UIControlStateDisabled];
+            [knobControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
+            [knobControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
+            [knobControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
             // [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateSelected];
 
             NSLog(@"Switched to continuous mode");
