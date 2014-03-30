@@ -14,6 +14,7 @@
  */
 
 #import "IOSKnobControl.h"
+#import "KCDAppDelegate.h"
 #import "KCDContinuousViewController.h"
 
 @implementation KCDContinuousViewController {
@@ -28,9 +29,6 @@
 
     // basic continuous knob configuration
     knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
-    [knobControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
-    [knobControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
-    [knobControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
     knobControl.mode = IKCMContinuous;
 
     // arrange to be notified whenever the knob turns
@@ -42,6 +40,30 @@
     [self setupMinAndMaxControls];
 
     [self updateKnobProperties];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self updateKnobImages];
+}
+
+- (void)updateKnobImages
+{
+    KCDAppDelegate* appDelegate = (KCDAppDelegate*)[UIApplication sharedApplication].delegate;
+
+    [knobControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
+    [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
+    [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+
+    // Use the same three images for each knob.
+    [minControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
+    [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
+    [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+
+    [maxControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
+    [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
+    [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
 }
 
 - (void)updateKnobProperties
@@ -83,15 +105,6 @@
     // That happens in updateKnobProperties.
     minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds];
     maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds];
-
-    // Use the same three images for each knob.
-    [minControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
-    [minControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
-    [minControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
-
-    [maxControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
-    [maxControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
-    [maxControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
 
     minControl.mode = maxControl.mode = IKCMContinuous;
     minControl.circular = maxControl.circular = NO;

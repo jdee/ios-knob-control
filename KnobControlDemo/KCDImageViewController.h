@@ -15,10 +15,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KCDAppDelegate : UIResponder <UIApplicationDelegate>
+@interface KCDImageViewController : UIViewController<UIPickerViewDataSource,UIPickerViewDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic) IBOutlet UIPickerView* pickerView;
 
-@property (nonatomic, copy) NSString* imageTitle;
+- (IBAction) done:(id)sender;
 
 @end
