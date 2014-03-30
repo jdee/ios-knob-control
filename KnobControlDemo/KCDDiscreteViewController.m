@@ -38,15 +38,15 @@
 
 - (void)updateKnobProperties
 {
-    knobControl.mode = IKCMLinearReturn + self.modeControl.selectedSegmentIndex;
+    knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCMLinearReturn : IKCMWheelOfFortune;
+
     knobControl.positions = 6;
     knobControl.circular = YES;
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
     /*
-     * The control ranges from -1 to 1, starting at 0. This avoids compressing the
-     * scale in the range below 0(1).
+     * The time scale control is logarithmic.
      */
     knobControl.timeScale = exp(self.timeScaleControl.value);
 

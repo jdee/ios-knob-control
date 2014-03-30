@@ -11,6 +11,8 @@
 /**
  * @mainpage iOS Knob Control
  *
+ * https://github.com/jdee/ios-knob-control/
+ *
  * A simple, reusable knob control. See the @ref IOSKnobControl class reference for details.
  *
  * Copyright (c) 2013-14, Jimmy Dee
