@@ -42,10 +42,11 @@
     knobControl.positions = 6;
     knobControl.circular = YES;
     knobControl.clockwise = self.clockwiseSwitch.on;
+    knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
     /*
      * The control ranges from -1 to 1, starting at 0. This avoids compressing the
-     * scale in the range below 0.
+     * scale in the range below 0(1).
      */
     knobControl.timeScale = exp(self.timeScaleControl.value);
 
@@ -55,38 +56,19 @@
 - (void)knobPositionChanged:(IOSKnobControl*)sender
 {
     self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
-
-    if (knobControl.mode != IKCMContinuous) {
-        self.indexLabel.text = [NSString stringWithFormat:@"%d", knobControl.positionIndex];
-    }
+    self.indexLabel.text = [NSString stringWithFormat:@"%d", knobControl.positionIndex];
 }
 
 #pragma mark - Handlers for configuration controls
 
-- (void)modeChanged:(UISegmentedControl *)sender
+- (void)somethingChanged:(UISegmentedControl *)sender
 {
-    NSLog(@"Mode index changed to %ld", (long)sender.selectedSegmentIndex);
-
     [self updateKnobProperties];
 }
 
 - (void)clockwiseChanged:(UISwitch *)sender
 {
-
-    switch (knobControl.mode) {
-        case IKCMLinearReturn:
-        case IKCMWheelOfFortune:
-            [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
-            break;
-        default:
-            break;
-    }
-    
-    [self updateKnobProperties];
-}
-
-- (void)timeScaleChanged:(UISlider *)sender
-{
+    [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
     [self updateKnobProperties];
 }
 

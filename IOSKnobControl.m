@@ -22,7 +22,7 @@
 #define IKC_EPSILON 1e-7
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
-#define IKC_TARGET_VERSION 0x010000
+#define IKC_TARGET_VERSION 0x010100
 #define IKC_TARGET_BUILD 1
 
 /*
@@ -50,7 +50,7 @@ static float normalizePosition(float position) {
 
 @implementation IOSKnobControl {
     float touchStart, positionStart, currentTouch;
-    UIPanGestureRecognizer* panGestureRecognizer;
+    UIGestureRecognizer* gestureRecognizer;
     CALayer* imageLayer;
     UIImage* images[4];
     BOOL rotating;
@@ -115,6 +115,7 @@ static float normalizePosition(float position) {
     _max = M_PI - IKC_EPSILON;
     _positions = 2;
     _timeScale = 1.0;
+    _gesture = IKCGOneFingerRotation;
 
     rotating = NO;
 
@@ -163,7 +164,7 @@ static float normalizePosition(float position) {
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
-    panGestureRecognizer.enabled = enabled;
+    gestureRecognizer.enabled = enabled;
 
     [self updateImage];
 }
@@ -235,6 +236,12 @@ static float normalizePosition(float position) {
     if (max < 0.0) max = 0.0;
     if (max >= M_PI) max = M_PI - IKC_EPSILON;
     _max = max;
+}
+
+- (void)setGesture:(IKCGesture)gesture
+{
+    _gesture = gesture;
+    [self setupGestureRecognizer];
 }
 
 #pragma mark - Private Methods: Geometry
@@ -367,11 +374,20 @@ static float normalizePosition(float position) {
 
 - (void)setupGestureRecognizer
 {
-    if (panGestureRecognizer) [self removeGestureRecognizer:panGestureRecognizer];
+    if (gestureRecognizer) [self removeGestureRecognizer:gestureRecognizer];
 
-    panGestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
-    panGestureRecognizer.enabled = self.enabled; // YES at initialization. This line usually does nothing.
-    [self addGestureRecognizer:panGestureRecognizer];
+    if (_gesture == IKCGOneFingerRotation) {
+        gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+    }
+    else if (_gesture == IKCGTwoFingerRotation) {
+        gestureRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotation:)];
+    }
+    else if (_gesture == IKCGVerticalPan) {
+        gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleVerticalPan:)];
+    }
+
+    gestureRecognizer.enabled = self.enabled;
+    [self addGestureRecognizer:gestureRecognizer];
 }
 
 // DEBT: Factor this stuff into a separate GR?
@@ -411,6 +427,34 @@ static float normalizePosition(float position) {
            sender.state == UIGestureRecognizerStateEnded ? "ended" : "<misc>"), touchStart, positionStart, touch, position);
 #endif
 
+    [self followGesture:sender toPosition:position];
+}
+
+- (void)handleRotation:(UIRotationGestureRecognizer*)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        positionStart = self.position;
+    }
+
+    float sign = self.clockwise ? 1.0 : -1.0;
+
+    [self followGesture:sender toPosition:positionStart + sign * sender.rotation];
+}
+
+- (void)handleVerticalPan:(UIPanGestureRecognizer*)sender
+{
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        positionStart = self.position;
+    }
+
+    // 1 vertical pass over the control bounds = 1 radian
+    // DEBT: Might want to make this sensitivity configurable.
+    float position = positionStart - [sender translationInView:self].y/self.bounds.size.height;
+    [self followGesture:sender toPosition:position];
+}
+
+- (void)followGesture:(UIGestureRecognizer*)sender toPosition:(double)position
+{
     switch (sender.state) {
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:

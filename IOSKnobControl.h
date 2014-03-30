@@ -4,8 +4,8 @@
 #error IOSKnobControl requires automatic reference counting.
 #endif // objc_arc
 
-#define IKC_VERSION_STRING @"1.0.0"
-#define IKC_VERSION 0x010000
+#define IKC_VERSION_STRING @"1.1.0"
+#define IKC_VERSION 0x010100
 #define IKC_BUILD 1
 
 /**
@@ -38,6 +38,12 @@ typedef NS_ENUM(NSInteger, IKCMode) {
     IKCMWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
     IKCMContinuous,     ///< Like a circular generalization of the slider control.
     IKCMRotaryDial      ///< TODO: Like an old rotary telephone dial. (Currently unimplemented.)
+};
+
+typedef NS_ENUM(NSInteger, IKCGesture) {
+    IKCGOneFingerRotation, ///< Custom gesture handling. One finger rotates the knob.
+    IKCGTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture.
+    IKCGVerticalPan        ///< Uses a vertical pan gesture. The image still rotates.
 };
 
 /**
@@ -76,6 +82,11 @@ typedef NS_ENUM(NSInteger, IKCMode) {
  * The default value of this property is NO.
  */
 @property (nonatomic) BOOL clockwise;
+
+/**
+ * Specifies the gesture the control should recognize. The default is IKCOneFingerRotation.
+ */
+@property (nonatomic) IKCGesture gesture;
 
 /**
  * Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. See the @ref circular property for further details.

@@ -76,6 +76,8 @@
     knobControl.max = maxControl.position;
     knobControl.clockwise = self.clockwiseSwitch.on;
 
+    minControl.gesture = maxControl.gesture = knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
+
     minControl.clockwise = maxControl.clockwise = knobControl.clockwise;
 
     minControl.position = minControl.position;
@@ -131,15 +133,9 @@
     [self.maxControlView addSubview:maxControl];
 }
 
-#pragma mark - Handlers for configuration controls
+#pragma mark - Handler for configuration controls
 
-- (void)circularChanged:(UISwitch *)sender
-{
-    NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
-    [self updateKnobProperties];
-}
-
-- (void)clockwiseChanged:(UISwitch *)sender
+- (void)somethingChanged:(id)sender
 {
     [self updateKnobProperties];
 }

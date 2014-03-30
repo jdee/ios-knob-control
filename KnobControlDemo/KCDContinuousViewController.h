@@ -25,8 +25,8 @@
 @property (nonatomic) IBOutlet UIView* maxControlView;
 @property (nonatomic) IBOutlet UILabel* minLabel;
 @property (nonatomic) IBOutlet UILabel* maxLabel;
+@property (nonatomic) IBOutlet UISegmentedControl* gestureControl;
 
-- (IBAction)circularChanged:(UISwitch*)sender;
-- (IBAction)clockwiseChanged:(UISwitch*)sender;
+- (IBAction)somethingChanged:(id)sender;
 
 @end
