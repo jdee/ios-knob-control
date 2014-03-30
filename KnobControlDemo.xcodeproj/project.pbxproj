@@ -14,7 +14,7 @@
 		7B199B59189ABEC9003E7F6A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
 		7B199B5D189ABEC9003E7F6A /* KCDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */; };
 		7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */; };
-		7B199B66189ABEC9003E7F6A /* KCDViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B65189ABEC9003E7F6A /* KCDViewController.m */; };
+		7B199B66189ABEC9003E7F6A /* KCDContinuousViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */; };
 		7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B67189ABEC9003E7F6A /* Images.xcassets */; };
 		7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B6E189ABEC9003E7F6A /* XCTest.framework */; };
 		7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
@@ -23,6 +23,7 @@
 		7B199B7B189ABEC9003E7F6A /* KnobControlDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */; };
 		7B199B85189AC13D003E7F6A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B84189AC13D003E7F6A /* README.md */; };
 		7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */; };
+		7B2880B418E79EB800A0E726 /* KCDDiscreteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */; };
 		7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7BE81C7F18B7B9DE0088814A /* ChangeLog */; };
 /* End PBXBuildFile section */
 
@@ -48,8 +49,8 @@
 		7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDAppDelegate.h; sourceTree = "<group>"; };
 		7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDAppDelegate.m; sourceTree = "<group>"; };
 		7B199B5F189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		7B199B64189ABEC9003E7F6A /* KCDViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDViewController.h; sourceTree = "<group>"; };
-		7B199B65189ABEC9003E7F6A /* KCDViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDViewController.m; sourceTree = "<group>"; };
+		7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDContinuousViewController.h; sourceTree = "<group>"; };
+		7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDContinuousViewController.m; sourceTree = "<group>"; };
 		7B199B67189ABEC9003E7F6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnobControlDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B199B6E189ABEC9003E7F6A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -59,6 +60,8 @@
 		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSKnobControl.h; sourceTree = "<group>"; };
 		7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOSKnobControl.m; sourceTree = "<group>"; };
+		7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDDiscreteViewController.h; sourceTree = "<group>"; };
+		7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDDiscreteViewController.m; sourceTree = "<group>"; };
 		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,8 +128,10 @@
 				7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */,
 				7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */,
 				7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */,
-				7B199B64189ABEC9003E7F6A /* KCDViewController.h */,
-				7B199B65189ABEC9003E7F6A /* KCDViewController.m */,
+				7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */,
+				7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */,
+				7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */,
+				7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */,
 				7B199B67189ABEC9003E7F6A /* Images.xcassets */,
 				7B199B53189ABEC9003E7F6A /* Supporting Files */,
 			);
@@ -274,7 +279,8 @@
 				7B199B5D189ABEC9003E7F6A /* KCDAppDelegate.m in Sources */,
 				7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */,
 				7B199B59189ABEC9003E7F6A /* main.m in Sources */,
-				7B199B66189ABEC9003E7F6A /* KCDViewController.m in Sources */,
+				7B2880B418E79EB800A0E726 /* KCDDiscreteViewController.m in Sources */,
+				7B199B66189ABEC9003E7F6A /* KCDContinuousViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

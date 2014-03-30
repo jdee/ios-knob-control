@@ -14,9 +14,9 @@
  */
 
 #import "IOSKnobControl.h"
-#import "KCDViewController.h"
+#import "KCDContinuousViewController.h"
 
-@implementation KCDViewController {
+@implementation KCDContinuousViewController {
     IOSKnobControl* knobControl;
     IOSKnobControl* minControl;
     IOSKnobControl* maxControl;
@@ -26,8 +26,12 @@
 {
     [super viewDidLoad];
 
-    // basic IOSKnobControl initialization (using default settings) with an image from the bundle
-    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds imageNamed:@"hexagon-ccw"];
+    // basic continuous knob configuration
+    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
+    [knobControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
+    [knobControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
+    [knobControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
+    knobControl.mode = IKCMContinuous;
 
     // arrange to be notified whenever the knob turns
     [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
@@ -38,27 +42,14 @@
     [self setupMinAndMaxControls];
 
     [self updateKnobProperties];
-
-    if (knobControl.mode == IKCMContinuous) {
-        self.indexLabel.hidden = YES;
-        self.indexLabelLabel.hidden = YES;
-    }
 }
 
 - (void)updateKnobProperties
 {
-    knobControl.mode = IKCMLinearReturn + self.modeControl.selectedSegmentIndex;
-    knobControl.positions = self.positionsTextField.text.intValue;
     knobControl.circular = self.circularSwitch.on;
     knobControl.min = minControl.position;
     knobControl.max = maxControl.position;
     knobControl.clockwise = self.clockwiseSwitch.on;
-
-    /*
-     * The control ranges from -1 to 1, starting at 0. This avoids compressing the
-     * scale in the range below 0.
-     */
-    knobControl.timeScale = exp(self.timeScaleControl.value);
 
     minControl.clockwise = maxControl.clockwise = knobControl.clockwise;
 
@@ -67,18 +58,13 @@
 
     knobControl.position = knobControl.position;
 
-    // with the current hexagonal image for discrete mode, min and max don't make much sense
-    minControl.enabled = maxControl.enabled = knobControl.mode == IKCMContinuous ? self.circularSwitch.on == NO : NO;
+    minControl.enabled = maxControl.enabled = self.circularSwitch.on == NO;
 }
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
 {
     if (sender == knobControl) {
         self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
-
-        if (knobControl.mode != IKCMContinuous) {
-            self.indexLabel.text = [NSString stringWithFormat:@"%d", knobControl.positionIndex];
-        }
     }
     else if (sender == minControl) {
         self.minLabel.text = [NSString stringWithFormat:@"%.2f", minControl.position];
@@ -131,56 +117,6 @@
 
 #pragma mark - Handlers for configuration controls
 
-- (void)modeChanged:(UISegmentedControl *)sender
-{
-    NSLog(@"Mode index changed to %ld", (long)sender.selectedSegmentIndex);
-    IKCMode mode = IKCMLinearReturn + (int)sender.selectedSegmentIndex;
-
-    /*
-     * Specification of animation and positions only applies to discrete mode.
-     * Index is only displayed in discrete mode. Adjust accordingly, depending
-     * on mode.
-     */
-    switch (mode) {
-        case IKCMLinearReturn:
-        case IKCMWheelOfFortune:
-            // for now, always use a hexagonal image, so positions is always 6
-            // circular is always YES
-            // self.positionsTextField.enabled = YES;
-            self.positionsTextField.enabled = NO;
-            self.indexLabelLabel.hidden = NO;
-            self.indexLabel.hidden = NO;
-            self.circularSwitch.on = YES;
-            self.circularSwitch.enabled = NO;
-            self.timeScaleControl.enabled = YES;
-
-            [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
-            [knobControl setImage:nil forState:UIControlStateHighlighted];
-
-            NSLog(@"Switched to discrete mode");
-            break;
-        case IKCMContinuous:
-            self.positionsTextField.enabled = NO;
-            self.indexLabelLabel.hidden = YES;
-            self.indexLabel.hidden = YES;
-            self.circularSwitch.enabled = YES;
-            self.timeScaleControl.enabled = NO;
-
-            [knobControl setImage:[UIImage imageNamed:@"teardrop"] forState:UIControlStateNormal];
-            [knobControl setImage:[UIImage imageNamed:@"teardrop-highlighted"] forState:UIControlStateHighlighted];
-            [knobControl setImage:[UIImage imageNamed:@"teardrop-disabled"] forState:UIControlStateDisabled];
-            // [knobControl setImage:[UIImage imageNamed:@"knob"] forState:UIControlStateSelected];
-
-            NSLog(@"Switched to continuous mode");
-            break;
-        default:
-            NSLog(@"Error: unsupported mode selected");
-            abort();
-    }
-
-    [self updateKnobProperties];
-}
-
 - (void)circularChanged:(UISwitch *)sender
 {
     NSLog(@"Circular is %@", (sender.on ? @"YES" : @"NO"));
@@ -199,11 +135,6 @@
             break;
     }
 
-    [self updateKnobProperties];
-}
-
-- (void)timeScaleChanged:(UISlider *)sender
-{
     [self updateKnobProperties];
 }
 

@@ -15,27 +15,18 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KCDViewController : UIViewController
+@interface KCDContinuousViewController : UIViewController
 
-@property IBOutlet UIView* knobControlView;
-@property IBOutlet UILabel* positionLabel;
-@property IBOutlet UILabel* indexLabelLabel;
-@property IBOutlet UILabel* indexLabel;
-@property IBOutlet UISegmentedControl* modeControl;
-@property IBOutlet UISlider* timeScaleControl;
-@property IBOutlet UITextField* positionsTextField;
-@property IBOutlet UISwitch* clockwiseSwitch;
-@property IBOutlet UISwitch* circularSwitch;
-@property IBOutlet UIView* minControlView;
-@property IBOutlet UIView* maxControlView;
-@property IBOutlet UILabel* minLabel;
-@property IBOutlet UILabel* maxLabel;
-@property IBOutlet UILabel* minLabelLabel;
-@property IBOutlet UILabel* maxLabelLabel;
+@property (nonatomic) IBOutlet UIView* knobControlView;
+@property (nonatomic) IBOutlet UILabel* positionLabel;
+@property (nonatomic) IBOutlet UISwitch* clockwiseSwitch;
+@property (nonatomic) IBOutlet UISwitch* circularSwitch;
+@property (nonatomic) IBOutlet UIView* minControlView;
+@property (nonatomic) IBOutlet UIView* maxControlView;
+@property (nonatomic) IBOutlet UILabel* minLabel;
+@property (nonatomic) IBOutlet UILabel* maxLabel;
 
-- (IBAction)modeChanged:(UISegmentedControl*)sender;
 - (IBAction)circularChanged:(UISwitch*)sender;
 - (IBAction)clockwiseChanged:(UISwitch*)sender;
-- (IBAction)timeScaleChanged:(UISlider*)sender;
 
 @end
