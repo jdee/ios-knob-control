@@ -46,6 +46,9 @@
 {
     [super viewWillAppear:animated];
     [self updateKnobImages];
+    [self updateKnobProperties];
+
+    NSLog(@"Min. knob position %f, max. knob position %f", minControl.position, maxControl.position);
 }
 
 - (void)updateKnobImages
@@ -138,16 +141,6 @@
 
 - (void)clockwiseChanged:(UISwitch *)sender
 {
-
-    switch (knobControl.mode) {
-        case IKCMLinearReturn:
-        case IKCMWheelOfFortune:
-            [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
-            break;
-        default:
-            break;
-    }
-
     [self updateKnobProperties];
 }
 
