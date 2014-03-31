@@ -52,6 +52,7 @@ static float normalizePosition(float position) {
     float touchStart, positionStart, currentTouch;
     UIGestureRecognizer* gestureRecognizer;
     CALayer* imageLayer;
+    CAShapeLayer* shapeLayer, *pipLayer;
     UIImage* images[4];
     BOOL rotating;
 }
@@ -64,18 +65,8 @@ static float normalizePosition(float position) {
 {
     self = [super initWithFrame:frame];
     if (self) {
-        /*
-         * If this constructor is used, the image property is initialized to nil and must be
-         * set manually.
-         */
         [self setDefaults];
         [self setupGestureRecognizer];
-
-        /*
-         * Should we call [self updateImage] here? The control cannot be used in this condition,
-         * until setImage:forState: is called, which will properly update the image. updateImage
-         * could potentially even crash with a nil image.
-         */
     }
     return self;
 }
@@ -242,6 +233,13 @@ static float normalizePosition(float position) {
 {
     _gesture = gesture;
     [self setupGestureRecognizer];
+}
+
+- (void)tintColorDidChange
+{
+    if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
+        [self updateShapeLayer];
+    }
 }
 
 #pragma mark - Private Methods: Geometry
@@ -462,6 +460,8 @@ static float normalizePosition(float position) {
                 [self snapToNearestPosition];
             }
             rotating = NO;
+
+            // revert from highlighted to normal
             [self updateImage];
             break;
         default:
@@ -469,7 +469,6 @@ static float normalizePosition(float position) {
             self.position = position;
             if (rotating == NO) {
                 rotating = YES;
-                [self updateImage];
             }
             break;
     }
@@ -523,7 +522,14 @@ static float normalizePosition(float position) {
         imageLayer.contents = (id)image.CGImage;
     }
     else {
-        [self updateShapeLayer];
+        if (![imageLayer isKindOfClass:CAShapeLayer.class]) {
+            [imageLayer removeFromSuperlayer];
+            imageLayer = [self updateShapeLayer];
+            [self.layer addSublayer:imageLayer];
+        }
+        else {
+            imageLayer = [self updateShapeLayer];
+        }
     }
 }
 
@@ -531,12 +537,19 @@ static float normalizePosition(float position) {
  * When no image is supplied (when [self imageForState:UIControlStateNormal] returns nil),
  * use a CAShapeLayer instead.
  */
-- (void)updateShapeLayer
+- (CAShapeLayer*)updateShapeLayer
 {
-    CAShapeLayer* shapeLayer;
-    if (![imageLayer isKindOfClass:CAShapeLayer.class]) {
-        [imageLayer removeFromSuperlayer];
+    float hue, saturation, brightness, alpha;
+    [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
 
+    UIColor* highlightColor = [UIColor colorWithHue:hue saturation:1.0 brightness:1.0 alpha:alpha];
+    UIColor* normalColor = [UIColor colorWithHue:hue saturation:0.7 brightness:0.8 alpha:alpha];
+    UIColor* disabledColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.9 alpha:alpha];
+
+    UIColor* markingColor = [UIColor colorWithHue:hue saturation:1.0 brightness:0.5 alpha:alpha];
+    UIColor* disabledMarkingColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.5 alpha:alpha];
+
+    if (!shapeLayer) {
         shapeLayer = [CAShapeLayer layer];
         shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
         shapeLayer.frame = self.frame;
@@ -544,24 +557,21 @@ static float normalizePosition(float position) {
         shapeLayer.opaque = NO;
 
         // DEBT: Should this be part of the same layer? For now, this is easier
-        CAShapeLayer* pipLayer = [CAShapeLayer layer];
-        pipLayer.fillColor = [UIColor blackColor].CGColor;
+        pipLayer = [CAShapeLayer layer];
         pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
         pipLayer.frame = self.frame;
         pipLayer.opaque = NO;
         pipLayer.backgroundColor = [UIColor clearColor].CGColor;
 
         [shapeLayer addSublayer:pipLayer];
-        
-        imageLayer = shapeLayer;
-        [self.layer addSublayer:imageLayer];
-    }
-    else {
-        shapeLayer = (CAShapeLayer*)imageLayer;
     }
 
-    shapeLayer.fillColor = (self.state & UIControlStateHighlighted) ?  [UIColor colorWithRed:0.9 green:0.9 blue:1.0 alpha:1.0].CGColor :
-        (self.state & UIControlStateDisabled) ? [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0].CGColor : [UIColor lightGrayColor].CGColor;
+    shapeLayer.fillColor = (self.state & UIControlStateHighlighted) ? highlightColor.CGColor :
+        (self.state & UIControlStateDisabled) ? disabledColor.CGColor :
+        normalColor.CGColor;
+    pipLayer.fillColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
+
+    return shapeLayer;
 }
 
 @end

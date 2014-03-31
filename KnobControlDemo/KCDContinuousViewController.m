@@ -91,6 +91,9 @@
     knobControl.max = maxControl.position;
     knobControl.clockwise = self.clockwiseSwitch.on;
 
+    // configure the tint color
+    minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor greenColor];
+
     minControl.gesture = maxControl.gesture = knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
     minControl.clockwise = maxControl.clockwise = knobControl.clockwise;
