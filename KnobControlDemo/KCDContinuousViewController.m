@@ -55,18 +55,33 @@
 {
     KCDAppDelegate* appDelegate = (KCDAppDelegate*)[UIApplication sharedApplication].delegate;
 
-    [knobControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
-    [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
-    [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+    if (appDelegate.imageTitle) {
+        [knobControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
+        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
+        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
 
-    // Use the same three images for each knob.
-    [minControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
-    [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
-    [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+        // Use the same three images for each knob.
+        [minControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
+        [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
+        [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
 
-    [maxControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
-    [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
-    [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+        [maxControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
+        [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
+        [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+    }
+    else {
+        [knobControl setImage:nil forState:UIControlStateNormal];
+        [knobControl setImage:nil forState:UIControlStateHighlighted];
+        [knobControl setImage:nil forState:UIControlStateDisabled];
+
+        [minControl setImage:nil forState:UIControlStateNormal];
+        [minControl setImage:nil forState:UIControlStateHighlighted];
+        [minControl setImage:nil forState:UIControlStateDisabled];
+
+        [maxControl setImage:nil forState:UIControlStateNormal];
+        [maxControl setImage:nil forState:UIControlStateHighlighted];
+        [maxControl setImage:nil forState:UIControlStateDisabled];
+    }
 }
 
 - (void)updateKnobProperties

@@ -33,7 +33,7 @@
      * change a couple lines of code and rebuild to see a new image. But it's also convenient to be able to change
      * in the app. For now, we'll have to maintain this list by hand.
      */
-    titles = @[@"knob", @"teardrop"];
+    titles = @[@"(none)", @"knob", @"teardrop"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -42,14 +42,20 @@
 
     KCDAppDelegate* appDelegate = (KCDAppDelegate*)[UIApplication sharedApplication].delegate;
 
-    currentlySelectedRow = [titles indexOfObject:appDelegate.imageTitle];
+    currentlySelectedRow = appDelegate.imageTitle ? [titles indexOfObject:appDelegate.imageTitle] : [titles indexOfObject:@"(none)"];
     [_pickerView selectRow:currentlySelectedRow inComponent:0 animated:NO];
 }
 
 - (void)done:(id)sender
 {
     KCDAppDelegate* appDelegate = (KCDAppDelegate*)[UIApplication sharedApplication].delegate;
-    appDelegate.imageTitle = [titles objectAtIndex:currentlySelectedRow];
+
+    if ([[titles objectAtIndex:currentlySelectedRow] isEqualToString:@"(none)"]) {
+        appDelegate.imageTitle = nil;
+    }
+    else {
+        appDelegate.imageTitle = [titles objectAtIndex:currentlySelectedRow];
+    }
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }

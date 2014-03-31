@@ -20,7 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    _imageTitle = @"knob";
+    _imageTitle = nil;
     return YES;
 }
 							

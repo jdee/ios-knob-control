@@ -145,19 +145,19 @@ static float normalizePosition(float position) {
      */
     if (state == UIControlStateNormal || state == UIControlStateHighlighted || state == UIControlStateDisabled || state == UIControlStateSelected) {
         images[index] = image;
+    }
 
-        /*
-         * The method parameter state must be one of the four enumerated values listed above.
-         * But self.state could be a mixed state. Conceivably, the control could be
-         * both disabled and highlighted. In that case, since disabled is numerically
-         * greater than highlighted, we return the index/image for UIControlStateDisabled.
-         * (See indexForState: below.) That is to say, the following expression is always true:
-         * [self indexForState:UIControlStateDisabled] == [self indexForState:UIControlStateHighlighted|UIControlStateDisabled]
-         * If we just now changed the image currently in use (the image for the current state), update it now.
-         */
-        if ([self indexForState:state] == [self indexForState:self.state]) {
-            [self updateImage];
-        }
+    /*
+     * The method parameter state must be one of the four enumerated values listed above.
+     * But self.state could be a mixed state. Conceivably, the control could be
+     * both disabled and highlighted. In that case, since disabled is numerically
+     * greater than highlighted, we return the index/image for UIControlStateDisabled.
+     * (See indexForState: below.) That is to say, the following expression is always true:
+     * [self indexForState:UIControlStateDisabled] == [self indexForState:UIControlStateHighlighted|UIControlStateDisabled]
+     * If we just now changed the image currently in use (the image for the current state), update it now.
+     */
+    if (index == [self indexForState:self.state]) {
+        [self updateImage];
     }
 }
 
@@ -505,18 +505,63 @@ static float normalizePosition(float position) {
  */
 - (void)updateImage
 {
-    if (!imageLayer) {
-        imageLayer = [CALayer layer];
-        imageLayer.frame = self.frame;
-        imageLayer.backgroundColor = [UIColor clearColor].CGColor;
-        imageLayer.opaque = NO;
-        [self.layer addSublayer:imageLayer];
-    }
-
     UIImage* image = self.imageForCurrentState;
     if (image) {
+        if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
+            [imageLayer removeFromSuperlayer];
+            imageLayer = nil;
+        }
+
+        if (!imageLayer) {
+            imageLayer = [CALayer layer];
+            imageLayer.frame = self.frame;
+            imageLayer.backgroundColor = [UIColor clearColor].CGColor;
+            imageLayer.opaque = NO;
+            [self.layer addSublayer:imageLayer];
+        }
+
         imageLayer.contents = (id)image.CGImage;
     }
+    else {
+        [self updateShapeLayer];
+    }
+}
+
+/*
+ * When no image is supplied (when [self imageForState:UIControlStateNormal] returns nil),
+ * use a CAShapeLayer instead.
+ */
+- (void)updateShapeLayer
+{
+    CAShapeLayer* shapeLayer;
+    if (![imageLayer isKindOfClass:CAShapeLayer.class]) {
+        [imageLayer removeFromSuperlayer];
+
+        shapeLayer = [CAShapeLayer layer];
+        shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+        shapeLayer.frame = self.frame;
+        shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+        shapeLayer.opaque = NO;
+
+        // DEBT: Should this be part of the same layer? For now, this is easier
+        CAShapeLayer* pipLayer = [CAShapeLayer layer];
+        pipLayer.fillColor = [UIColor blackColor].CGColor;
+        pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+        pipLayer.frame = self.frame;
+        pipLayer.opaque = NO;
+        pipLayer.backgroundColor = [UIColor clearColor].CGColor;
+
+        [shapeLayer addSublayer:pipLayer];
+        
+        imageLayer = shapeLayer;
+        [self.layer addSublayer:imageLayer];
+    }
+    else {
+        shapeLayer = (CAShapeLayer*)imageLayer;
+    }
+
+    shapeLayer.fillColor = (self.state & UIControlStateHighlighted) ?  [UIColor colorWithRed:0.9 green:0.9 blue:1.0 alpha:1.0].CGColor :
+        (self.state & UIControlStateDisabled) ? [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0].CGColor : [UIColor lightGrayColor].CGColor;
 }
 
 @end
