@@ -516,6 +516,10 @@ static float normalizePosition(float position) {
             imageLayer.frame = self.frame;
             imageLayer.backgroundColor = [UIColor clearColor].CGColor;
             imageLayer.opaque = NO;
+
+            float actual = self.clockwise ? self.position : -self.position;
+            imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+
             [self.layer addSublayer:imageLayer];
         }
 
@@ -574,6 +578,9 @@ static float normalizePosition(float position) {
         shapeLayer.frame = self.frame;
         shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
         shapeLayer.opaque = NO;
+
+        float actual = self.clockwise ? self.position : -self.position;
+        shapeLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
         // DEBT: Should this be part of the same layer? For now, this is easier
         pipLayer = [CAShapeLayer layer];
