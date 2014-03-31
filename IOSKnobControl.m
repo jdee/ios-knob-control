@@ -539,15 +539,34 @@ static float normalizePosition(float position) {
  */
 - (CAShapeLayer*)updateShapeLayer
 {
-    float hue, saturation, brightness, alpha;
+    UIColor* highlightColor, *normalColor, *disabledColor, *markingColor, *disabledMarkingColor;
+
+    float red, green, blue, alpha;
+    [self.tintColor getRed:&red green:&green blue:&blue alpha:&alpha];
+
+    float hue, saturation, brightness;
     [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
 
-    UIColor* highlightColor = [UIColor colorWithHue:hue saturation:1.0 brightness:1.0 alpha:alpha];
-    UIColor* normalColor = [UIColor colorWithHue:hue saturation:0.7 brightness:0.8 alpha:alpha];
-    UIColor* disabledColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.9 alpha:alpha];
+    if ((red == green && green == blue) || brightness < 0.02) {
+        /*
+         * This is for any shade of gray from black to white. Unfortunately, black is not really black.
+         * It comes out as a red hue. Hence the brightness test above.
+         */
+        highlightColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:alpha];
+        normalColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:alpha];
+        disabledColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:alpha];
 
-    UIColor* markingColor = [UIColor colorWithHue:hue saturation:1.0 brightness:0.5 alpha:alpha];
-    UIColor* disabledMarkingColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.5 alpha:alpha];
+        markingColor = [UIColor colorWithRed:0.25 green:0.25 blue:0.25 alpha:alpha];
+        disabledMarkingColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:alpha];
+    }
+    else {
+        highlightColor = [UIColor colorWithHue:hue saturation:0.7 brightness:1.0 alpha:alpha];
+        normalColor = [UIColor colorWithHue:hue saturation:1.0 brightness:0.9 alpha:alpha];
+        disabledColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.9 alpha:alpha];
+
+        markingColor = [UIColor colorWithHue:hue saturation:1.0 brightness:0.5 alpha:alpha];
+        disabledMarkingColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.5 alpha:alpha];
+    }
 
     if (!shapeLayer) {
         shapeLayer = [CAShapeLayer layer];
