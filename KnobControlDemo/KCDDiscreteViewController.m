@@ -61,7 +61,7 @@
 
 #pragma mark - Handlers for configuration controls
 
-- (void)somethingChanged:(UISegmentedControl *)sender
+- (void)somethingChanged:(id)sender
 {
     [self updateKnobProperties];
 }

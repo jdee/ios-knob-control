@@ -363,7 +363,7 @@
                                 <rect key="frame" x="228" y="170" width="51" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
-                                    <action selector="clockwiseChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="87d-lZ-5G5"/>
+                                    <action selector="clockwiseChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="BdN-ij-LIf"/>
                                 </connections>
                             </switch>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="index" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="taM-Ly-YuE">
@@ -394,7 +394,7 @@
                                     <segment title="Wheel of Fortune"/>
                                 </segments>
                                 <connections>
-                                    <action selector="modeChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="gKp-E1-VWH"/>
+                                    <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="fjd-IZ-qrQ"/>
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="time scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GZX-GT-U5w">
@@ -407,7 +407,7 @@
                                 <rect key="frame" x="112" y="315" width="190" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <connections>
-                                    <action selector="timeScaleChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="SWU-N9-L8U"/>
+                                    <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="gii-LV-JJD"/>
                                 </connections>
                             </slider>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-Xo-VtY">
@@ -419,7 +419,7 @@
                                     <segment title="v. pan"/>
                                 </segments>
                                 <connections>
-                                    <action selector="gestureChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="2B4-km-q6A"/>
+                                    <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="zhY-if-EWL"/>
                                 </connections>
                             </segmentedControl>
                         </subviews>
