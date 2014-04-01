@@ -118,12 +118,12 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from
  * -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1.
  */
-@property (nonatomic) int positionIndex;
+@property (nonatomic) NSInteger positionIndex;
 
 /**
  * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode.
  */
-@property (nonatomic) int positions;
+@property (nonatomic) NSUInteger positions;
 
 /**
  * Used by the linear return mode to specify the time scale for the animation.
@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 
 /**
  * Only used when no image is provided. These titles are rendered around the knob for each position index. If this property is nil (the default), the position
- * indices will be rendered instead (0, 1, 2, ...). The length of this array property must be at least positions in order to avoid an exception.
+ * indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices.
  */
 @property (nonatomic) NSArray* titles;
 

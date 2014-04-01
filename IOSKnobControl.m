@@ -173,7 +173,7 @@ static float normalizePosition(float position) {
     [self updateImage];
 }
 
-- (void)setPositions:(int)positions
+- (void)setPositions:(NSUInteger)positions
 {
     _positions = positions;
     [imageLayer removeFromSuperlayer];
@@ -225,20 +225,22 @@ static float normalizePosition(float position) {
     [self returnToPosition:position duration:animated ? delta*0.5/M_PI : 0.0];
 }
 
-- (void)setPositionIndex:(int)positionIndex
+- (void)setPositionIndex:(NSInteger)positionIndex
 {
     if (self.mode == IKCMContinuous) return;
-    [self setPosition:positionIndex*2.0*M_PI/_positions animated:NO];
+
+    float position = self.circular ? (2.0*M_PI/_positions)*positionIndex : ((self.max - self.min)/_positions)*(positionIndex+0.5) + self.min;
+    [self setPosition:position animated:NO];
 }
 
-- (int)positionIndex
+- (NSInteger)positionIndex
 {
     if (self.mode == IKCMContinuous) return -1;
 
     float converted = self.position;
     if (converted < 0) converted += 2.0*M_PI;
 
-    int index = self.circular ? converted*0.5/M_PI*self.positions+0.5 : (self.position-self.min)/(self.max-self.min)*self.positions+0.5;
+    int index = self.circular ? converted*0.5/M_PI*self.positions+0.5 : (self.position-self.min)/(self.max-self.min)*self.positions-0.5;
 
     while (index >= self.positions) index -= self.positions;
     while (index < 0) index += self.positions;
@@ -580,10 +582,10 @@ static float normalizePosition(float position) {
 {
     UIColor* highlightColor, *normalColor, *disabledColor, *markingColor, *disabledMarkingColor;
 
-    float red, green, blue, alpha;
+    CGFloat red, green, blue, alpha;
     [self.tintColor getRed:&red green:&green blue:&blue alpha:&alpha];
 
-    float hue, saturation, brightness;
+    CGFloat hue, saturation, brightness;
     [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
 
     if ((red == green && green == blue) || brightness < 0.02) {
@@ -651,8 +653,15 @@ static float normalizePosition(float position) {
         CGSize textSize = [layer.string sizeWithAttributes:attrs];
 
         // place it at the appropriate angle, taking the clockwise switch into account
-        float angle = (2.0*M_PI/_positions)*j;
-        float actual = self.clockwise ? -angle : angle;
+        float position;
+        if (self.circular) {
+            position = (2.0*M_PI/_positions)*j;
+        }
+        else {
+            position = ((self.max-self.min)/_positions)*(j+0.5) + self.min;
+        }
+
+        float actual = self.clockwise ? -position : position;
 
         // distance from the center to place the upper left corner
         float radius = 0.4*self.bounds.size.width - 0.5*textSize.height;

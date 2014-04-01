@@ -131,12 +131,14 @@ Properties</h2></td></tr>
 <tr class="separator:a2c6fe54e7624e3612f558e31155f1405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fd561975d0ccc747d3b40b5d4377d39"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39">position</a></td></tr>
 <tr class="separator:a9fd561975d0ccc747d3b40b5d4377d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29fee3098a484f4dc4468794545f99f0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a29fee3098a484f4dc4468794545f99f0">positionIndex</a></td></tr>
-<tr class="separator:a29fee3098a484f4dc4468794545f99f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96f06067ea331c5e20838872df839247"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a96f06067ea331c5e20838872df839247">positions</a></td></tr>
-<tr class="separator:a96f06067ea331c5e20838872df839247"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a748c9f93832ff24e2c868c404e976969"><td class="memItemLeft" align="right" valign="top">NSInteger&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a748c9f93832ff24e2c868c404e976969">positionIndex</a></td></tr>
+<tr class="separator:a748c9f93832ff24e2c868c404e976969"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22a233530468c59a028ad0c579c857a1"><td class="memItemLeft" align="right" valign="top">NSUInteger&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a22a233530468c59a028ad0c579c857a1">positions</a></td></tr>
+<tr class="separator:a22a233530468c59a028ad0c579c857a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a432d17639cf2b2ea1a61916215d6ad"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad">timeScale</a></td></tr>
 <tr class="separator:a5a432d17639cf2b2ea1a61916215d6ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae3ace0d2cf9907b8f9aa2e2ba150bf72"><td class="memItemLeft" align="right" valign="top">NSArray *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#ae3ace0d2cf9907b8f9aa2e2ba150bf72">titles</a></td></tr>
+<tr class="separator:ae3ace0d2cf9907b8f9aa2e2ba150bf72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A simple, reusable rotary control. You must provide at least one image. The control chooses an image based on state, like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and animates rotation of the current image in response, programmatically reading out the current angular position of the knob and generating a UIControlEventValueChanged each time the knob rotates.</p>
@@ -478,7 +480,7 @@ Properties</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a29fee3098a484f4dc4468794545f99f0"></a>
+<a class="anchor" id="a748c9f93832ff24e2c868c404e976969"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -486,20 +488,20 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">- (int) positionIndex</td>
+          <td class="memname">- (NSInteger) positionIndex</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max properties are ignored, and then positionIndex is position/2/M_PI*positions. This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1. DEBT: Should this have a setter? Should I be able to set a discrete knob to position 3, e.g., rather than having to do it by setting the position property? </p>
+<p>Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max properties are ignored, and then positionIndex is position/2/M_PI*positions. This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1. </p>
 
 </div>
 </div>
-<a class="anchor" id="a96f06067ea331c5e20838872df839247"></a>
+<a class="anchor" id="a22a233530468c59a028ad0c579c857a1"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -507,7 +509,7 @@ Properties</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">- (int) positions</td>
+          <td class="memname">- (NSUInteger) positions</td>
         </tr>
       </table>
   </td>
@@ -541,13 +543,34 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ae3ace0d2cf9907b8f9aa2e2ba150bf72"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (NSArray*) titles</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Only used when no image is provided. These titles are rendered around the knob for each position index. If this property is nil (the default), the position indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="_i_o_s_knob_control_8h_source.html">IOSKnobControl.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 30 2014 10:16:42 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Mar 31 2014 19:24:34 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

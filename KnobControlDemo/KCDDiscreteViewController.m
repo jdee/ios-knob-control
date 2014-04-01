@@ -58,7 +58,7 @@
 - (void)knobPositionChanged:(IOSKnobControl*)sender
 {
     self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
-    self.indexLabel.text = [NSString stringWithFormat:@"%d", knobControl.positionIndex];
+    self.indexLabel.text = [NSString stringWithFormat:@"%ld", (long)knobControl.positionIndex];
 }
 
 #pragma mark - Handlers for configuration controls
