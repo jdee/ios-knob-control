@@ -25,7 +25,7 @@
     [super viewDidLoad];
 
     // basic IOSKnobControl initialization (using default settings) with an image from the bundle
-    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds imageNamed:@"hexagon-ccw"];
+    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds /* imageNamed:@"hexagon-ccw" */];
 
     // arrange to be notified whenever the knob turns
     [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
@@ -41,9 +41,11 @@
     knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCMLinearReturn : IKCMWheelOfFortune;
 
     knobControl.positions = 6;
+    knobControl.titles = @[@"zero", @"one", @"two", @"three", @"four", @"five"];
     knobControl.circular = YES;
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
+    knobControl.tintColor = [UIColor greenColor];
 
     /*
      * The time scale control is logarithmic.
@@ -68,7 +70,7 @@
 
 - (void)clockwiseChanged:(UISwitch *)sender
 {
-    [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
+    // [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
     [self updateKnobProperties];
 }
 

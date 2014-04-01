@@ -53,6 +53,7 @@ static float normalizePosition(float position) {
     UIGestureRecognizer* gestureRecognizer;
     CALayer* imageLayer;
     CAShapeLayer* shapeLayer, *pipLayer;
+    NSMutableArray* markings;
     UIImage* images[4];
     BOOL rotating;
 }
@@ -169,6 +170,40 @@ static float normalizePosition(float position) {
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
+    [self updateImage];
+}
+
+- (void)setPositions:(int)positions
+{
+    _positions = positions;
+    [imageLayer removeFromSuperlayer];
+    shapeLayer = nil;
+    imageLayer = [self createShapeLayer];
+    [self.layer addSublayer:imageLayer];
+}
+
+- (void)setTitles:(NSArray *)titles
+{
+    _titles = titles;
+    [imageLayer removeFromSuperlayer];
+    shapeLayer = nil;
+    imageLayer = [self createShapeLayer];
+    [self.layer addSublayer:imageLayer];
+}
+
+- (void)setMode:(IKCMode)mode
+{
+    _mode = mode;
+    [self updateImage];
+}
+
+- (void)setClockwise:(BOOL)clockwise
+{
+    _clockwise = clockwise;
+    [imageLayer removeFromSuperlayer];
+    shapeLayer = nil;
+    imageLayer = [self createShapeLayer];
+    [self.layer addSublayer:imageLayer];
     [self updateImage];
 }
 
@@ -528,20 +563,14 @@ static float normalizePosition(float position) {
     else {
         if (![imageLayer isKindOfClass:CAShapeLayer.class]) {
             [imageLayer removeFromSuperlayer];
-            imageLayer = [self updateShapeLayer];
+            imageLayer = [self createShapeLayer];
             [self.layer addSublayer:imageLayer];
         }
-        else {
-            imageLayer = [self updateShapeLayer];
-        }
+        [self updateShapeLayer];
     }
 }
 
-/*
- * When no image is supplied (when [self imageForState:UIControlStateNormal] returns nil),
- * use a CAShapeLayer instead.
- */
-- (CAShapeLayer*)updateShapeLayer
+- (void)updateShapeLayer
 {
     UIColor* highlightColor, *normalColor, *disabledColor, *markingColor, *disabledMarkingColor;
 
@@ -572,6 +601,66 @@ static float normalizePosition(float position) {
         disabledMarkingColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.5 alpha:alpha];
     }
 
+    shapeLayer.fillColor = (self.state & UIControlStateHighlighted) ? highlightColor.CGColor :
+        (self.state & UIControlStateDisabled) ? disabledColor.CGColor :
+        normalColor.CGColor;
+    pipLayer.fillColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
+
+    for (CATextLayer* layer in markings) {
+        // layer.foregroundColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
+        layer.foregroundColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
+    }
+}
+
+- (void)addMarkings
+{
+    markings = [NSMutableArray array];
+    for (CATextLayer* layer in markings) {
+        [layer removeFromSuperlayer];
+    }
+
+    int j=0;
+    for (j=0; j<_positions; ++j) {
+        NSString* title;
+        if (j < _titles.count) title = [_titles objectAtIndex:j];
+
+        if (!title) {
+            title = [NSString stringWithFormat:@"%d", j];
+        }
+
+        CATextLayer* layer = [CATextLayer layer];
+        layer.string = title;
+        layer.fontSize = 18.0;
+        layer.alignmentMode = kCAAlignmentCenter;
+
+        UIFont* font = ((__bridge UIFont*)layer.font).copy;
+
+        NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
+        [attrs setObject:font forKey:NSFontAttributeName];
+
+        CGSize size = [layer.string sizeWithAttributes:attrs];
+
+        float angle = (2.0*M_PI/_positions)*j;
+        float actual = self.clockwise ? -angle : angle;
+
+        layer.frame = CGRectMake(0.5*self.bounds.size.width*(1+0.7*sin(actual))-0.5*size.width, 0.5*self.bounds.size.height*(1-0.7*cos(actual))-0.5*size.height, size.width, size.height);
+        layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+
+        layer.opaque = NO;
+        layer.backgroundColor = [UIColor clearColor].CGColor;
+
+        [markings addObject:layer];
+
+        [shapeLayer addSublayer:layer];
+    }
+}
+
+/*
+ * When no image is supplied (when [self imageForState:UIControlStateNormal] returns nil),
+ * use a CAShapeLayer instead.
+ */
+- (CAShapeLayer*)createShapeLayer
+{
     if (!shapeLayer) {
         shapeLayer = [CAShapeLayer layer];
         shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
@@ -579,23 +668,29 @@ static float normalizePosition(float position) {
         shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
         shapeLayer.opaque = NO;
 
+        if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
+            [pipLayer removeFromSuperlayer];
+            pipLayer = nil;
+            [self addMarkings];
+        }
+        else {
+            for (CATextLayer* layer in markings) {
+                [layer removeFromSuperlayer];
+            }
+            markings = nil;
+
+            pipLayer = [CAShapeLayer layer];
+            pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+            pipLayer.frame = self.frame;
+            pipLayer.opaque = NO;
+            pipLayer.backgroundColor = [UIColor clearColor].CGColor;
+
+            [shapeLayer addSublayer:pipLayer];
+        }
+
         float actual = self.clockwise ? self.position : -self.position;
         shapeLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
-
-        // DEBT: Should this be part of the same layer? For now, this is easier
-        pipLayer = [CAShapeLayer layer];
-        pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-        pipLayer.frame = self.frame;
-        pipLayer.opaque = NO;
-        pipLayer.backgroundColor = [UIColor clearColor].CGColor;
-
-        [shapeLayer addSublayer:pipLayer];
     }
-
-    shapeLayer.fillColor = (self.state & UIControlStateHighlighted) ? highlightColor.CGColor :
-        (self.state & UIControlStateDisabled) ? disabledColor.CGColor :
-        normalColor.CGColor;
-    pipLayer.fillColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
 
     return shapeLayer;
 }

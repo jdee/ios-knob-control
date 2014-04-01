@@ -135,6 +135,12 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  */
 @property (nonatomic) float timeScale;
 
+/**
+ * Only used when no image is provided. These titles are rendered around the knob for each position index. If this property is nil (the default), the position
+ * indices will be rendered instead (0, 1, 2, ...). The length of this array property must be at least positions in order to avoid an exception.
+ */
+@property (nonatomic) NSArray* titles;
+
 #pragma mark - Object Lifecycle
 
 /**
