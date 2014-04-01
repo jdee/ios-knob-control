@@ -172,12 +172,12 @@ static float normalizePosition(float position) {
              * This is for any shade of gray from black to white. Unfortunately, black is not really black.
              * It comes out as a red hue. Hence the brightness test above.
              */
-            CGFloat value = ((NSNumber*)@[@(0.6), @(0.8), @(0.9)][index]).floatValue;
+            CGFloat value = ((NSNumber*)@[@(0.6), @(0.8), @(0.9), @(0.8)][index]).floatValue;
             color = [UIColor colorWithRed:value green:value blue:value alpha:alpha];
         }
         else {
-            saturation = ((NSNumber*)@[@(1.0), @(0.7), @(0.2)][index]).floatValue;
-            brightness = ((NSNumber*)@[@(0.9), @(1.0), @(0.9)][index]).floatValue;
+            saturation = ((NSNumber*)@[@(1.0), @(0.7), @(0.2), @(0.7)][index]).floatValue;
+            brightness = ((NSNumber*)@[@(0.9), @(1.0), @(0.9), @(1.0)][index]).floatValue;
             color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:alpha];
         }
     }
@@ -214,12 +214,12 @@ static float normalizePosition(float position) {
              * This is for any shade of gray from black to white. Unfortunately, black is not really black.
              * It comes out as a red hue. Hence the brightness test above.
              */
-            CGFloat value = ((NSNumber*)@[@(0.25), @(0.25), @(0.4)][index]).floatValue;
+            CGFloat value = ((NSNumber*)@[@(0.25), @(0.25), @(0.4), @(0.25)][index]).floatValue;
             color = [UIColor colorWithRed:value green:value blue:value alpha:alpha];
         }
         else {
-            saturation = ((NSNumber*)@[@(1.0), @(1.0), @(0.2)][index]).floatValue;
-            brightness = 0.5; // ((NSNumber*)@[@(0.5), @(0.5), @(0.5)][index]).floatValue;
+            saturation = ((NSNumber*)@[@(1.0), @(1.0), @(0.2), @(1.0)][index]).floatValue;
+            brightness = 0.5; // ((NSNumber*)@[@(0.5), @(0.5), @(0.5), @(0.5)][index]).floatValue;
             color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:alpha];
         }
     }
