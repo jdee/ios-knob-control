@@ -736,20 +736,18 @@ static float normalizePosition(float position) {
         // set the font size and calculate the size of the title
         layer.fontSize = 18.0;
 
-        UIFont* font = (__bridge UIFont*)layer.font;
-
-        NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
-        [attrs setObject:font forKey:NSFontAttributeName];
-
         CGSize textSize;
         if ([layer.string respondsToSelector:@selector(sizeWithAttributes:)]) {
             // iOS 7.x
+            UIFont* font = (__bridge UIFont*)layer.font;
+            NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
+            [attrs setObject:font forKey:NSFontAttributeName];
             textSize = [layer.string sizeWithAttributes:attrs];
         }
         else {
             // iOS 5 & 6
-            UIFont* uifont = [UIFont fontWithName:@"Helvetica" size:layer.fontSize];
-            textSize = [layer.string sizeWithFont:uifont];
+            UIFont* font = [UIFont fontWithName:@"Helvetica" size:layer.fontSize];
+            textSize = [layer.string sizeWithFont:font];
         }
 
         // place it at the appropriate angle, taking the clockwise switch into account

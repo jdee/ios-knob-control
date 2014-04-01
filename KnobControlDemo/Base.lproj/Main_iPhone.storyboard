@@ -162,9 +162,12 @@
                                     <segue destination="MAf-mq-eSE" kind="modal" id="1NB-04-cP6"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="6j1-77-8LI">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="6j1-77-8LI">
                                 <rect key="frame" x="20" y="226" width="280" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="Qay-ki-3yv"/>
+                                </constraints>
                                 <segments>
                                     <segment title="1-f rot."/>
                                     <segment title="2-f. rot."/>
@@ -184,12 +187,16 @@
                             <constraint firstItem="Wav-jw-KiX" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="20" id="7Fm-ep-Ptv"/>
                             <constraint firstItem="nZP-0K-Voz" firstAttribute="leading" secondItem="Wav-jw-KiX" secondAttribute="trailing" constant="8" id="8zK-ff-TFr"/>
                             <constraint firstItem="Wav-jw-KiX" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="AeU-DH-Raz"/>
+                            <constraint firstItem="6j1-77-8LI" firstAttribute="top" secondItem="Wav-jw-KiX" secondAttribute="bottom" constant="6" id="DDo-AF-Qwx"/>
                             <constraint firstItem="jZn-DZ-6KN" firstAttribute="leading" secondItem="7o9-h7-AwA" secondAttribute="trailing" constant="32" id="Gcc-MU-jkB"/>
                             <constraint firstItem="DDP-MT-obn" firstAttribute="leading" secondItem="Wav-jw-KiX" secondAttribute="trailing" constant="8" id="JJc-Iu-1fY"/>
                             <constraint firstItem="UJo-4d-zR8" firstAttribute="top" secondItem="vqD-g4-ltI" secondAttribute="bottom" constant="-25" id="Lpo-D7-F7W"/>
                             <constraint firstItem="egb-ow-f1d" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="SWG-Kn-hus"/>
                             <constraint firstItem="egb-ow-f1d" firstAttribute="top" secondItem="7o9-h7-AwA" secondAttribute="bottom" constant="13" id="Tll-rN-QVN"/>
+                            <constraint firstAttribute="trailing" secondItem="6j1-77-8LI" secondAttribute="trailing" constant="20" id="UVZ-rt-d5y"/>
                             <constraint firstItem="7o9-h7-AwA" firstAttribute="top" secondItem="jZn-DZ-6KN" secondAttribute="bottom" constant="-21" id="VT9-S7-QLg"/>
+                            <constraint firstItem="vqD-g4-ltI" firstAttribute="top" secondItem="6j1-77-8LI" secondAttribute="bottom" constant="21" id="aQO-i7-CqM"/>
+                            <constraint firstItem="6j1-77-8LI" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="aTJ-qo-BXx"/>
                             <constraint firstItem="OjC-9U-h5N" firstAttribute="top" secondItem="1i9-nA-7UP" secondAttribute="bottom" constant="-21" id="abA-qr-7Gy"/>
                             <constraint firstItem="1i9-nA-7UP" firstAttribute="leading" secondItem="OjC-9U-h5N" secondAttribute="trailing" constant="26" id="ana-PW-jFh"/>
                             <constraint firstItem="MEk-uT-0ey" firstAttribute="top" secondItem="DDP-MT-obn" secondAttribute="bottom" constant="8" id="cK8-yM-Tts"/>
@@ -201,8 +208,6 @@
                             <constraint firstItem="4sJ-uz-zKG" firstAttribute="top" secondItem="To5-Vi-gn8" secondAttribute="bottom" constant="22" id="qBn-al-QTN"/>
                             <constraint firstItem="To5-Vi-gn8" firstAttribute="leading" secondItem="Wav-jw-KiX" secondAttribute="trailing" constant="9" id="qrx-uK-Tt3"/>
                             <constraint firstItem="DDP-MT-obn" firstAttribute="top" secondItem="nZP-0K-Voz" secondAttribute="bottom" constant="8" id="rEe-LP-kyj"/>
-                            <constraint firstItem="vqD-g4-ltI" firstAttribute="top" secondItem="Wav-jw-KiX" secondAttribute="bottom" constant="55" id="sJf-aY-jIG"/>
-                            <constraint firstItem="UJo-4d-zR8" firstAttribute="top" secondItem="Wav-jw-KiX" secondAttribute="bottom" constant="51" id="ugu-pS-1l8"/>
                             <constraint firstItem="9xV-FB-DdP" firstAttribute="leading" secondItem="OjC-9U-h5N" secondAttribute="trailing" constant="-42" id="wBq-Sc-jhU"/>
                             <constraint firstItem="4sJ-uz-zKG" firstAttribute="leading" secondItem="Wav-jw-KiX" secondAttribute="trailing" constant="8" id="wCg-CT-Pvk"/>
                             <constraint firstItem="7o9-h7-AwA" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="20" id="zSR-U5-PnH"/>
@@ -391,9 +396,12 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="QRZ-W1-zSR">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="QRZ-W1-zSR">
                                 <rect key="frame" x="20" y="279" width="280" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="e1R-3o-AYg"/>
+                                </constraints>
                                 <segments>
                                     <segment title="Linear Return"/>
                                     <segment title="Wheel of Fortune"/>
@@ -402,22 +410,32 @@
                                     <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="fjd-IZ-qrQ"/>
                                 </connections>
                             </segmentedControl>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="time scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GZX-GT-U5w">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GZX-GT-U5w">
                                 <rect key="frame" x="20" y="319" width="86" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="86" id="0ko-If-wgy"/>
+                                    <constraint firstAttribute="height" constant="21" id="t1I-Go-8aH"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JHN-Ql-Wnj">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JHN-Ql-Wnj">
                                 <rect key="frame" x="112" y="315" width="190" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="anG-Kb-cIJ"/>
+                                </constraints>
                                 <connections>
                                     <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="gii-LV-JJD"/>
                                 </connections>
                             </slider>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-Xo-VtY">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-Xo-VtY">
                                 <rect key="frame" x="20" y="228" width="280" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="yle-9i-idb"/>
+                                </constraints>
                                 <segments>
                                     <segment title="1-f. rot."/>
                                     <segment title="2-f. rot."/>
@@ -431,15 +449,26 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="pL2-iT-1uC" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="8" id="8Zc-3A-Xy3"/>
+                            <constraint firstAttribute="trailing" secondItem="JHN-Ql-Wnj" secondAttribute="trailing" constant="20" id="9ua-RZ-hY5"/>
                             <constraint firstItem="taM-Ly-YuE" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="8" id="Em2-cp-Z4J"/>
+                            <constraint firstItem="QRZ-W1-zSR" firstAttribute="top" secondItem="dPo-Xo-VtY" secondAttribute="bottom" constant="23" id="GnO-0S-gQ6"/>
                             <constraint firstItem="6XS-jD-4bt" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="8" id="J9E-Wb-hQs"/>
                             <constraint firstItem="bd9-Sz-5t7" firstAttribute="top" secondItem="13Y-kE-mFg" secondAttribute="bottom" constant="8" id="KLv-oE-tqC"/>
                             <constraint firstItem="taM-Ly-YuE" firstAttribute="top" secondItem="6XS-jD-4bt" secondAttribute="bottom" constant="8" id="OGk-m2-YjP"/>
                             <constraint firstItem="VgK-B7-VJ2" firstAttribute="leading" secondItem="u6P-2h-2tv" secondAttribute="leading" constant="20" id="OST-iN-sx9"/>
                             <constraint firstItem="6XS-jD-4bt" firstAttribute="top" secondItem="pL2-iT-1uC" secondAttribute="bottom" constant="8" id="P2Y-ca-I0N"/>
+                            <constraint firstItem="dPo-Xo-VtY" firstAttribute="leading" secondItem="u6P-2h-2tv" secondAttribute="leading" constant="20" id="PS0-ip-MDE"/>
+                            <constraint firstItem="JHN-Ql-Wnj" firstAttribute="top" secondItem="GZX-GT-U5w" secondAttribute="bottom" constant="-25" id="Pce-2W-RN9"/>
                             <constraint firstItem="bd9-Sz-5t7" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="7" id="R5F-XA-GdZ"/>
+                            <constraint firstItem="JHN-Ql-Wnj" firstAttribute="leading" secondItem="GZX-GT-U5w" secondAttribute="trailing" constant="8" id="RT3-Cn-oba"/>
+                            <constraint firstItem="GZX-GT-U5w" firstAttribute="leading" secondItem="u6P-2h-2tv" secondAttribute="leading" constant="20" id="XYa-qU-HwY"/>
+                            <constraint firstAttribute="trailing" secondItem="QRZ-W1-zSR" secondAttribute="trailing" constant="20" id="Zko-xT-SP3"/>
+                            <constraint firstItem="QRZ-W1-zSR" firstAttribute="leading" secondItem="u6P-2h-2tv" secondAttribute="leading" constant="20" id="bhr-bp-dAS"/>
                             <constraint firstItem="13Y-kE-mFg" firstAttribute="top" secondItem="taM-Ly-YuE" secondAttribute="bottom" constant="8" id="dO6-tb-YfK"/>
+                            <constraint firstItem="GZX-GT-U5w" firstAttribute="top" secondItem="QRZ-W1-zSR" secondAttribute="bottom" constant="12" id="jT3-vY-nXs"/>
                             <constraint firstItem="VgK-B7-VJ2" firstAttribute="top" secondItem="u6P-2h-2tv" secondAttribute="top" constant="20" id="klv-X3-dA8"/>
+                            <constraint firstItem="dPo-Xo-VtY" firstAttribute="top" secondItem="VgK-B7-VJ2" secondAttribute="bottom" constant="8" id="qVb-Ut-fbH"/>
+                            <constraint firstAttribute="trailing" secondItem="dPo-Xo-VtY" secondAttribute="trailing" constant="20" id="swh-k1-6aB"/>
                             <constraint firstItem="pL2-iT-1uC" firstAttribute="top" secondItem="u6P-2h-2tv" secondAttribute="top" constant="20" id="uR1-rS-tBS"/>
                             <constraint firstItem="13Y-kE-mFg" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="8" id="z1j-ol-QIy"/>
                         </constraints>
