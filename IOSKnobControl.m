@@ -861,7 +861,7 @@ static float normalizePosition(float position) {
 - (CGFloat)fontSizeForTitles
 {
     CGFloat fontSize;
-    CGFloat fontSizes[] = { 36.0, 24.0, 18.0, 14.0, 12.0, 10.0 };
+    CGFloat fontSizes[] = { /* 36.0, */ 24.0, 18.0, 14.0, 12.0, 10.0 };
 
     double angle = _circular ? 2.0*M_PI : _max - _min;
 
