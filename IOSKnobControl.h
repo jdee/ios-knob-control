@@ -49,7 +49,8 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 };
 
 /**
- * A simple, reusable rotary control. You must provide at least one image. The control chooses an image based on state,
+ * A simple, reusable rotary control. You may provide custom knob images or use the default images, which may be customized
+ * using the tintColor and titles properties. The control chooses an image based on state,
  * like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and
  * animates rotation of the current image in response, programmatically reading out the current angular position of the knob
  * and generating a UIControlEventValueChanged each time the knob rotates.

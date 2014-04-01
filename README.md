@@ -2,7 +2,8 @@ iOS Knob Control
 ================
 
 This is a generic, reusable knob control you can insert into any application.
-You provide any square image for the knob. The control animates rotation of the image
+You may provide custom knob images or use the default images, which may be customized
+using the tintColor and titles properties.  The control animates rotation of the image
 in response to one of several configurable gestures from the user. The knob has a number
 of configurable modes:
 
