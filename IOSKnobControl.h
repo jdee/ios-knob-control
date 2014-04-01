@@ -117,9 +117,8 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from
  * 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from
  * -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1.
- * DEBT: Should this have a setter? Should I be able to set a discrete knob to position 3, e.g., rather than having to do it by setting the position property?
  */
-@property (readonly, nonatomic) int positionIndex;
+@property (nonatomic) int positionIndex;
 
 /**
  * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode.

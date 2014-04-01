@@ -15,9 +15,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KCDImageViewController : UIViewController<UIPickerViewDataSource,UIPickerViewDelegate>
+@interface KCDImageViewController : UIViewController
 
-@property (nonatomic) IBOutlet UIPickerView* pickerView;
+@property (nonatomic) IBOutlet UIView* knobHolder;
 
 - (IBAction) done:(id)sender;
 

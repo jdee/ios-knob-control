@@ -225,6 +225,12 @@ static float normalizePosition(float position) {
     [self returnToPosition:position duration:animated ? delta*0.5/M_PI : 0.0];
 }
 
+- (void)setPositionIndex:(int)positionIndex
+{
+    if (self.mode == IKCMContinuous) return;
+    [self setPosition:positionIndex*2.0*M_PI/_positions animated:NO];
+}
+
 - (int)positionIndex
 {
     if (self.mode == IKCMContinuous) return -1;
@@ -621,6 +627,7 @@ static float normalizePosition(float position) {
 
     int j=0;
     for (j=0; j<_positions; ++j) {
+        // get the title for this marking (use j if none)
         NSString* title;
         if (j < _titles.count) title = [_titles objectAtIndex:j];
 
@@ -628,24 +635,33 @@ static float normalizePosition(float position) {
             title = [NSString stringWithFormat:@"%d", j];
         }
 
+        // create a CATextLayer to display this string
         CATextLayer* layer = [CATextLayer layer];
         layer.string = title;
-        layer.fontSize = 18.0;
         layer.alignmentMode = kCAAlignmentCenter;
 
-        UIFont* font = ((__bridge UIFont*)layer.font).copy;
+        // set the font size and calculate the size of the title
+        layer.fontSize = 18.0;
+
+        UIFont* font = (__bridge UIFont*)layer.font;
 
         NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
         [attrs setObject:font forKey:NSFontAttributeName];
 
-        CGSize size = [layer.string sizeWithAttributes:attrs];
+        CGSize textSize = [layer.string sizeWithAttributes:attrs];
 
+        // place it at the appropriate angle, taking the clockwise switch into account
         float angle = (2.0*M_PI/_positions)*j;
         float actual = self.clockwise ? -angle : angle;
 
-        layer.frame = CGRectMake(0.5*self.bounds.size.width*(1+0.7*sin(actual))-0.5*size.width, 0.5*self.bounds.size.height*(1-0.7*cos(actual))-0.5*size.height, size.width, size.height);
+        // distance from the center to place the upper left corner
+        float radius = 0.4*self.bounds.size.width - 0.5*textSize.height;
+
+        // place and rotate
+        layer.frame = CGRectMake((0.5*self.bounds.size.width+radius*sin(actual))-0.5*textSize.width, (0.5*self.bounds.size.height-radius*cos(actual))-0.5*textSize.height, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
+        // background is transparent
         layer.opaque = NO;
         layer.backgroundColor = [UIColor clearColor].CGColor;
 
