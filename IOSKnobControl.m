@@ -45,7 +45,6 @@ static float normalizePosition(float position) {
  * Returns the nearest allowed position
  */
 @property (readonly) float nearestPosition;
-@property (readonly) UIImage* imageForCurrentState;
 @end
 
 @implementation IOSKnobControl {
@@ -60,7 +59,7 @@ static float normalizePosition(float position) {
     BOOL rotating;
 }
 
-@dynamic positionIndex, nearestPosition, imageForCurrentState;
+@dynamic positionIndex, nearestPosition;
 
 #pragma mark - Object Lifecycle
 
@@ -349,7 +348,7 @@ static float normalizePosition(float position) {
     if (min <= -M_PI) min = -M_PI + IKC_EPSILON;
     _min = min;
 
-    if (_mode == IKCMContinuous || [self imageForCurrentState]) return;
+    if (_mode == IKCMContinuous || self.currentImage) return;
 
     [imageLayer removeFromSuperlayer];
     shapeLayer = nil;
@@ -365,7 +364,7 @@ static float normalizePosition(float position) {
     if (max >= M_PI) max = M_PI - IKC_EPSILON;
     _max = max;
 
-    if (_mode == IKCMContinuous || [self imageForCurrentState]) return;
+    if (_mode == IKCMContinuous || self.currentImage) return;
 
     [imageLayer removeFromSuperlayer];
     shapeLayer = nil;
@@ -385,6 +384,21 @@ static float normalizePosition(float position) {
     if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
         [self updateShapeLayer];
     }
+}
+
+- (UIImage*)currentImage
+{
+    return [self imageForState:self.state];
+}
+
+- (UIColor*)currentFillColor
+{
+    return [self fillColorForState:self.state];
+}
+
+- (UIColor*)currentTitleColor
+{
+    return [self titleColorForState:self.state];
 }
 
 #pragma mark - Private Methods: Geometry
@@ -621,11 +635,6 @@ static float normalizePosition(float position) {
 
 #pragma mark - Private Methods: Image Management
 
-- (UIImage*)imageForCurrentState
-{
-    return [self imageForState:self.state];
-}
-
 /*
  * Private method used by imageForState: and setImage:forState:.
  * For a pure state (only one bit set) other than normal, returns that bit + 1. If no
@@ -649,7 +658,7 @@ static float normalizePosition(float position) {
  */
 - (void)updateImage
 {
-    UIImage* image = self.imageForCurrentState;
+    UIImage* image = self.currentImage;
     if (image) {
         if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
             [imageLayer removeFromSuperlayer];

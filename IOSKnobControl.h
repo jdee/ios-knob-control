@@ -87,6 +87,21 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) BOOL clockwise;
 
 /**
+ * The fill color for the current state.
+ */
+@property (nonatomic, readonly) UIColor* currentFillColor;
+
+/**
+ * The image to use for the current state.
+ */
+@property (nonatomic, readonly) UIImage* currentImage;
+
+/**
+ * The title color to use for the current state.
+ */
+@property (nonatomic, readonly) UIColor* currentTitleColor;
+
+/**
  * Specifies the gesture the control should recognize. The default is IKCOneFingerRotation.
  */
 @property (nonatomic) IKCGesture gesture;
