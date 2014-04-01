@@ -91,14 +91,26 @@
     knobControl.max = maxControl.position;
     knobControl.clockwise = self.clockwiseSwitch.on;
 
-    // configure the tint color
+    if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
+        // configure the tint color (iOS 7.x only)
 
-    // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor greenColor];
-    // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor blackColor];
-    // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor whiteColor];
+        // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor greenColor];
+        // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor blackColor];
+        // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor whiteColor];
 
-    // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor colorWithRed:0.627 green:0.125 blue:0.941 alpha:1.0];
-    minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor colorWithHue:0.5 saturation:1.0 brightness:1.0 alpha:1.0];
+        // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor colorWithRed:0.627 green:0.125 blue:0.941 alpha:1.0];
+        minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor colorWithHue:0.5 saturation:1.0 brightness:1.0 alpha:1.0];
+    }
+    else {
+        // can still customize piecemeal below iOS 7
+        UIColor* titleColor = [UIColor whiteColor];
+        [minControl setTitleColor:titleColor forState:UIControlStateNormal];
+        [minControl setTitleColor:titleColor forState:UIControlStateHighlighted];
+        [maxControl setTitleColor:titleColor forState:UIControlStateNormal];
+        [maxControl setTitleColor:titleColor forState:UIControlStateHighlighted];
+        [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
+        [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
+    }
 
     minControl.gesture = maxControl.gesture = knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 

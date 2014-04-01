@@ -161,10 +161,10 @@ static float normalizePosition(float position) {
 
     if (!color) {
         CGFloat red, green, blue, alpha;
-        [self.tintColor getRed:&red green:&green blue:&blue alpha:&alpha];
+        [self.getTintColor getRed:&red green:&green blue:&blue alpha:&alpha];
 
         CGFloat hue, saturation, brightness;
-        [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+        [self.getTintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
 
         if ((red == green && green == blue) || brightness < 0.02) {
             /*
@@ -203,10 +203,10 @@ static float normalizePosition(float position) {
 
     if (!color) {
         CGFloat red, green, blue, alpha;
-        [self.tintColor getRed:&red green:&green blue:&blue alpha:&alpha];
+        [self.getTintColor getRed:&red green:&green blue:&blue alpha:&alpha];
 
         CGFloat hue, saturation, brightness;
-        [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+        [self.getTintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
 
         if ((red == green && green == blue) || brightness < 0.02) {
             /*
@@ -384,6 +384,18 @@ static float normalizePosition(float position) {
     if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
         [self updateShapeLayer];
     }
+}
+
+- (UIColor*)getTintColor
+{
+    /*
+     * No tintColor below iOS 7. This simplifies some internal code.
+     */
+    if ([self respondsToSelector:@selector(tintColor)]) {
+        return self.tintColor;
+    }
+
+    return [UIColor blueColor];
 }
 
 - (UIImage*)currentImage
@@ -729,7 +741,16 @@ static float normalizePosition(float position) {
         NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
         [attrs setObject:font forKey:NSFontAttributeName];
 
-        CGSize textSize = [layer.string sizeWithAttributes:attrs];
+        CGSize textSize;
+        if ([layer.string respondsToSelector:@selector(sizeWithAttributes:)]) {
+            // iOS 7.x
+            textSize = [layer.string sizeWithAttributes:attrs];
+        }
+        else {
+            // iOS 5 & 6
+            UIFont* uifont = [UIFont fontWithName:@"Helvetica" size:layer.fontSize];
+            textSize = [layer.string sizeWithFont:uifont];
+        }
 
         // place it at the appropriate angle, taking the clockwise switch into account
         float position;

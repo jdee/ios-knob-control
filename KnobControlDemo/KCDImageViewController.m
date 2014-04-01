@@ -43,8 +43,12 @@
     knobControl.timeScale = 0.5;
 
     // tint and title colors
-    knobControl.tintColor = [UIColor yellowColor];
-    UIColor* titleColor = [UIColor blackColor];
+    UIColor* titleColor = [UIColor whiteColor];
+    if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
+        knobControl.tintColor = [UIColor yellowColor];
+        titleColor = [UIColor blackColor];
+    }
+
     [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
     [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
 

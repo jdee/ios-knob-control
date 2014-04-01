@@ -304,6 +304,7 @@
                     <connections>
                         <segue destination="vXZ-lx-hvc" kind="relationship" relationship="viewControllers" id="FZ0-IZ-Ij3"/>
                         <segue destination="zEq-iY-6hZ" kind="relationship" relationship="viewControllers" id="TMC-2z-iRy"/>
+                        <segue destination="IJo-kI-z9o" kind="relationship" relationship="viewControllers" id="d0o-7t-xai"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u35-1P-uhl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -458,6 +459,79 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="caW-ih-mf4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1870" y="769"/>
+        </scene>
+        <!--Feedback View Controller - Feedback-->
+        <scene sceneID="E6s-YF-hjC">
+            <objects>
+                <viewController id="IJo-kI-z9o" customClass="KCDFeedbackViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3Ib-Hv-dey"/>
+                        <viewControllerLayoutGuide type="bottom" id="n6F-WD-tsx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="SvS-Si-8by">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IdO-DP-yHp">
+                                <rect key="frame" x="70" y="49" width="180" height="180"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="Lqp-pO-XHP"/>
+                                    <constraint firstAttribute="width" constant="180" id="wHY-5L-RIm"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XC7-1e-cV7">
+                                <rect key="frame" x="70" y="266" width="180" height="180"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="T4p-ex-XSF"/>
+                                    <constraint firstAttribute="width" constant="180" id="p1T-xp-5g6"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="input" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZcS-ZA-Qxo">
+                                <rect key="frame" x="20" y="20" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="280" id="4XC-HW-SlC"/>
+                                    <constraint firstAttribute="height" constant="21" id="zkx-YE-nVi"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="output" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l1k-dE-4Ut">
+                                <rect key="frame" x="20" y="237" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="QUK-Mg-8Xv"/>
+                                    <constraint firstAttribute="width" constant="280" id="sDm-vM-Bpo"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="XC7-1e-cV7" secondAttribute="trailing" constant="70" id="2Kg-db-1oV"/>
+                            <constraint firstAttribute="trailing" secondItem="IdO-DP-yHp" secondAttribute="trailing" constant="70" id="3ec-7h-LK2"/>
+                            <constraint firstItem="l1k-dE-4Ut" firstAttribute="leading" secondItem="SvS-Si-8by" secondAttribute="leading" constant="20" id="4n0-Rh-Mlm"/>
+                            <constraint firstItem="XC7-1e-cV7" firstAttribute="top" secondItem="l1k-dE-4Ut" secondAttribute="bottom" constant="8" id="Bne-Bn-MKp"/>
+                            <constraint firstItem="ZcS-ZA-Qxo" firstAttribute="leading" secondItem="SvS-Si-8by" secondAttribute="leading" constant="20" id="CSz-fK-Nog"/>
+                            <constraint firstItem="IdO-DP-yHp" firstAttribute="top" secondItem="ZcS-ZA-Qxo" secondAttribute="bottom" constant="8" id="LUi-1F-SmF"/>
+                            <constraint firstItem="ZcS-ZA-Qxo" firstAttribute="top" secondItem="SvS-Si-8by" secondAttribute="top" constant="20" id="Zfo-DZ-m7n"/>
+                            <constraint firstItem="l1k-dE-4Ut" firstAttribute="top" secondItem="IdO-DP-yHp" secondAttribute="bottom" constant="8" id="jaP-TM-jaq"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Feedback" id="ZaZ-b3-F03"/>
+                    <connections>
+                        <outlet property="dialHolder" destination="XC7-1e-cV7" id="PNz-cb-Njo"/>
+                        <outlet property="knobHolder" destination="IdO-DP-yHp" id="OTy-k3-Ybd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HPK-iR-tTc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1870" y="1352"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -47,7 +47,10 @@
     knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
     // tint and title colors
-    knobControl.tintColor = [UIColor greenColor];
+    if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
+        knobControl.tintColor = [UIColor greenColor];
+    }
+
     UIColor* titleColor = [UIColor whiteColor];
     [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
     [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];

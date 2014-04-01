@@ -25,6 +25,7 @@
 		7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */; };
 		7B2880B418E79EB800A0E726 /* KCDDiscreteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */; };
 		7B2880B718E7A8C400A0E726 /* KCDImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */; };
+		7B2880BD18EB3E7A00A0E726 /* KCDFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */; };
 		7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7BE81C7F18B7B9DE0088814A /* ChangeLog */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,8 @@
 		7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDDiscreteViewController.m; sourceTree = "<group>"; };
 		7B2880B518E7A8C400A0E726 /* KCDImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDImageViewController.h; sourceTree = "<group>"; };
 		7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDImageViewController.m; sourceTree = "<group>"; };
+		7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDFeedbackViewController.h; sourceTree = "<group>"; };
+		7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDFeedbackViewController.m; sourceTree = "<group>"; };
 		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -135,6 +138,8 @@
 				7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */,
 				7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */,
 				7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */,
+				7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */,
+				7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */,
 				7B2880B518E7A8C400A0E726 /* KCDImageViewController.h */,
 				7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */,
 				7B199B67189ABEC9003E7F6A /* Images.xcassets */,
@@ -282,6 +287,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B199B5D189ABEC9003E7F6A /* KCDAppDelegate.m in Sources */,
+				7B2880BD18EB3E7A00A0E726 /* KCDFeedbackViewController.m in Sources */,
 				7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */,
 				7B199B59189ABEC9003E7F6A /* main.m in Sources */,
 				7B2880B718E7A8C400A0E726 /* KCDImageViewController.m in Sources */,
