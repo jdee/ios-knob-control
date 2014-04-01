@@ -208,4 +208,48 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  */
 - (void)setImage:(UIImage *)image forState:(UIControlState)state;
 
+/**
+ * Retrieve the fill color to use for the generated knob image in a particular control state. The @a state argument may be any bitwise combination
+ * of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The fill color for the
+ * higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
+ * the disabled fill color will be returned. If no fill color has been configured for the specified state (e.g., in this example,
+ * if there were no disabled fill color specified), returns a color based on the tintColor property.
+ * If any of the UIControlStateApplication bits is set, returns the fill color for UIControlStateNormal.
+ * @param state any valid control state
+ * @return the fill color to use for the specified state
+ */
+- (UIColor*)fillColorForState:(UIControlState)state;
+
+/**
+ * Set the fill color to use for the knob in a specific control state. Unlike the case with fillColorForState:, the @a state parameter
+ * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+ * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no fill color values will be
+ * modified.
+ * @param color the fill color to use for the specified state
+ * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
+ */
+- (void)setFillColor:(UIColor*)color forState:(UIControlState)state;
+
+/**
+ * Retrieve the title color to use for the generated knob image in a particular control state. The @a state argument may be any bitwise combination
+ * of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The title color for the
+ * higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
+ * the disabled title color will be returned. If no title color has been configured for the specified state (e.g., in this example,
+ * if there were no disabled title color specified), returns a color based on the tintColor property.
+ * If any of the UIControlStateApplication bits is set, returns the title color for UIControlStateNormal.
+ * @param state any valid control state
+ * @return the title color to use for the specified state
+ */
+- (UIColor*)titleColorForState:(UIControlState)state;
+
+/**
+ * Set the title color to use for the knob in a specific control state. Unlike the case with titleColorForState:, the @a state parameter
+ * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+ * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no title color values will be
+ * modified.
+ * @param color the title color to use for the specified state
+ * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
+ */
+- (void)setTitleColor:(UIColor*)color forState:(UIControlState)state;
+
 @end

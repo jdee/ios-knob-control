@@ -46,6 +46,9 @@
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
     knobControl.tintColor = [UIColor greenColor];
+    UIColor* titleColor = [UIColor whiteColor];
+    [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
+    [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
 
     /*
      * The time scale control is logarithmic.

@@ -114,6 +114,14 @@ Instance Methods</h2></td></tr>
 <tr class="separator:af98a625e550749085f3263601987bd84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abba25b88e6d7970f21c5fb30c357c6e5"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_i_o_s_knob_control.html#abba25b88e6d7970f21c5fb30c357c6e5">setImage:forState:</a></td></tr>
 <tr class="separator:abba25b88e6d7970f21c5fb30c357c6e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd488594a718d0017fb0fd554efc71a3"><td class="memItemLeft" align="right" valign="top">(UIColor *)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_i_o_s_knob_control.html#acd488594a718d0017fb0fd554efc71a3">fillColorForState:</a></td></tr>
+<tr class="separator:acd488594a718d0017fb0fd554efc71a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83352c92a82be8c401b5f9da78305146"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_i_o_s_knob_control.html#a83352c92a82be8c401b5f9da78305146">setFillColor:forState:</a></td></tr>
+<tr class="separator:a83352c92a82be8c401b5f9da78305146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a337007e4418821a9c1bd1aa1879c3151"><td class="memItemLeft" align="right" valign="top">(UIColor *)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_i_o_s_knob_control.html#a337007e4418821a9c1bd1aa1879c3151">titleColorForState:</a></td></tr>
+<tr class="separator:a337007e4418821a9c1bd1aa1879c3151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a788502d5ced4d39a84dfce4eb5aafc0e"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_i_o_s_knob_control.html#a788502d5ced4d39a84dfce4eb5aafc0e">setTitleColor:forState:</a></td></tr>
+<tr class="separator:a788502d5ced4d39a84dfce4eb5aafc0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
@@ -146,6 +154,30 @@ Properties</h2></td></tr>
 <p>DEBT: Enforce this. <a href="https://github.com/jdee/ios-knob-control/issues/5">https://github.com/jdee/ios-knob-control/issues/5</a></p>
 <p>The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1. </p>
 </div><h2 class="groupheader">Method Documentation</h2>
+<a class="anchor" id="acd488594a718d0017fb0fd554efc71a3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (UIColor*) fillColorForState: </td>
+          <td></td>
+          <td class="paramtype">(UIControlState)&#160;</td>
+          <td class="paramname"><em>state</em></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Retrieve the fill color to use for the generated knob image in a particular control state. The <em>state</em> argument may be any bitwise combination of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The fill color for the higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled &gt; UIControlStateHighlighted, the disabled fill color will be returned. If no fill color has been configured for the specified state (e.g., in this example, if there were no disabled fill color specified), returns a color based on the tintColor property. If any of the UIControlStateApplication bits is set, returns the fill color for UIControlStateNormal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>any valid control state </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the fill color to use for the specified state </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="af98a625e550749085f3263601987bd84"></a>
 <div class="memitem">
 <div class="memproto">
@@ -261,6 +293,40 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a83352c92a82be8c401b5f9da78305146"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) setFillColor: </td>
+          <td></td>
+          <td class="paramtype">(UIColor *)&#160;</td>
+          <td class="paramname"><em>color</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">forState:</td>
+          <td></td>
+          <td class="paramtype">(UIControlState)&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the fill color to use for the knob in a specific control state. Unlike the case with fillColorForState:, the <em>state</em> parameter must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected. Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no fill color values will be modified. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>the fill color to use for the specified state </td></tr>
+    <tr><td class="paramname">state</td><td>one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="abba25b88e6d7970f21c5fb30c357c6e5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -327,6 +393,64 @@ Properties</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a788502d5ced4d39a84dfce4eb5aafc0e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) setTitleColor: </td>
+          <td></td>
+          <td class="paramtype">(UIColor *)&#160;</td>
+          <td class="paramname"><em>color</em></td>
+        </tr>
+        <tr>
+          <td class="paramkey">forState:</td>
+          <td></td>
+          <td class="paramtype">(UIControlState)&#160;</td>
+          <td class="paramname"><em>state</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the title color to use for the knob in a specific control state. Unlike the case with titleColorForState:, the <em>state</em> parameter must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected. Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no title color values will be modified. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">color</td><td>the title color to use for the specified state </td></tr>
+    <tr><td class="paramname">state</td><td>one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a337007e4418821a9c1bd1aa1879c3151"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (UIColor*) titleColorForState: </td>
+          <td></td>
+          <td class="paramtype">(UIControlState)&#160;</td>
+          <td class="paramname"><em>state</em></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Retrieve the title color to use for the generated knob image in a particular control state. The <em>state</em> argument may be any bitwise combination of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The title color for the higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled &gt; UIControlStateHighlighted, the disabled title color will be returned. If no title color has been configured for the specified state (e.g., in this example, if there were no disabled title color specified), returns a color based on the tintColor property. If any of the UIControlStateApplication bits is set, returns the title color for UIControlStateNormal. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>any valid control state </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the title color to use for the specified state </dd></dl>
 
 </div>
 </div>
@@ -570,7 +694,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Mar 31 2014 19:36:06 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Apr 1 2014 10:03:12 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

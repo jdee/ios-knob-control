@@ -55,6 +55,8 @@ static float normalizePosition(float position) {
     CAShapeLayer* shapeLayer, *pipLayer;
     NSMutableArray* markings;
     UIImage* images[4];
+    UIColor* fillColor[4];
+    UIColor* titleColor[4];
     BOOL rotating;
 }
 
@@ -148,6 +150,90 @@ static float normalizePosition(float position) {
      * [self indexForState:UIControlStateDisabled] == [self indexForState:UIControlStateHighlighted|UIControlStateDisabled]
      * If we just now changed the image currently in use (the image for the current state), update it now.
      */
+    if (index == [self indexForState:self.state]) {
+        [self updateImage];
+    }
+}
+
+- (UIColor *)fillColorForState:(UIControlState)state
+{
+    int index = [self indexForState:state];
+    UIColor* color = index >= 0 && fillColor[index] ? fillColor[index] : fillColor[[self indexForState:UIControlStateNormal]];
+
+    if (!color) {
+        CGFloat red, green, blue, alpha;
+        [self.tintColor getRed:&red green:&green blue:&blue alpha:&alpha];
+
+        CGFloat hue, saturation, brightness;
+        [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+
+        if ((red == green && green == blue) || brightness < 0.02) {
+            /*
+             * This is for any shade of gray from black to white. Unfortunately, black is not really black.
+             * It comes out as a red hue. Hence the brightness test above.
+             */
+            CGFloat value = ((NSNumber*)@[@(0.6), @(0.8), @(0.9)][index]).floatValue;
+            color = [UIColor colorWithRed:value green:value blue:value alpha:alpha];
+        }
+        else {
+            saturation = ((NSNumber*)@[@(1.0), @(0.7), @(0.2)][index]).floatValue;
+            brightness = ((NSNumber*)@[@(0.9), @(1.0), @(0.9)][index]).floatValue;
+            color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:alpha];
+        }
+    }
+
+    return color;
+}
+
+- (void)setFillColor:(UIColor *)color forState:(UIControlState)state
+{
+    int index = [self indexForState:state];
+    if (state == UIControlStateNormal || state == UIControlStateHighlighted || state == UIControlStateDisabled || state == UIControlStateSelected) {
+        fillColor[index] = color;
+    }
+
+    if (index == [self indexForState:self.state]) {
+        [self updateImage];
+    }
+}
+
+- (UIColor *)titleColorForState:(UIControlState)state
+{
+    int index = [self indexForState:state];
+    UIColor* color = index >= 0 && titleColor[index] ? titleColor[index] : titleColor[[self indexForState:UIControlStateNormal]];
+
+    if (!color) {
+        CGFloat red, green, blue, alpha;
+        [self.tintColor getRed:&red green:&green blue:&blue alpha:&alpha];
+
+        CGFloat hue, saturation, brightness;
+        [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
+
+        if ((red == green && green == blue) || brightness < 0.02) {
+            /*
+             * This is for any shade of gray from black to white. Unfortunately, black is not really black.
+             * It comes out as a red hue. Hence the brightness test above.
+             */
+            CGFloat value = ((NSNumber*)@[@(0.25), @(0.25), @(0.4)][index]).floatValue;
+            color = [UIColor colorWithRed:value green:value blue:value alpha:alpha];
+        }
+        else {
+            saturation = ((NSNumber*)@[@(1.0), @(1.0), @(0.2)][index]).floatValue;
+            brightness = 0.5; // ((NSNumber*)@[@(0.5), @(0.5), @(0.5)][index]).floatValue;
+            color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:alpha];
+        }
+    }
+
+    return color;
+}
+
+- (void)setTitleColor:(UIColor *)color forState:(UIControlState)state
+{
+    int index = [self indexForState:state];
+    if (state == UIControlStateNormal || state == UIControlStateHighlighted || state == UIControlStateDisabled || state == UIControlStateSelected) {
+        titleColor[index] = color;
+    }
+
     if (index == [self indexForState:self.state]) {
         [self updateImage];
     }
@@ -596,43 +682,11 @@ static float normalizePosition(float position) {
 
 - (void)updateShapeLayer
 {
-    UIColor* highlightColor, *normalColor, *disabledColor, *markingColor, *disabledMarkingColor;
-
-    CGFloat red, green, blue, alpha;
-    [self.tintColor getRed:&red green:&green blue:&blue alpha:&alpha];
-
-    CGFloat hue, saturation, brightness;
-    [self.tintColor getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha];
-
-    if ((red == green && green == blue) || brightness < 0.02) {
-        /*
-         * This is for any shade of gray from black to white. Unfortunately, black is not really black.
-         * It comes out as a red hue. Hence the brightness test above.
-         */
-        highlightColor = [UIColor colorWithRed:0.8 green:0.8 blue:0.8 alpha:alpha];
-        normalColor = [UIColor colorWithRed:0.6 green:0.6 blue:0.6 alpha:alpha];
-        disabledColor = [UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:alpha];
-
-        markingColor = [UIColor colorWithRed:0.25 green:0.25 blue:0.25 alpha:alpha];
-        disabledMarkingColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:alpha];
-    }
-    else {
-        highlightColor = [UIColor colorWithHue:hue saturation:0.7 brightness:1.0 alpha:alpha];
-        normalColor = [UIColor colorWithHue:hue saturation:1.0 brightness:0.9 alpha:alpha];
-        disabledColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.9 alpha:alpha];
-
-        markingColor = [UIColor colorWithHue:hue saturation:1.0 brightness:0.5 alpha:alpha];
-        disabledMarkingColor = [UIColor colorWithHue:hue saturation:0.2 brightness:0.5 alpha:alpha];
-    }
-
-    shapeLayer.fillColor = (self.state & UIControlStateHighlighted) ? highlightColor.CGColor :
-        (self.state & UIControlStateDisabled) ? disabledColor.CGColor :
-        normalColor.CGColor;
-    pipLayer.fillColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
+    shapeLayer.fillColor = [self fillColorForState:self.state].CGColor;
+    pipLayer.fillColor = [self titleColorForState:self.state].CGColor;
 
     for (CATextLayer* layer in markings) {
-        // layer.foregroundColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
-        layer.foregroundColor = (self.state & UIControlStateDisabled) ? disabledMarkingColor.CGColor : markingColor.CGColor;
+        layer.foregroundColor = [self titleColorForState:self.state].CGColor;
     }
 }
 
