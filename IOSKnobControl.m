@@ -845,12 +845,7 @@ static float normalizePosition(float position) {
 {
     CGFloat circumference = 0.0;
     for (NSString* title in _titles) {
-        CATextLayer* layer = [CATextLayer layer];
-        layer.fontSize = fontSize;
-        layer.string = title;
-        layer.alignmentMode = kCAAlignmentCenter;
-
-        CGSize textSize = [layer.string sizeOfTextWithFontSize:fontSize];
+        CGSize textSize = [title sizeOfTextWithFontSize:fontSize];
         circumference += textSize.width;
     }
 
