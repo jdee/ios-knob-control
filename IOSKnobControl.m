@@ -356,10 +356,14 @@ static float normalizePosition(float position) {
 {
     if (self.mode == IKCMContinuous) return -1;
 
+    if (!_circular && _position == _max) {
+        return _positions - 1;
+    }
+
     float converted = self.position;
     if (converted < 0) converted += 2.0*M_PI;
 
-    int index = self.circular ? converted*0.5/M_PI*self.positions+0.5 : (self.position-self.min)/(self.max-self.min)*self.positions-0.5;
+    int index = self.circular ? converted*0.5/M_PI*self.positions+0.5 : (self.position-self.min)/(self.max-self.min)*self.positions;
 
     while (index >= self.positions) index -= self.positions;
     while (index < 0) index += self.positions;
@@ -461,17 +465,19 @@ static float normalizePosition(float position) {
  */
 - (float)nearestPosition
 {
-    float range = self.circular ? 2.0*M_PI : self.max - self.min;
-    float position = self.positionIndex*range/self.positions;
-    if (2*self.positionIndex == self.positions && self.circular == YES) {
-        /*
-         * Try to keep things confined to (-M_PI,M_PI] and avoid a return to -M_PI.
-         * This only happens when circular is YES.
-         * https://github.com/jdee/ios-knob-control/issues/7
-         */
-        return M_PI - IKC_EPSILON;
+    if (_circular) {
+        if (2*self.positionIndex == self.positions) {
+            /*
+             * Try to keep things confined to (-M_PI,M_PI] and avoid a return to -M_PI.
+             * This only happens when circular is YES.
+             * https://github.com/jdee/ios-knob-control/issues/7
+             */
+            return M_PI - IKC_EPSILON;
+        }
+        return self.positionIndex*2.0*M_PI/_positions;
     }
-    return position;
+
+    return ((_max-_min)/_positions)*(self.positionIndex+0.5) + _min;
 }
 
 #pragma mark - Private Methods: Animation
@@ -857,13 +863,15 @@ static float normalizePosition(float position) {
     CGFloat fontSize;
     CGFloat fontSizes[] = { 36.0, 24.0, 18.0, 14.0, 12.0, 10.0 };
 
+    double angle = _circular ? 2.0*M_PI : _max - _min;
+
     int index;
     for (index=0; index<sizeof(fontSizes)/sizeof(CGFloat); ++index) {
         fontSize = fontSizes[index];
         CGFloat circumference = [self titleCircumferenceWithFontSize:fontSize];
 
-        // Empirically, this 0.5 works out well. This allows for a little padding between text segments.
-        if (circumference <= M_PI*self.bounds.size.width*0.5) break;
+        // Empirically, this 0.25 works out well. This allows for a little padding between text segments.
+        if (circumference <= angle*self.bounds.size.width*0.25) break;
     }
 
     return fontSize;

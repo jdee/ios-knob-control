@@ -41,6 +41,9 @@
     knobControl.positions = 3;
     knobControl.titles = titles;
     knobControl.timeScale = 0.5;
+    knobControl.circular = NO;
+    knobControl.min = -M_PI/2.0;
+    knobControl.max = M_PI/2.0;
 
     // tint and title colors
     UIColor* titleColor = [UIColor whiteColor];
