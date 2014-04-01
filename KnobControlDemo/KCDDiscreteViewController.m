@@ -40,8 +40,12 @@
 {
     knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCMLinearReturn : IKCMWheelOfFortune;
 
-    knobControl.positions = 6;
-    knobControl.titles = @[@"zero", @"one", @"two", @"three", @"four", @"five"];
+    // to use the @"hexagon" images instead of the month selector
+    // knobControl.positions = 6;
+
+    knobControl.positions = 12;
+    knobControl.titles = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
+
     knobControl.circular = YES;
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;

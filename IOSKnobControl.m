@@ -386,18 +386,6 @@ static float normalizePosition(float position) {
     }
 }
 
-- (UIColor*)getTintColor
-{
-    /*
-     * No tintColor below iOS 7. This simplifies some internal code.
-     */
-    if ([self respondsToSelector:@selector(tintColor)]) {
-        return self.tintColor;
-    }
-
-    return [UIColor blueColor];
-}
-
 - (UIImage*)currentImage
 {
     return [self imageForState:self.state];
@@ -647,6 +635,18 @@ static float normalizePosition(float position) {
 
 #pragma mark - Private Methods: Image Management
 
+- (UIColor*)getTintColor
+{
+    /*
+     * No tintColor below iOS 7. This simplifies some internal code.
+     */
+    if ([self respondsToSelector:@selector(tintColor)]) {
+        return self.tintColor;
+    }
+
+    return [UIColor blueColor];
+}
+
 /*
  * Private method used by imageForState: and setImage:forState:.
  * For a pure state (only one bit set) other than normal, returns that bit + 1. If no
@@ -718,7 +718,8 @@ static float normalizePosition(float position) {
         [layer removeFromSuperlayer];
     }
 
-    int j=0;
+    CGFloat fontSize = self.fontSizeForTitles;
+    int j;
     for (j=0; j<_positions; ++j) {
         // get the title for this marking (use j if none)
         NSString* title;
@@ -734,21 +735,9 @@ static float normalizePosition(float position) {
         layer.alignmentMode = kCAAlignmentCenter;
 
         // set the font size and calculate the size of the title
-        layer.fontSize = 18.0;
+        layer.fontSize = fontSize;
 
-        CGSize textSize;
-        if ([layer.string respondsToSelector:@selector(sizeWithAttributes:)]) {
-            // iOS 7.x
-            UIFont* font = (__bridge UIFont*)layer.font;
-            NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
-            [attrs setObject:font forKey:NSFontAttributeName];
-            textSize = [layer.string sizeWithAttributes:attrs];
-        }
-        else {
-            // iOS 5 & 6
-            UIFont* font = [UIFont fontWithName:@"Helvetica" size:layer.fontSize];
-            textSize = [layer.string sizeWithFont:font];
-        }
+        CGSize textSize = [self sizeOfTextInLayer:layer];
 
         // place it at the appropriate angle, taking the clockwise switch into account
         float position;
@@ -816,6 +805,58 @@ static float normalizePosition(float position) {
     }
 
     return shapeLayer;
+}
+
+- (CGSize)sizeOfTextInLayer:(CATextLayer*)layer
+{
+    CGSize textSize;
+    UIFont* font = [UIFont fontWithName:@"Helvetica" size:layer.fontSize];
+    if ([layer.string respondsToSelector:@selector(sizeWithAttributes:)]) {
+        // iOS 7.x
+        NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
+        [attrs setObject:font forKey:NSFontAttributeName];
+        textSize = [layer.string sizeWithAttributes:attrs];
+    }
+    else {
+        // iOS 5 & 6
+        textSize = [layer.string sizeWithFont:font];
+    }
+    return textSize;
+}
+
+- (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
+{
+    CGFloat circumference = 0.0;
+    for (NSString* title in _titles) {
+        CATextLayer* layer = [CATextLayer layer];
+        layer.fontSize = fontSize;
+        layer.string = title;
+        layer.alignmentMode = kCAAlignmentCenter;
+
+        CGSize textSize = [self sizeOfTextInLayer:layer];
+        circumference += textSize.width;
+    }
+
+    return circumference;
+}
+
+- (CGFloat)fontSizeForTitles
+{
+    CGFloat fontSize;
+    CGFloat fontSizes[] = { 36.0, 24.0, 18.0, 14.0, 12.0, 10.0 };
+
+    int index;
+    for (index=0; index<sizeof(fontSizes)/sizeof(CGFloat); ++index) {
+        fontSize = fontSizes[index];
+        CGFloat circumference = [self titleCircumferenceWithFontSize:fontSize];
+
+        // NSLog(@"With %d titles, circumference at font size %.1f is %f; view width is %f", _titles.count, fontSize, circumference, self.bounds.size.width);
+
+        // Empirically, this 0.5 works out well. This allows for a little padding between text segments.
+        if (circumference <= M_PI*self.bounds.size.width*0.5) break;
+    }
+
+    return fontSize;
 }
 
 @end
