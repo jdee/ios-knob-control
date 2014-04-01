@@ -239,7 +239,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0TV-nJ-bA8">
-                                <rect key="frame" x="229" y="329" width="71" height="30"/>
+                                <rect key="frame" x="228" y="383" width="71" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="71" id="93E-EG-UTX"/>
@@ -254,7 +254,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Available knob images" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pIT-cE-yYH">
-                                <rect key="frame" x="20" y="130" width="280" height="21"/>
+                                <rect key="frame" x="20" y="66" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="nOa-S1-75E"/>
@@ -263,23 +263,23 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ROT-dm-5Wv">
-                                <rect key="frame" x="80" y="159" width="162" height="162"/>
+                                <rect key="frame" x="20" y="95" width="280" height="280"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="162" id="0sW-mZ-trj"/>
-                                    <constraint firstAttribute="height" constant="162" id="3wX-cC-A81"/>
+                                    <constraint firstAttribute="width" constant="280" id="0sW-mZ-trj"/>
+                                    <constraint firstAttribute="height" constant="280" id="3wX-cC-A81"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ROT-dm-5Wv" firstAttribute="leading" secondItem="n59-Nj-dwe" secondAttribute="leading" constant="80" id="3Ee-2L-2ht"/>
+                            <constraint firstItem="ROT-dm-5Wv" firstAttribute="leading" secondItem="n59-Nj-dwe" secondAttribute="leading" constant="20" id="3Ee-2L-2ht"/>
                             <constraint firstItem="ROT-dm-5Wv" firstAttribute="top" secondItem="pIT-cE-yYH" secondAttribute="bottom" constant="8" id="K4j-nb-30O"/>
-                            <constraint firstAttribute="trailing" secondItem="0TV-nJ-bA8" secondAttribute="trailing" constant="20" id="MMx-ib-AiS"/>
+                            <constraint firstAttribute="trailing" secondItem="0TV-nJ-bA8" secondAttribute="trailing" constant="21" id="MMx-ib-AiS"/>
                             <constraint firstItem="0TV-nJ-bA8" firstAttribute="top" secondItem="ROT-dm-5Wv" secondAttribute="bottom" constant="8" id="c4s-0S-anu"/>
                             <constraint firstItem="pIT-cE-yYH" firstAttribute="leading" secondItem="n59-Nj-dwe" secondAttribute="leading" constant="20" id="jtN-7j-t0y"/>
-                            <constraint firstItem="pIT-cE-yYH" firstAttribute="top" secondItem="n59-Nj-dwe" secondAttribute="top" constant="130" id="rxU-Ug-cPn"/>
+                            <constraint firstItem="pIT-cE-yYH" firstAttribute="top" secondItem="n59-Nj-dwe" secondAttribute="top" constant="66" id="rxU-Ug-cPn"/>
                         </constraints>
                     </view>
                     <connections>
