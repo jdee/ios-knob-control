@@ -45,6 +45,8 @@
     knobControl.circular = YES;
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
+
+    // tint and title colors
     knobControl.tintColor = [UIColor greenColor];
     UIColor* titleColor = [UIColor whiteColor];
     [knobControl setTitleColor:titleColor forState:UIControlStateNormal];

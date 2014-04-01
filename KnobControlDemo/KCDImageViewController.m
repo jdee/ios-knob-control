@@ -40,8 +40,13 @@
     knobControl.mode = IKCMLinearReturn;
     knobControl.positions = 3;
     knobControl.titles = titles;
-    knobControl.tintColor = [UIColor yellowColor];
     knobControl.timeScale = 0.5;
+
+    // tint and title colors
+    knobControl.tintColor = [UIColor yellowColor];
+    UIColor* titleColor = [UIColor blackColor];
+    [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
+    [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
 
     [_knobHolder addSubview:knobControl];
 }
