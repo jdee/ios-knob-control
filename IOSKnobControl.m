@@ -262,6 +262,14 @@ static float normalizePosition(float position) {
     if (min > 0.0) min = 0.0;
     if (min <= -M_PI) min = -M_PI + IKC_EPSILON;
     _min = min;
+
+    if (_mode == IKCMContinuous || [self imageForCurrentState]) return;
+
+    [imageLayer removeFromSuperlayer];
+    shapeLayer = nil;
+    imageLayer = [self createShapeLayer];
+    [self.layer addSublayer:imageLayer];
+    [self updateImage];
 }
 
 - (void)setMax:(float)max
@@ -270,6 +278,14 @@ static float normalizePosition(float position) {
     if (max < 0.0) max = 0.0;
     if (max >= M_PI) max = M_PI - IKC_EPSILON;
     _max = max;
+
+    if (_mode == IKCMContinuous || [self imageForCurrentState]) return;
+
+    [imageLayer removeFromSuperlayer];
+    shapeLayer = nil;
+    imageLayer = [self createShapeLayer];
+    [self.layer addSublayer:imageLayer];
+    [self updateImage];
 }
 
 - (void)setGesture:(IKCGesture)gesture
