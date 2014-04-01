@@ -445,9 +445,24 @@
                                     <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="zhY-if-EWL"/>
                                 </connections>
                             </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="S3G-O7-fDk">
+                                <rect key="frame" x="20" y="353" width="280" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="QZv-hC-PLK"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Months"/>
+                                    <segment title="Hexagon"/>
+                                </segments>
+                                <connections>
+                                    <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="iZd-Mh-4g0"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="S3G-O7-fDk" firstAttribute="leading" secondItem="u6P-2h-2tv" secondAttribute="leading" constant="20" id="5w4-vl-4im"/>
                             <constraint firstItem="pL2-iT-1uC" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="8" id="8Zc-3A-Xy3"/>
                             <constraint firstAttribute="trailing" secondItem="JHN-Ql-Wnj" secondAttribute="trailing" constant="20" id="9ua-RZ-hY5"/>
                             <constraint firstItem="taM-Ly-YuE" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="8" id="Em2-cp-Z4J"/>
@@ -467,9 +482,11 @@
                             <constraint firstItem="13Y-kE-mFg" firstAttribute="top" secondItem="taM-Ly-YuE" secondAttribute="bottom" constant="8" id="dO6-tb-YfK"/>
                             <constraint firstItem="GZX-GT-U5w" firstAttribute="top" secondItem="QRZ-W1-zSR" secondAttribute="bottom" constant="12" id="jT3-vY-nXs"/>
                             <constraint firstItem="VgK-B7-VJ2" firstAttribute="top" secondItem="u6P-2h-2tv" secondAttribute="top" constant="20" id="klv-X3-dA8"/>
+                            <constraint firstItem="S3G-O7-fDk" firstAttribute="top" secondItem="GZX-GT-U5w" secondAttribute="bottom" constant="13" id="msp-Sa-N2L"/>
                             <constraint firstItem="dPo-Xo-VtY" firstAttribute="top" secondItem="VgK-B7-VJ2" secondAttribute="bottom" constant="8" id="qVb-Ut-fbH"/>
                             <constraint firstAttribute="trailing" secondItem="dPo-Xo-VtY" secondAttribute="trailing" constant="20" id="swh-k1-6aB"/>
                             <constraint firstItem="pL2-iT-1uC" firstAttribute="top" secondItem="u6P-2h-2tv" secondAttribute="top" constant="20" id="uR1-rS-tBS"/>
+                            <constraint firstAttribute="trailing" secondItem="S3G-O7-fDk" secondAttribute="trailing" constant="20" id="xPP-aF-tAo"/>
                             <constraint firstItem="13Y-kE-mFg" firstAttribute="leading" secondItem="VgK-B7-VJ2" secondAttribute="trailing" constant="8" id="z1j-ol-QIy"/>
                         </constraints>
                     </view>
@@ -477,6 +494,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="clockwiseSwitch" destination="bsh-Rh-6aH" id="8n9-Rt-Tmo"/>
+                        <outlet property="demoControl" destination="S3G-O7-fDk" id="TGD-Ve-grY"/>
                         <outlet property="gestureControl" destination="dPo-Xo-VtY" id="JuV-vz-grA"/>
                         <outlet property="indexLabel" destination="13Y-kE-mFg" id="M19-49-gWV"/>
                         <outlet property="knobControlView" destination="VgK-B7-VJ2" id="i7T-FI-RIc"/>

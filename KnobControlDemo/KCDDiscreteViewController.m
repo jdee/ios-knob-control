@@ -40,11 +40,15 @@
 {
     knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCMLinearReturn : IKCMWheelOfFortune;
 
-    // to use the @"hexagon" images instead of the month selector
-    // knobControl.positions = 6;
-
-    knobControl.positions = 12;
-    knobControl.titles = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
+    if (self.useHexagonImages) {
+        knobControl.positions = 6;
+        [knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
+    }
+    else {
+        knobControl.positions = 12;
+        knobControl.titles = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
+        [knobControl setImage:nil forState:UIControlStateNormal];
+    }
 
     knobControl.circular = YES;
     knobControl.clockwise = self.clockwiseSwitch.on;
@@ -73,6 +77,16 @@
     self.indexLabel.text = [NSString stringWithFormat:@"%ld", (long)knobControl.positionIndex];
 }
 
+- (UIImage*)hexagonImage
+{
+    return [UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"];
+}
+
+- (BOOL)useHexagonImages
+{
+    return _demoControl.selectedSegmentIndex > 0;
+}
+
 #pragma mark - Handlers for configuration controls
 
 - (void)somethingChanged:(id)sender
@@ -82,7 +96,9 @@
 
 - (void)clockwiseChanged:(UISwitch *)sender
 {
-    // [knobControl setImage:[UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"] forState:UIControlStateNormal];
+    if (self.useHexagonImages) {
+        [knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
+    }
     [self updateKnobProperties];
 }
 

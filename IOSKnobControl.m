@@ -40,6 +40,35 @@ static float normalizePosition(float position) {
     return position;
 }
 
+@interface NSString(IKC)
+- (CGSize)sizeOfTextWithFontSize:(CGFloat)fontSize;
+@end
+
+@implementation NSString(IKC)
+
+/*
+ * For portability among iOS versions. The CATextLayer uses Helvetica
+ * by default. We just need the font size here.
+ */
+- (CGSize)sizeOfTextWithFontSize:(CGFloat)fontSize
+{
+    CGSize textSize;
+    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+    if ([self respondsToSelector:@selector(sizeWithAttributes:)]) {
+        // iOS 7.x
+        NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
+        [attrs setObject:font forKey:NSFontAttributeName];
+        textSize = [self sizeWithAttributes:attrs];
+    }
+    else {
+        // iOS 5 & 6
+        textSize = [self sizeWithFont:font];
+    }
+    return textSize;
+}
+
+@end
+
 @interface IOSKnobControl()
 /*
  * Returns the nearest allowed position
@@ -269,6 +298,11 @@ static float normalizePosition(float position) {
 
 - (void)setTitles:(NSArray *)titles
 {
+    /*
+     * DEBT: Actually, titles can be set on a control using images. It's the absence of the
+     * image that triggers use of the titles. The property can be populated in advance of
+     * removing images.
+     */
     _titles = titles;
     [imageLayer removeFromSuperlayer];
     shapeLayer = nil;
@@ -737,7 +771,7 @@ static float normalizePosition(float position) {
         // set the font size and calculate the size of the title
         layer.fontSize = fontSize;
 
-        CGSize textSize = [self sizeOfTextInLayer:layer];
+        CGSize textSize = [layer.string sizeOfTextWithFontSize:layer.fontSize];
 
         // place it at the appropriate angle, taking the clockwise switch into account
         float position;
@@ -807,23 +841,6 @@ static float normalizePosition(float position) {
     return shapeLayer;
 }
 
-- (CGSize)sizeOfTextInLayer:(CATextLayer*)layer
-{
-    CGSize textSize;
-    UIFont* font = [UIFont fontWithName:@"Helvetica" size:layer.fontSize];
-    if ([layer.string respondsToSelector:@selector(sizeWithAttributes:)]) {
-        // iOS 7.x
-        NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
-        [attrs setObject:font forKey:NSFontAttributeName];
-        textSize = [layer.string sizeWithAttributes:attrs];
-    }
-    else {
-        // iOS 5 & 6
-        textSize = [layer.string sizeWithFont:font];
-    }
-    return textSize;
-}
-
 - (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
 {
     CGFloat circumference = 0.0;
@@ -833,7 +850,7 @@ static float normalizePosition(float position) {
         layer.string = title;
         layer.alignmentMode = kCAAlignmentCenter;
 
-        CGSize textSize = [self sizeOfTextInLayer:layer];
+        CGSize textSize = [layer.string sizeOfTextWithFontSize:fontSize];
         circumference += textSize.width;
     }
 
@@ -849,8 +866,6 @@ static float normalizePosition(float position) {
     for (index=0; index<sizeof(fontSizes)/sizeof(CGFloat); ++index) {
         fontSize = fontSizes[index];
         CGFloat circumference = [self titleCircumferenceWithFontSize:fontSize];
-
-        // NSLog(@"With %d titles, circumference at font size %.1f is %f; view width is %f", _titles.count, fontSize, circumference, self.bounds.size.width);
 
         // Empirically, this 0.5 works out well. This allows for a little padding between text segments.
         if (circumference <= M_PI*self.bounds.size.width*0.5) break;

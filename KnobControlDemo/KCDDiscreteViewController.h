@@ -24,6 +24,7 @@
 @property (nonatomic) IBOutlet UISlider* timeScaleControl;
 @property (nonatomic) IBOutlet UISwitch* clockwiseSwitch;
 @property (nonatomic) IBOutlet UISegmentedControl* gestureControl;
+@property (nonatomic) IBOutlet UISegmentedControl* demoControl;
 
 - (IBAction)somethingChanged:(id)sender;
 - (IBAction)clockwiseChanged:(UISwitch*)sender;
