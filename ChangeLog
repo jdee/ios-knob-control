@@ -1,4 +1,20 @@
-Jimmy Dee <jgvdthree@gmail.com> 21-Feb-2014
+2014-02-21  Jimmy Dee  <jgvdthree@gmail.com>
 
- * Version 1.0.0
-   Linear Return, Wheel of Fortune and Continuous modes complete.
+    * Version 1.0.0
+
+    Linear Return, Wheel of Fortune and Continuous modes complete.
+
+2014-04-02  Jimmy Dee  <jgvdthree@gmail.com>
+
+    * Version 1.1.0
+
+    Can now choose from three gestures for the control.
+
+    Control now functions without an externally supplied image. If no image supplied,
+    the control provides a simple, customizable knob image.
+
+    Numerous changes to the demo app:
+    - Separate demos in a tab view for greater clarity: Continuous, discrete and feedback.
+    - Feedback demo provides an example of using a disabled knob control as a dial.
+    - New knob images.
+    - Demos of new built-in knob images and gestures.

@@ -2,10 +2,9 @@ iOS Knob Control
 ================
 
 This is a generic, reusable knob control you can insert into any application.
-You may provide custom knob images or use the default images, which may be customized
-using the tintColor and titles properties.  The control animates rotation of the image
-in response to one of several configurable gestures from the user. The knob has a number
-of configurable modes:
+You may provide custom knob images or use the customizable default images.
+The control animates rotation of the image in response to one of several
+configurable gestures from the user. The knob has a number of configurable modes:
 
 - Linear return mode: Like a circular generalization of the UIPickerView control.
   Only certain discrete positions are allowed. The knob rotates
@@ -49,8 +48,8 @@ or using an oblong background. But the control itself always has to be square.
 The control honors the enabled property. That is, if you set enabled to NO, it enters the
 UIControlStateDisabled and stops responding to user input. If specified, a disabled image is displayed
 instead of the normal image. Even when disabled, the control's position may always be specified
-at any time programmatically, with or without animation. With appropriate foreground and background
-images, a disabled knob control may be used as a dial view to display a numeric value.
+at any time programmatically, with or without animation. With appropriate images, a disabled knob control
+may be used as a dial view to display a numeric value.
 
 The KnobControlDemo.xcodeproj sample project can be used to build a simple demo app
 to exercise the different modes of the control and provides examples of use. This demo project
