@@ -23,7 +23,7 @@
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
 #define IKC_TARGET_VERSION 0x010100
-#define IKC_TARGET_BUILD 1
+#define IKC_TARGET_BUILD 2
 
 /*
  * DEBT: Should also do a runtime check in the constructors in case the control is ever built
@@ -39,6 +39,10 @@ static float normalizePosition(float position) {
 
     return position;
 }
+
+@protocol NSStringDeprecatedMethods
+- (CGSize) sizeWithFont:(UIFont*)font;
+@end
 
 @interface NSString(IKC)
 - (CGSize)sizeOfTextWithFontSize:(CGFloat)fontSize;
@@ -62,7 +66,9 @@ static float normalizePosition(float position) {
     }
     else {
         // iOS 5 & 6
-        textSize = [self sizeWithFont:font];
+        // following http://vgable.com/blog/2009/06/15/ignoring-just-one-deprecated-warning/
+        id<NSStringDeprecatedMethods> string = (id<NSStringDeprecatedMethods>)self;
+        textSize = [string sizeWithFont:font];
     }
     return textSize;
 }

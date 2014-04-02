@@ -6,7 +6,7 @@
 
 #define IKC_VERSION_STRING @"1.1.0"
 #define IKC_VERSION 0x010100
-#define IKC_BUILD 1
+#define IKC_BUILD 2
 
 /**
  * @mainpage iOS Knob Control
