@@ -4,9 +4,9 @@
 #error IOSKnobControl requires automatic reference counting.
 #endif // objc_arc
 
-#define IKC_VERSION_STRING @"1.1.0"
-#define IKC_VERSION 0x010100
-#define IKC_BUILD 2
+#define IKC_VERSION_STRING @"1.2.0"
+#define IKC_VERSION 0x010200
+#define IKC_BUILD 1
 
 /**
  * @mainpage iOS Knob Control
@@ -45,7 +45,8 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 typedef NS_ENUM(NSInteger, IKCGesture) {
     IKCGOneFingerRotation, ///< Custom gesture handling. One finger rotates the knob.
     IKCGTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture.
-    IKCGVerticalPan        ///< Uses a vertical pan gesture. The image still rotates.
+    IKCGVerticalPan,       ///< Uses a vertical pan gesture. The image still rotates.
+    IKCGTap                ///< Uses a tap gesture. The knob rotates to the position tapped. In rotary dial mode, rotates from the position tapped (dials that number).
 };
 
 /**

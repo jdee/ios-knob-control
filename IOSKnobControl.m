@@ -22,8 +22,8 @@
 #define IKC_EPSILON 1e-7
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
-#define IKC_TARGET_VERSION 0x010100
-#define IKC_TARGET_BUILD 2
+#define IKC_TARGET_VERSION 0x010200
+#define IKC_TARGET_BUILD 1
 
 /*
  * DEBT: Should also do a runtime check in the constructors in case the control is ever built
@@ -588,6 +588,10 @@ static float normalizePosition(float position) {
     else if (_gesture == IKCGVerticalPan) {
         gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleVerticalPan:)];
     }
+    else if (_gesture == IKCGTap)
+    {
+        gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    }
 
     gestureRecognizer.enabled = self.enabled;
     [self addGestureRecognizer:gestureRecognizer];
@@ -654,6 +658,36 @@ static float normalizePosition(float position) {
     // DEBT: Might want to make this sensitivity configurable.
     float position = positionStart - [sender translationInView:self].y/self.bounds.size.height;
     [self followGesture:sender toPosition:position];
+}
+
+- (void)handleTap:(UITapGestureRecognizer*)sender
+{
+    if (sender.state != UIGestureRecognizerStateEnded) return;
+
+    CGPoint location = [sender locationInView:self];
+    CGPoint inCenterFrame = [self transformLocationToCenterFrame:location];
+    float position = [self polarAngleOfPoint:inCenterFrame];
+
+    switch (self.mode)
+    {
+        case IKCMContinuous:
+            // DEBT: This is the first gesture that provides an absolute position. Previously all gestures
+            // only rotated the image *by* a certain amount. This gesture rotates the image *to* a specific
+            // position. This assumes a certain orientation of the image. For now, assume the pointer is
+            // at the top.
+            self.position = position - M_PI_2;
+            break;
+        case IKCMLinearReturn:
+        case IKCMWheelOfFortune:
+            // DEBT: And that works poorly with discrete modes. If I tap Feb, it doesn't mean I want Jan to
+            // rotate to that point. It means I want Feb at the top. Things would work the same as the
+            // continuous mode if you had discrete labels and something like the continuous knob image.
+            // For now:
+            [self setPosition:_position - position + M_PI_2];
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)followGesture:(UIGestureRecognizer*)sender toPosition:(double)position
