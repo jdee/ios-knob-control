@@ -854,35 +854,72 @@ static float normalizePosition(float position) {
 - (CAShapeLayer*)createShapeLayer
 {
     if (!shapeLayer) {
-        shapeLayer = [CAShapeLayer layer];
-        shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-        shapeLayer.frame = self.frame;
-        shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
-        shapeLayer.opaque = NO;
-
-        if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
-            [pipLayer removeFromSuperlayer];
-            pipLayer = nil;
-            [self addMarkings];
+        if (self.mode == IKCMRotaryDial)
+        {
+            [self createRotaryDial];
         }
-        else {
-            for (CATextLayer* layer in markings) {
-                [layer removeFromSuperlayer];
+        else
+        {
+            shapeLayer = [CAShapeLayer layer];
+            shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+            shapeLayer.frame = self.frame;
+            shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+            shapeLayer.opaque = NO;
+
+            if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
+                [pipLayer removeFromSuperlayer];
+                pipLayer = nil;
+                [self addMarkings];
             }
-            markings = nil;
+            else {
+                for (CATextLayer* layer in markings) {
+                    [layer removeFromSuperlayer];
+                }
+                markings = nil;
 
-            pipLayer = [CAShapeLayer layer];
-            pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-            pipLayer.frame = self.frame;
-            pipLayer.opaque = NO;
-            pipLayer.backgroundColor = [UIColor clearColor].CGColor;
-
-            [shapeLayer addSublayer:pipLayer];
+                pipLayer = [CAShapeLayer layer];
+                pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+                pipLayer.frame = self.frame;
+                pipLayer.opaque = NO;
+                pipLayer.backgroundColor = [UIColor clearColor].CGColor;
+                
+                [shapeLayer addSublayer:pipLayer];
+            }
         }
 
         float actual = self.clockwise ? self.position : -self.position;
         shapeLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
     }
+
+    return shapeLayer;
+}
+
+- (CAShapeLayer*)createRotaryDial
+{
+    UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.5 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
+
+    // [path addArcWithCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
+    int j;
+    for (j=0; j<10; ++j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + 105.0 * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - 105.0 * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:22.0 startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
+    }
+    for (j=9; j>=0; --j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + 105.0 * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - 105.0 * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:22.0 startAngle:1.5*M_PI-centerAngle endAngle:M_PI_2-centerAngle clockwise:YES];
+    }
+
+    shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = path.CGPath;
+    shapeLayer.frame = self.frame;
+    shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+    shapeLayer.opaque = NO;
 
     return shapeLayer;
 }

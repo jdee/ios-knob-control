@@ -26,6 +26,7 @@
 		7B2880B418E79EB800A0E726 /* KCDDiscreteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */; };
 		7B2880B718E7A8C400A0E726 /* KCDImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */; };
 		7B2880BD18EB3E7A00A0E726 /* KCDFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */; };
+		7B662CA81932A7EF00C5D676 /* KCDRotaryDialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */; };
 		7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7BE81C7F18B7B9DE0088814A /* ChangeLog */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,8 @@
 		7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDImageViewController.m; sourceTree = "<group>"; };
 		7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDFeedbackViewController.h; sourceTree = "<group>"; };
 		7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDFeedbackViewController.m; sourceTree = "<group>"; };
+		7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDRotaryDialViewController.h; sourceTree = "<group>"; };
+		7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDRotaryDialViewController.m; sourceTree = "<group>"; };
 		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,14 +137,7 @@
 				7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */,
 				7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */,
 				7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */,
-				7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */,
-				7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */,
-				7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */,
-				7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */,
-				7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */,
-				7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */,
-				7B2880B518E7A8C400A0E726 /* KCDImageViewController.h */,
-				7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */,
+				7B662CA51932A78D00C5D676 /* View Controllers */,
 				7B199B67189ABEC9003E7F6A /* Images.xcassets */,
 				7B199B53189ABEC9003E7F6A /* Supporting Files */,
 			);
@@ -184,6 +180,23 @@
 				7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */,
 			);
 			name = IOSKnobControl;
+			sourceTree = "<group>";
+		};
+		7B662CA51932A78D00C5D676 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */,
+				7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */,
+				7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */,
+				7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */,
+				7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */,
+				7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */,
+				7B2880B518E7A8C400A0E726 /* KCDImageViewController.h */,
+				7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */,
+				7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */,
+				7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,6 +303,7 @@
 				7B2880BD18EB3E7A00A0E726 /* KCDFeedbackViewController.m in Sources */,
 				7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */,
 				7B199B59189ABEC9003E7F6A /* main.m in Sources */,
+				7B662CA81932A7EF00C5D676 /* KCDRotaryDialViewController.m in Sources */,
 				7B2880B718E7A8C400A0E726 /* KCDImageViewController.m in Sources */,
 				7B2880B418E79EB800A0E726 /* KCDDiscreteViewController.m in Sources */,
 				7B199B66189ABEC9003E7F6A /* KCDContinuousViewController.m in Sources */,
