@@ -604,9 +604,12 @@
                                     <constraint firstAttribute="width" constant="280" id="LxD-gO-FGb"/>
                                 </constraints>
                             </view>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="l7P-P4-Eup">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="l7P-P4-Eup">
                                 <rect key="frame" x="20" y="308" width="280" height="29"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="28" id="JWH-HO-Zap"/>
+                                </constraints>
                                 <segments>
                                     <segment title="1-f. rot."/>
                                     <segment title="tap"/>
@@ -615,18 +618,49 @@
                                     <action selector="gestureChanged:" destination="DDj-gh-zI5" eventType="valueChanged" id="XZo-aO-Mso"/>
                                 </connections>
                             </segmentedControl>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="(number dialed)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRX-Ya-KBQ">
-                                <rect key="frame" x="20" y="344" width="280" height="21"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(number dialed)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRX-Ya-KBQ">
+                                <rect key="frame" x="20" y="382" width="280" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="45a-sd-ej5"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="-1" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="tUm-g9-qtP">
+                                <rect key="frame" x="114" y="344" width="188" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <action selector="timeScaleChanged:" destination="DDj-gh-zI5" eventType="valueChanged" id="37B-8N-5CK"/>
+                                </connections>
+                            </slider>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="time scale" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="okE-Yz-BAV">
+                                <rect key="frame" x="20" y="348" width="88" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="KD6-qN-hju"/>
+                                    <constraint firstAttribute="width" constant="88" id="vKL-AO-aoG"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="JRX-Ya-KBQ" firstAttribute="top" secondItem="okE-Yz-BAV" secondAttribute="bottom" constant="13" id="0TS-0a-HYv"/>
+                            <constraint firstItem="l7P-P4-Eup" firstAttribute="top" secondItem="OaE-tL-X2V" secondAttribute="bottom" constant="8" id="24b-EN-E7R"/>
+                            <constraint firstItem="JRX-Ya-KBQ" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="Bhf-Tb-BSn"/>
+                            <constraint firstAttribute="trailing" secondItem="tUm-g9-qtP" secondAttribute="trailing" constant="20" id="HDM-1c-1Ad"/>
+                            <constraint firstItem="l7P-P4-Eup" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="MeJ-hl-B4Q"/>
+                            <constraint firstItem="tUm-g9-qtP" firstAttribute="top" secondItem="okE-Yz-BAV" secondAttribute="bottom" constant="-25" id="Qh8-ls-46k"/>
                             <constraint firstItem="OaE-tL-X2V" firstAttribute="top" secondItem="gbs-8r-d6i" secondAttribute="top" constant="20" id="RCm-T4-Dc4"/>
+                            <constraint firstAttribute="trailing" secondItem="JRX-Ya-KBQ" secondAttribute="trailing" constant="20" id="UfK-6N-SFW"/>
+                            <constraint firstItem="okE-Yz-BAV" firstAttribute="top" secondItem="l7P-P4-Eup" secondAttribute="bottom" constant="12" id="Yag-Qz-XVx"/>
+                            <constraint firstItem="tUm-g9-qtP" firstAttribute="leading" secondItem="okE-Yz-BAV" secondAttribute="trailing" constant="8" id="h55-hi-NWV"/>
                             <constraint firstItem="OaE-tL-X2V" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="mdL-Dp-ihb"/>
+                            <constraint firstAttribute="trailing" secondItem="l7P-P4-Eup" secondAttribute="trailing" constant="20" id="qO5-bp-vCL"/>
+                            <constraint firstItem="okE-Yz-BAV" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="vBH-3O-KYE"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Rotary Dial" id="clO-fK-Daj"/>
@@ -634,6 +668,7 @@
                         <outlet property="gestureControl" destination="l7P-P4-Eup" id="LIx-Vf-yYC"/>
                         <outlet property="knobHolder" destination="OaE-tL-X2V" id="MPm-8b-3Kc"/>
                         <outlet property="numberLabel" destination="JRX-Ya-KBQ" id="Pi8-mt-FdK"/>
+                        <outlet property="timeScaleSlider" destination="tUm-g9-qtP" id="NS5-w1-zhc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hJ3-gY-z0k" userLabel="First Responder" sceneMemberID="firstResponder"/>

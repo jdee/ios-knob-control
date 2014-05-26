@@ -59,4 +59,9 @@
     knobControl.gesture = sender.selectedSegmentIndex == 0 ? IKCGOneFingerRotation : IKCGTap;
 }
 
+- (void)timeScaleChanged:(UISlider *)sender
+{
+    knobControl.timeScale = exp(sender.value);
+}
+
 @end

@@ -20,7 +20,9 @@
 @property (nonatomic) IBOutlet UIView* knobHolder;
 @property (nonatomic) IBOutlet UISegmentedControl* gestureControl;
 @property (nonatomic) IBOutlet UILabel* numberLabel;
+@property (nonatomic) IBOutlet UISlider* timeScaleSlider;
 
 - (IBAction)gestureChanged:(UISegmentedControl*)sender;
+- (IBAction)timeScaleChanged:(UISlider*)sender;
 
 @end
