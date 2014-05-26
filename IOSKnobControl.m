@@ -813,10 +813,21 @@ static int numberDialed(float position) {
             }
             else if (self.mode == IKCMRotaryDial)
             {
-                double delta = normalizePosition(currentTouch - touchStart);
-                // delta is signed and will be negative when the dial is rotated clockwise.
+                double delta = fabs(normalizePosition(currentTouch - touchStart));
+
+                /*
+                 * Delta is unsigned and just represents the absolute angular distance the knob was rotated before being
+                 * released. It may be rotated in either direction. What matters is _numberDialed, which is determined
+                 * by the starting touch, and how far the knob/dial has traveled from its rest position when released. 
+                 * The user just has to drag the knob at least 45 degrees in order to trigger a dial.
+                 * It's confusing if the knob doesn't follow the touch. The problem with using min and max here is that they
+                 * are limited to -/+ M_PI, but it's possible to dial well past M_PI, up to 11*M_PI/6 (330 degrees) when dialing 0.
+                 * Atm, we normalize that to (-M_PI, M_PI], so it switches sign when you rotate past +/- M_PI.
+                 * DEBT: Support min/max with absolute values at least 11*M_PI/6.
+                 */
+
                 // DEBT: Review, externalize this threshold?
-                if (_numberDialed < 0 || _numberDialed > 9 || delta > -M_PI_4)
+                if (_numberDialed < 0 || _numberDialed > 9 || delta < M_PI_4 || sender.state == UIGestureRecognizerStateCancelled)
                 {
                     [self returnToPosition:0.0 duration:_timeScale/IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*fabs(position)];
                 }
