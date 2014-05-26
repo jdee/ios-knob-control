@@ -293,6 +293,12 @@ static int numberDialed(float position) {
     }
 }
 
+- (void)setBackgroundImage:(UIImage *)backgroundImage
+{
+    _backgroundImage = backgroundImage;
+    [self updateImage];
+}
+
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
