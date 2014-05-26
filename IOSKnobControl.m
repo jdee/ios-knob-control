@@ -18,7 +18,11 @@
 /*
  * Return animations rotate through this many radians per second when self.timeScale == 1.0.
  */
-#define IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 0.52359878163217 // M_PI/6.0
+#define IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 0.52359878163217 // M_PI/6.0 rad/s
+/*
+ * Rotary dial animations are 10 times faster.
+ */
+#define IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 5.2359878163217 // 5.0*M_PI/3.0 rad/s
 #define IKC_EPSILON 1e-7
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
@@ -523,7 +527,7 @@ static int numberDialed(float position) {
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
     animation.values = @[@(adjusted), @(farPosition), @(0.0)];
     animation.keyTimes = @[@(0.0), @((farPosition-adjusted)/totalRotation), @(1.0)];
-    animation.duration = _timeScale / IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE * totalRotation * 0.2;
+    animation.duration = _timeScale / IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE * totalRotation;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 
     [imageLayer addAnimation:animation forKey:nil];
@@ -814,7 +818,7 @@ static int numberDialed(float position) {
                 // DEBT: Review, externalize this threshold?
                 if (_numberDialed < 0 || _numberDialed > 9 || delta > -M_PI_4)
                 {
-                    [self returnToPosition:0.0 duration:_timeScale*IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*0.2/fabs(position)];
+                    [self returnToPosition:0.0 duration:_timeScale/IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*fabs(position)];
                 }
                 else
                 {
