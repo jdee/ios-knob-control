@@ -330,14 +330,27 @@ static int numberDialed(float position) {
     _mode = mode;
     [self updateImage];
 
-    if (_mode == IKCMRotaryDial && (_gesture == IKCGVerticalPan || _gesture == IKCGTwoFingerRotation))
+    if (_mode == IKCMRotaryDial)
     {
-        self.gesture = IKCGOneFingerRotation;
+        if (_gesture == IKCGVerticalPan || _gesture == IKCGTwoFingerRotation)
+        {
+            self.gesture = IKCGOneFingerRotation;
+        }
+        self.clockwise = NO; // dial clockwise, but all calcs assume ccw
+        self.circular = YES; // these two settings affect how position is read out while dialing and how
     }
+}
+
+- (void)setCircular:(BOOL)circular
+{
+    if (_mode == IKCMRotaryDial) return;
+    _circular = circular;
 }
 
 - (void)setClockwise:(BOOL)clockwise
 {
+    if (_mode == IKCMRotaryDial) return;
+
     _clockwise = clockwise;
     [imageLayer removeFromSuperlayer];
     shapeLayer = nil;
@@ -475,7 +488,29 @@ static int numberDialed(float position) {
     lastNumberDialed = number;
     [self sendActionsForControlEvents:UIControlEventValueChanged];
 
-    // TODO: Animation
+    if (number == 0) number = 10;
+
+    // now animate
+
+    double farPosition = (number + 1) * M_PI/6.0;
+    double adjusted = -_position;
+    while (adjusted < 0) adjusted += 2.0*M_PI;
+    double totalRotation = 2.0*farPosition - adjusted;
+
+    [CATransaction new];
+    [CATransaction setDisableActions:YES];
+    imageLayer.transform = CATransform3DMakeRotation(0.0, 0, 0, 1);
+    _position = 0.0;
+
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+    animation.values = @[@(adjusted), @(farPosition), @(0.0)];
+    animation.keyTimes = @[@(0.0), @((farPosition-adjusted)/totalRotation), @(1.0)];
+    animation.duration = _timeScale / IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE * totalRotation * 0.2;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+
+    [imageLayer addAnimation:animation forKey:nil];
+
+    [CATransaction commit];
 }
 
 #pragma mark - Private Methods: Geometry
@@ -746,9 +781,14 @@ static int numberDialed(float position) {
                 double delta = normalizePosition(currentTouch - touchStart);
                 // delta is signed and will be negative when the dial is rotated clockwise.
                 // DEBT: Review, externalize this threshold?
-                if (delta > M_PI_4) return;
-
-                [self dialNumber:_numberDialed];
+                if (delta > -M_PI_4)
+                {
+                    [self returnToPosition:0.0 duration:_timeScale*IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*0.2/fabs(position)];
+                }
+                else
+                {
+                    [self dialNumber:_numberDialed];
+                }
             }
 
             rotating = NO;

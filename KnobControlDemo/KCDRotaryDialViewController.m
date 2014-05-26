@@ -45,6 +45,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     numberDialed = @"";
+    _numberLabel.text = numberDialed;
 }
 
 - (void)dialed:(IOSKnobControl*)sender
