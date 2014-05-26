@@ -41,9 +41,20 @@ static float normalizePosition(float position) {
 }
 
 static int numberDialed(float position) {
+    // normalize position to [0, 2*M_PI)
     while (position < 0) position += 2.0*M_PI;
+    while (position >= 2.0*M_PI) position -= 2.0*M_PI;
 
+    // now number is in [0, 11]
     int number = position * 6.0 / M_PI;
+
+    // this is not 0 but the dead spot clockwise from 1
+    if (number == 0) return 12;
+    // this is the next dead spot, counterclockwise from 0
+    if (number == 11) return 11;
+
+    // now number is in [1, 10]. the modulus makes 1..10 into 1..9, 0.
+    // the return value is in [0, 9].
     return number % 10;
 }
 
@@ -484,6 +495,7 @@ static int numberDialed(float position) {
 - (void)dialNumber:(int)number
 {
     if (_mode != IKCMRotaryDial) return;
+    if (number < 0 || number > 9) return;
 
     lastNumberDialed = number;
     [self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -558,6 +570,11 @@ static int numberDialed(float position) {
 
 - (void)snapToNearestPosition
 {
+    [self snapToNearestPositionWithDuration:-1.0];
+}
+
+- (void)snapToNearestPositionWithDuration:(float)duration
+{
     /*
      * Animate return to nearest position
      */
@@ -600,7 +617,11 @@ static int numberDialed(float position) {
             break;
     }
 
-    float duration = _timeScale/IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*fabs(delta);
+    if (duration < 0.0)
+    {
+        duration = _timeScale/IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*fabs(delta);
+    }
+
     [self returnToPosition:nearestPositionAngle duration:duration];
 }
 
@@ -755,7 +776,11 @@ static int numberDialed(float position) {
             // rotate to that point. It means I want Feb at the top. Things would work the same as the
             // continuous mode if you had discrete labels and something like the continuous knob image.
             // For now:
-            [self setPosition:_position - position + M_PI_2];
+            // DEBT: Blech. Don't want to generate UIControlEventValueChanged twice. Don't call setPosition:.
+            // Just adjust the ivar to prep snapToNearest.... This could use work.
+            // All I really need is something like [self nearestPositionToPosition:]. 怠け者だな。
+            _position -= position - M_PI_2;
+            [self snapToNearestPositionWithDuration:0.0];
             break;
         case IKCMRotaryDial:
             // This is the reason this gesture was introduced. The user can simply tap a number on the dial,
@@ -781,7 +806,7 @@ static int numberDialed(float position) {
                 double delta = normalizePosition(currentTouch - touchStart);
                 // delta is signed and will be negative when the dial is rotated clockwise.
                 // DEBT: Review, externalize this threshold?
-                if (delta > -M_PI_4)
+                if (_numberDialed < 0 || _numberDialed > 9 || delta > -M_PI_4)
                 {
                     [self returnToPosition:0.0 duration:_timeScale*IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*0.2/fabs(position)];
                 }

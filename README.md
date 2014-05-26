@@ -8,9 +8,8 @@ configurable gestures from the user. The knob has a number of configurable modes
 
 - Linear return mode: Like a circular generalization of the UIPickerView control.
   Only certain discrete positions are allowed. The knob rotates
-  to follow the user's gesture, but on release returns to an allowed position with
-  one of several available animations. The time scale for the return animation may
-  be configured as a property of the control.
+  to follow the user's gesture, but on release returns to an allowed position.
+  The time scale for the return animation may be configured as a property of the control.
 - Wheel of Fortune mode: Like linear return, except for the animation after the
   user releases the knob. Only a narrow strip between each pair of segments is excluded, like
   the pegs on the rim of a carnival wheel. If the knob was released in one of those
