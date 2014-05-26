@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, IKCMode) {
     IKCMLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
     IKCMWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
     IKCMContinuous,     ///< Like a circular generalization of the slider control.
-    IKCMRotaryDial      ///< TODO: Like an old rotary telephone dial. (Currently unimplemented.)
+    IKCMRotaryDial      ///< Like an old rotary telephone dial.
 };
 
 typedef NS_ENUM(NSInteger, IKCGesture) {
@@ -69,6 +69,14 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @interface IOSKnobControl : UIControl
 
 #pragma mark - Properties
+
+/**
+ * If set, the specified image is rendered in the background of the control. The default value is nil.
+ *
+ * If mode is IKCMRotaryDial, and backgroundImage is nil, the numbers on the dial will be rendered as the
+ * background. Use this property to supply your own dial background instead of the generated one.
+ */
+@property (nonatomic) UIImage* backgroundImage;
 
 /**
  * If this property is set to YES, the circle is closed. That is, all angular positions in (-M_PI,M_PI] are allowed, and -M_PI is identified with M_PI, so it is possible to

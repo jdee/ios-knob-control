@@ -41,7 +41,7 @@ static float normalizePosition(float position) {
 }
 
 @protocol NSStringDeprecatedMethods
-- (CGSize) sizeWithFont:(UIFont*)font;
+- (CGSize)sizeWithFont:(UIFont*)font;
 @end
 
 @interface NSString(IKC)
@@ -85,9 +85,9 @@ static float normalizePosition(float position) {
 @implementation IOSKnobControl {
     float touchStart, positionStart, currentTouch;
     UIGestureRecognizer* gestureRecognizer;
-    CALayer* imageLayer;
+    CALayer* imageLayer, *backgroundLayer;
     CAShapeLayer* shapeLayer, *pipLayer;
-    NSMutableArray* markings;
+    NSMutableArray* markings, *dialMarkings;
     UIImage* images[4];
     UIColor* fillColor[4];
     UIColor* titleColor[4];
@@ -750,6 +750,42 @@ static float normalizePosition(float position) {
  */
 - (void)updateImage
 {
+    /*
+     * There is always a background layer. It may just have no contents and no
+     * sublayers.
+     */
+    if (!backgroundLayer)
+    {
+        backgroundLayer = [CALayer layer];
+        backgroundLayer.frame = self.frame;
+        backgroundLayer.backgroundColor = [UIColor clearColor].CGColor;
+        backgroundLayer.opaque = NO;
+        [self.layer addSublayer:backgroundLayer];
+    }
+
+    if (_backgroundImage)
+    {
+        backgroundLayer.contents = (id)_backgroundImage.CGImage;
+        for (CALayer* layer in dialMarkings)
+        {
+            [layer removeFromSuperlayer];
+        }
+        dialMarkings = nil;
+    }
+    else if (_mode == IKCMRotaryDial)
+    {
+        [self createDialNumbers];
+    }
+    else
+    {
+        backgroundLayer.contents = nil;
+        for (CALayer* layer in dialMarkings)
+        {
+            [layer removeFromSuperlayer];
+        }
+        dialMarkings = nil;
+    }
+
     UIImage* image = self.currentImage;
     if (image) {
         if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
@@ -787,6 +823,11 @@ static float normalizePosition(float position) {
     pipLayer.fillColor = [self titleColorForState:self.state].CGColor;
 
     for (CATextLayer* layer in markings) {
+        layer.foregroundColor = [self titleColorForState:self.state].CGColor;
+    }
+
+    for (CATextLayer* layer in dialMarkings)
+    {
         layer.foregroundColor = [self titleColorForState:self.state].CGColor;
     }
 }
@@ -946,6 +987,40 @@ static float normalizePosition(float position) {
     shapeLayer.opaque = NO;
 
     return shapeLayer;
+}
+
+- (CALayer*)createDialNumbers
+{
+    backgroundLayer.contents = nil;
+    for (CALayer* layer in dialMarkings)
+    {
+        [layer removeFromSuperlayer];
+    }
+    dialMarkings = [NSMutableArray array];
+
+    CGFloat fontSize = self.fontSizeForTitles;
+    int j;
+    for (j=0; j<10; ++j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + 105.0 * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - 105.0 * sin(centerAngle);
+
+        CATextLayer* textLayer = [CATextLayer layer];
+        textLayer.string = [NSString stringWithFormat:@"%d", (j+1)%10];
+        textLayer.alignmentMode = kCAAlignmentCenter;
+        textLayer.fontSize = fontSize;
+        textLayer.backgroundColor = [UIColor clearColor].CGColor;
+        textLayer.opaque = NO;
+
+        CGSize textSize = [textLayer.string sizeOfTextWithFontSize:textLayer.fontSize];
+        textLayer.frame = CGRectMake(centerX-textSize.width*0.5, centerY-textSize.height*0.5, textSize.width, textSize.height);
+
+        [dialMarkings addObject:textLayer];
+        [backgroundLayer addSublayer:textLayer];
+    }
+
+    return backgroundLayer;
 }
 
 - (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
