@@ -44,8 +44,8 @@ typedef NS_ENUM(NSInteger, IKCMode) {
 
 typedef NS_ENUM(NSInteger, IKCGesture) {
     IKCGOneFingerRotation, ///< Custom gesture handling. One finger rotates the knob.
-    IKCGTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture.
-    IKCGVerticalPan,       ///< Uses a vertical pan gesture. The image still rotates.
+    IKCGTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture. (Not available with IKCMRotaryDial.)
+    IKCGVerticalPan,       ///< Uses a vertical pan gesture. The image still rotates. (Not available with IKCMRotaryDial.)
     IKCGTap                ///< Uses a tap gesture. The knob rotates to the position tapped. In rotary dial mode, rotates from the position tapped (dials that number).
 };
 
@@ -85,13 +85,13 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value,
  * is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI).
  *
- * The default value of this property is YES.
+ * The default value of this property is YES. It is ignored in IKCMRotaryDial.
  */
 @property (nonatomic) BOOL circular;
 
 /**
  * Specifies whether the value of position increases when the knob is turned clockwise instead of counterclockwise.
- * The default value of this property is NO.
+ * The default value of this property is NO. It is ignored in IKCMRotaryDial.
  */
 @property (nonatomic) BOOL clockwise;
 
@@ -116,12 +116,12 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) IKCGesture gesture;
 
 /**
- * Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. See the @ref circular property for further details.
+ * Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. It is ignored in IKCMRotaryDial. See the @ref circular property for further details.
  */
 @property (nonatomic) float max;
 
 /**
- * Minimum value of the position property if circular == NO. Must be in the range (-M_PI,0]. -M_PI is not a permitted value, but any value between that and 0 is. Default is -M_PI + 1e-7. See the @ref circular property for further details.
+ * Minimum value of the position property if circular == NO. Must be in the range (-M_PI,0]. -M_PI is not a permitted value, but any value between that and 0 is. Default is -M_PI + 1e-7. It is ignored in IKCMRotaryDial. See the @ref circular property for further details.
  */
 @property (nonatomic) float min;
 
@@ -146,12 +146,12 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) NSInteger positionIndex;
 
 /**
- * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode.
+ * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous or rotary dial modes.
  */
 @property (nonatomic) NSUInteger positions;
 
 /**
- * Used by the linear return mode to specify the time scale for the animation.
+ * Used to specify the time scale for return animations.
  * Default is 1.0. The duration of the animation is proportional to this property.
  * Set the number below 1.0 to speed up the animation, and above to slow it down.
  * Return animations will rotate through M_PI/6/timeScale radians per second or
@@ -160,7 +160,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) float timeScale;
 
 /**
- * Only used when no image is provided. These titles are rendered around the knob for each position index. If this property is nil (the default), the position
+ * Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position
  * indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices.
  */
 @property (nonatomic) NSArray* titles;

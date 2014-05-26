@@ -320,6 +320,11 @@ static float normalizePosition(float position) {
 {
     _mode = mode;
     [self updateImage];
+
+    if (_mode == IKCMRotaryDial && (_gesture == IKCGVerticalPan || _gesture == IKCGTwoFingerRotation))
+    {
+        self.gesture = IKCGOneFingerRotation;
+    }
 }
 
 - (void)setClockwise:(BOOL)clockwise
@@ -419,6 +424,14 @@ static float normalizePosition(float position) {
 
 - (void)setGesture:(IKCGesture)gesture
 {
+    if (_mode == IKCMRotaryDial && (gesture == IKCGTwoFingerRotation || gesture == IKCGVerticalPan))
+    {
+#ifdef DEBUG
+        NSLog(@"IKCMRotaryDial only allows IKCGOneFingerRotation and IKCGTap");
+#endif // DEBUG
+        return;
+    }
+
     _gesture = gesture;
     [self setupGestureRecognizer];
 }
@@ -570,7 +583,10 @@ static float normalizePosition(float position) {
     }
 
     _position = normalizePosition(position);
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
+    if (_mode != IKCMRotaryDial)
+    {
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
 }
 
 #pragma mark - Private Methods: Gesture Recognition
@@ -627,12 +643,12 @@ static float normalizePosition(float position) {
 
     currentTouch = touch;
 
-#if 0
+    /*
     NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f",
           (sender.state == UIGestureRecognizerStateBegan ? "began" :
            sender.state == UIGestureRecognizerStateChanged ? "changed" :
            sender.state == UIGestureRecognizerStateEnded ? "ended" : "<misc>"), touchStart, positionStart, touch, position);
-#endif
+    //*/
 
     [self followGesture:sender toPosition:position];
 }
@@ -685,6 +701,11 @@ static float normalizePosition(float position) {
             // For now:
             [self setPosition:_position - position + M_PI_2];
             break;
+        case IKCMRotaryDial:
+            // This is the reason this gesture was introduced. The user can simply tap a number on the dial,
+            // and the dial will rotate around and back as though they had dialed.
+            // TODO: ^^
+            break;
         default:
             break;
     }
@@ -698,6 +719,14 @@ static float normalizePosition(float position) {
             if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
                 [self snapToNearestPosition];
             }
+            else if (self.mode == IKCMRotaryDial)
+            {
+                // TODO: determine if we need to rotate the rest of the way around
+                // before returning
+
+                // TODO: Return to 0 orientation.
+            }
+
             rotating = NO;
 
             // revert from highlighted to normal

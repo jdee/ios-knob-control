@@ -125,6 +125,8 @@ Instance Methods</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:af631be46868141458ef1a5894bfa24ca"><td class="memItemLeft" align="right" valign="top">UIImage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#af631be46868141458ef1a5894bfa24ca">backgroundImage</a></td></tr>
+<tr class="separator:af631be46868141458ef1a5894bfa24ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafe8f96b875f1d3b9284991e65fdd0d6"><td class="memItemLeft" align="right" valign="top">BOOL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a></td></tr>
 <tr class="separator:aafe8f96b875f1d3b9284991e65fdd0d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa94f3ab453d2f53554a75acea661fb55"><td class="memItemLeft" align="right" valign="top">BOOL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#aa94f3ab453d2f53554a75acea661fb55">clockwise</a></td></tr>
@@ -461,6 +463,28 @@ Properties</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Property Documentation</h2>
+<a class="anchor" id="af631be46868141458ef1a5894bfa24ca"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (UIImage*) backgroundImage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>If set, the specified image is rendered in the background of the control. The default value is nil.</p>
+<p>If mode is IKCMRotaryDial, and backgroundImage is nil, the numbers on the dial will be rendered as the background. Use this property to supply your own dial background instead of the generated one. </p>
+
+</div>
+</div>
 <a class="anchor" id="aafe8f96b875f1d3b9284991e65fdd0d6"></a>
 <div class="memitem">
 <div class="memproto">
@@ -480,7 +504,7 @@ Properties</h2></td></tr>
 </div><div class="memdoc">
 <p>If this property is set to YES, the circle is closed. That is, all angular positions in (-M_PI,M_PI] are allowed, and -M_PI is identified with M_PI, so it is possible to continue around the circle. The min and max properties of the control are ignored.</p>
 <p>If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value, is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI).</p>
-<p>The default value of this property is YES. </p>
+<p>The default value of this property is YES. It is ignored in IKCMRotaryDial. </p>
 
 </div>
 </div>
@@ -501,7 +525,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Specifies whether the value of position increases when the knob is turned clockwise instead of counterclockwise. The default value of this property is NO. </p>
+<p>Specifies whether the value of position increases when the knob is turned clockwise instead of counterclockwise. The default value of this property is NO. It is ignored in IKCMRotaryDial. </p>
 
 </div>
 </div>
@@ -606,7 +630,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for further details. </p>
+<p>Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. It is ignored in IKCMRotaryDial. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for further details. </p>
 
 </div>
 </div>
@@ -627,7 +651,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Minimum value of the position property if circular == NO. Must be in the range (-M_PI,0]. -M_PI is not a permitted value, but any value between that and 0 is. Default is -M_PI + 1e-7. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for further details. </p>
+<p>Minimum value of the position property if circular == NO. Must be in the range (-M_PI,0]. -M_PI is not a permitted value, but any value between that and 0 is. Default is -M_PI + 1e-7. It is ignored in IKCMRotaryDial. See the <a class="el" href="interface_i_o_s_knob_control.html#aafe8f96b875f1d3b9284991e65fdd0d6">circular</a> property for further details. </p>
 
 </div>
 </div>
@@ -711,7 +735,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous mode. </p>
+<p>Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous or rotary dial modes. </p>
 
 </div>
 </div>
@@ -732,7 +756,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Used by the linear return mode to specify the time scale for the animation. Default is 1.0. The duration of the animation is proportional to this property. Set the number below 1.0 to speed up the animation, and above to slow it down. Return animations will rotate through M_PI/6/timeScale radians per second or through 2*M_PI in 12*timeScale s. </p>
+<p>Used to specify the time scale for return animations. Default is 1.0. The duration of the animation is proportional to this property. Set the number below 1.0 to speed up the animation, and above to slow it down. Return animations will rotate through M_PI/6/timeScale radians per second or through 2*M_PI in 12*timeScale s. </p>
 
 </div>
 </div>
@@ -753,7 +777,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Only used when no image is provided. These titles are rendered around the knob for each position index. If this property is nil (the default), the position indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices. </p>
+<p>Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices. </p>
 
 </div>
 </div>
@@ -763,7 +787,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Apr 1 2014 10:13:11 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun May 25 2014 18:40:51 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>
