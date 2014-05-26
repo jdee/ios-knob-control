@@ -40,6 +40,13 @@ static float normalizePosition(float position) {
     return position;
 }
 
+static int numberDialed(float position) {
+    while (position < 0) position += 2.0*M_PI;
+
+    int number = position * 6.0 / M_PI;
+    return number % 10;
+}
+
 @protocol NSStringDeprecatedMethods
 - (CGSize)sizeWithFont:(UIFont*)font;
 @end
@@ -92,6 +99,7 @@ static float normalizePosition(float position) {
     UIColor* fillColor[4];
     UIColor* titleColor[4];
     BOOL rotating;
+    int lastNumberDialed, _numberDialed;
 }
 
 @dynamic positionIndex, nearestPosition;
@@ -146,6 +154,7 @@ static float normalizePosition(float position) {
     _gesture = IKCGOneFingerRotation;
 
     rotating = NO;
+    lastNumberDialed = _numberDialed = -1;
 
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
@@ -366,6 +375,7 @@ static float normalizePosition(float position) {
 - (NSInteger)positionIndex
 {
     if (self.mode == IKCMContinuous) return -1;
+    if (self.mode == IKCMRotaryDial) return lastNumberDialed;
 
     if (!_circular && _position == _max) {
         return _positions - 1;
@@ -456,6 +466,16 @@ static float normalizePosition(float position) {
 - (UIColor*)currentTitleColor
 {
     return [self titleColorForState:self.state];
+}
+
+- (void)dialNumber:(int)number
+{
+    if (_mode != IKCMRotaryDial) return;
+
+    lastNumberDialed = number;
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+
+    // TODO: Animation
 }
 
 #pragma mark - Private Methods: Geometry
@@ -628,6 +648,7 @@ static float normalizePosition(float position) {
         touchStart = touch;
         positionStart = self.position;
         currentTouch = touch;
+        _numberDialed = numberDialed([self polarAngleOfPoint:centerFrameBegin]);
     }
 
     if (currentTouch > M_PI_2 && currentTouch < M_PI && touch < -M_PI_2 && touch > -M_PI) {
@@ -704,7 +725,7 @@ static float normalizePosition(float position) {
         case IKCMRotaryDial:
             // This is the reason this gesture was introduced. The user can simply tap a number on the dial,
             // and the dial will rotate around and back as though they had dialed.
-            // TODO: ^^
+            [self dialNumber:numberDialed(position)];
             break;
         default:
             break;
@@ -716,15 +737,18 @@ static float normalizePosition(float position) {
     switch (sender.state) {
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
-            if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
+            if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune)
+            {
                 [self snapToNearestPosition];
             }
             else if (self.mode == IKCMRotaryDial)
             {
-                // TODO: determine if we need to rotate the rest of the way around
-                // before returning
+                double delta = normalizePosition(currentTouch - touchStart);
+                // delta is signed and will be negative when the dial is rotated clockwise.
+                // DEBT: Review, externalize this threshold?
+                if (delta > M_PI_4) return;
 
-                // TODO: Return to 0 orientation.
+                [self dialNumber:_numberDialed];
             }
 
             rotating = NO;

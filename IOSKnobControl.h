@@ -142,6 +142,8 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from
  * 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from
  * -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1.
+ *
+ * In IKCMRotaryDial, this property is used to represent the number last dialed. This property should be consulted whenever a UIControlEventValueChanged is generated.
  */
 @property (nonatomic) NSInteger positionIndex;
 
@@ -275,5 +277,14 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
  */
 - (void)setTitleColor:(UIColor*)color forState:(UIControlState)state;
+
+/**
+ * ICKMRotaryDial only.
+ * Programmatically dial a @a number on the control. This causes the dial to rotate clockwise as though the user had dialed the specified
+ * @a number and then to rotate back to the rest position. It generates a UIControlEventValueChanged and sets the value of the
+ * positionIndex property to @a number.
+ * @param number the number to dial
+ */
+- (void)dialNumber:(int)number;
 
 @end

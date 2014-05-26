@@ -615,6 +615,13 @@
                                     <action selector="gestureChanged:" destination="DDj-gh-zI5" eventType="valueChanged" id="XZo-aO-Mso"/>
                                 </connections>
                             </segmentedControl>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="(number dialed)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRX-Ya-KBQ">
+                                <rect key="frame" x="20" y="344" width="280" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -626,6 +633,7 @@
                     <connections>
                         <outlet property="gestureControl" destination="l7P-P4-Eup" id="LIx-Vf-yYC"/>
                         <outlet property="knobHolder" destination="OaE-tL-X2V" id="MPm-8b-3Kc"/>
+                        <outlet property="numberLabel" destination="JRX-Ya-KBQ" id="Pi8-mt-FdK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hJ3-gY-z0k" userLabel="First Responder" sceneMemberID="firstResponder"/>

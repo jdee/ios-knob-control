@@ -19,6 +19,7 @@
 
 @property (nonatomic) IBOutlet UIView* knobHolder;
 @property (nonatomic) IBOutlet UISegmentedControl* gestureControl;
+@property (nonatomic) IBOutlet UILabel* numberLabel;
 
 - (IBAction)gestureChanged:(UISegmentedControl*)sender;
 

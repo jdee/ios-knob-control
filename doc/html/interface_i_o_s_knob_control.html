@@ -122,6 +122,8 @@ Instance Methods</h2></td></tr>
 <tr class="separator:a337007e4418821a9c1bd1aa1879c3151"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a788502d5ced4d39a84dfce4eb5aafc0e"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_i_o_s_knob_control.html#a788502d5ced4d39a84dfce4eb5aafc0e">setTitleColor:forState:</a></td></tr>
 <tr class="separator:a788502d5ced4d39a84dfce4eb5aafc0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88ce867ee0371b151ed7a59622db8ef3"><td class="memItemLeft" align="right" valign="top">(void)&#160;</td><td class="memItemRight" valign="bottom">- <a class="el" href="interface_i_o_s_knob_control.html#a88ce867ee0371b151ed7a59622db8ef3">dialNumber:</a></td></tr>
+<tr class="separator:a88ce867ee0371b151ed7a59622db8ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="properties"></a>
 Properties</h2></td></tr>
@@ -162,6 +164,29 @@ Properties</h2></td></tr>
 <p>DEBT: Enforce this. <a href="https://github.com/jdee/ios-knob-control/issues/5">https://github.com/jdee/ios-knob-control/issues/5</a></p>
 <p>The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1. </p>
 </div><h2 class="groupheader">Method Documentation</h2>
+<a class="anchor" id="a88ce867ee0371b151ed7a59622db8ef3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (void) dialNumber: </td>
+          <td></td>
+          <td class="paramtype">(int)&#160;</td>
+          <td class="paramname"><em>number</em></td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>ICKMRotaryDial only. Programmatically dial a <em>number</em> on the control. This causes the dial to rotate clockwise as though the user had dialed the specified <em>number</em> and then to rotate back to the rest position. It generates a UIControlEventValueChanged and sets the value of the positionIndex property to <em>number</em>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">number</td><td>the number to dial </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="acd488594a718d0017fb0fd554efc71a3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -714,7 +739,8 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max properties are ignored, and then positionIndex is position/2/M_PI*positions. This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1. </p>
+<p>Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max properties are ignored, and then positionIndex is position/2/M_PI*positions. This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1.</p>
+<p>In IKCMRotaryDial, this property is used to represent the number last dialed. This property should be consulted whenever a UIControlEventValueChanged is generated. </p>
 
 </div>
 </div>
@@ -787,7 +813,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun May 25 2014 18:40:51 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun May 25 2014 18:50:12 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

@@ -22,15 +22,16 @@ configurable gestures from the user. The knob has a number of configurable modes
   potentiometer/volume knob. Often used with min. and max. angles, but can also
   be circular. Knob remains wherever the user leaves it and can attain any value
   between the min. and max. equally.
-- Rotary dial mode (not available yet): Like an old rotary telephone dial.
+- Rotary dial mode: Like an old rotary telephone dial.
 
-It responds to three different gestures, depending on the value of a property:
+It responds to four different gestures, depending on the value of a property:
 
 - One-finger rotation: Custom gesture recognition. The spot under your finger tracks your touch
   as you rotate the knob.
 - Two-finger rotation: The standard iOS two-finger rotation gesture.
 - Vertical pan: Drag your finger up or down to increase or decrease the value of the position
   property, respectively.
+- Tap: Select a position for the knob or dial a number in rotary dial mode by tapping.
 
 The knob control can be circular, permitting the user to rotate it all the way around,
 or it can have a min. and max. angle in continuous and discrete modes.

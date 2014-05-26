@@ -18,6 +18,7 @@
 
 @implementation KCDRotaryDialViewController {
     IOSKnobControl* knobControl;
+    NSString* numberDialed;
 }
 
 - (void)viewDidLoad
@@ -41,8 +42,15 @@
     [_knobHolder addSubview:knobControl];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    numberDialed = @"";
+}
+
 - (void)dialed:(IOSKnobControl*)sender
 {
+    numberDialed = [numberDialed stringByAppendingFormat:@"%ld", (long)knobControl.positionIndex];
+    _numberLabel.text = numberDialed;
 }
 
 - (void)gestureChanged:(UISegmentedControl *)sender
