@@ -854,37 +854,23 @@ static float normalizePosition(float position) {
 - (CAShapeLayer*)createShapeLayer
 {
     if (!shapeLayer) {
-        if (self.mode == IKCMRotaryDial)
+        switch (_mode)
         {
-            [self createRotaryDial];
-        }
-        else
-        {
-            shapeLayer = [CAShapeLayer layer];
-            shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-            shapeLayer.frame = self.frame;
-            shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
-            shapeLayer.opaque = NO;
-
-            if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune) {
-                [pipLayer removeFromSuperlayer];
-                pipLayer = nil;
-                [self addMarkings];
-            }
-            else {
-                for (CATextLayer* layer in markings) {
-                    [layer removeFromSuperlayer];
-                }
-                markings = nil;
-
-                pipLayer = [CAShapeLayer layer];
-                pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-                pipLayer.frame = self.frame;
-                pipLayer.opaque = NO;
-                pipLayer.backgroundColor = [UIColor clearColor].CGColor;
-                
-                [shapeLayer addSublayer:pipLayer];
-            }
+            case IKCMContinuous:
+                [self createKnobWithPip];
+                break;
+            case IKCMLinearReturn:
+            case IKCMWheelOfFortune:
+                [self createKnobWithMarkings];
+                break;
+            case IKCMRotaryDial:
+                [self createRotaryDial];
+                break;
+#ifdef DEBUG
+            default:
+                NSLog(@"Unexpected mode: %d", _mode);
+                abort();
+#endif // DEBUG
         }
 
         float actual = self.clockwise ? self.position : -self.position;
@@ -894,11 +880,49 @@ static float normalizePosition(float position) {
     return shapeLayer;
 }
 
+- (CAShapeLayer*)createKnobWithPip
+{
+    shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    shapeLayer.frame = self.frame;
+    shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+    shapeLayer.opaque = NO;
+
+    for (CATextLayer* layer in markings) {
+        [layer removeFromSuperlayer];
+    }
+    markings = nil;
+
+    pipLayer = [CAShapeLayer layer];
+    pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    pipLayer.frame = self.frame;
+    pipLayer.opaque = NO;
+    pipLayer.backgroundColor = [UIColor clearColor].CGColor;
+
+    [shapeLayer addSublayer:pipLayer];
+
+    return shapeLayer;
+}
+
+- (CAShapeLayer*)createKnobWithMarkings
+{
+    shapeLayer = [CAShapeLayer layer];
+    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    shapeLayer.frame = self.frame;
+    shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+    shapeLayer.opaque = NO;
+
+    [pipLayer removeFromSuperlayer];
+    pipLayer = nil;
+    [self addMarkings];
+
+    return shapeLayer;
+}
+
 - (CAShapeLayer*)createRotaryDial
 {
     UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.5 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
 
-    // [path addArcWithCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
     int j;
     for (j=0; j<10; ++j)
     {
@@ -907,7 +931,7 @@ static float normalizePosition(float position) {
         double centerY = self.bounds.size.height*0.5 - 105.0 * sin(centerAngle);
         [path addArcWithCenter:CGPointMake(centerX, centerY) radius:22.0 startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
     }
-    for (j=9; j>=0; --j)
+    for (--j; j>=0; --j)
     {
         double centerAngle = M_PI_4 + j*M_PI/6.0;
         double centerX = self.bounds.size.width*0.5 + 105.0 * cos(centerAngle);

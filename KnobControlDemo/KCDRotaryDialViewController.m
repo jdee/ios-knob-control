@@ -17,6 +17,14 @@
 {
     knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
     knobControl.mode = IKCMRotaryDial;
+
+    UIColor* normalColor, *highlightedColor;
+    normalColor = [UIColor colorWithRed:1.0 green:0.0 blue:1.0 alpha:0.7];
+    highlightedColor = [UIColor colorWithRed:1.0 green:0.4 blue:1.0 alpha:0.7];
+
+    [knobControl setFillColor:normalColor forState:UIControlStateNormal];
+    [knobControl setFillColor:highlightedColor forState:UIControlStateHighlighted];
+
     [knobControl addTarget:self action:@selector(dialed:) forControlEvents:UIControlEventValueChanged];
     [_knobHolder addSubview:knobControl];
 }
