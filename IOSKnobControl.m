@@ -1276,8 +1276,8 @@ static CGRect adjustFrame(CGRect frame) {
     float nearX = self.frame.size.width*0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.5);
     float nearY = self.frame.size.height*0.5 * (1.0 + 0.586 * 0.5);
 
-    // the opposite edge is tangent to the boundary of the control. the width of the far side
-    // is stopWidth.
+    // the opposite edge is tangent to the perimeter of the dial. the width of the far side
+    // is stopWidth * self.frame.size.height * 0.5.
 
     float upperEdgeX = self.frame.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 + stopWidth * 0.5);
     float upperEdgeY = self.frame.size.height*0.5 * (1.0 + 0.5 - stopWidth * sqrt(3.0)*0.5);
