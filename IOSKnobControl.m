@@ -25,6 +25,11 @@
 #define IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 5.2359878163217 // 5.0*M_PI/3.0 rad/s
 #define IKC_EPSILON 1e-7
 
+// this should probably be IKC_MIN_FINGER_HOLE_RADIUS. the actual radius should be a property initialized to this value, and this min. value should be enforced.
+// but I'm reluctant to introduce a new property just for rotary dial mode, and I'm not sure whether it's really necessary. it would only be useful for very
+// large dials (on an iPad).
+#define IKC_FINGER_HOLE_RADIUS 22.0
+
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
 #define IKC_TARGET_VERSION 0x010200
 #define IKC_TARGET_BUILD 1
@@ -60,6 +65,13 @@ static int numberDialed(float position) {
     // now number is in [1, 10]. the modulus makes 1..10 into 1..9, 0.
     // the return value is in [0, 9].
     return number % 10;
+}
+
+static CGRect adjustFrame(CGRect frame) {
+    const float IKC_MINIMUM_DIMENSION = 10.0 * IKC_FINGER_HOLE_RADIUS;
+    if (frame.size.width < IKC_MINIMUM_DIMENSION) frame.size.width = IKC_MINIMUM_DIMENSION;
+    if (frame.size.height < IKC_MINIMUM_DIMENSION) frame.size.height = IKC_MINIMUM_DIMENSION;
+    return frame;
 }
 
 @protocol NSStringDeprecatedMethods
@@ -297,6 +309,15 @@ static int numberDialed(float position) {
     }
 }
 
+- (void)setFrame:(CGRect)frame
+{
+    if (_mode == IKCMRotaryDial)
+    {
+        frame = adjustFrame(frame);
+    }
+    [super setFrame:frame];
+}
+
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {
     _backgroundImage = backgroundImage;
@@ -359,6 +380,7 @@ static int numberDialed(float position) {
         }
         self.clockwise = NO; // dial clockwise, but all calcs assume ccw
         self.circular = YES; // these two settings affect how position is read out while dialing and how
+        self.frame = adjustFrame(self.frame);
     }
 }
 
@@ -770,6 +792,7 @@ static int numberDialed(float position) {
     CGPoint location = [sender locationInView:self];
     CGPoint inCenterFrame = [self transformLocationToCenterFrame:location];
     float position = [self polarAngleOfPoint:inCenterFrame];
+    float r = NAN;
 
     switch (self.mode)
     {
@@ -795,6 +818,25 @@ static int numberDialed(float position) {
         case IKCMRotaryDial:
             // This is the reason this gesture was introduced. The user can simply tap a number on the dial,
             // and the dial will rotate around and back as though they had dialed.
+
+            // desensitize the center region
+            /*
+             * The finger holes are positioned so that the distance between adjacent holes is the same as
+             * the margin between the hole and the perimeter of the outer dial. This implies an approximate relationship
+             * among the quantities
+             * R, the radius of the dial (self.frame.size.width*0.5 or self.frame.size.height*0.5),
+             * f, the radius of each finger hole, and
+             * m, the margin around each finger hole:
+             * R = 5f + 3m.
+             */
+            r = sqrt(inCenterFrame.x * inCenterFrame.x + inCenterFrame.y * inCenterFrame.y);
+#ifdef DEBUG
+            NSLog(@"Tapped %f pts from center; threshold is %f", r, (self.frame.size.width-IKC_FINGER_HOLE_RADIUS)/3.0);
+#endif // DEBUG
+
+            // distance from the center must be at least R - 2f - m = (2R - f)/3
+            if (r < (self.frame.size.width-IKC_FINGER_HOLE_RADIUS)/3.0) return;
+
             [self dialNumber:numberDialed(position)];
             break;
         default:
@@ -1103,20 +1145,30 @@ static int numberDialed(float position) {
 {
     UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.5 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
 
+    float const dialRadius = 0.5 * self.frame.size.width;
+
+    // this follows because the holes are positioned so that the margin between adjacent holes
+    // is the same as the margin between each hole and the rim of the dial. see the discussion
+    // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
+    // the minimum size for a tap target. the minimum value of dialRadius is 110. the control
+    // must be at least 220x220.
+    float const margin = (dialRadius - 5.0*IKC_FINGER_HOLE_RADIUS)/3.0;
+    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
+
     int j;
     for (j=0; j<10; ++j)
     {
         double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + 105.0 * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - 105.0 * sin(centerAngle);
-        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:22.0 startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
     }
     for (--j; j>=0; --j)
     {
         double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + 105.0 * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - 105.0 * sin(centerAngle);
-        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:22.0 startAngle:1.5*M_PI-centerAngle endAngle:M_PI_2-centerAngle clockwise:YES];
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:1.5*M_PI-centerAngle endAngle:M_PI_2-centerAngle clockwise:YES];
     }
 
     shapeLayer = [CAShapeLayer layer];
@@ -1137,13 +1189,23 @@ static int numberDialed(float position) {
     }
     dialMarkings = [NSMutableArray array];
 
+    float const dialRadius = 0.5 * self.frame.size.width;
+
+    // this follows because the holes are positioned so that the margin between adjacent holes
+    // is the same as the margin between each hole and the rim of the dial. see the discussion
+    // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
+    // the minimum size for a tap target. the minimum value of dialRadius is 110. the control
+    // must be at least 220x220.
+    float const margin = (dialRadius - 5.0*IKC_FINGER_HOLE_RADIUS)/3.0;
+    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
+
     CGFloat fontSize = self.fontSizeForTitles;
     int j;
     for (j=0; j<10; ++j)
     {
         double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + 105.0 * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - 105.0 * sin(centerAngle);
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
 
         CATextLayer* textLayer = [CATextLayer layer];
         textLayer.string = [NSString stringWithFormat:@"%d", (j+1)%10];
