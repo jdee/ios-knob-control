@@ -139,6 +139,8 @@ Properties</h2></td></tr>
 <tr class="separator:a88841ef8c88bd0a0363a6bfeaca5c95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acca582fc3dac7efc34539fea6cdb0226"><td class="memItemLeft" align="right" valign="top">UIColor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#acca582fc3dac7efc34539fea6cdb0226">currentTitleColor</a></td></tr>
 <tr class="separator:acca582fc3dac7efc34539fea6cdb0226"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60391ed9083378f3d29f9d4ce0b1ceee"><td class="memItemLeft" align="right" valign="top">UIImage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a60391ed9083378f3d29f9d4ce0b1ceee">foregroundImage</a></td></tr>
+<tr class="separator:a60391ed9083378f3d29f9d4ce0b1ceee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8561208607058c699048d1af9c1255ed"><td class="memItemLeft" align="right" valign="top">IKCGesture&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a8561208607058c699048d1af9c1255ed">gesture</a></td></tr>
 <tr class="separator:a8561208607058c699048d1af9c1255ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab40fa89f61337b948f719a23cc847abc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#ab40fa89f61337b948f719a23cc847abc">max</a></td></tr>
@@ -617,6 +619,28 @@ Properties</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a60391ed9083378f3d29f9d4ce0b1ceee"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (UIImage*) foregroundImage</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>An image to render in the foreground. Like the background image, this is totally stationary. The knob image is sandwiched between them and is the only thing that rotates. Obviously the foreground image has to be at least partly transparent. This is mainly useful for providing a stationary finger stop in the foreground of a rotary dial, but it may be used with any mode.</p>
+<p>If mode is IKCMRotaryDial, and foregroundImage is nil, a simple stop image is generated around 4:00 on the dial. </p>
+
+</div>
+</div>
 <a class="anchor" id="a8561208607058c699048d1af9c1255ed"></a>
 <div class="memitem">
 <div class="memproto">
@@ -813,7 +837,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 26 2014 05:43:56 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue May 27 2014 14:37:51 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

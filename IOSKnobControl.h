@@ -111,6 +111,15 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic, readonly) UIColor* currentTitleColor;
 
 /**
+ * An image to render in the foreground. Like the background image, this is totally stationary. The knob image is sandwiched between them and is the only thing
+ * that rotates. Obviously the foreground image has to be at least partly transparent. This is mainly useful for providing a stationary finger stop in the foreground of a
+ * rotary dial, but it may be used with any mode.
+ *
+ * If mode is IKCMRotaryDial, and foregroundImage is nil, a simple stop image is generated around 4:00 on the dial.
+ */
+@property (nonatomic) UIImage* foregroundImage;
+
+/**
  * Specifies the gesture the control should recognize. The default is IKCOneFingerRotation.
  */
 @property (nonatomic) IKCGesture gesture;

@@ -119,8 +119,8 @@ static CGRect adjustFrame(CGRect frame) {
 @implementation IOSKnobControl {
     float touchStart, positionStart, currentTouch;
     UIGestureRecognizer* gestureRecognizer;
-    CALayer* imageLayer, *backgroundLayer;
-    CAShapeLayer* shapeLayer, *pipLayer;
+    CALayer* imageLayer, *backgroundLayer, *foregroundLayer;
+    CAShapeLayer* shapeLayer, *pipLayer, *stopLayer;
     NSMutableArray* markings, *dialMarkings;
     UIImage* images[4];
     UIColor* fillColor[4];
@@ -321,6 +321,12 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {
     _backgroundImage = backgroundImage;
+    [self updateImage];
+}
+
+- (void)setForegroundImage:(UIImage *)foregroundImage
+{
+    _foregroundImage = foregroundImage;
     [self updateImage];
 }
 
@@ -998,22 +1004,52 @@ static CGRect adjustFrame(CGRect frame) {
             imageLayer = [self createShapeLayer];
             [self.layer addSublayer:imageLayer];
         }
-        [self updateShapeLayer];
     }
+
+    if (!foregroundLayer)
+    {
+        foregroundLayer = [CALayer layer];
+        foregroundLayer.frame = self.frame;
+        foregroundLayer.backgroundColor = [UIColor clearColor].CGColor;
+        foregroundLayer.opaque = NO;
+        [self.layer addSublayer:foregroundLayer];
+    }
+
+    if (_foregroundImage)
+    {
+        foregroundLayer.contents = (id)_foregroundImage.CGImage;
+        [stopLayer removeFromSuperlayer];
+        stopLayer = nil;
+    }
+    else if (_mode == IKCMRotaryDial)
+    {
+        foregroundLayer.contents = nil;
+        [self createDialStop];
+        [foregroundLayer addSublayer:stopLayer];
+    }
+    else
+    {
+        foregroundLayer.contents = nil;
+        [stopLayer removeFromSuperlayer];
+        stopLayer = nil;
+    }
+
+    [self updateShapeLayer];
 }
 
 - (void)updateShapeLayer
 {
-    shapeLayer.fillColor = [self fillColorForState:self.state].CGColor;
-    pipLayer.fillColor = [self titleColorForState:self.state].CGColor;
+    shapeLayer.fillColor = self.currentFillColor.CGColor;
+    pipLayer.fillColor = self.currentTitleColor.CGColor;
+    stopLayer.fillColor = self.currentTitleColor.CGColor;
 
     for (CATextLayer* layer in markings) {
-        layer.foregroundColor = [self titleColorForState:self.state].CGColor;
+        layer.foregroundColor = self.currentTitleColor.CGColor;
     }
 
     for (CATextLayer* layer in dialMarkings)
     {
-        layer.foregroundColor = [self titleColorForState:self.state].CGColor;
+        layer.foregroundColor = self.currentTitleColor.CGColor;
     }
 }
 
@@ -1226,6 +1262,42 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     return backgroundLayer;
+}
+
+- (CALayer*)createDialStop
+{
+    float const stopWidth = 0.05;
+
+    // the stop is an isosceles triangle at 4:00 (-M_PI/6) pointing inward radially.
+
+    // the near point is the point nearest the center of the dial, at 60% of the control
+    // radius.
+
+    float nearX = self.frame.size.width*0.5 * (1.0 + 0.6 * sqrt(3.0) * 0.5);
+    float nearY = self.frame.size.height*0.5 * (1.0 + 0.6 * 0.5);
+
+    // the opposite edge is tangent to the boundary of the control. the width of the far side
+    // is stopWidth.
+
+    float upperEdgeX = self.frame.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 + stopWidth * 0.5);
+    float upperEdgeY = self.frame.size.height*0.5 * (1.0 + 0.5 - stopWidth * sqrt(3.0)*0.5);
+
+    float lowerEdgeX = self.frame.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 - stopWidth * 0.5);
+    float lowerEdgeY = self.frame.size.height*0.5 * (1.0 + 0.5 + stopWidth * sqrt(3.0)*0.5);
+
+    UIBezierPath* path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(nearX, nearY)];
+    [path addLineToPoint:CGPointMake(lowerEdgeX, lowerEdgeY)];
+    [path addLineToPoint:CGPointMake(upperEdgeX, upperEdgeY)];
+    [path closePath];
+
+    stopLayer = [CAShapeLayer layer];
+    stopLayer.path = path.CGPath;
+    stopLayer.frame = self.frame;
+    stopLayer.backgroundColor = [UIColor clearColor].CGColor;
+    stopLayer.opaque = NO;
+
+    return stopLayer;
 }
 
 - (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
