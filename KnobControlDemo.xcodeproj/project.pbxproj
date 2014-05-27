@@ -71,6 +71,7 @@
 		7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDFeedbackViewController.m; sourceTree = "<group>"; };
 		7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDRotaryDialViewController.h; sourceTree = "<group>"; };
 		7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDRotaryDialViewController.m; sourceTree = "<group>"; };
+		7B662CA91935364B00C5D676 /* KCDImageChooser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDImageChooser.h; sourceTree = "<group>"; };
 		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -191,6 +192,7 @@
 				7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */,
 				7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */,
 				7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */,
+				7B662CA91935364B00C5D676 /* KCDImageChooser.h */,
 				7B2880B518E7A8C400A0E726 /* KCDImageViewController.h */,
 				7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */,
 				7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */,

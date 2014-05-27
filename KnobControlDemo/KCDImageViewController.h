@@ -15,9 +15,14 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol KCDImageChooser;
+
 @interface KCDImageViewController : UIViewController
 
+@property (nonatomic) NSArray* titles;
 @property (nonatomic) IBOutlet UIView* knobHolder;
+@property (nonatomic, weak) id<KCDImageChooser> delegate;
+@property (nonatomic, copy) NSString* imageTitle;
 
 - (IBAction) done:(id)sender;
 

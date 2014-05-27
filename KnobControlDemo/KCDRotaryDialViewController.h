@@ -14,8 +14,9 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "KCDImageChooser.h"
 
-@interface KCDRotaryDialViewController : UIViewController
+@interface KCDRotaryDialViewController : UIViewController<KCDImageChooser>
 
 @property (nonatomic) IBOutlet UIView* knobHolder;
 @property (nonatomic) IBOutlet UISegmentedControl* gestureControl;

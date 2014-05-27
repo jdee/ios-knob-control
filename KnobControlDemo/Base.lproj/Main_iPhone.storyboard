@@ -294,7 +294,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NHo-rc-89I" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2276" y="441"/>
+            <point key="canvasLocation" x="2406" y="769"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="oU5-2K-m69">
@@ -619,7 +619,7 @@
                                 </connections>
                             </segmentedControl>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(number dialed)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JRX-Ya-KBQ">
-                                <rect key="frame" x="20" y="382" width="280" height="21"/>
+                                <rect key="frame" x="20" y="382" width="209" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="45a-sd-ej5"/>
@@ -645,20 +645,36 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOk-5q-HcT">
+                                <rect key="frame" x="237" y="378" width="63" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="7ZX-Kj-JWF"/>
+                                    <constraint firstAttribute="width" constant="63" id="nc1-ig-cLN"/>
+                                </constraints>
+                                <state key="normal" title="Images">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="MAf-mq-eSE" kind="modal" id="Wio-sR-5TS"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="JRX-Ya-KBQ" firstAttribute="top" secondItem="okE-Yz-BAV" secondAttribute="bottom" constant="13" id="0TS-0a-HYv"/>
                             <constraint firstItem="l7P-P4-Eup" firstAttribute="top" secondItem="OaE-tL-X2V" secondAttribute="bottom" constant="8" id="24b-EN-E7R"/>
-                            <constraint firstItem="JRX-Ya-KBQ" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="Bhf-Tb-BSn"/>
                             <constraint firstAttribute="trailing" secondItem="tUm-g9-qtP" secondAttribute="trailing" constant="20" id="HDM-1c-1Ad"/>
                             <constraint firstItem="l7P-P4-Eup" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="MeJ-hl-B4Q"/>
+                            <constraint firstItem="JRX-Ya-KBQ" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="O9a-yC-P7P"/>
                             <constraint firstItem="tUm-g9-qtP" firstAttribute="top" secondItem="okE-Yz-BAV" secondAttribute="bottom" constant="-25" id="Qh8-ls-46k"/>
                             <constraint firstItem="OaE-tL-X2V" firstAttribute="top" secondItem="gbs-8r-d6i" secondAttribute="top" constant="20" id="RCm-T4-Dc4"/>
-                            <constraint firstAttribute="trailing" secondItem="JRX-Ya-KBQ" secondAttribute="trailing" constant="20" id="UfK-6N-SFW"/>
                             <constraint firstItem="okE-Yz-BAV" firstAttribute="top" secondItem="l7P-P4-Eup" secondAttribute="bottom" constant="12" id="Yag-Qz-XVx"/>
+                            <constraint firstItem="jOk-5q-HcT" firstAttribute="top" secondItem="JRX-Ya-KBQ" secondAttribute="bottom" constant="-25" id="bcR-t0-tE1"/>
+                            <constraint firstAttribute="trailing" secondItem="jOk-5q-HcT" secondAttribute="trailing" constant="20" id="fZB-df-Zxl"/>
                             <constraint firstItem="tUm-g9-qtP" firstAttribute="leading" secondItem="okE-Yz-BAV" secondAttribute="trailing" constant="8" id="h55-hi-NWV"/>
                             <constraint firstItem="OaE-tL-X2V" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="mdL-Dp-ihb"/>
+                            <constraint firstItem="jOk-5q-HcT" firstAttribute="leading" secondItem="JRX-Ya-KBQ" secondAttribute="trailing" constant="8" id="nwi-Ax-FeX"/>
                             <constraint firstAttribute="trailing" secondItem="l7P-P4-Eup" secondAttribute="trailing" constant="20" id="qO5-bp-vCL"/>
                             <constraint firstItem="okE-Yz-BAV" firstAttribute="leading" secondItem="gbs-8r-d6i" secondAttribute="leading" constant="20" id="vBH-3O-KYE"/>
                         </constraints>
@@ -681,4 +697,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="Wio-sR-5TS"/>
+    </inferredMetricsTieBreakers>
 </document>

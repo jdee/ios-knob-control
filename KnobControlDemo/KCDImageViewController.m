@@ -14,11 +14,10 @@
  */
 
 #import "IOSKnobControl.h"
-#import "KCDAppDelegate.h"
+#import "KCDImageChooser.h"
 #import "KCDImageViewController.h"
 
 @implementation KCDImageViewController {
-    NSArray* titles;
     IOSKnobControl* knobControl;
 }
 
@@ -28,18 +27,10 @@
 {
     [super viewDidLoad];
 
-    /*
-     * Might be nice to have it enumerate all the images in the asset catalog, but we add -highlighted and -disabled
-     * to the end of each, making that bit more complicated. And this sample app should be simple. It's not hard to
-     * change a couple lines of code and rebuild to see a new image. But it's also convenient to be able to change
-     * in the app. For now, we'll have to maintain this list by hand.
-     */
-    titles = @[@"(none)", @"knob", @"teardrop"];
-
     knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
     knobControl.mode = IKCMLinearReturn;
-    knobControl.positions = 3;
-    knobControl.titles = titles;
+    knobControl.positions = _titles.count;
+    knobControl.titles = _titles;
     knobControl.timeScale = 0.5;
     knobControl.circular = NO;
     knobControl.min = -M_PI/2.0;
@@ -62,22 +53,17 @@
 {
     [super viewWillAppear:animated];
 
-    KCDAppDelegate* appDelegate = (KCDAppDelegate*)[UIApplication sharedApplication].delegate;
-
-    knobControl.positionIndex = appDelegate.imageTitle ? [titles indexOfObject:appDelegate.imageTitle] : [titles indexOfObject:@"(none)"];
+    knobControl.positionIndex = _imageTitle ? [_titles indexOfObject:_imageTitle] : [_titles indexOfObject:@"(none)"];
 }
 
 - (void)done:(id)sender
 {
-    KCDAppDelegate* appDelegate = (KCDAppDelegate*)[UIApplication sharedApplication].delegate;
-    NSString* title = [titles objectAtIndex:knobControl.positionIndex];
+    NSString* title = [_titles objectAtIndex:knobControl.positionIndex];
 
     if ([title isEqualToString:@"(none)"]) {
-        appDelegate.imageTitle = nil;
+        title = nil;
     }
-    else {
-        appDelegate.imageTitle = title;
-    }
+    [_delegate imageChosen:title];
 
     [self dismissViewControllerAnimated:YES completion:nil];
 }

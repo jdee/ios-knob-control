@@ -14,15 +14,20 @@
  */
 
 #import "IOSKnobControl.h"
+#import "KCDImageViewController.h"
 #import "KCDRotaryDialViewController.h"
 
 @implementation KCDRotaryDialViewController {
     IOSKnobControl* knobControl;
-    NSString* numberDialed;
+    NSString* numberDialed, *imageTitle;
 }
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+
+    imageTitle = @"(none)";
+
     knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
     knobControl.mode = IKCMRotaryDial;
     knobControl.gesture = IKCGOneFingerRotation;
@@ -48,6 +53,22 @@
     _numberLabel.text = @"(number dialed)";
 }
 
+- (void)updateKnobImages
+{
+    if (imageTitle) {
+        [knobControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
+        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
+        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
+        knobControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
+    }
+    else {
+        [knobControl setImage:nil forState:UIControlStateNormal];
+        [knobControl setImage:nil forState:UIControlStateHighlighted];
+        [knobControl setImage:nil forState:UIControlStateDisabled];
+        knobControl.backgroundImage = nil;
+    }
+}
+
 - (void)dialed:(IOSKnobControl*)sender
 {
     numberDialed = [numberDialed stringByAppendingFormat:@"%ld", (long)knobControl.positionIndex];
@@ -62,6 +83,26 @@
 - (void)timeScaleChanged:(UISlider *)sender
 {
     knobControl.timeScale = exp(sender.value);
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    KCDImageViewController* imageVC = (KCDImageViewController*)segue.destinationViewController;
+
+    // To customize:
+    // add your own image(s) here, e.g.:
+
+    // imageVC.titles = @[@"(none)", @"telephone"];
+    imageVC.titles = @[@"(none)"];
+
+    imageVC.imageTitle = imageTitle;
+    imageVC.delegate = self;
+}
+
+- (void)imageChosen:(NSString *)anImageTitle
+{
+    imageTitle = anImageTitle;
+    [self updateKnobImages];
 }
 
 @end

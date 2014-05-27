@@ -14,8 +14,9 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "KCDImageChooser.h"
 
-@interface KCDContinuousViewController : UIViewController
+@interface KCDContinuousViewController : UIViewController<KCDImageChooser>
 
 @property (nonatomic) IBOutlet UIView* knobControlView;
 @property (nonatomic) IBOutlet UILabel* positionLabel;

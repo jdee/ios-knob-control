@@ -19,6 +19,4 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-@property (nonatomic, copy) NSString* imageTitle;
-
 @end

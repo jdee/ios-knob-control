@@ -14,18 +14,21 @@
  */
 
 #import "IOSKnobControl.h"
-#import "KCDAppDelegate.h"
 #import "KCDContinuousViewController.h"
+#import "KCDImageViewController.h"
 
 @implementation KCDContinuousViewController {
     IOSKnobControl* knobControl;
     IOSKnobControl* minControl;
     IOSKnobControl* maxControl;
+    NSString* imageTitle;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    imageTitle = @"(none)";
 
     // basic continuous knob configuration
     knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
@@ -45,7 +48,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self updateKnobImages];
     [self updateKnobProperties];
 
     NSLog(@"Min. knob position %f, max. knob position %f", minControl.position, maxControl.position);
@@ -53,21 +55,19 @@
 
 - (void)updateKnobImages
 {
-    KCDAppDelegate* appDelegate = (KCDAppDelegate*)[UIApplication sharedApplication].delegate;
-
-    if (appDelegate.imageTitle) {
-        [knobControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
-        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
-        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+    if (imageTitle) {
+        [knobControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
+        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
+        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
 
         // Use the same three images for each knob.
-        [minControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
-        [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
-        [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+        [minControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
+        [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
+        [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
 
-        [maxControl setImage:[UIImage imageNamed:appDelegate.imageTitle] forState:UIControlStateNormal];
-        [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", appDelegate.imageTitle]] forState:UIControlStateHighlighted];
-        [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", appDelegate.imageTitle]] forState:UIControlStateDisabled];
+        [maxControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
+        [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
+        [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
     }
     else {
         [knobControl setImage:nil forState:UIControlStateNormal];
@@ -167,6 +167,21 @@
     // add each to its placeholder
     [self.minControlView addSubview:minControl];
     [self.maxControlView addSubview:maxControl];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // this is our only segue, so be lazy
+    KCDImageViewController* imageVC = (KCDImageViewController*)segue.destinationViewController;
+    imageVC.titles = @[@"(none)", @"knob", @"teardrop"];
+    imageVC.imageTitle = imageTitle;
+    imageVC.delegate = self;
+}
+
+- (void)imageChosen:(NSString *)anImageTitle
+{
+    imageTitle = anImageTitle;
+    [self updateKnobImages];
 }
 
 #pragma mark - Handler for configuration controls
