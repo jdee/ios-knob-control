@@ -68,7 +68,7 @@ static int numberDialed(float position) {
 }
 
 static CGRect adjustFrame(CGRect frame) {
-    const float IKC_MINIMUM_DIMENSION = 10.0 * IKC_FINGER_HOLE_RADIUS;
+    const float IKC_MINIMUM_DIMENSION = ceil(9.72 * IKC_FINGER_HOLE_RADIUS);
     if (frame.size.width < IKC_MINIMUM_DIMENSION) frame.size.width = IKC_MINIMUM_DIMENSION;
     if (frame.size.height < IKC_MINIMUM_DIMENSION) frame.size.height = IKC_MINIMUM_DIMENSION;
     return frame;
@@ -823,20 +823,23 @@ static CGRect adjustFrame(CGRect frame) {
             // desensitize the center region
             /*
              * The finger holes are positioned so that the distance between adjacent holes is the same as
-             * the margin between the hole and the perimeter of the outer dial. This implies an approximate relationship
+             * the margin between the hole and the perimeter of the outer dial. This implies a relationship
              * among the quantities
              * R, the radius of the dial (self.frame.size.width*0.5 or self.frame.size.height*0.5),
              * f, the radius of each finger hole, and
              * m, the margin around each finger hole:
-             * R = 5f + 3m.
+             * R = 4.86*f + 2.93*m.
+             * 4.86 = 1.0 + 1.0/sin(M_PI/12.0);
+             * 2.93 = 1.0 + 0.5/sin(M_PI/12.0);
              */
             r = sqrt(inCenterFrame.x * inCenterFrame.x + inCenterFrame.y * inCenterFrame.y);
 #ifdef DEBUG
-            NSLog(@"Tapped %f pts from center; threshold is %f", r, (self.frame.size.width-IKC_FINGER_HOLE_RADIUS)/3.0);
+            NSLog(@"Tapped %f pts from center; threshold is %f", r, self.frame.size.width*0.294);
 #endif // DEBUG
 
-            // distance from the center must be at least R - 2f - m = (2R - f)/3
-            if (r < (self.frame.size.width-IKC_FINGER_HOLE_RADIUS)/3.0) return;
+            // distance from the center must be at least R - 2f - m. The max. value of f is R/4.86, so given that a custom
+            // image may make the finger holes any size, we allow for the largest value of 2f + m, which occurs when m = 0
+            if (r < self.frame.size.width*0.294) return;
 
             [self dialNumber:numberDialed(position)];
             break;
@@ -1151,9 +1154,9 @@ static CGRect adjustFrame(CGRect frame) {
     // this follows because the holes are positioned so that the margin between adjacent holes
     // is the same as the margin between each hole and the rim of the dial. see the discussion
     // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
-    // the minimum size for a tap target. the minimum value of dialRadius is 110. the control
-    // must be at least 220x220.
-    float const margin = (dialRadius - 5.0*IKC_FINGER_HOLE_RADIUS)/3.0;
+    // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
+    // must be at least 214x214.
+    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
     float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
 
     int j;
@@ -1195,9 +1198,9 @@ static CGRect adjustFrame(CGRect frame) {
     // this follows because the holes are positioned so that the margin between adjacent holes
     // is the same as the margin between each hole and the rim of the dial. see the discussion
     // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
-    // the minimum size for a tap target. the minimum value of dialRadius is 110. the control
-    // must be at least 220x220.
-    float const margin = (dialRadius - 5.0*IKC_FINGER_HOLE_RADIUS)/3.0;
+    // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
+    // must be at least 214x214.
+    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
     float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
 
     CGFloat fontSize = self.fontSizeForTitles;
