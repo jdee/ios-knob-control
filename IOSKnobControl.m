@@ -381,6 +381,7 @@ static CGRect adjustFrame(CGRect frame) {
         self.clockwise = NO; // dial clockwise, but all calcs assume ccw
         self.circular = YES; // these two settings affect how position is read out while dialing and how
         self.frame = adjustFrame(self.frame);
+        lastNumberDialed = 0;
     }
 }
 
@@ -422,7 +423,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setPositionIndex:(NSInteger)positionIndex
 {
-    if (self.mode == IKCMContinuous) return;
+    if (self.mode == IKCMContinuous || self.mode == IKCMRotaryDial) return;
 
     float position = self.circular ? (2.0*M_PI/_positions)*positionIndex : ((self.max - self.min)/_positions)*(positionIndex+0.5) + self.min;
     [self setPosition:position animated:NO];
