@@ -1270,11 +1270,11 @@ static CGRect adjustFrame(CGRect frame) {
 
     // the stop is an isosceles triangle at 4:00 (-M_PI/6) pointing inward radially.
 
-    // the near point is the point nearest the center of the dial, at 60% of the control
-    // radius.
+    // the near point is the point nearest the center of the dial, at the edge of the
+    // outer tap ring. (see handleTap: for where the 0.586 comes from.)
 
-    float nearX = self.frame.size.width*0.5 * (1.0 + 0.6 * sqrt(3.0) * 0.5);
-    float nearY = self.frame.size.height*0.5 * (1.0 + 0.6 * 0.5);
+    float nearX = self.frame.size.width*0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.5);
+    float nearY = self.frame.size.height*0.5 * (1.0 + 0.586 * 0.5);
 
     // the opposite edge is tangent to the boundary of the control. the width of the far side
     // is stopWidth.
