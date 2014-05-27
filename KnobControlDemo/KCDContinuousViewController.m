@@ -60,33 +60,39 @@
         [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
         [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
         knobControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
+        knobControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
 
         // Use the same three images for each knob.
         [minControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
         [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
         [minControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
         minControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
+        minControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
 
         [maxControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
         [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
         [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
         maxControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
+        maxControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
     }
     else {
         [knobControl setImage:nil forState:UIControlStateNormal];
         [knobControl setImage:nil forState:UIControlStateHighlighted];
         [knobControl setImage:nil forState:UIControlStateDisabled];
         knobControl.backgroundImage = nil;
+        knobControl.foregroundImage = nil;
 
         [minControl setImage:nil forState:UIControlStateNormal];
         [minControl setImage:nil forState:UIControlStateHighlighted];
         [minControl setImage:nil forState:UIControlStateDisabled];
         minControl.backgroundImage = nil;
+        minControl.foregroundImage = nil;
 
         [maxControl setImage:nil forState:UIControlStateNormal];
         [maxControl setImage:nil forState:UIControlStateHighlighted];
         [maxControl setImage:nil forState:UIControlStateDisabled];
         maxControl.backgroundImage = nil;
+        maxControl.foregroundImage = nil;
     }
 }
 

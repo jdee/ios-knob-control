@@ -60,12 +60,14 @@
         [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
         [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
         knobControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
+        knobControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
     }
     else {
         [knobControl setImage:nil forState:UIControlStateNormal];
         [knobControl setImage:nil forState:UIControlStateHighlighted];
         [knobControl setImage:nil forState:UIControlStateDisabled];
         knobControl.backgroundImage = nil;
+        knobControl.foregroundImage = nil;
     }
 }
 
