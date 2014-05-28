@@ -109,6 +109,28 @@ static CGRect adjustFrame(CGRect frame) {
 
 @end
 
+/*
+ * Used in dialNumber:. There doesn't seem to be an appropriate delegate protocol for CAAnimation. 
+ * The animationDidStop:finished: message is
+ * simply sent to the delegate object when the animation completes. This method could be in the knob control itself,
+ * but the CAAnimation object retains its delegate. It seems likely that the removedOnCompletion flag should make
+ * that retention harmless: the imageLayer will eventually release the animation, which in turn will release the
+ * control. But this mechanism, using a weak reference to the knob control, avoids that assumption and keeps this
+ * method out of the main class, which is a better design.
+ */
+@interface IKCAnimationDelegate : NSObject
+@property (nonatomic, weak) IOSKnobControl* knobControl;
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag;
+@end
+
+@implementation IKCAnimationDelegate
+- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
+{
+    if (flag == NO) return;
+    _knobControl.enabled = YES;
+}
+@end
+
 @interface IOSKnobControl()
 /*
  * Returns the nearest allowed position
@@ -548,6 +570,11 @@ static CGRect adjustFrame(CGRect frame) {
     while (adjusted < 0) adjusted += 2.0*M_PI;
     double totalRotation = 2.0*farPosition - adjusted;
 
+    IKCAnimationDelegate* delegate = [[IKCAnimationDelegate alloc] init];
+    delegate.knobControl = self;
+
+    self.enabled = NO;
+
     [CATransaction new];
     [CATransaction setDisableActions:YES];
     imageLayer.transform = CATransform3DMakeRotation(0.0, 0, 0, 1);
@@ -558,6 +585,7 @@ static CGRect adjustFrame(CGRect frame) {
     animation.keyTimes = @[@(0.0), @((farPosition-adjusted)/totalRotation), @(1.0)];
     animation.duration = _timeScale / IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE * totalRotation;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    animation.delegate = delegate;
 
     [imageLayer addAnimation:animation forKey:nil];
 
