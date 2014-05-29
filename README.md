@@ -36,8 +36,9 @@ The knob control can be circular, permitting the user to rotate it all the way a
 or it can have a min. and max. angle in continuous and discrete modes.
 
 The control is distributed as a single pair of files (IOSKnobControl.h and IOSKnobControl.m
-in this directory), which you can simply drop into your project. You have to provide at
-least one image for the knob. You may use any of the images in this project or supply your own.
+in this directory), which you can simply drop into your project. Without any externally supplied image,
+the control generates appropriate, customizable images in all modes. It can also accept externally
+supplied images. You can use any of the images in the demo project here or supply your own.
 
 The knob control and all images must be square. Images will usually be circles or regular polygons, with a
 transparent background or a solid one that matches the view behind it. However, the aspect
