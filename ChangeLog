@@ -18,3 +18,21 @@
     - Feedback demo provides an example of using a disabled knob control as a dial.
     - New knob images.
     - Demos of new built-in knob images and gestures.
+    
+TBD  Jimmy Dee  <jgvdthree@gmail.com>
+
+    * Version 1.2.0
+
+    NOT YET RELEASED.
+    
+    Rotary dial mode complete.
+
+    Added a tap gesture available in all modes.
+
+    Control now has backgroundImage and foregroundImage properties. These properties may be used
+    to specify stationary background and foreground layers for the control. The knob image rotates
+    between them. These are particularly useful for providing a dial background with numbers and
+    a finger stop in the foreground in rotary dial mode, but they are available in all modes.
+
+    Demo app:
+    - Rotary dial demo with some poor images (as well as generated dial images).
