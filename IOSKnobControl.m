@@ -64,6 +64,11 @@ static CGRect adjustFrame(CGRect frame) {
     const float IKC_MINIMUM_DIMENSION = ceil(9.72 * IKC_FINGER_HOLE_RADIUS);
     if (frame.size.width < IKC_MINIMUM_DIMENSION) frame.size.width = IKC_MINIMUM_DIMENSION;
     if (frame.size.height < IKC_MINIMUM_DIMENSION) frame.size.height = IKC_MINIMUM_DIMENSION;
+
+    // force the frame to be square. choose the larger of the two dimensions as the square side in case it's not.
+    float side = MAX(frame.size.width, frame.size.height);
+    frame.size.width = frame.size.height = side;
+
     return frame;
 }
 

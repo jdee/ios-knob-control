@@ -60,9 +60,9 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * transparent background or a solid one that matches the view behind it. However, the aspect
  * ratio must be 1:1. The effect of the animation is circular rotation. This only works if the control
  * is square. You can produce other effects, for example, by partially clipping a square control
- * or using an oblong background. But the control itself always has to be square.
- *
- * DEBT: Enforce this. https://github.com/jdee/ios-knob-control/issues/5
+ * or using an oblong background. But the control itself always has to be square. If an oblong frame is specified
+ * for the control, the frame will be made square. The larger of the original sides will will be used for both the
+ * width and height. The origin of the frame will be unchanged.
  *
  * The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1.
  */
