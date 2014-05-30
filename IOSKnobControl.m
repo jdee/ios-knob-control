@@ -78,8 +78,7 @@ static CGRect adjustFrame(CGRect frame) {
 @implementation NSString(IKC)
 
 /*
- * For portability among iOS versions. The CATextLayer uses Helvetica
- * by default. We just need the font size here.
+ * For portability among iOS versions.
  */
 - (CGSize)sizeOfTextWithFont:(UIFont*)font
 {
