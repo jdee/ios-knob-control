@@ -42,13 +42,6 @@
 #error IOSKnobControl.h version and build do not match IOSKnobControl.m.
 #endif // target version/build check
 
-static float normalizePosition(float position) {
-    while (position >   M_PI) position -= 2.0*M_PI;
-    while (position <= -M_PI) position += 2.0*M_PI;
-
-    return position;
-}
-
 static int numberDialed(float position) {
     // normalize position to [0, 2*M_PI)
     while (position < 0) position += 2.0*M_PI;
@@ -404,10 +397,12 @@ static CGRect adjustFrame(CGRect frame) {
     {
         if (_gesture == IKCGVerticalPan || _gesture == IKCGTwoFingerRotation)
         {
-            self.gesture = IKCGOneFingerRotation;
+            _gesture = IKCGOneFingerRotation;
         }
-        self.clockwise = NO; // dial clockwise, but all calcs assume ccw
-        self.circular = YES; // these two settings affect how position is read out while dialing and how
+        _clockwise = NO; // dial clockwise, but all calcs assume ccw
+        _circular = NO;
+        _max = IKC_EPSILON;
+        _min = -11.0*M_PI/6.0;
         self.frame = adjustFrame(self.frame);
         lastNumberDialed = 0;
     }
@@ -438,10 +433,14 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setPosition:(float)position animated:(BOOL)animated
 {
-    // for this purpose, don't normalize to [-M_PI,M_PI].
     if (_circular == NO) {
         position = MAX(position, _min);
         position = MIN(position, _max);
+    }
+    else {
+        while (position > M_PI) position -= 2.0*M_PI;
+        while (position <= -M_PI) position += 2.0*M_PI;
+        if (position == -M_PI) position = M_PI;
     }
     float delta = fabs(position - _position);
 
@@ -466,15 +465,17 @@ static CGRect adjustFrame(CGRect frame) {
         return _positions - 1;
     }
 
-    float converted = self.position;
+    float converted = _position;
     if (converted < 0) converted += 2.0*M_PI;
 
-    int index = self.circular ? converted*0.5/M_PI*self.positions+0.5 : (self.position-self.min)/(self.max-self.min)*self.positions;
+    int index = _circular ? converted*0.5/M_PI*_positions+0.5 : (_position-_min)/(_max-_min)*_positions;
 
-    while (index >= self.positions) index -= self.positions;
-    while (index < 0) index += self.positions;
+    if (index < 0)
+    {
+        index += ceil(-(double)index/(double)_positions) * _positions;
+    }
 
-    return index;
+    return index % _positions;
 }
 
 /*
@@ -487,34 +488,44 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setMin:(float)min
 {
-    min = normalizePosition(min);
-    if (min > 0.0) min = 0.0;
-    if (min <= -M_PI) min = -M_PI + IKC_EPSILON;
+    // this property is effectively readonly in this mode
+    if (_mode == IKCMRotaryDial) return;
+
     _min = min;
 
-    if (_mode == IKCMContinuous || self.currentImage) return;
+    if (_max - _min >= 2.0*M_PI) _max = _min + 2.0*M_PI;
+    if (_max < _min) _max = _min;
 
+    if (_position < _min) self.position = _min;
+
+    if (_mode == IKCMContinuous || _mode == IKCMRotaryDial || [self imageForState:UIControlStateNormal]) return;
+
+    // if we are rendering a discrete knob with titles, re-render the titles now that min/max has changed
     [imageLayer removeFromSuperlayer];
     shapeLayer = nil;
     imageLayer = [self createShapeLayer];
     [self.layer addSublayer:imageLayer];
-    [self updateImage];
 }
 
 - (void)setMax:(float)max
 {
-    max = normalizePosition(max);
-    if (max < 0.0) max = 0.0;
-    if (max >= M_PI) max = M_PI - IKC_EPSILON;
+    // this property is effectively readonly in this mode
+    if (_mode == IKCMRotaryDial) return;
+
     _max = max;
 
-    if (_mode == IKCMContinuous || self.currentImage) return;
+    if (_max - _min >= 2.0*M_PI) _min = _max - 2.0*M_PI;
+    if (_max < _min) _min = _max;
 
+    if (_position > _max) self.position = _max;
+
+    if (_mode == IKCMContinuous || _mode == IKCMRotaryDial || [self imageForState:UIControlStateNormal]) return;
+
+    // if we are rendering a discrete knob with titles, re-render the titles now that min/max has changed
     [imageLayer removeFromSuperlayer];
     shapeLayer = nil;
     imageLayer = [self createShapeLayer];
     [self.layer addSublayer:imageLayer];
-    [self updateImage];
 }
 
 - (void)setGesture:(IKCGesture)gesture
@@ -686,6 +697,11 @@ static CGRect adjustFrame(CGRect frame) {
 
     if (duration < 0.0)
     {
+        // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
+        // If delta is M_PI/self.positions, the duration is maximal. Otherwise, it scales linearly.
+        // Without this adjustment, the animation will seem much faster for large
+        // deltas.
+
         duration = _timeScale/IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*fabs(delta);
     }
 
@@ -694,15 +710,12 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)returnToPosition:(float)position duration:(float)duration
 {
+    if (position == _position) return;
+
     float actual = self.clockwise ? position : -position;
-    float current = self.clockwise ? self.position : -self.position;
+    float current = self.clockwise ? _position : -_position;
 
     if (duration > 0.0) {
-        // The largest absolute value of delta is M_PI/self.positions, halfway between segments.
-        // If delta is M_PI/self.positions, the duration is maximal. Otherwise, it scales linearly.
-        // Without this adjustment, the animation will seem much faster for large
-        // deltas.
-
         // Gratefully borrowed from http://www.raywenderlich.com/56885/custom-control-for-ios-tutorial-a-reusable-knob
         [CATransaction new];
         [CATransaction setDisableActions:YES];
@@ -725,7 +738,7 @@ static CGRect adjustFrame(CGRect frame) {
         imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
     }
 
-    _position = normalizePosition(position);
+    _position = position;
     if (_mode != IKCMRotaryDial)
     {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
@@ -788,10 +801,10 @@ static CGRect adjustFrame(CGRect frame) {
     currentTouch = touch;
 
     /*
-    NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f",
+    NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f (min=%f, max=%f), _position = %f",
           (sender.state == UIGestureRecognizerStateBegan ? "began" :
            sender.state == UIGestureRecognizerStateChanged ? "changed" :
-           sender.state == UIGestureRecognizerStateEnded ? "ended" : "<misc>"), touchStart, positionStart, touch, position);
+           sender.state == UIGestureRecognizerStateEnded ? "ended" : "<misc>"), touchStart, positionStart, touch, position, _min, _max, _position);
     //*/
 
     [self followGesture:sender toPosition:position];
@@ -893,21 +906,20 @@ static CGRect adjustFrame(CGRect frame) {
             }
             else if (self.mode == IKCMRotaryDial)
             {
-                double delta = fabs(normalizePosition(currentTouch - touchStart));
+                double delta = currentTouch - touchStart;
+                while (delta <= -2.0*M_PI) delta += 2.0*M_PI;
+                while (delta > 0.0) delta -= 2.0*M_PI;
 
                 /*
                  * Delta is unsigned and just represents the absolute angular distance the knob was rotated before being
-                 * released. It may be rotated in either direction. What matters is _numberDialed, which is determined
+                 * released. It may only be rotated in the negative direction, however, since max is 0.0.
+                 * What matters is _numberDialed, which is determined
                  * by the starting touch, and how far the knob/dial has traveled from its rest position when released. 
                  * The user just has to drag the knob at least 45 degrees in order to trigger a dial.
-                 * It's confusing if the knob doesn't follow the touch. The problem with using min and max here is that they
-                 * are limited to -/+ M_PI, but it's possible to dial well past M_PI, up to 11*M_PI/6 (330 degrees) when dialing 0.
-                 * Atm, we normalize that to (-M_PI, M_PI], so it switches sign when you rotate past +/- M_PI.
-                 * DEBT: Support min/max with absolute values at least 11*M_PI/6.
                  */
 
-                // DEBT: Review, externalize this threshold?
-                if (_numberDialed < 0 || _numberDialed > 9 || delta < M_PI_4 || sender.state == UIGestureRecognizerStateCancelled)
+                // DEBT: Review, externalize this threshold (-M_PI_4)?
+                if (_numberDialed < 0 || _numberDialed > 9 || delta > -M_PI_4 || sender.state == UIGestureRecognizerStateCancelled)
                 {
                     [self returnToPosition:0.0 duration:_timeScale/IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE*fabs(position)];
                 }
@@ -1126,10 +1138,10 @@ static CGRect adjustFrame(CGRect frame) {
             position = (2.0*M_PI/_positions)*j;
         }
         else {
-            position = ((self.max-self.min)/_positions)*(j+0.5) + self.min;
+            position = ((_max-_min)/_positions)*(j+0.5) + _min;
         }
 
-        float actual = self.clockwise ? -position : position;
+        float actual = _clockwise ? -position : position;
 
         // distance from the center to place the upper left corner
         float radius = 0.4*self.bounds.size.width - 0.5*textSize.height;

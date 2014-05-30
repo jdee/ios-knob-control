@@ -82,8 +82,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * If this property is set to YES, the circle is closed. That is, all angular positions in (-M_PI,M_PI] are allowed, and -M_PI is identified with M_PI, so it is possible to
  * continue around the circle. The min and max properties of the control are ignored.
  *
- * If this property is set to NO, the circle is open, and the min and max properties are consulted. It is assumed that 0.0, the initial value,
- * is allowed, so min must be within (-M_PI,0] and max must be within [0,M_PI).
+ * If this property is set to NO, the circle is open, and the min and max properties are consulted.
  *
  * The default value of this property is YES. It is ignored in IKCMRotaryDial.
  */
@@ -125,12 +124,18 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) IKCGesture gesture;
 
 /**
- * Maximum value of the position property if circular == NO. Must be in the range [0,M_PI). M_PI is not a permitted value, but any value between that and 0 is. Default is M_PI - 1e-7. It is ignored in IKCMRotaryDial. See the @ref circular property for further details.
+ * Maximum value of the position property if circular == NO. It is ignored in IKCMRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
+ * For example, if you first set min to 0 and max to 3*M_PI, min will be adjusted to 2*M_PI after max is set. If you set max first and then min, max will be adjusted to M_PI after min is set. 
+ * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
+ * value.
  */
 @property (nonatomic) float max;
 
 /**
- * Minimum value of the position property if circular == NO. Must be in the range (-M_PI,0]. -M_PI is not a permitted value, but any value between that and 0 is. Default is -M_PI + 1e-7. It is ignored in IKCMRotaryDial. See the @ref circular property for further details.
+ * Minimum value of the position property if circular == NO. It is ignored in IKCMRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
+ * For example, if you first set min to 0 and max to 3*M_PI, min will be adjusted to 2*M_PI after max is set. If you set max first and then min, max will be adjusted to M_PI after min is set.
+ * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
+ * value.
  */
 @property (nonatomic) float min;
 
