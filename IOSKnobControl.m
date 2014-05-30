@@ -460,22 +460,7 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (self.mode == IKCMContinuous) return -1;
     if (self.mode == IKCMRotaryDial) return lastNumberDialed;
-
-    if (!_circular && _position == _max) {
-        return _positions - 1;
-    }
-
-    float converted = _position;
-    if (converted < 0) converted += 2.0*M_PI;
-
-    int index = _circular ? converted*0.5/M_PI*_positions+0.5 : (_position-_min)/(_max-_min)*_positions;
-
-    if (index < 0)
-    {
-        index += ceil(-(double)index/(double)_positions) * _positions;
-    }
-
-    return index % _positions;
+    return [self positionIndexForPosition:_position];
 }
 
 /*
@@ -605,6 +590,25 @@ static CGRect adjustFrame(CGRect frame) {
 
 #pragma mark - Private Methods: Geometry
 
+- (NSInteger)positionIndexForPosition:(float)position
+{
+    if (!_circular && position == _max) {
+        return _positions - 1;
+    }
+
+    float converted = position;
+    if (converted < 0) converted += 2.0*M_PI;
+
+    int index = _circular ? converted*0.5/M_PI*_positions+0.5 : (position-_min)/(_max-_min)*_positions;
+
+    if (index < 0)
+    {
+        index += ceil(-(double)index/(double)_positions) * _positions;
+    }
+
+    return index % _positions;
+}
+
 - (CGPoint)transformLocationToCenterFrame:(CGPoint)point
 {
     point.x -= self.bounds.size.width*0.5;
@@ -624,13 +628,19 @@ static CGRect adjustFrame(CGRect frame) {
     return atan2(point.y, self.clockwise ? -point.x : point.x);
 }
 
+- (float)nearestPosition
+{
+    return [self nearestPositionToPosition:_position];
+}
+
 /*
  * Not normalized to (-M_PI,M_PI].
  */
-- (float)nearestPosition
+- (float)nearestPositionToPosition:(float)position
 {
+    NSInteger positionIndex = [self positionIndexForPosition:position];
     if (_circular) {
-        if (2*self.positionIndex == self.positions) {
+        if (2*positionIndex == _positions) {
             /*
              * Try to keep things confined to (-M_PI,M_PI] and avoid a return to -M_PI.
              * This only happens when circular is YES.
@@ -638,26 +648,26 @@ static CGRect adjustFrame(CGRect frame) {
              */
             return M_PI - IKC_EPSILON;
         }
-        return self.positionIndex*2.0*M_PI/_positions;
+        return positionIndex*2.0*M_PI/_positions;
     }
 
-    return ((_max-_min)/_positions)*(self.positionIndex+0.5) + _min;
+    return ((_max-_min)/_positions)*(positionIndex+0.5) + _min;
 }
 
 #pragma mark - Private Methods: Animation
 
 - (void)snapToNearestPosition
 {
-    [self snapToNearestPositionWithDuration:-1.0];
+    [self snapToNearestPositionWithPosition:_position duration:-1.0];
 }
 
-- (void)snapToNearestPositionWithDuration:(float)duration
+- (void)snapToNearestPositionWithPosition:(float)position duration:(float)duration
 {
     /*
      * Animate return to nearest position
      */
-    float nearestPositionAngle = self.nearestPosition;
-    float delta = nearestPositionAngle - self.position;
+    float nearestPositionAngle = [self nearestPositionToPosition:position];
+    float delta = nearestPositionAngle - _position;
 
     while (delta > M_PI) {
         nearestPositionAngle -= 2.0*M_PI;
@@ -669,7 +679,7 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     // DEBT: Make these constants macros, properties, something.
-    const float threshold = 0.9*M_PI/self.positions;
+    const float threshold = 0.9*M_PI/_positions;
 
     switch (self.mode) {
         case IKCMWheelOfFortune:
@@ -857,11 +867,7 @@ static CGRect adjustFrame(CGRect frame) {
             // rotate to that point. It means I want Feb at the top. Things would work the same as the
             // continuous mode if you had discrete labels and something like the continuous knob image.
             // For now:
-            // DEBT: Blech. Don't want to generate UIControlEventValueChanged twice. Don't call setPosition:.
-            // Just adjust the ivar to prep snapToNearest.... This could use work.
-            // All I really need is something like [self nearestPositionToPosition:]. 怠け者だな。
-            _position -= position - M_PI_2;
-            [self snapToNearestPositionWithDuration:0.0];
+            [self snapToNearestPositionWithPosition:_position-position+M_PI_2 duration:0.0];
             break;
         case IKCMRotaryDial:
             // This is the reason this gesture was introduced. The user can simply tap a number on the dial,
