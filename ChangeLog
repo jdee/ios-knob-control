@@ -27,7 +27,7 @@ TBD  Jimmy Dee  <jgvdthree@gmail.com>
     
     Rotary dial mode complete.
 
-    Added a tap gesture available in all modes.
+    Added support for using a tap gesture in all modes.
 
     Control now has backgroundImage and foregroundImage properties. These properties may be used
     to specify stationary background and foreground layers for the control. The knob image rotates
@@ -36,3 +36,4 @@ TBD  Jimmy Dee  <jgvdthree@gmail.com>
 
     Demo app:
     - Rotary dial demo with some poor images (as well as generated dial images).
+    - Tap gesture option available in continuous and discrete demos.
