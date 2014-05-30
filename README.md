@@ -69,6 +69,14 @@ Documentation
 All API documentation can be found in IOSKnobControl.h. Browsable HTML documentation generated from this source is
 checked into this repository in the doc/html subdirectory. See doc/html/index.html.
 
+Releases
+--------
+
+This is an open-source software project. It's never currently deployed anywhere. To use it, you just drop it into your
+own project. Obviously, you are free to use any commit in the history of the repository--*at your own risk.* Stable releases
+are indicated by tags in the repo (e.g., 1.1.0.2) and notes in the ChangeLog. When in doubt, use the last stable release
+tag as opposed to the HEAD revision.
+
 Known Issues
 ------------
 
