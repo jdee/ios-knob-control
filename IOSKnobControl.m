@@ -141,7 +141,7 @@ static CGRect adjustFrame(CGRect frame) {
 @implementation IOSKnobControl {
     float touchStart, positionStart, currentTouch;
     UIGestureRecognizer* gestureRecognizer;
-    CALayer* imageLayer, *backgroundLayer, *foregroundLayer;
+    CALayer* imageLayer, *backgroundLayer, *foregroundLayer, *middleLayer;
     CAShapeLayer* shapeLayer, *pipLayer, *stopLayer;
     NSMutableArray* markings, *dialMarkings;
     UIImage* images[4];
@@ -1005,6 +1005,15 @@ static CGRect adjustFrame(CGRect frame) {
         dialMarkings = nil;
     }
 
+    if (!middleLayer)
+    {
+        middleLayer = [CALayer layer];
+        middleLayer.frame = self.frame;
+        middleLayer.backgroundColor = [UIColor clearColor].CGColor;
+        middleLayer.opaque = NO;
+        [self.layer addSublayer:middleLayer];
+    }
+
     UIImage* image = self.currentImage;
     if (image) {
         if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
@@ -1021,7 +1030,7 @@ static CGRect adjustFrame(CGRect frame) {
             float actual = self.clockwise ? self.position : -self.position;
             imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
-            [self.layer addSublayer:imageLayer];
+            [middleLayer addSublayer:imageLayer];
         }
 
         imageLayer.contents = (id)image.CGImage;
@@ -1030,36 +1039,38 @@ static CGRect adjustFrame(CGRect frame) {
         if (![imageLayer isKindOfClass:CAShapeLayer.class]) {
             [imageLayer removeFromSuperlayer];
             imageLayer = [self createShapeLayer];
-            [self.layer addSublayer:imageLayer];
+            [middleLayer addSublayer:imageLayer];
         }
     }
 
-    if (!foregroundLayer)
+    if (_foregroundImage || _mode == IKCMRotaryDial)
     {
+        [foregroundLayer removeFromSuperlayer];
         foregroundLayer = [CALayer layer];
         foregroundLayer.frame = self.frame;
         foregroundLayer.backgroundColor = [UIColor clearColor].CGColor;
         foregroundLayer.opaque = NO;
         [self.layer addSublayer:foregroundLayer];
-    }
 
-    if (_foregroundImage)
-    {
-        foregroundLayer.contents = (id)_foregroundImage.CGImage;
-        [stopLayer removeFromSuperlayer];
-        stopLayer = nil;
-    }
-    else if (_mode == IKCMRotaryDial)
-    {
-        foregroundLayer.contents = nil;
-        [self createDialStop];
-        [foregroundLayer addSublayer:stopLayer];
+        if (_foregroundImage)
+        {
+            [stopLayer removeFromSuperlayer];
+            stopLayer = nil;
+            foregroundLayer.contents = (id)_foregroundImage.CGImage;
+        }
+        else
+        {
+            foregroundLayer.contents = nil;
+            [self createDialStop];
+            [foregroundLayer addSublayer:stopLayer];
+        }
     }
     else
     {
-        foregroundLayer.contents = nil;
         [stopLayer removeFromSuperlayer];
         stopLayer = nil;
+        [foregroundLayer removeFromSuperlayer];
+        foregroundLayer = nil;
     }
 
     [self updateShapeLayer];

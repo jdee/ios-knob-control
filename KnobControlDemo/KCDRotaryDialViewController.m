@@ -33,9 +33,9 @@
     knobControl.gesture = IKCGOneFingerRotation;
 
     UIColor* normalColor, *highlightedColor, *titleColor;
-    normalColor = [UIColor colorWithRed:1.0 green:0.0 blue:1.0 alpha:0.7];
-    highlightedColor = [UIColor colorWithRed:1.0 green:0.4 blue:1.0 alpha:0.7];
-    titleColor = [UIColor colorWithRed:0.5 green:0.0 blue:0.5 alpha:1.0];
+    normalColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.0 alpha:0.7];
+    highlightedColor = [UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:0.7];
+    titleColor = [UIColor colorWithRed:0.0 green:0.3 blue:0.0 alpha:1.0];
 
     //*
     [knobControl setFillColor:normalColor forState:UIControlStateNormal];
@@ -91,11 +91,7 @@
 {
     KCDImageViewController* imageVC = (KCDImageViewController*)segue.destinationViewController;
 
-    // To customize:
-    // add your own image(s) here, e.g.:
-
-    // imageVC.titles = @[@"(none)", @"telephone"];
-    imageVC.titles = @[@"(none)"];
+    imageVC.titles = @[@"(none)", @"telephone"];
 
     imageVC.imageTitle = imageTitle;
     imageVC.delegate = self;
