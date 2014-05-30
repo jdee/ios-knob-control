@@ -72,7 +72,7 @@ static CGRect adjustFrame(CGRect frame) {
 @end
 
 @interface NSString(IKC)
-- (CGSize)sizeOfTextWithFontSize:(CGFloat)fontSize;
+- (CGSize)sizeOfTextWithFont:(UIFont*)font;
 @end
 
 @implementation NSString(IKC)
@@ -81,10 +81,9 @@ static CGRect adjustFrame(CGRect frame) {
  * For portability among iOS versions. The CATextLayer uses Helvetica
  * by default. We just need the font size here.
  */
-- (CGSize)sizeOfTextWithFontSize:(CGFloat)fontSize
+- (CGSize)sizeOfTextWithFont:(UIFont*)font
 {
     CGSize textSize;
-    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
     if ([self respondsToSelector:@selector(sizeWithAttributes:)]) {
         // iOS 7.x
         NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
@@ -1118,6 +1117,7 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     CGFloat fontSize = self.fontSizeForTitles;
+    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
     int j;
     for (j=0; j<_positions; ++j) {
         // get the title for this marking (use j if none)
@@ -1136,7 +1136,7 @@ static CGRect adjustFrame(CGRect frame) {
         // set the font size and calculate the size of the title
         layer.fontSize = fontSize;
 
-        CGSize textSize = [layer.string sizeOfTextWithFontSize:layer.fontSize];
+        CGSize textSize = [layer.string sizeOfTextWithFont:font];
 
         // place it at the appropriate angle, taking the clockwise switch into account
         float position;
@@ -1297,6 +1297,7 @@ static CGRect adjustFrame(CGRect frame) {
     float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
 
     CGFloat fontSize = self.fontSizeForTitles;
+    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
     int j;
     for (j=0; j<10; ++j)
     {
@@ -1311,7 +1312,7 @@ static CGRect adjustFrame(CGRect frame) {
         textLayer.backgroundColor = [UIColor clearColor].CGColor;
         textLayer.opaque = NO;
 
-        CGSize textSize = [textLayer.string sizeOfTextWithFontSize:textLayer.fontSize];
+        CGSize textSize = [textLayer.string sizeOfTextWithFont:font];
         textLayer.frame = CGRectMake(centerX-textSize.width*0.5, centerY-textSize.height*0.5, textSize.width, textSize.height);
 
         [dialMarkings addObject:textLayer];
@@ -1360,8 +1361,9 @@ static CGRect adjustFrame(CGRect frame) {
 - (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
 {
     CGFloat circumference = 0.0;
+    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
     for (NSString* title in _titles) {
-        CGSize textSize = [title sizeOfTextWithFontSize:fontSize];
+        CGSize textSize = [title sizeOfTextWithFont:font];
         circumference += textSize.width;
     }
 
