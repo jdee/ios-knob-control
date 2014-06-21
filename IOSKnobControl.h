@@ -4,8 +4,8 @@
 #error IOSKnobControl requires automatic reference counting.
 #endif // objc_arc
 
-#define IKC_VERSION_STRING @"1.2.0"
-#define IKC_VERSION 0x010200
+#define IKC_VERSION_STRING @"1.2.1"
+#define IKC_VERSION 0x010201
 #define IKC_BUILD 1
 
 /**

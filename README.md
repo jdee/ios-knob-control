@@ -63,6 +63,12 @@ nothing to do with the control. The control uses ARC, so it cannot be used below
 without modification. It has not been tested below iOS 6.1, however, and there may be problems
 there that have not yet been discovered.
 
+iOS 8 Beta
+----------
+
+This branch (1.2.1) is not yet released. The main purpose of this work is to provide any updates necessary for
+iOS 8 support, including a Swift demo app.
+
 Documentation
 -------------
 

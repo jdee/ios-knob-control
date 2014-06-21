@@ -31,7 +31,7 @@
 #define IKC_FINGER_HOLE_RADIUS 22.0
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
-#define IKC_TARGET_VERSION 0x010200
+#define IKC_TARGET_VERSION 0x010201
 #define IKC_TARGET_BUILD 1
 
 /*
@@ -90,9 +90,7 @@ static CGRect adjustFrame(CGRect frame) {
     CGSize textSize;
     if ([self respondsToSelector:@selector(sizeWithAttributes:)]) {
         // iOS 7.x
-        NSMutableDictionary* attrs = [NSMutableDictionary dictionary];
-        [attrs setObject:font forKey:NSFontAttributeName];
-        textSize = [self sizeWithAttributes:attrs];
+        textSize = [self sizeWithAttributes:@{NSFontAttributeName: font}];
     }
     else {
         // iOS 5 & 6
