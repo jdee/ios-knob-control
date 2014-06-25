@@ -89,7 +89,7 @@ static CGRect adjustFrame(CGRect frame) {
 {
     CGSize textSize;
     if ([self respondsToSelector:@selector(sizeWithAttributes:)]) {
-        // iOS 7.x
+        // iOS 7+
         textSize = [self sizeWithAttributes:@{NSFontAttributeName: font}];
     }
     else {
