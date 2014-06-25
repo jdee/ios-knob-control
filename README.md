@@ -52,10 +52,12 @@ instead of the normal image. Even when disabled, the control's position may alwa
 at any time programmatically, with or without animation. With appropriate images, a disabled knob control
 may be used as a dial view to display a numeric value.
 
-The KnobControlDemo.xcodeproj sample project can be used to build a simple demo app
-to exercise the different modes of the control and provides examples of use. This demo project
-uses storyboards and autolayout and so requires iOS 6.0 or greater. The control may easily be used in a
-64-bit binary without problem. The demo project is configured to build a 64-bit binary.
+There are two demo apps, one in Objective-C, which is complete, in the KnobControlDemo-ObjC subdirectory,
+and one in Swift, which is new and incomplete, in the KnobControlDemo-Swift subdirectory. Both exercise the
+same functionality using the same Objective-C knob control. Both demos contain projects that can be used to build
+a simple demo app to exercise the different modes of the control and provide examples of use. The Objective-C
+demo project uses storyboards and autolayout and so requires iOS 6.0 or greater. The control works on 64-bit
+devices.
 
 The control itself, the IOSKnobControl class, may be compiled down to iOS 5.0, but the demo
 project will not build if the iOS Deployment Target is set below 6.0 for reasons that have
@@ -66,7 +68,7 @@ there that have not yet been discovered.
 iOS 8 Beta
 ----------
 
-This branch (1.2.1) is not yet released. The main purpose of this work is to provide any updates necessary for
+This branch (ios8) is not yet released. The main purpose of this work is to provide any updates necessary for
 iOS 8 support, including a Swift demo app.
 
 Documentation
