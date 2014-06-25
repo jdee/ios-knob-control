@@ -60,9 +60,9 @@
 		7B199B76189ABEC9003E7F6A /* KnobControlDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemoTests-Info.plist"; sourceTree = "<group>"; };
 		7B199B78189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KnobControlDemoTests.m; sourceTree = "<group>"; };
-		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSKnobControl.h; sourceTree = "<group>"; };
-		7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOSKnobControl.m; sourceTree = "<group>"; };
+		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSKnobControl.h; path = ../IOSKnobControl.h; sourceTree = "<group>"; };
+		7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSKnobControl.m; path = ../IOSKnobControl.m; sourceTree = "<group>"; };
 		7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDDiscreteViewController.h; sourceTree = "<group>"; };
 		7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDDiscreteViewController.m; sourceTree = "<group>"; };
 		7B2880B518E7A8C400A0E726 /* KCDImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDImageViewController.h; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 		7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDRotaryDialViewController.h; sourceTree = "<group>"; };
 		7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDRotaryDialViewController.m; sourceTree = "<group>"; };
 		7B662CA91935364B00C5D676 /* KCDImageChooser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDImageChooser.h; sourceTree = "<group>"; };
-		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
+		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
