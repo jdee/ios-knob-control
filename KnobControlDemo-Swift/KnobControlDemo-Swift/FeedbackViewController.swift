@@ -27,7 +27,7 @@ class FeedbackViewController: UIViewController {
         super.viewDidLoad()
 
         // M_PI is a CDouble, while min and max are CFloat. Might consider making them doubles.
-        let π = CFloat(M_PI)
+        let π = Float(M_PI)
         let titleColor = UIColor.whiteColor()
 
         knobControl = IOSKnobControl(frame: knobHolder.bounds)

@@ -15,13 +15,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import UIKit
 
-class RotaryDialViewController: UIViewController {
+class RotaryDialViewController: UIViewController, ImageChooser {
 
     @IBOutlet var knobHolder : UIView
     @IBOutlet var numberLabel : UILabel
 
     var knobControl : IOSKnobControl!
     var numberDialed = ""
+    var imageTitle : String?
                             
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,6 +51,19 @@ class RotaryDialViewController: UIViewController {
         numberLabel.text = "(number dialed)"
     }
 
+    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+        if let imageVC = segue.destinationViewController as? ImageViewController {
+            imageVC.delegate = self
+            imageVC.titles = [ "(none)", "telephone" ]
+            imageVC.imageTitle = imageTitle
+        }
+    }
+
+    func imageChosen(title: String?) {
+        imageTitle = title
+        updateKnobImages()
+    }
+
     func dialed(sender: IOSKnobControl) {
         numberDialed = "\(numberDialed)\(sender.positionIndex)"
         numberLabel.text = numberDialed
@@ -68,6 +82,23 @@ class RotaryDialViewController: UIViewController {
 
     @IBAction func timescaleChanged(sender: UISlider) {
         knobControl.timeScale = expf(sender.value)
+    }
+
+    func updateKnobImages() {
+        if let title = imageTitle {
+            knobControl.setImage(UIImage(named: title), forState: .Normal)
+            knobControl.setImage(UIImage(named: "\(title)-highlighted"), forState: .Highlighted)
+            knobControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
+            knobControl.backgroundImage = UIImage(named: "\(title)-background")
+            knobControl.foregroundImage = UIImage(named: "\(title)-foreground")
+        }
+        else {
+            knobControl.setImage(nil, forState: .Normal)
+            knobControl.setImage(nil, forState: .Highlighted)
+            knobControl.setImage(nil, forState: .Disabled)
+            knobControl.backgroundImage = nil
+            knobControl.foregroundImage = nil
+        }
     }
 }
 

@@ -24,6 +24,13 @@
 			remoteGlobalIDString = 7B25BD9B195B98E80060A1BA;
 			remoteInfo = "KnobControlDemo-Swift";
 		};
+		7B25BDC5195C92FF0060A1BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7B25BD94195B98E80060A1BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B25BD9B195B98E80060A1BA;
+			remoteInfo = "KnobControlDemo-Swift";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -159,6 +166,7 @@
 			);
 			dependencies = (
 				7B25BDB2195B98E80060A1BA /* PBXTargetDependency */,
+				7B25BDC6195C92FF0060A1BA /* PBXTargetDependency */,
 			);
 			name = "KnobControlDemo-SwiftTests";
 			productName = "KnobControlDemo-SwiftTests";
@@ -248,6 +256,11 @@
 			isa = PBXTargetDependency;
 			target = 7B25BD9B195B98E80060A1BA /* KnobControlDemo-Swift */;
 			targetProxy = 7B25BDB1195B98E80060A1BA /* PBXContainerItemProxy */;
+		};
+		7B25BDC6195C92FF0060A1BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B25BD9B195B98E80060A1BA /* KnobControlDemo-Swift */;
+			targetProxy = 7B25BDC5195C92FF0060A1BA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

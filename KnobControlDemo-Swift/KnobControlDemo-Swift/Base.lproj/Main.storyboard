@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
     </dependencies>
     <scenes>
@@ -77,6 +76,59 @@
             </objects>
             <point key="canvasLocation" x="2855" y="1301"/>
         </scene>
+        <!--Image View Controller-->
+        <scene sceneID="RDY-jF-leY">
+            <objects>
+                <viewController id="eUj-5I-utF" customClass="ImageViewController" customModule="KnobControlDemo_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rat-xR-nau"/>
+                        <viewControllerLayoutGuide type="bottom" id="xoq-cO-2aB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Mff-hf-b1b">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AZw-4X-yqw">
+                                <rect key="frame" x="20" y="100" width="280" height="280"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="280" id="GoD-MR-e7I"/>
+                                    <constraint firstAttribute="width" constant="280" id="ohN-l2-bag"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Available knob images" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1GO-4F-bdW">
+                                <rect key="frame" x="20" y="71" width="280" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKL-7z-7nz">
+                                <rect key="frame" x="237" y="388" width="63" height="30"/>
+                                <state key="normal" title="Choose">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="done:" destination="eUj-5I-utF" eventType="touchUpInside" id="x9D-xL-Yti"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="1GO-4F-bdW" firstAttribute="top" secondItem="Mff-hf-b1b" secondAttribute="top" constant="71" id="9Lx-YF-eAO"/>
+                            <constraint firstItem="AZw-4X-yqw" firstAttribute="leading" secondItem="1GO-4F-bdW" secondAttribute="trailing" constant="-280" id="9nh-CU-gfa"/>
+                            <constraint firstItem="1GO-4F-bdW" firstAttribute="leading" secondItem="Mff-hf-b1b" secondAttribute="leading" constant="20" id="jTR-cs-gml"/>
+                            <constraint firstAttribute="trailing" secondItem="1GO-4F-bdW" secondAttribute="trailing" constant="20" id="kgB-On-xrl"/>
+                            <constraint firstItem="AZw-4X-yqw" firstAttribute="top" secondItem="1GO-4F-bdW" secondAttribute="bottom" constant="8" id="vln-VI-obl"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="knobHolder" destination="AZw-4X-yqw" id="Jrn-fY-hhh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qjf-2I-zJl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3319" y="1002"/>
+        </scene>
         <!--Rotary Dial View Controller - Rotary Dial-->
         <scene sceneID="wg7-f3-ORb">
             <objects>
@@ -132,6 +184,15 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="npS-iS-W3Q">
+                                <rect key="frame" x="231" y="378" width="69" height="30"/>
+                                <state key="normal" title="Images">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="eUj-5I-utF" kind="presentation" id="MB7-94-efA"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
