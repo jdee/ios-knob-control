@@ -32,7 +32,7 @@
 
     // basic continuous knob configuration
     knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
-    knobControl.mode = IKCMContinuous;
+    knobControl.mode = IKCModeContinuous;
 
     // arrange to be notified whenever the knob turns
     [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
@@ -104,7 +104,7 @@
     knobControl.clockwise = self.clockwiseSwitch.on;
 
     if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
-        // configure the tint color (iOS 7.x only)
+        // configure the tint color (iOS 7+ only)
 
         // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor greenColor];
         // minControl.tintColor = maxControl.tintColor = knobControl.tintColor = [UIColor blackColor];
@@ -124,7 +124,7 @@
         [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
     }
 
-    minControl.gesture = maxControl.gesture = knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
+    minControl.gesture = maxControl.gesture = knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
     minControl.clockwise = maxControl.clockwise = knobControl.clockwise;
 
@@ -159,7 +159,7 @@
     minControl = [[IOSKnobControl alloc] initWithFrame:self.minControlView.bounds];
     maxControl = [[IOSKnobControl alloc] initWithFrame:self.maxControlView.bounds];
 
-    minControl.mode = maxControl.mode = IKCMContinuous;
+    minControl.mode = maxControl.mode = IKCModeContinuous;
     minControl.circular = maxControl.circular = NO;
 
     // reuse the same knobPositionChanged: method

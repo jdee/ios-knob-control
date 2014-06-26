@@ -28,7 +28,7 @@
     [super viewDidLoad];
 
     knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
-    knobControl.mode = IKCMLinearReturn;
+    knobControl.mode = IKCModeLinearReturn;
     knobControl.positions = _titles.count;
     knobControl.titles = _titles;
     knobControl.timeScale = 0.5;

@@ -29,8 +29,8 @@
     imageTitle = @"(none)";
 
     knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
-    knobControl.mode = IKCMRotaryDial;
-    knobControl.gesture = IKCGOneFingerRotation;
+    knobControl.mode = IKCModeRotaryDial;
+    knobControl.gesture = IKCGestureOneFingerRotation;
 
     UIColor* normalColor, *highlightedColor, *titleColor;
     normalColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.0 alpha:0.7];
@@ -79,7 +79,7 @@
 
 - (void)gestureChanged:(UISegmentedControl *)sender
 {
-    knobControl.gesture = sender.selectedSegmentIndex == 0 ? IKCGOneFingerRotation : IKCGTap;
+    knobControl.gesture = sender.selectedSegmentIndex == 0 ? IKCGestureOneFingerRotation : IKCGestureTap;
 }
 
 - (void)timeScaleChanged:(UISlider *)sender

@@ -38,7 +38,7 @@
 
 - (void)updateKnobProperties
 {
-    knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCMLinearReturn : IKCMWheelOfFortune;
+    knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCModeLinearReturn : IKCModeWheelOfFortune;
 
     if (self.useHexagonImages) {
         knobControl.positions = 6;
@@ -52,7 +52,7 @@
 
     knobControl.circular = YES;
     knobControl.clockwise = self.clockwiseSwitch.on;
-    knobControl.gesture = IKCGOneFingerRotation + self.gestureControl.selectedSegmentIndex;
+    knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
     // tint and title colors
     if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
