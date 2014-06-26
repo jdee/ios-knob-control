@@ -18,7 +18,18 @@ import UIKit
 /**
  * Delegate protocol for ImageViewController
  */
-protocol ImageChooser {
+// https://devforums.apple.com/message/985898#985898
+/*
+ * The real issue here is that a protocol can be used for a class or a struct, so
+ * a protocol variable may be a reference (to a class) or a value type (copy of a struct).
+ * Using @class_protocol means it cannot be used with structs, so the delegate property
+ * of ImageViewController can be marked weak. A strong reference loop is not a practical 
+ * concern here; the only time the Rotary Dial or Continuous view controller sees this
+ * ImageViewController is in prepareForSegue(, sender:), where the association is made.
+ * Since the other VC does not retain a strong reference to this one, there's no loop.
+ * But this is good practice.
+ */
+@class_protocol protocol ImageChooser {
     func imageChosen(title: String?)
 }
 
@@ -28,9 +39,7 @@ class ImageViewController: UIViewController {
 
     var knobControl : IOSKnobControl!
 
-    // DEBT: Shouldn't delegates usually be weak references? But that's not possible with protocols, is it? What's the equivalent to this Obj-C?
-    // @property (weak, nonatomic) id<ImageChooser> delegate;
-    var delegate : ImageChooser?
+    weak var delegate : ImageChooser?
 
     var imageTitle : String?
     var titles : String[] = [ "(none)" ]
