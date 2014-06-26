@@ -1374,7 +1374,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (CGFloat)fontSizeForTitles
 {
-    CGFloat fontSize;
+    CGFloat fontSize = 0.0;
     CGFloat fontSizes[] = { /* 36.0, */ 24.0, 18.0, 14.0, 12.0, 10.0 };
 
     double angle = _circular ? 2.0*M_PI : _max - _min;

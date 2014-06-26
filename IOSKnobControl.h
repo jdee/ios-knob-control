@@ -36,18 +36,33 @@
  * In both cases, the circle may or may not be closed.
  */
 typedef NS_ENUM(NSInteger, IKCMode) {
-    IKCMLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
-    IKCMWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
-    IKCMContinuous,     ///< Like a circular generalization of the slider control.
-    IKCMRotaryDial      ///< Like an old rotary telephone dial.
+    IKCModeLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
+    IKCModeWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
+    IKCModeContinuous,     ///< Like a circular generalization of the slider control.
+    IKCModeRotaryDial      ///< Like an old rotary telephone dial.
 };
 
+/*
+ * For brevity, the individual enumerated values were previously named IKCMLinearReturn, etc. But the longer names provide for better interoperability with Swift.
+ * By changing the enumeration names, these become IKCMode.LinearReturn, IKCMode.Continuous, etc. These macros are provided for compatibility with the previous versions.
+ * DEBT: Should I use something other than macros? It may be advantageous to mark these deprecated some day, and I'm not sure if that can be done with macros.
+ */
+#define IKCMLinearReturn IKCModeLinearReturn
+#define IKCMWheelOfFortune IKCModeWheelOfFortune
+#define IKCMContinuous IKCModeContinuous
+#define IKCMRotaryDial IKCModeRotaryDial
+
 typedef NS_ENUM(NSInteger, IKCGesture) {
-    IKCGOneFingerRotation, ///< Custom gesture handling. One finger rotates the knob.
-    IKCGTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture. (Not available with IKCMRotaryDial.)
-    IKCGVerticalPan,       ///< Uses a vertical pan gesture. The image still rotates. (Not available with IKCMRotaryDial.)
-    IKCGTap                ///< Uses a tap gesture. The knob rotates to the position tapped. In rotary dial mode, rotates from the position tapped (dials that number).
+    IKCGestureOneFingerRotation, ///< Custom gesture handling. One finger rotates the knob.
+    IKCGestureTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture. (Not available with IKCModeRotaryDial.)
+    IKCGestureVerticalPan,       ///< Uses a vertical pan gesture. The image still rotates. (Not available with IKCModeRotaryDial.)
+    IKCGestureTap                ///< Uses a tap gesture. The knob rotates to the position tapped. In rotary dial mode, rotates from the position tapped (dials that number).
 };
+
+#define IKCGOneFingerRotation IKCGestureOneFingerRotation
+#define IKCGTwoFingerRotation IKCGestureTwoFingerRotation
+#define IKCGVerticalPan IKCGestureVerticalPan
+#define IKCGTap IKCGestureTap
 
 /**
  * A simple, reusable rotary control. You may provide custom knob images or use the default images, which may be customized
@@ -84,13 +99,13 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  *
  * If this property is set to NO, the circle is open, and the min and max properties are consulted.
  *
- * The default value of this property is YES. It is ignored in IKCMRotaryDial.
+ * The default value of this property is YES. It is ignored in IKCModeRotaryDial.
  */
 @property (nonatomic) BOOL circular;
 
 /**
  * Specifies whether the value of position increases when the knob is turned clockwise instead of counterclockwise.
- * The default value of this property is NO. It is ignored in IKCMRotaryDial.
+ * The default value of this property is NO. It is ignored in IKCModeRotaryDial.
  */
 @property (nonatomic) BOOL clockwise;
 
@@ -114,17 +129,17 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * that rotates. Obviously the foreground image has to be at least partly transparent. This is mainly useful for providing a stationary finger stop in the foreground of a
  * rotary dial, but it may be used with any mode.
  *
- * If mode is IKCMRotaryDial, and foregroundImage is nil, a simple stop image is generated around 4:00 on the dial.
+ * If mode is IKCModeRotaryDial, and foregroundImage is nil, a simple stop image is generated around 4:00 on the dial.
  */
 @property (nonatomic) UIImage* foregroundImage;
 
 /**
- * Specifies the gesture the control should recognize. The default is IKCOneFingerRotation.
+ * Specifies the gesture the control should recognize. The default is IKCGestureOneFingerRotation.
  */
 @property (nonatomic) IKCGesture gesture;
 
 /**
- * Maximum value of the position property if circular == NO. It is ignored in IKCMRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
+ * Maximum value of the position property if circular == NO. It is ignored in IKCModeRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
  * For example, if you first set min to 0 and max to 3*M_PI, min will be adjusted to 2*M_PI after max is set. If you set max first and then min, max will be adjusted to M_PI after min is set. 
  * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
  * value.
@@ -132,7 +147,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) float max;
 
 /**
- * Minimum value of the position property if circular == NO. It is ignored in IKCMRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
+ * Minimum value of the position property if circular == NO. It is ignored in IKCModeRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
  * For example, if you first set min to 0 and max to 3*M_PI, min will be adjusted to 2*M_PI after max is set. If you set max first and then min, max will be adjusted to M_PI after min is set.
  * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
  * value.
@@ -140,7 +155,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) float min;
 
 /**
- * Specifies which mode to use for this knob control. IKCMDiscrete is the default.
+ * Specifies which mode to use for this knob control. IKCModeLinearReturn is the default.
  */
 @property (nonatomic) IKCMode mode;
 
@@ -157,7 +172,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from
  * -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1.
  *
- * In IKCMRotaryDial, this property is used to represent the number last dialed. This property should be consulted whenever a UIControlEventValueChanged is generated.
+ * In IKCModeRotaryDial, this property is used to represent the number last dialed. This property should be consulted whenever a UIControlEventValueChanged is generated.
  */
 @property (nonatomic) NSInteger positionIndex;
 
@@ -217,8 +232,8 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * UIControlEventValueChanged is generated.
  *
  * Though the @a position will be forced to lie between the @ref min and @ref max properties, it may otherwise be set to a disallowed position.
- * That is, if mode is IKCMLinearReturn, the
- * knob may be positioned between discrete positions, and if mode is IKCMWheelOfFortune, the knob may be positioned exactly
+ * That is, if mode is IKCModeLinearReturn, the
+ * knob may be positioned between discrete positions, and if mode is IKCModeWheelOfFortune, the knob may be positioned exactly
  * on a boundary between segments. If the control is enabled, any subsequent gesture will probably result in a return
  * animation to the nearest allowed position.
  * @param position the new angular position for the knob; will be adjusted to lie within (-M_PI,M_PI] and respect the min and max properties if circular is NO
@@ -293,7 +308,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 - (void)setTitleColor:(UIColor*)color forState:(UIControlState)state;
 
 /**
- * ICKMRotaryDial only.
+ * ICKModeRotaryDial only.
  * Programmatically dial a @a number on the control. This causes the dial to rotate clockwise as though the user had dialed the specified
  * @a number and then to rotate back to the rest position. It generates a UIControlEventValueChanged and sets the value of the
  * positionIndex property to @a number.

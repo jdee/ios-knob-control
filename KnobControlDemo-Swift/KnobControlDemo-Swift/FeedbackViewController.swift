@@ -31,7 +31,7 @@ class FeedbackViewController: UIViewController {
         let titleColor = UIColor.whiteColor()
 
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
-        knobControl.mode = .IKCMContinuous
+        knobControl.mode = .Continuous
         knobControl.circular = false
         knobControl.min = -π * 0.25
         knobControl.max = π * 0.25
@@ -47,7 +47,7 @@ class FeedbackViewController: UIViewController {
         knobHolder.addSubview(knobControl)
 
         dialControl = IOSKnobControl(frame: dialHolder.bounds, imageNamed: "needle")
-        dialControl.mode = .IKCMContinuous
+        dialControl.mode = .Continuous
         dialControl.circular = false
         dialControl.min = knobControl.min
         dialControl.max = knobControl.max
