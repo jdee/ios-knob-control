@@ -15,18 +15,45 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class RotaryDialViewController: UIViewController {
+
+    @IBOutlet var knobHolder : UIView
+    @IBOutlet var numberLabel : UILabel
+
+    var knobControl : IOSKnobControl!
+    var numberDialed = ""
                             
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        knobControl = IOSKnobControl(frame: knobHolder.bounds)
+        knobControl.mode = .RotaryDial
+        knobControl.gesture = .OneFingerRotation
+
+        //*
+        let normalColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 0.7)
+        let highlightedColor = UIColor(red: 0.0, green: 0.7, blue: 0.0, alpha: 0.7)
+        let titleColor = UIColor(red: 0.0, green: 0.3, blue: 0.0, alpha: 1.0)
+
+        knobControl.setFillColor(normalColor, forState: .Normal)
+        knobControl.setFillColor(highlightedColor, forState: .Highlighted)
+        knobControl.setTitleColor(titleColor, forState: .Normal)
+        // */
+
+        knobControl.addTarget(self, action: "dialed:", forControlEvents: .ValueChanged)
+        knobHolder.addSubview(knobControl)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        numberDialed = ""
+        numberLabel.text = "(number dialed)"
     }
 
+    func dialed(sender: IOSKnobControl) {
+        numberDialed = "\(numberDialed)\(sender.positionIndex)"
+        numberLabel.text = numberDialed
+    }
 
 }
 

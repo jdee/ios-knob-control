@@ -49,6 +49,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+
     numberDialed = @"";
     _numberLabel.text = @"(number dialed)";
 }

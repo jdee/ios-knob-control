@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		7B25BDA2195B98E80060A1BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDA1195B98E80060A1BA /* AppDelegate.swift */; };
 		7B25BDA4195B98E80060A1BA /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */; };
-		7B25BDA6195B98E80060A1BA /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDA5195B98E80060A1BA /* SecondViewController.swift */; };
+		7B25BDA6195B98E80060A1BA /* RotaryDialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */; };
 		7B25BDA9195B98E80060A1BA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B25BDA7195B98E80060A1BA /* Main.storyboard */; };
 		7B25BDAB195B98E80060A1BA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B25BDAA195B98E80060A1BA /* Images.xcassets */; };
 		7B25BDB7195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDB6195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift */; };
@@ -31,7 +31,7 @@
 		7B25BDA0195B98E80060A1BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B25BDA1195B98E80060A1BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackViewController.swift; sourceTree = "<group>"; };
-		7B25BDA5195B98E80060A1BA /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
+		7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RotaryDialViewController.swift; sourceTree = "<group>"; };
 		7B25BDA8195B98E80060A1BA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7B25BDAA195B98E80060A1BA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7B25BDB0195B98E80060A1BA /* KnobControlDemo-SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KnobControlDemo-SwiftTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,7 +84,7 @@
 			children = (
 				7B25BDA1195B98E80060A1BA /* AppDelegate.swift */,
 				7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */,
-				7B25BDA5195B98E80060A1BA /* SecondViewController.swift */,
+				7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */,
 				7B25BDA7195B98E80060A1BA /* Main.storyboard */,
 				7B25BDAA195B98E80060A1BA /* Images.xcassets */,
 				7B25BD9F195B98E80060A1BA /* Supporting Files */,
@@ -226,7 +226,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B25BDA6195B98E80060A1BA /* SecondViewController.swift in Sources */,
+				7B25BDA6195B98E80060A1BA /* RotaryDialViewController.swift in Sources */,
 				7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */,
 				7B25BDA2195B98E80060A1BA /* AppDelegate.swift in Sources */,
 				7B25BDA4195B98E80060A1BA /* FeedbackViewController.swift in Sources */,
@@ -421,6 +421,7 @@
 				7B25BDBC195B98E80060A1BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7B25BDBD195B98E80060A1BA /* Build configuration list for PBXNativeTarget "KnobControlDemo-SwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -429,6 +430,7 @@
 				7B25BDBF195B98E80060A1BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
