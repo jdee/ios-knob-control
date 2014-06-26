@@ -22,24 +22,6 @@ protocol ImageChooser {
     func imageChosen(title: String?)
 }
 
-/*
- * DEBT: Blech. This is not safe (only works for String[]) and needs work.
- * It would be better to be able to call [NSArray indexOfObject:] or a similar
- * thing in the built-in Array type (which doesn't seem to be there). See ImageViewController.viewWillAppear
- * below.
- */
-extension Array {
-    func indexOfString(object: String) -> Int? {
-        for (index, element) in enumerate(self) {
-            let string = element as String
-            if string == object {
-                return index
-            }
-        }
-        return nil
-    }
-}
-
 class ImageViewController: UIViewController {
 
     @IBOutlet var knobHolder : UIView
@@ -82,21 +64,15 @@ class ImageViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        /*
-         * This did not work for some reason:
-         * let titleArray : NSArray = titles
-         * let index = titleArray.indexOfObject(...)
-         */
+        let titleArray : NSArray = titles
 
         if let selected = imageTitle {
-            if let index = titles.indexOfString(selected) {
-                knobControl.positionIndex = index
-            }
+            let index = titleArray.indexOfObject(selected)
+            knobControl.positionIndex = index
         }
         else {
-            if let index = titles.indexOfString("(none)") {
-                knobControl.positionIndex = index
-            }
+            let index = titleArray.indexOfObject("(none)")
+            knobControl.positionIndex = index
         }
     }
 

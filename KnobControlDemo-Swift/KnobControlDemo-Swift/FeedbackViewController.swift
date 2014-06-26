@@ -36,7 +36,7 @@ class FeedbackViewController: UIViewController {
         knobControl.min = -π * 0.25
         knobControl.max = π * 0.25
 
-        if (knobControl.respondsToSelector("tintColor")) {
+        if (knobControl.respondsToSelector("setTintColor:")) {
             knobControl.tintColor = UIColor.blueColor() // default anyway
         }
 
