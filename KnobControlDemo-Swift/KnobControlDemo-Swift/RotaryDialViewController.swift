@@ -55,5 +55,19 @@ class RotaryDialViewController: UIViewController {
         numberLabel.text = numberDialed
     }
 
+    @IBAction func gestureChanged(sender: UISegmentedControl) {
+        switch (sender.selectedSegmentIndex) {
+        case 0:
+            knobControl.gesture = .OneFingerRotation
+        case 1:
+            knobControl.gesture = .Tap
+        default:
+            break
+        }
+    }
+
+    @IBAction func timescaleChanged(sender: UISlider) {
+        knobControl.timeScale = expf(sender.value)
+    }
 }
 
