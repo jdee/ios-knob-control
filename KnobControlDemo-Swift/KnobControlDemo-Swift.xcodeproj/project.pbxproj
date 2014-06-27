@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7B204B16195D016A00873E27 /* DiscreteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B204B15195D016A00873E27 /* DiscreteViewController.swift */; };
 		7B25BDA2195B98E80060A1BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDA1195B98E80060A1BA /* AppDelegate.swift */; };
 		7B25BDA4195B98E80060A1BA /* FeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */; };
 		7B25BDA6195B98E80060A1BA /* RotaryDialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7B204B15195D016A00873E27 /* DiscreteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiscreteViewController.swift; sourceTree = "<group>"; };
 		7B25BD9C195B98E80060A1BA /* KnobControlDemo-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnobControlDemo-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B25BDA0195B98E80060A1BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B25BDA1195B98E80060A1BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 			children = (
 				7B25BDA1195B98E80060A1BA /* AppDelegate.swift */,
 				7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */,
+				7B204B15195D016A00873E27 /* DiscreteViewController.swift */,
 				7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */,
 				7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */,
 				7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */,
@@ -244,6 +247,7 @@
 				7BAFFA81195CDC1900C88446 /* ContinuousViewController.swift in Sources */,
 				7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */,
 				7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */,
+				7B204B16195D016A00873E27 /* DiscreteViewController.swift in Sources */,
 				7B25BDA2195B98E80060A1BA /* AppDelegate.swift in Sources */,
 				7B25BDA4195B98E80060A1BA /* FeedbackViewController.swift in Sources */,
 			);
