@@ -15,8 +15,24 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import UIKit
 
+/*
+ * The purpose of the discrete demo is to exercise the knob control in the discrete
+ * modes .LinearReturn and .WheelOfFortune. A segmented control selects between these
+ * modes. This view includes a single knob control with two output fields in the upper
+ * right: position and index. The index field displays the value of the knob's positionIndex
+ * property, which is not available in .Continous or .RotaryDial mode. In addition, the
+ * following controls configure the knob control's behavior:
+ * - a switch labeled "clockwise" that determines whether the knob considers a positive rotation to be clockwise or counterclockwise
+ * - a segmented control to select which gesture the knob will respond to (1-finger rotation, 2-finger rotation, vertical pan or tap)
+ * - a slider labeled "time scale" that specifies the timeScale property of the knob control (for return animations, which only occur in discrete modes)
+ * - a segmented control to select between two different sets of demo images
+ * -- months: the control generates the knob image from the knob's titles property; the user can select any month from the knob
+ * -- hexagon: the control uses one of two image sets from the asset catalog, each a hexagon with index values printed around the sides; changing the
+ *    clockwise setting switches to a different image with numbers rendered in the opposite direction
+ */
 class DiscreteViewController: UIViewController {
 
+    // Storyboard Outlets
     @IBOutlet var knobHolder : UIView
     @IBOutlet var indexLabel : UILabel
     @IBOutlet var positionLabel : UILabel
@@ -26,8 +42,10 @@ class DiscreteViewController: UIViewController {
     @IBOutlet var timeScaleSlider : UISlider
     @IBOutlet var imageControl : UISegmentedControl
 
+    // Knob control. See comments in ContinuousViewController on use of the unwrapped optional.
     var knobControl : IOSKnobControl!
 
+    // computed properties for convenience when working with the hexagon demo
     var hexagonImage : UIImage {
     get {
         let suffix = clockwiseSwitch.on ? "cw" : "ccw"
@@ -44,10 +62,11 @@ class DiscreteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Create the knob control
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
-        knobControl.mode = .LinearReturn
         knobControl.circular = true
 
+        // Customize the colors for the months demo (with a generated image)
         let titleColor = UIColor.whiteColor()
         if (knobControl.respondsToSelector("setTintColor:")) {
             // iOS 7+
@@ -56,13 +75,16 @@ class DiscreteViewController: UIViewController {
         knobControl.setTitleColor(titleColor, forState: .Normal)
         knobControl.setTitleColor(titleColor, forState: .Highlighted)
 
+        // specify an action for the .ValueChanged event and add as a subview to the knobHolder UIView
         knobControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
         knobHolder.addSubview(knobControl)
 
+        // initialize all other properties based on initial control values
         updateKnobProperties()
     }
 
     @IBAction func clockwiseChanged(sender: UISwitch) {
+        // use the computed properties from above here
         if (useHexagonImages) {
             knobControl.setImage(hexagonImage, forState: .Normal)
         }
@@ -70,17 +92,25 @@ class DiscreteViewController: UIViewController {
     }
 
     @IBAction func somethingChanged(sender: AnyObject?) {
+        // everything but the clockwise switch comes through here
         updateKnobProperties()
     }
 
     func knobPositionChanged(sender: IOSKnobControl) {
+        // display both the position and positionIndex properties
         indexLabel.text = String(knobControl.positionIndex)
         positionLabel.text = "%.02f" % knobControl.position
     }
 
     func updateKnobProperties() {
+        /*
+         * Using exponentiation avoids compressing the scale below 1.0. The
+         * slider starts at 0 in middle and ranges from -1 to 1, so the
+         * time scale can range from 1/e to e, and defaults to 1.
+         */
         knobControl.timeScale = expf(timeScaleSlider.value)
 
+        // Set the .mode property of the knob control
         switch (modeControl.selectedSegmentIndex) {
         case 0:
             knobControl.mode = .LinearReturn
@@ -90,6 +120,7 @@ class DiscreteViewController: UIViewController {
             break
         }
 
+        // Configure the gesture to use
         switch (gestureControl.selectedSegmentIndex) {
         case 0:
             knobControl.gesture = .OneFingerRotation
@@ -103,8 +134,10 @@ class DiscreteViewController: UIViewController {
             break
         }
 
+        // clockwise or counterclockwise
         knobControl.clockwise = clockwiseSwitch.on
 
+        // Make use of computed props again to switch between the two demos
         if (useHexagonImages) {
             knobControl.positions = 6
             knobControl.setImage(hexagonImage, forState: .Normal)
@@ -115,6 +148,7 @@ class DiscreteViewController: UIViewController {
             knobControl.setImage(nil, forState: .Normal)
         }
 
+        // Good idea to do this to make the knob reset itself after changing certain params.
         knobControl.position = knobControl.position
     }
 

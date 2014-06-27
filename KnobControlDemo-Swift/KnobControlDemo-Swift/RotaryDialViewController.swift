@@ -15,23 +15,42 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import UIKit
 
+/*
+ * This demo exercises the knob control's .RotaryDial mode. The size of the control
+ * limits the size of the finger holes in the control, so in this mode it's recommended
+ * to render the control at a large size. In fact, in rotary dial mode, the control
+ * enforces a minimum size for this reason.
+ * There are two configuration controls as input, directly below the control:
+ * - a segmented control to select the gesture; only one-finger rotation and tap are supported in this mode
+ * - a time-scale slider for the return animation; this affects the speed of the animation after you release the control
+ * Below these are the only output field, a label that displays the number dialed, and a button labeled Images
+ * that allows the user to use the dial with a set of images. The default dial images are rendered by the control as in
+ * the other modes.
+ */
 class RotaryDialViewController: UIViewController, ImageChooser {
 
+    // Storyboard Outlets
     @IBOutlet var knobHolder : UIView
     @IBOutlet var numberLabel : UILabel
 
+    // Knob control
     var knobControl : IOSKnobControl!
+
+    // Place to accumulate the number dialed
     var numberDialed = ""
+
+    // State retention: stores the user's last selection from the ImageViewController
     var imageTitle : String?
                             
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // Create the knob control
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.mode = .RotaryDial
         knobControl.gesture = .OneFingerRotation
 
-        //*
+        //* color specification
         let normalColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 0.7)
         let highlightedColor = UIColor(red: 0.0, green: 0.7, blue: 0.0, alpha: 0.7)
         let titleColor = UIColor(red: 0.0, green: 0.3, blue: 0.0, alpha: 1.0)
@@ -41,35 +60,45 @@ class RotaryDialViewController: UIViewController, ImageChooser {
         knobControl.setTitleColor(titleColor, forState: .Normal)
         // */
 
+        // arrange to be called back when the user dials
         knobControl.addTarget(self, action: "dialed:", forControlEvents: .ValueChanged)
+
+        // add the control to its holder
         knobHolder.addSubview(knobControl)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
+        // reset the number dialed each time the view appears
+        // (number dialed) is displayed in the label instead of a blank string
         numberDialed = ""
         numberLabel.text = "(number dialed)"
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
         if let imageVC = segue.destinationViewController as? ImageViewController {
-            imageVC.delegate = self
-            imageVC.titles = [ "(none)", "telephone" ]
-            imageVC.imageTitle = imageTitle
+            imageVC.delegate = self                    // arrange for imageChosen() to be called later
+            imageVC.titles = [ "(none)", "telephone" ] // specify the images to use
+            imageVC.imageTitle = imageTitle            // pass in the user's last choice or nil for "(none)"
         }
     }
 
     func imageChosen(title: String?) {
+        // save the user's choice and update the knob images
         imageTitle = title
         updateKnobImages()
     }
 
     func dialed(sender: IOSKnobControl) {
+        // append the last digit dialed and display
         numberDialed = "\(numberDialed)\(sender.positionIndex)"
         numberLabel.text = numberDialed
     }
 
     @IBAction func gestureChanged(sender: UISegmentedControl) {
+        // change the gesture (1-finger rotation and tap only in rotary dial mode)
+
         switch (sender.selectedSegmentIndex) {
         case 0:
             knobControl.gesture = .OneFingerRotation
@@ -81,11 +110,22 @@ class RotaryDialViewController: UIViewController, ImageChooser {
     }
 
     @IBAction func timescaleChanged(sender: UISlider) {
+        /*
+         * Using exponentiation avoids compressing the scale below 1.0. The
+         * slider starts at 0 in middle and ranges from -1 to 1, so the
+         * time scale can range from 1/e to e, and defaults to 1.
+         */
         knobControl.timeScale = expf(sender.value)
     }
 
     func updateKnobImages() {
         if let title = imageTitle {
+            /*
+             * As in the ContinuousViewController, if an image set exists starting with the selected title
+             * and ending in -highlighted or -disabled, it is used for that state.
+             * Image sets ending in -background or -foreground, if any, are used for the background and
+             * foreground images.
+             */
             knobControl.setImage(UIImage(named: title), forState: .Normal)
             knobControl.setImage(UIImage(named: "\(title)-highlighted"), forState: .Highlighted)
             knobControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
@@ -93,6 +133,7 @@ class RotaryDialViewController: UIViewController, ImageChooser {
             knobControl.foregroundImage = UIImage(named: "\(title)-foreground")
         }
         else {
+            // use the default, generated images if (none) selected
             knobControl.setImage(nil, forState: .Normal)
             knobControl.setImage(nil, forState: .Highlighted)
             knobControl.setImage(nil, forState: .Disabled)

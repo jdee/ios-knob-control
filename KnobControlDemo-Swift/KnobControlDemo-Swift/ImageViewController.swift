@@ -30,13 +30,29 @@ import UIKit
  * But this is good practice.
  */
 @class_protocol protocol ImageChooser {
+    // called when the user taps the Choose button
+    // title is the string selected from the list or nil if "(none)" was selected
     func imageChosen(title: String?)
 }
 
+/*
+ * This View Controller is presented modally by the continuous and rotary dial views when
+ * the Images button is tapped in either one, to allow the user to see yet another knob
+ * control and select a set of images to use for the control(s) in that demo. The two demos
+ * have different image requirements, so the list in each case is different and specified
+ * by setting the titles property of the destinationViewController in the other view
+ * controller's prepareForSegue(,sender:) method. The titles are used to construct a discrete
+ * knob in .LinearReturn mode. The user selects an image set by rotating that name to the
+ * top, where it is mest legible. Then she taps the Choose button, the model view controller
+ * disappears, and the main view controller's imageChosen() method is called.
+ */
 class ImageViewController: UIViewController {
 
+    // Storyboard Outlet
     @IBOutlet var knobHolder : UIView
 
+    // Knob control. See ContinuousViewController.swift for comments on the use of unwrapped
+    // optionals here.
     var knobControl : IOSKnobControl!
 
     /*
@@ -47,7 +63,11 @@ class ImageViewController: UIViewController {
      */
     var delegate : ImageChooser?
 
+    // state retention: if set, the specified imageTitle will be rotated to the top when the
+    // view is first displayed, reflecting the user's previous choice.
     var imageTitle : String?
+
+    // this property is assigned by the other VC in prepareForSegue(, sender:)
     var titles : String[] = [ "(none)" ]
 
     override func viewDidLoad() {
@@ -55,15 +75,17 @@ class ImageViewController: UIViewController {
 
         let π = Float(M_PI)
 
+        // Create the knob Control
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.mode = .LinearReturn
-        knobControl.positions = titles.count
+        knobControl.positions = titles.count // never inferred from titles; if they don't match, positions wins, and empty spaces are filled with index numbers (0, 1, ...)
         knobControl.titles = titles
         knobControl.timeScale = 0.5
         knobControl.circular = false
         knobControl.min = -π * 0.5
         knobControl.max = π * 0.5
 
+        // color set up
         var titleColor = UIColor.whiteColor()
         if (knobControl.respondsToSelector("setTintColor:")) {
             knobControl.tintColor = UIColor.yellowColor()
@@ -73,12 +95,18 @@ class ImageViewController: UIViewController {
         knobControl.setTitleColor(titleColor, forState: .Normal)
         knobControl.setTitleColor(titleColor, forState: .Highlighted)
 
+        // add as a subview to the holder
         knobHolder.addSubview(knobControl)
+
+        // note that we don't care here when the knob is rotated; we don't do anything in response in the app code.
+        // only in done() when the user taps Choose do we consult the knob's positionIndex to find the chosen title
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        // Set the knob to the last selected positionIndex.
+        // Use [NSArray indexOfObject:] over a bridge
         let titleArray : NSArray = titles
 
         if let selected = imageTitle {
@@ -86,22 +114,30 @@ class ImageViewController: UIViewController {
             knobControl.positionIndex = index
         }
         else {
+            // note that the nil/unset value of imageTitle is mapped to the "(none)" entry
             let index = titleArray.indexOfObject("(none)")
             knobControl.positionIndex = index
         }
     }
 
     @IBAction func done(sender: UIButton) {
+        // The user has spoken
+
+        // This looks enough like Obj-C at a glance to make me nervous.
         var selected = titles[knobControl.positionIndex]
         if selected == "(none)" {
+            // note that the nil/unset value of imageTitle is mapped to the "(none)" entry
             imageTitle = nil
         }
         else {
             imageTitle = selected
         }
 
+        // if no delegate, this is a no-op
+        // this crashes if I make the delegate a weak ref though atm
         delegate?.imageChosen(imageTitle)
 
+        // Say good night, Gracie.
         dismissViewControllerAnimated(true, completion: nil)
     }
 

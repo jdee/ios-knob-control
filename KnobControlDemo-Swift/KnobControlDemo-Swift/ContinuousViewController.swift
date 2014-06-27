@@ -20,8 +20,28 @@ import UIKit
     return String(format: format, val)
 }
 
+/*
+ * The purpose of the continuous tab is to exercise the knob control in .Continuous mode.
+ * There is one primary output field, at the upper right: position. This indicates the angle, in
+ * radians, through which the knob has turned from its initial position. There are several
+ * further inputs to change the knob's parameters and behavior in continuous mode:
+ * - a switch labeled "clockwise" that determines whether the knob considers a positive rotation to be clockwise or counterclockwise
+ * - a button labeled "Images" that presents a modal view allowing the user to select images to use with the knob
+ * - a segmented control to select which gesture the knob will respond to (1-finger rotation, 2-finger rotation, vertical pan or tap)
+ * - a switch labeled "circular" that determines whether the knob can rotate freely all the way around in a circle:
+ * -- If this switch is ON, the min and max knob properties are ignored, and the min and max knobs below are disabled
+ * -- If this switch is OFF, the position property is constrained to lie between the min and max properties of the knob. The min and
+ *    max knob controls are enabled to specify the min and max values of the knob's position property.
+ * - min and max knob controls, each with its own output label, reading that control's position as above; the values of these knob positions
+ *   are used for the main knob control's min and max properties
+ *
+ * By setting the circular switch to ON (its default state), you can also exercise the disabled state of the min and max knob controls.
+ *
+ * Knob controls are always created programmatically and inserted as subviews of placeholder views (usually UIViews, but can be anything).
+ */
 class ContinuousViewController: UIViewController, ImageChooser {
 
+    // Storyboard Outlets
     @IBOutlet var knobHolder : UIView
     @IBOutlet var positionLabel : UILabel
     @IBOutlet var clockwiseSwitch : UISwitch
@@ -32,6 +52,16 @@ class ContinuousViewController: UIViewController, ImageChooser {
     @IBOutlet var minLabel : UILabel
     @IBOutlet var maxLabel : UILabel
 
+    // Three knob controls. Note that these are effectively extensions to the views defined in the storyboard.
+    // Any other type of view or control from UIKit may be inserted directly into the storyboard and configured
+    // there. These controls would be used in place of the corresponding xxxHolder UIViews if they were directly
+    // available to IB, and they are immediately and permanently initialized in viewDidLoad(). Without making
+    // them optionals, this VC would have to have a custom initializer to set them, and the controls would have
+    // to be created before the view was loaded from the storyboard. Making them unwrapped optionals initializes
+    // them automatically to nil and allows them to be used safely without explicit unwrapping, since they are
+    // guaranteed to be assigned before any code that refers to them.
+
+    // In addition, Swift allows you to celebrate the IOSKnobControl with three cheers.
     var knobControl : IOSKnobControl!
     var minControl : IOSKnobControl!
     var maxControl : IOSKnobControl!
@@ -43,6 +73,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
 
         let π = Float(M_PI)
 
+        // Create the knob controls
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.mode = .Continuous
         knobControl.min = -π * 0.5
@@ -56,6 +87,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
         maxControl.mode = .Continuous
         maxControl.position = knobControl.max
 
+        // Set the colors for the default knob images.
         if (knobControl.respondsToSelector("setTintColor:")) {
             // iOS 7+
             knobControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
@@ -75,6 +107,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
             maxControl.setTitleColor(titleColor, forState: .Highlighted)
         }
 
+        // add knob controls as subviews of their holders and arrange actions for each one in response to .ValueChanged events
         knobControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
         knobHolder.addSubview(knobControl)
 
@@ -84,24 +117,29 @@ class ContinuousViewController: UIViewController, ImageChooser {
         minControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
         minHolder.addSubview(minControl)
 
+        // initialize all remaining state, including the min and max label values
         updateKnobProperties()
+
         knobPositionChanged(minControl)
         knobPositionChanged(maxControl)
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
         if let imageVC = segue.destinationViewController as? ImageViewController {
-            imageVC.delegate = self
-            imageVC.titles = [ "(none)", "knob", "teardrop" ]
-            imageVC.imageTitle = imageTitle
+            // set up image selection for this demo
+            imageVC.delegate = self                           // arrange for imageChosen() to be called later
+            imageVC.titles = [ "(none)", "knob", "teardrop" ] // image sets from the asset catalog; "(none)" maps to a nil value of imageTitle (in the ImageViewController)
+            imageVC.imageTitle = imageTitle                   // retain state; if you go back into the ImageViewController to select another image, the knob there will show your current selection
         }
     }
 
     @IBAction func somethingChanged(sender: AnyObject?) {
+        // rather than responding separately to each input, just consult them all whenever any one changes
         updateKnobProperties()
     }
 
     func imageChosen(title: String?) {
+        // store the title selected; will be nil if "(none)" selected
         imageTitle = title
 
         NSLog("selected image title %@", (title ? title! : "(none)"))
@@ -110,6 +148,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
     }
 
     func knobPositionChanged(sender: IOSKnobControl) {
+        // update the appropriate fields depending on which knob changed
         if sender === knobControl {
             positionLabel.text = "%.02f" % sender.position
         }
@@ -124,6 +163,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
     }
 
     func updateKnobProperties() {
+        // set the gesture according to the segmented control
         switch (gestureControl.selectedSegmentIndex) {
         case 0:
             knobControl.gesture = .OneFingerRotation
@@ -136,9 +176,11 @@ class ContinuousViewController: UIViewController, ImageChooser {
         default:
             break
         }
+        // many of these properties will be the same for the min and max knobs
         minControl.gesture = knobControl.gesture
         maxControl.gesture = knobControl.gesture
 
+        // set clockwise property
         knobControl.clockwise = clockwiseSwitch.on
 
         minControl.clockwise = knobControl.clockwise
@@ -149,6 +191,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
         minControl.position = minControl.position
         maxControl.position = maxControl.position
 
+        // only the main knob control can be circular; if this is true, the min and max knobs are disabled
         knobControl.circular = circularSwitch.on
         minControl.enabled = !knobControl.circular
         maxControl.enabled = minControl.enabled
@@ -156,22 +199,43 @@ class ContinuousViewController: UIViewController, ImageChooser {
 
     func updateKnobImages() {
         if let title = imageTitle {
+            /*
+             * If an imageTitle is specified, take that image set from the asset catalog and use it for
+             * the UIControlState.Normal state. If images are not specified (or are set to nil) for other
+             * states, the image for the .Normal state will be used for the knob.
+             * If image sets exist beginning with the specified imageTitle and ending with -highlighted or
+             * -disabled, those images will be used for the relevant states. If there is no such image set
+             * in the asset catalog, the image for that state will be set to nil here.
+             * If image sets exist beginning with the specified imageTitle and ending with -foreground or
+             * -background, they will be used for the foregroundImage or backgroundImage properties,
+             * respectively, of the control. These are mainly used for rotary dial mode and are mostly
+             * absent here (nil).
+             */
+
             NSLog("using image title %@", title)
-            knobControl.setImage(UIImage(named: title), forState: .Normal)
-            knobControl.setImage(UIImage(named: "\(title)-highlighted"), forState: .Highlighted)
-            knobControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
+            let normalImage = UIImage(named: title)
+            let highlightedImage = UIImage(named: "\(title)-highlighted")
+            let disabledImage = UIImage(named: "\(title)-disabled")
+
+            knobControl.setImage(normalImage, forState: .Normal)
+            knobControl.setImage(highlightedImage, forState: .Highlighted)
+            knobControl.setImage(disabledImage, forState: .Disabled)
             knobControl.backgroundImage = UIImage(named: "\(title)-background")
             knobControl.foregroundImage = UIImage(named: "\(title)-foreground")
 
-            minControl.setImage(UIImage(named: title), forState: .Normal)
-            minControl.setImage(UIImage(named: "\(title)-highlighted"), forState: .Highlighted)
-            minControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
+            minControl.setImage(normalImage, forState: .Normal)
+            minControl.setImage(highlightedImage, forState: .Highlighted)
+            minControl.setImage(disabledImage, forState: .Disabled)
 
-            maxControl.setImage(UIImage(named: title), forState: .Normal)
-            maxControl.setImage(UIImage(named: "\(title)-highlighted"), forState: .Highlighted)
-            maxControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
+            maxControl.setImage(normalImage, forState: .Normal)
+            maxControl.setImage(highlightedImage, forState: .Highlighted)
+            maxControl.setImage(disabledImage, forState: .Disabled)
         }
         else {
+            /*
+             * If no imageTitle is specified, set all these things to nil to use the default images
+             * generated by the control.
+             */
             knobControl.setImage(nil, forState: .Normal)
             knobControl.setImage(nil, forState: .Highlighted)
             knobControl.setImage(nil, forState: .Disabled)
@@ -188,8 +252,11 @@ class ContinuousViewController: UIViewController, ImageChooser {
             knobControl.foregroundImage = nil
         }
 
+        // use the same foreground/background images (or nil) for the min and max knobs
         minControl.backgroundImage = knobControl.backgroundImage
+        minControl.foregroundImage = knobControl.foregroundImage
         maxControl.backgroundImage = knobControl.backgroundImage
+        maxControl.foregroundImage = knobControl.foregroundImage
     }
 
 }
