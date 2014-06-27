@@ -147,7 +147,7 @@
                                     <segue destination="MAf-mq-eSE" kind="modal" id="1NB-04-cP6"/>
                                 </connections>
                             </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="6j1-77-8LI">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="6j1-77-8LI">
                                 <rect key="frame" x="20" y="226" width="280" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="Qay-ki-3yv"/>
@@ -372,7 +372,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="QRZ-W1-zSR">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="QRZ-W1-zSR">
                                 <rect key="frame" x="20" y="279" width="280" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="e1R-3o-AYg"/>
@@ -403,7 +403,7 @@
                                     <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="gii-LV-JJD"/>
                                 </connections>
                             </slider>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-Xo-VtY">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="dPo-Xo-VtY">
                                 <rect key="frame" x="20" y="228" width="280" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="yle-9i-idb"/>
@@ -418,7 +418,7 @@
                                     <action selector="somethingChanged:" destination="zEq-iY-6hZ" eventType="valueChanged" id="zhY-if-EWL"/>
                                 </connections>
                             </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="S3G-O7-fDk">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="S3G-O7-fDk">
                                 <rect key="frame" x="20" y="353" width="280" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="QZv-hC-PLK"/>
@@ -568,7 +568,7 @@
                                     <constraint firstAttribute="width" constant="280" id="LxD-gO-FGb"/>
                                 </constraints>
                             </view>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="l7P-P4-Eup">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="l7P-P4-Eup">
                                 <rect key="frame" x="20" y="308" width="280" height="29"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="28" id="JWH-HO-Zap"/>
@@ -657,6 +657,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="1NB-04-cP6"/>
+        <segue reference="Wio-sR-5TS"/>
     </inferredMetricsTieBreakers>
 </document>

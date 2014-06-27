@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
     </dependencies>
     <scenes>
@@ -132,7 +133,7 @@
                                     <action selector="somethingChanged:" destination="OZn-jT-57a" eventType="valueChanged" id="rQf-rk-KWC"/>
                                 </connections>
                             </switch>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OTZ-z2-hi7">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="OTZ-z2-hi7">
                                 <rect key="frame" x="20" y="228" width="280" height="29"/>
                                 <segments>
                                     <segment title="1-f. rot."/>
@@ -144,7 +145,7 @@
                                     <action selector="somethingChanged:" destination="OZn-jT-57a" eventType="valueChanged" id="4ZI-CB-s1c"/>
                                 </connections>
                             </segmentedControl>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="hOV-wk-dlV">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="hOV-wk-dlV">
                                 <rect key="frame" x="20" y="264" width="280" height="29"/>
                                 <segments>
                                     <segment title="Linear Return"/>
@@ -169,7 +170,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N1e-cv-bkq">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N1e-cv-bkq">
                                 <rect key="frame" x="20" y="338" width="280" height="29"/>
                                 <segments>
                                     <segment title="months"/>
@@ -195,6 +196,7 @@
                             <constraint firstItem="hOV-wk-dlV" firstAttribute="leading" secondItem="iRa-BG-ivg" secondAttribute="leading" constant="20" id="KXg-aP-Khi"/>
                             <constraint firstItem="GtY-QY-IAr" firstAttribute="top" secondItem="iRa-BG-ivg" secondAttribute="top" constant="20" id="Kmk-tN-w1G"/>
                             <constraint firstAttribute="trailing" secondItem="zdu-ez-yiE" secondAttribute="trailing" constant="12" id="OMT-g8-X65"/>
+                            <constraint firstItem="Vxt-fy-CIp" firstAttribute="leading" secondItem="GtY-QY-IAr" secondAttribute="trailing" constant="8" id="POn-aO-hp2"/>
                             <constraint firstItem="gaf-ZJ-1sr" firstAttribute="top" secondItem="hOV-wk-dlV" secondAttribute="bottom" constant="12" id="QVG-25-vcd"/>
                             <constraint firstItem="gaf-ZJ-1sr" firstAttribute="leading" secondItem="iRa-BG-ivg" secondAttribute="leading" constant="20" id="UiX-CO-utN"/>
                             <constraint firstItem="lli-jG-ncf" firstAttribute="leading" secondItem="Ex8-QA-vyc" secondAttribute="trailing" constant="-72" id="YIh-M3-CYb"/>
@@ -210,7 +212,6 @@
                             <constraint firstItem="OTZ-z2-hi7" firstAttribute="top" secondItem="GtY-QY-IAr" secondAttribute="bottom" constant="8" id="vwW-AV-rW4"/>
                             <constraint firstItem="j8M-7q-yZ1" firstAttribute="top" secondItem="lli-jG-ncf" secondAttribute="bottom" constant="8" id="wGq-kl-2AC"/>
                             <constraint firstAttribute="trailing" secondItem="CsB-0V-y4W" secondAttribute="trailing" constant="20" id="xgg-uH-XsB"/>
-                            <constraint firstItem="zdu-ez-yiE" firstAttribute="leading" secondItem="Vxt-fy-CIp" secondAttribute="trailing" constant="-49" id="yol-I5-ep5"/>
                             <constraint firstAttribute="trailing" secondItem="OTZ-z2-hi7" secondAttribute="trailing" constant="20" id="zmF-XZ-QCB"/>
                         </constraints>
                     </view>
@@ -321,18 +322,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ft-lM-VTh">
-                                <rect key="frame" x="228" y="195" width="72" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="y3k-Yc-P5b"/>
-                                </constraints>
-                                <state key="normal" title="Images">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="eUj-5I-utF" kind="presentation" id="qCM-a2-8Ei"/>
-                                </connections>
-                            </button>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="4XS-BT-yJj">
                                 <rect key="frame" x="228" y="107" width="51" height="31"/>
                                 <connections>
@@ -348,7 +337,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="1od-gV-0Bj">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="1od-gV-0Bj">
                                 <rect key="frame" x="20" y="228" width="280" height="29"/>
                                 <segments>
                                     <segment title="1-f. rot."/>
@@ -407,13 +396,25 @@
                                 <rect key="frame" x="163" y="303" width="85" height="85"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ft-lM-VTh">
+                                <rect key="frame" x="228" y="190" width="72" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="y3k-Yc-P5b"/>
+                                </constraints>
+                                <state key="normal" title="Images">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="eUj-5I-utF" kind="presentation" id="qCM-a2-8Ei"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="YDz-Ab-WQJ" firstAttribute="top" secondItem="Njl-im-1bp" secondAttribute="bottom" constant="8" id="0HF-0b-CeL"/>
                             <constraint firstItem="Njl-im-1bp" firstAttribute="leading" secondItem="pyb-ge-l0K" secondAttribute="trailing" constant="-72" id="2CE-to-yg8"/>
                             <constraint firstAttribute="trailing" secondItem="YDz-Ab-WQJ" secondAttribute="trailing" constant="14" id="2l2-45-z9j"/>
-                            <constraint firstItem="7ft-lM-VTh" firstAttribute="top" secondItem="Vww-Ez-ncO" secondAttribute="bottom" constant="-25" id="43D-oN-fiT"/>
+                            <constraint firstItem="7ft-lM-VTh" firstAttribute="top" secondItem="Vww-Ez-ncO" secondAttribute="bottom" constant="-30" id="43D-oN-fiT"/>
                             <constraint firstItem="x61-V6-9ZY" firstAttribute="top" secondItem="GV7-Nm-KAg" secondAttribute="bottom" constant="-26" id="5l9-tg-jwl"/>
                             <constraint firstItem="pyb-ge-l0K" firstAttribute="top" secondItem="6yX-1m-eSD" secondAttribute="top" constant="20" id="AHL-JE-R7v"/>
                             <constraint firstItem="Vww-Ez-ncO" firstAttribute="top" secondItem="6yX-1m-eSD" secondAttribute="top" constant="20" id="BKZ-Ws-Xsq"/>
@@ -424,9 +425,9 @@
                             <constraint firstAttribute="trailing" secondItem="1od-gV-0Bj" secondAttribute="trailing" constant="20" id="NLD-wc-FnM"/>
                             <constraint firstAttribute="trailing" secondItem="pyb-ge-l0K" secondAttribute="trailing" constant="20" id="PIt-df-eJS"/>
                             <constraint firstItem="7ft-lM-VTh" firstAttribute="leading" secondItem="Vww-Ez-ncO" secondAttribute="trailing" constant="8" id="RVT-M8-IHw"/>
+                            <constraint firstItem="4XS-BT-yJj" firstAttribute="leading" secondItem="Vww-Ez-ncO" secondAttribute="trailing" constant="8" id="SQL-2q-49C"/>
                             <constraint firstItem="YDz-Ab-WQJ" firstAttribute="leading" secondItem="Njl-im-1bp" secondAttribute="trailing" constant="-72" id="TjQ-7b-YAV"/>
                             <constraint firstAttribute="trailing" secondItem="7ft-lM-VTh" secondAttribute="trailing" constant="20" id="U7U-TF-Bld"/>
-                            <constraint firstItem="YDz-Ab-WQJ" firstAttribute="leading" secondItem="4XS-BT-yJj" secondAttribute="trailing" constant="-49" id="VHu-gY-pWc"/>
                             <constraint firstAttribute="trailing" secondItem="Njl-im-1bp" secondAttribute="trailing" constant="20" id="Zfh-i8-0Rp"/>
                             <constraint firstItem="YDz-Ab-WQJ" firstAttribute="top" secondItem="Njl-im-1bp" secondAttribute="bottom" constant="8" id="Zku-kO-7fS"/>
                             <constraint firstItem="Njl-im-1bp" firstAttribute="top" secondItem="pyb-ge-l0K" secondAttribute="bottom" constant="8" id="bXo-Rd-VHi"/>
@@ -474,7 +475,7 @@
                                     <constraint firstAttribute="height" constant="280" id="j8i-RP-Rbv"/>
                                 </constraints>
                             </view>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="FGM-Or-n4w">
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="FGM-Or-n4w">
                                 <rect key="frame" x="20" y="308" width="280" height="29"/>
                                 <segments>
                                     <segment title="1-f. rot."/>
