@@ -15,6 +15,7 @@
 		7B25BDAB195B98E80060A1BA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B25BDAA195B98E80060A1BA /* Images.xcassets */; };
 		7B25BDB7195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDB6195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift */; };
 		7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDC1195B9DE40060A1BA /* IOSKnobControl.m */; };
+		7B3F7C14195D109000771BD8 /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7B3F7C12195D109000771BD8 /* ChangeLog */; };
 		7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */; };
 		7BAFFA81195CDC1900C88446 /* ContinuousViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,8 @@
 		7B25BDC0195B9DE40060A1BA /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSKnobControl.h; path = ../IOSKnobControl.h; sourceTree = "<group>"; };
 		7B25BDC1195B9DE40060A1BA /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSKnobControl.m; path = ../IOSKnobControl.m; sourceTree = "<group>"; };
 		7B25BDC4195B9E330060A1BA /* KnobControlDemo-Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KnobControlDemo-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
+		7B3F7C12195D109000771BD8 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = "<group>"; };
+		7B3F7C13195D109000771BD8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,6 +79,8 @@
 		7B25BD93195B98E80060A1BA = {
 			isa = PBXGroup;
 			children = (
+				7B3F7C12195D109000771BD8 /* ChangeLog */,
+				7B3F7C13195D109000771BD8 /* README.md */,
 				7B25BD9E195B98E80060A1BA /* KnobControlDemo-Swift */,
 				7B25BDB3195B98E80060A1BA /* KnobControlDemo-SwiftTests */,
 				7B25BDC3195B9DED0060A1BA /* IOSKnobControl */,
@@ -225,6 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B25BDA9195B98E80060A1BA /* Main.storyboard in Resources */,
+				7B3F7C14195D109000771BD8 /* ChangeLog in Resources */,
 				7B25BDAB195B98E80060A1BA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
