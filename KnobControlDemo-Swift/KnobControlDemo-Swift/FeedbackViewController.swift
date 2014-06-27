@@ -48,6 +48,7 @@ class FeedbackViewController: UIViewController {
 
         dialControl = IOSKnobControl(frame: dialHolder.bounds, imageNamed: "needle")
         dialControl.mode = .Continuous
+        dialControl.enabled = false
         dialControl.circular = false
         dialControl.min = knobControl.min
         dialControl.max = knobControl.max
