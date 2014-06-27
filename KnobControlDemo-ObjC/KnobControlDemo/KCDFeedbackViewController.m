@@ -20,9 +20,18 @@
 
 @end
 
+/*
+ * The feedback demo is the simplest of all the tabs. The purpose is to demonstrate
+ * the use of a disabled knob control with a custom image as a dial view. There are
+ * two knob controls: one enabled, the other disabled. Whenever the enabled one
+ * changes, the disabled one is simply set to the same position. The result is that
+ * the bottom knob control does not respond to gestures but just reflects the
+ * position of the top knob control, acting like a VU meter. This demo has no
+ * configuration controls.
+ */
 @implementation KCDFeedbackViewController {
     IOSKnobControl* knobControl;
-    IOSKnobControl* dialControl;
+    IOSKnobControl* dialView;
 }
 
 - (void)viewDidLoad
@@ -45,19 +54,25 @@
     [knobControl addTarget:self action:@selector(knobTurned:) forControlEvents:UIControlEventValueChanged];
     [_knobHolder addSubview:knobControl];
 
-    dialControl = [[IOSKnobControl alloc] initWithFrame:_dialHolder.bounds imageNamed:@"needle"];
-    dialControl.mode = IKCModeContinuous;
-    dialControl.enabled = NO;
-    dialControl.clockwise = knobControl.clockwise;
-    dialControl.circular = knobControl.circular;
-    dialControl.min = knobControl.min;
-    dialControl.max = knobControl.max;
-    [_dialHolder addSubview:dialControl];
+    dialView = [[IOSKnobControl alloc] initWithFrame:_dialHolder.bounds imageNamed:@"needle"];
+    dialView.mode = IKCModeContinuous;
+    dialView.enabled = NO;
+    dialView.clockwise = knobControl.clockwise;
+    dialView.circular = knobControl.circular;
+    dialView.min = knobControl.min;
+    dialView.max = knobControl.max;
+    [_dialHolder addSubview:dialView];
+
+    // no need to arrange an action for UIControlEventValueChanged. this control will still generate those
+    // events when the position is set programmatically, but who cares, since they're precisely
+    // the same sequence of events as the first control.
 }
 
 - (void)knobTurned:(IOSKnobControl*)sender
 {
-    dialControl.position = sender.position;
+    // Here's the meat: Set the dialView's position to the knobControl's position whenever
+    // the latter changes.
+    dialView.position = sender.position;
 }
 
 @end

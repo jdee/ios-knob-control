@@ -17,6 +17,18 @@
 #import "KCDImageViewController.h"
 #import "KCDRotaryDialViewController.h"
 
+/*
+ * This demo exercises the knob control's IKCModeRotaryDial mode. The size of the control
+ * limits the size of the finger holes in the control, so in this mode it's recommended
+ * to render the control at a large size. In fact, in rotary dial mode, the control
+ * enforces a minimum size for this reason.
+ * There are two configuration controls as input, directly below the control:
+ * - a segmented control to select the gesture; only one-finger rotation and tap are supported in this mode
+ * - a time-scale slider for the return animation; this affects the speed of the animation after you release the control
+ * Below these are the only output field, a label that displays the number dialed, and a button labeled Images
+ * that allows the user to use the dial with a set of images. The default dial images are rendered by the control as in
+ * the other modes.
+ */
 @implementation KCDRotaryDialViewController {
     IOSKnobControl* knobControl;
     NSString* numberDialed, *imageTitle;
@@ -58,6 +70,12 @@
 - (void)updateKnobImages
 {
     if (imageTitle) {
+        /*
+         * As in the ContinuousViewController, if an image set exists starting with the selected title
+         * and ending in -highlighted or -disabled, it is used for that state.
+         * Image sets ending in -background or -foreground, if any, are used for the background and
+         * foreground images.
+         */
         [knobControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
         [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
         [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
@@ -86,6 +104,11 @@
 
 - (void)timeScaleChanged:(UISlider *)sender
 {
+    /*
+     * Using exponentiation avoids compressing the scale below 1.0. The
+     * slider starts at 0 in middle and ranges from -1 to 1, so the
+     * time scale can range from 1/e to e, and defaults to 1.
+     */
     knobControl.timeScale = exp(sender.value);
 }
 

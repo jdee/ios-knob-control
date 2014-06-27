@@ -16,6 +16,21 @@
 #import "IOSKnobControl.h"
 #import "KCDDiscreteViewController.h"
 
+/*
+ * The purpose of the discrete demo is to exercise the knob control in the discrete
+ * modes ICKModeLinearReturn and ICKModeWheelOfFortune. A segmented control selects between these
+ * modes. This view includes a single knob control with two output fields in the upper
+ * right: position and index. The index field displays the value of the knob's positionIndex
+ * property, which is not available in ICKModeContinous or ICModeRotaryDial mode. In addition, the
+ * following controls configure the knob control's behavior:
+ * - a switch labeled "clockwise" that determines whether the knob considers a positive rotation to be clockwise or counterclockwise
+ * - a segmented control to select which gesture the knob will respond to (1-finger rotation, 2-finger rotation, vertical pan or tap)
+ * - a slider labeled "time scale" that specifies the timeScale property of the knob control (for return animations, which only occur in discrete modes)
+ * - a segmented control to select between two different sets of demo images
+ * -- months: the control generates the knob image from the knob's titles property; the user can select any month from the knob
+ * -- hexagon: the control uses one of two image sets from the asset catalog, each a hexagon with index values printed around the sides; changing the
+ *    clockwise setting switches to a different image with numbers rendered in the opposite direction
+ */
 @implementation KCDDiscreteViewController {
     IOSKnobControl* knobControl;
 }
@@ -64,10 +79,13 @@
     [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
 
     /*
-     * The time scale control is logarithmic.
+     * Using exponentiation avoids compressing the scale below 1.0. The
+     * slider starts at 0 in middle and ranges from -1 to 1, so the
+     * time scale can range from 1/e to e, and defaults to 1.
      */
     knobControl.timeScale = exp(self.timeScaleControl.value);
 
+    // Good idea to do this to make the knob reset itself after changing certain params.
     knobControl.position = knobControl.position;
 }
 
