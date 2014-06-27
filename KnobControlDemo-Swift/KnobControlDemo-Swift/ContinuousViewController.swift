@@ -24,30 +24,69 @@ class ContinuousViewController: UIViewController, ImageChooser {
 
     @IBOutlet var knobHolder : UIView
     @IBOutlet var positionLabel : UILabel
+    @IBOutlet var clockwiseSwitch : UISwitch
+    @IBOutlet var gestureControl : UISegmentedControl
+    @IBOutlet var circularSwitch : UISwitch
+    @IBOutlet var minHolder : UIView
+    @IBOutlet var maxHolder : UIView
+    @IBOutlet var minLabel : UILabel
+    @IBOutlet var maxLabel : UILabel
 
     var knobControl : IOSKnobControl!
+    var minControl : IOSKnobControl!
+    var maxControl : IOSKnobControl!
+
     var imageTitle : String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let π = Float(M_PI)
+
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.mode = .Continuous
-        knobControl.circular = true
+        knobControl.min = -π * 0.5
+        knobControl.max = π * 0.5
+
+        minControl = IOSKnobControl(frame: minHolder.bounds)
+        minControl.mode = .Continuous
+        minControl.position = knobControl.min
+
+        maxControl = IOSKnobControl(frame: maxHolder.bounds)
+        maxControl.mode = .Continuous
+        maxControl.position = knobControl.max
 
         if (knobControl.respondsToSelector("setTintColor:")) {
             // iOS 7+
             knobControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+            minControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+            maxControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
         }
         else {
             // can still customize piecemeal below iOS 7 (or in iOS 7+ instead of just using the tintColor)
             let titleColor = UIColor.whiteColor()
             knobControl.setTitleColor(titleColor, forState: .Normal)
             knobControl.setTitleColor(titleColor, forState: .Highlighted)
+
+            minControl.setTitleColor(titleColor, forState: .Normal)
+            minControl.setTitleColor(titleColor, forState: .Highlighted)
+
+            maxControl.setTitleColor(titleColor, forState: .Normal)
+            maxControl.setTitleColor(titleColor, forState: .Highlighted)
         }
 
         knobControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
         knobHolder.addSubview(knobControl)
+
+        maxControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
+        maxHolder.addSubview(maxControl)
+
+        minControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
+        minHolder.addSubview(minControl)
+
+        updateKnobProperties()
+        knobPositionChanged(minControl)
+        knobPositionChanged(maxControl)
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
@@ -56,6 +95,10 @@ class ContinuousViewController: UIViewController, ImageChooser {
             imageVC.titles = [ "(none)", "knob", "teardrop" ]
             imageVC.imageTitle = imageTitle
         }
+    }
+
+    @IBAction func somethingChanged(sender: AnyObject?) {
+        updateKnobProperties()
     }
 
     func imageChosen(title: String?) {
@@ -67,7 +110,48 @@ class ContinuousViewController: UIViewController, ImageChooser {
     }
 
     func knobPositionChanged(sender: IOSKnobControl) {
-        positionLabel.text = "%.02f" % sender.position
+        if sender === knobControl {
+            positionLabel.text = "%.02f" % sender.position
+        }
+        else if sender === minControl {
+            knobControl.min = sender.position
+            minLabel.text = "%.02f" % knobControl.min
+        }
+        else if sender === maxControl {
+            knobControl.max = sender.position
+            maxLabel.text = "%.02f" % knobControl.max
+        }
+    }
+
+    func updateKnobProperties() {
+        switch (gestureControl.selectedSegmentIndex) {
+        case 0:
+            knobControl.gesture = .OneFingerRotation
+        case 1:
+            knobControl.gesture = .TwoFingerRotation
+        case 2:
+            knobControl.gesture = .VerticalPan
+        case 3:
+            knobControl.gesture = .Tap
+        default:
+            break
+        }
+        minControl.gesture = knobControl.gesture
+        maxControl.gesture = knobControl.gesture
+
+        knobControl.clockwise = clockwiseSwitch.on
+
+        minControl.clockwise = knobControl.clockwise
+        maxControl.clockwise = knobControl.clockwise
+
+        // good to do this after changing clockwise to make sure the image is properly positioned
+        knobControl.position = knobControl.position
+        minControl.position = minControl.position
+        maxControl.position = maxControl.position
+
+        knobControl.circular = circularSwitch.on
+        minControl.enabled = !knobControl.circular
+        maxControl.enabled = minControl.enabled
     }
 
     func updateKnobImages() {
@@ -78,14 +162,34 @@ class ContinuousViewController: UIViewController, ImageChooser {
             knobControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
             knobControl.backgroundImage = UIImage(named: "\(title)-background")
             knobControl.foregroundImage = UIImage(named: "\(title)-foreground")
+
+            minControl.setImage(UIImage(named: title), forState: .Normal)
+            minControl.setImage(UIImage(named: "\(title)-highlighted"), forState: .Highlighted)
+            minControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
+
+            maxControl.setImage(UIImage(named: title), forState: .Normal)
+            maxControl.setImage(UIImage(named: "\(title)-highlighted"), forState: .Highlighted)
+            maxControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
         }
         else {
             knobControl.setImage(nil, forState: .Normal)
             knobControl.setImage(nil, forState: .Highlighted)
             knobControl.setImage(nil, forState: .Disabled)
+
+            minControl.setImage(nil, forState: .Normal)
+            minControl.setImage(nil, forState: .Highlighted)
+            minControl.setImage(nil, forState: .Disabled)
+
+            maxControl.setImage(nil, forState: .Normal)
+            maxControl.setImage(nil, forState: .Highlighted)
+            maxControl.setImage(nil, forState: .Disabled)
+
             knobControl.backgroundImage = nil
             knobControl.foregroundImage = nil
         }
+
+        minControl.backgroundImage = knobControl.backgroundImage
+        maxControl.backgroundImage = knobControl.backgroundImage
     }
 
 }
