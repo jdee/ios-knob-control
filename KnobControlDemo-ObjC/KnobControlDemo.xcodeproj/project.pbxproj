@@ -54,7 +54,7 @@
 		7B199B5F189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDContinuousViewController.h; sourceTree = "<group>"; };
 		7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDContinuousViewController.m; sourceTree = "<group>"; };
-		7B199B67189ABEC9003E7F6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		7B199B67189ABEC9003E7F6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../Images.xcassets; sourceTree = "<group>"; };
 		7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnobControlDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B199B6E189ABEC9003E7F6A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		7B199B76189ABEC9003E7F6A /* KnobControlDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemoTests-Info.plist"; sourceTree = "<group>"; };
