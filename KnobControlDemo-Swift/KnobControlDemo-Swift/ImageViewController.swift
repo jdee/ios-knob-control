@@ -39,7 +39,13 @@ class ImageViewController: UIViewController {
 
     var knobControl : IOSKnobControl!
 
-    weak var delegate : ImageChooser?
+    /*
+     * Hmm. I'd like to make this a weak reference, but the delegate here is a VC that's
+     * hidden when this one is presented modally. If I make this weak, I get a crash when
+     * calling back the delegate in done() around line 102. This has the potential to create
+     * a strong reference loop, but see the remarks above. Not in this case, so meh for now.
+     */
+    var delegate : ImageChooser?
 
     var imageTitle : String?
     var titles : String[] = [ "(none)" ]

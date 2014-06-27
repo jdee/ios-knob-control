@@ -14,6 +14,8 @@
 		7B25BDAB195B98E80060A1BA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B25BDAA195B98E80060A1BA /* Images.xcassets */; };
 		7B25BDB7195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDB6195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift */; };
 		7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDC1195B9DE40060A1BA /* IOSKnobControl.m */; };
+		7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */; };
+		7BAFFA81195CDC1900C88446 /* ContinuousViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +49,8 @@
 		7B25BDC0195B9DE40060A1BA /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSKnobControl.h; path = ../IOSKnobControl.h; sourceTree = "<group>"; };
 		7B25BDC1195B9DE40060A1BA /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSKnobControl.m; path = ../IOSKnobControl.m; sourceTree = "<group>"; };
 		7B25BDC4195B9E330060A1BA /* KnobControlDemo-Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KnobControlDemo-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
+		7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +94,9 @@
 			isa = PBXGroup;
 			children = (
 				7B25BDA1195B98E80060A1BA /* AppDelegate.swift */,
+				7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */,
 				7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */,
+				7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */,
 				7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */,
 				7B25BDA7195B98E80060A1BA /* Main.storyboard */,
 				7B25BDAA195B98E80060A1BA /* Images.xcassets */,
@@ -235,7 +241,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B25BDA6195B98E80060A1BA /* RotaryDialViewController.swift in Sources */,
+				7BAFFA81195CDC1900C88446 /* ContinuousViewController.swift in Sources */,
 				7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */,
+				7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */,
 				7B25BDA2195B98E80060A1BA /* AppDelegate.swift in Sources */,
 				7B25BDA4195B98E80060A1BA /* FeedbackViewController.swift in Sources */,
 			);

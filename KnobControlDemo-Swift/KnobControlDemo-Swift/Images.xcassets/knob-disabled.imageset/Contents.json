@@ -3,12 +3,12 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "second.png"
+      "filename" : "knob-disabled.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "second@2x.png"
+      "filename" : "knob-disabled@2x.png"
     }
   ],
   "info" : {
