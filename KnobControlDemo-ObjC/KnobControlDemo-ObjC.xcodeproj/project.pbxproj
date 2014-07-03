@@ -11,22 +11,22 @@
 		7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */; };
 		7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B55189ABEC9003E7F6A /* InfoPlist.strings */; };
-		7B199B59189ABEC9003E7F6A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
-		7B199B5D189ABEC9003E7F6A /* KCDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */; };
 		7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */; };
-		7B199B66189ABEC9003E7F6A /* KCDContinuousViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */; };
 		7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B67189ABEC9003E7F6A /* Images.xcassets */; };
 		7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B6E189ABEC9003E7F6A /* XCTest.framework */; };
 		7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
 		7B199B71189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B79189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B77189ABEC9003E7F6A /* InfoPlist.strings */; };
-		7B199B7B189ABEC9003E7F6A /* KnobControlDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */; };
+		7B199B7B189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m */; };
 		7B199B85189AC13D003E7F6A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B84189AC13D003E7F6A /* README.md */; };
-		7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */; };
-		7B2880B418E79EB800A0E726 /* KCDDiscreteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */; };
-		7B2880B718E7A8C400A0E726 /* KCDImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */; };
-		7B2880BD18EB3E7A00A0E726 /* KCDFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */; };
-		7B662CA81932A7EF00C5D676 /* KCDRotaryDialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */; };
+		7B5268651965CB2A00732EA4 /* KCDContinuousViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BCC770A1965C7FF004FC6FC /* KCDContinuousViewController.m */; };
+		7B52686A1965CB2A00732EA4 /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */; };
+		7B52686B1965CD0000732EA4 /* KCDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */; };
+		7B52686C1965CD0000732EA4 /* KCDDiscreteViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */; };
+		7B52686D1965CD0000732EA4 /* KCDFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */; };
+		7B52686E1965CD0000732EA4 /* KCDImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */; };
+		7B52686F1965CD0000732EA4 /* KCDRotaryDialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */; };
+		7B5268701965CF8900732EA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
 		7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7BE81C7F18B7B9DE0088814A /* ChangeLog */; };
 /* End PBXBuildFile section */
 
@@ -41,25 +41,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7B199B49189ABEC9003E7F6A /* KnobControlDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KnobControlDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B199B49189ABEC9003E7F6A /* KnobControlDemo-ObjC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnobControlDemo-ObjC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B199B4C189ABEC9003E7F6A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		7B199B50189ABEC9003E7F6A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		7B199B54189ABEC9003E7F6A /* KnobControlDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemo-Info.plist"; sourceTree = "<group>"; };
+		7B199B54189ABEC9003E7F6A /* KnobControlDemo-ObjC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemo-ObjC-Info.plist"; sourceTree = "<group>"; };
 		7B199B56189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7B199B58189ABEC9003E7F6A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		7B199B5A189ABEC9003E7F6A /* KnobControlDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KnobControlDemo-Prefix.pch"; sourceTree = "<group>"; };
+		7B199B5A189ABEC9003E7F6A /* KnobControlDemo-ObjC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KnobControlDemo-ObjC-Prefix.pch"; sourceTree = "<group>"; };
 		7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDAppDelegate.h; sourceTree = "<group>"; };
 		7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDAppDelegate.m; sourceTree = "<group>"; };
 		7B199B5F189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDContinuousViewController.h; sourceTree = "<group>"; };
-		7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDContinuousViewController.m; sourceTree = "<group>"; };
 		7B199B67189ABEC9003E7F6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../Images.xcassets; sourceTree = "<group>"; };
-		7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KnobControlDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B199B6D189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KnobControlDemo-ObjCTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B199B6E189ABEC9003E7F6A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		7B199B76189ABEC9003E7F6A /* KnobControlDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemoTests-Info.plist"; sourceTree = "<group>"; };
+		7B199B76189ABEC9003E7F6A /* KnobControlDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "KnobControlDemoTests-Info.plist"; path = "KnobControlDemo-ObjCTests/KnobControlDemoTests-Info.plist"; sourceTree = "<group>"; };
 		7B199B78189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KnobControlDemoTests.m; sourceTree = "<group>"; };
+		7B199B7A189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "KnobControlDemo-ObjCTests.m"; path = "KnobControlDemo-ObjCTests/KnobControlDemo-ObjCTests.m"; sourceTree = "<group>"; };
 		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSKnobControl.h; path = ../IOSKnobControl.h; sourceTree = "<group>"; };
 		7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSKnobControl.m; path = ../IOSKnobControl.m; sourceTree = "<group>"; };
@@ -72,6 +71,7 @@
 		7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDRotaryDialViewController.h; sourceTree = "<group>"; };
 		7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDRotaryDialViewController.m; sourceTree = "<group>"; };
 		7B662CA91935364B00C5D676 /* KCDImageChooser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDImageChooser.h; sourceTree = "<group>"; };
+		7BCC770A1965C7FF004FC6FC /* KCDContinuousViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KCDContinuousViewController.m; path = "KnobControlDemo-ObjC/KCDContinuousViewController.m"; sourceTree = SOURCE_ROOT; };
 		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -104,8 +104,8 @@
 			children = (
 				7BE81C7F18B7B9DE0088814A /* ChangeLog */,
 				7B199B84189AC13D003E7F6A /* README.md */,
-				7B199B52189ABEC9003E7F6A /* KnobControlDemo */,
-				7B199B74189ABEC9003E7F6A /* KnobControlDemoTests */,
+				7B199B52189ABEC9003E7F6A /* KnobControlDemo-ObjC */,
+				7B199B74189ABEC9003E7F6A /* KnobControlDemo-ObjCTests */,
 				7B199B86189AC1FD003E7F6A /* IOSKnobControl */,
 				7B199B4B189ABEC9003E7F6A /* Frameworks */,
 				7B199B4A189ABEC9003E7F6A /* Products */,
@@ -115,8 +115,8 @@
 		7B199B4A189ABEC9003E7F6A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B49189ABEC9003E7F6A /* KnobControlDemo.app */,
-				7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */,
+				7B199B49189ABEC9003E7F6A /* KnobControlDemo-ObjC.app */,
+				7B199B6D189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -132,7 +132,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		7B199B52189ABEC9003E7F6A /* KnobControlDemo */ = {
+		7B199B52189ABEC9003E7F6A /* KnobControlDemo-ObjC */ = {
 			isa = PBXGroup;
 			children = (
 				7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */,
@@ -142,26 +142,27 @@
 				7B199B67189ABEC9003E7F6A /* Images.xcassets */,
 				7B199B53189ABEC9003E7F6A /* Supporting Files */,
 			);
-			path = KnobControlDemo;
+			path = "KnobControlDemo-ObjC";
 			sourceTree = "<group>";
 		};
 		7B199B53189ABEC9003E7F6A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B54189ABEC9003E7F6A /* KnobControlDemo-Info.plist */,
+				7B199B54189ABEC9003E7F6A /* KnobControlDemo-ObjC-Info.plist */,
 				7B199B55189ABEC9003E7F6A /* InfoPlist.strings */,
 				7B199B58189ABEC9003E7F6A /* main.m */,
-				7B199B5A189ABEC9003E7F6A /* KnobControlDemo-Prefix.pch */,
+				7B199B5A189ABEC9003E7F6A /* KnobControlDemo-ObjC-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		7B199B74189ABEC9003E7F6A /* KnobControlDemoTests */ = {
+		7B199B74189ABEC9003E7F6A /* KnobControlDemo-ObjCTests */ = {
 			isa = PBXGroup;
 			children = (
-				7B199B7A189ABEC9003E7F6A /* KnobControlDemoTests.m */,
+				7B199B7A189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m */,
 				7B199B75189ABEC9003E7F6A /* Supporting Files */,
 			);
+			name = "KnobControlDemo-ObjCTests";
 			path = KnobControlDemoTests;
 			sourceTree = "<group>";
 		};
@@ -187,7 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */,
-				7B199B65189ABEC9003E7F6A /* KCDContinuousViewController.m */,
+				7BCC770A1965C7FF004FC6FC /* KCDContinuousViewController.m */,
 				7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */,
 				7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */,
 				7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */,
@@ -204,9 +205,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7B199B48189ABEC9003E7F6A /* KnobControlDemo */ = {
+		7B199B48189ABEC9003E7F6A /* KnobControlDemo-ObjC */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo" */;
+			buildConfigurationList = 7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo-ObjC" */;
 			buildPhases = (
 				7B199B45189ABEC9003E7F6A /* Sources */,
 				7B199B46189ABEC9003E7F6A /* Frameworks */,
@@ -216,14 +217,14 @@
 			);
 			dependencies = (
 			);
-			name = KnobControlDemo;
+			name = "KnobControlDemo-ObjC";
 			productName = KnobControlDemo;
-			productReference = 7B199B49189ABEC9003E7F6A /* KnobControlDemo.app */;
+			productReference = 7B199B49189ABEC9003E7F6A /* KnobControlDemo-ObjC.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7B199B6C189ABEC9003E7F6A /* KnobControlDemoTests */ = {
+		7B199B6C189ABEC9003E7F6A /* KnobControlDemo-ObjCTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemoTests" */;
+			buildConfigurationList = 7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo-ObjCTests" */;
 			buildPhases = (
 				7B199B69189ABEC9003E7F6A /* Sources */,
 				7B199B6A189ABEC9003E7F6A /* Frameworks */,
@@ -234,9 +235,9 @@
 			dependencies = (
 				7B199B73189ABEC9003E7F6A /* PBXTargetDependency */,
 			);
-			name = KnobControlDemoTests;
+			name = "KnobControlDemo-ObjCTests";
 			productName = KnobControlDemoTests;
-			productReference = 7B199B6D189ABEC9003E7F6A /* KnobControlDemoTests.xctest */;
+			productReference = 7B199B6D189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -254,7 +255,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "KnobControlDemo" */;
+			buildConfigurationList = 7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "KnobControlDemo-ObjC" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -267,8 +268,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7B199B48189ABEC9003E7F6A /* KnobControlDemo */,
-				7B199B6C189ABEC9003E7F6A /* KnobControlDemoTests */,
+				7B199B48189ABEC9003E7F6A /* KnobControlDemo-ObjC */,
+				7B199B6C189ABEC9003E7F6A /* KnobControlDemo-ObjCTests */,
 			);
 		};
 /* End PBXProject section */
@@ -301,14 +302,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B199B5D189ABEC9003E7F6A /* KCDAppDelegate.m in Sources */,
-				7B2880BD18EB3E7A00A0E726 /* KCDFeedbackViewController.m in Sources */,
-				7B199B89189AC2C6003E7F6A /* IOSKnobControl.m in Sources */,
-				7B199B59189ABEC9003E7F6A /* main.m in Sources */,
-				7B662CA81932A7EF00C5D676 /* KCDRotaryDialViewController.m in Sources */,
-				7B2880B718E7A8C400A0E726 /* KCDImageViewController.m in Sources */,
-				7B2880B418E79EB800A0E726 /* KCDDiscreteViewController.m in Sources */,
-				7B199B66189ABEC9003E7F6A /* KCDContinuousViewController.m in Sources */,
+				7B5268701965CF8900732EA4 /* main.m in Sources */,
+				7B52686B1965CD0000732EA4 /* KCDAppDelegate.m in Sources */,
+				7B52686C1965CD0000732EA4 /* KCDDiscreteViewController.m in Sources */,
+				7B52686D1965CD0000732EA4 /* KCDFeedbackViewController.m in Sources */,
+				7B52686E1965CD0000732EA4 /* KCDImageViewController.m in Sources */,
+				7B52686F1965CD0000732EA4 /* KCDRotaryDialViewController.m in Sources */,
+				7B5268651965CB2A00732EA4 /* KCDContinuousViewController.m in Sources */,
+				7B52686A1965CB2A00732EA4 /* IOSKnobControl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B199B7B189ABEC9003E7F6A /* KnobControlDemoTests.m in Sources */,
+				7B199B7B189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -325,7 +326,7 @@
 /* Begin PBXTargetDependency section */
 		7B199B73189ABEC9003E7F6A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7B199B48189ABEC9003E7F6A /* KnobControlDemo */;
+			target = 7B199B48189ABEC9003E7F6A /* KnobControlDemo-ObjC */;
 			targetProxy = 7B199B72189ABEC9003E7F6A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -353,6 +354,7 @@
 				7B199B78189ABEC9003E7F6A /* en */,
 			);
 			name = InfoPlist.strings;
+			path = "KnobControlDemo-ObjCTests";
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -436,9 +438,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "KnobControlDemo/KnobControlDemo-Prefix.pch";
-				INFOPLIST_FILE = "KnobControlDemo/KnobControlDemo-Info.plist";
-				PRODUCT_NAME = KnobControlDemo;
+				GCC_PREFIX_HEADER = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Prefix.pch";
+				INFOPLIST_FILE = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Info.plist";
+				PRODUCT_NAME = "KnobControlDemo-ObjC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -449,9 +451,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "KnobControlDemo/KnobControlDemo-Prefix.pch";
-				INFOPLIST_FILE = "KnobControlDemo/KnobControlDemo-Info.plist";
-				PRODUCT_NAME = KnobControlDemo;
+				GCC_PREFIX_HEADER = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Prefix.pch";
+				INFOPLIST_FILE = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Info.plist";
+				PRODUCT_NAME = "KnobControlDemo-ObjC";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -472,7 +474,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "ios-knob-controlTests/KnobControlDemoTests-Info.plist";
-				PRODUCT_NAME = KnobControlDemoTests;
+				PRODUCT_NAME = "KnobControlDemo-ObjCTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -490,7 +492,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ios-knob-control/ios-knob-control-Prefix.pch";
 				INFOPLIST_FILE = "ios-knob-controlTests/KnobControlDemoTests-Info.plist";
-				PRODUCT_NAME = KnobControlDemoTests;
+				PRODUCT_NAME = "KnobControlDemo-ObjCTests";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = xctest;
 			};
@@ -499,7 +501,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "KnobControlDemo" */ = {
+		7B199B44189ABEC9003E7F6A /* Build configuration list for PBXProject "KnobControlDemo-ObjC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B199B7C189ABEC9003E7F6A /* Debug */,
@@ -508,7 +510,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo" */ = {
+		7B199B7E189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo-ObjC" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B199B7F189ABEC9003E7F6A /* Debug */,
@@ -517,7 +519,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemoTests" */ = {
+		7B199B81189ABEC9003E7F6A /* Build configuration list for PBXNativeTarget "KnobControlDemo-ObjCTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7B199B82189ABEC9003E7F6A /* Debug */,

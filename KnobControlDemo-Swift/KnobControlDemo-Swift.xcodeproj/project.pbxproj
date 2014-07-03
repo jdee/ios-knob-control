@@ -101,11 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				7B25BDA1195B98E80060A1BA /* AppDelegate.swift */,
-				7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */,
-				7B204B15195D016A00873E27 /* DiscreteViewController.swift */,
-				7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */,
-				7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */,
-				7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */,
+				7B5268711965CFCD00732EA4 /* View Controllers */,
 				7B25BDA7195B98E80060A1BA /* Main.storyboard */,
 				7B25BDAA195B98E80060A1BA /* Images.xcassets */,
 				7B25BD9F195B98E80060A1BA /* Supporting Files */,
@@ -146,6 +142,18 @@
 				7B25BDC1195B9DE40060A1BA /* IOSKnobControl.m */,
 			);
 			name = IOSKnobControl;
+			sourceTree = "<group>";
+		};
+		7B5268711965CFCD00732EA4 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */,
+				7B204B15195D016A00873E27 /* DiscreteViewController.swift */,
+				7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */,
+				7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */,
+				7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,7 +202,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0600;
-				ORGANIZATIONNAME = "Jimmy Dee";
+				ORGANIZATIONNAME = "Your Organization";
 				TargetAttributes = {
 					7B25BD9B195B98E80060A1BA = {
 						CreatedOnToolsVersion = 6.0;

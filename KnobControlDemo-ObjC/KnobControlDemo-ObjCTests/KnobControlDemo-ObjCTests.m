@@ -15,7 +15,7 @@
 
 #import <XCTest/XCTest.h>
 
-@interface KnobControlDemoTests : XCTestCase
+@interface KnobControlDemo_ObjcTests : XCTestCase
 
 @end
 
