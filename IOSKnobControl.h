@@ -160,6 +160,12 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic) IKCMode mode;
 
 /**
+ * Only consulted if circular is YES. If YES, the position property will always be normalized to lie in (-M_PI,M_PI]. If NO, position can increase or decrease beyond those bounds, allowing
+ * determination of the number of complete revolutions. If circular is NO, this property is ignored, and the min and max properties are consulted instead. Defaults to YES.
+ */
+@property (nonatomic) BOOL normalized;
+
+/**
  * Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI]. See @ref setPosition:animated: for more details,
  * including the role of the @ref circular, @ref min and @ref max properties. Assigning to this property results in a call to that method, with animated = NO.
  */

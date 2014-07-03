@@ -195,6 +195,7 @@ static CGRect adjustFrame(CGRect frame) {
     _positions = 2;
     _timeScale = 1.0;
     _gesture = IKCGOneFingerRotation;
+    _normalized = YES;
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
@@ -438,7 +439,7 @@ static CGRect adjustFrame(CGRect frame) {
         position = MAX(position, _min);
         position = MIN(position, _max);
     }
-    else {
+    else if (_normalized) {
         while (position > M_PI) position -= 2.0*M_PI;
         while (position <= -M_PI) position += 2.0*M_PI;
         if (position == -M_PI) position = M_PI;
@@ -526,6 +527,15 @@ static CGRect adjustFrame(CGRect frame) {
 
     _gesture = gesture;
     [self setupGestureRecognizer];
+}
+
+- (void)setNormalized:(BOOL)normalized
+{
+    _normalized = normalized;
+    if (_normalized) {
+        while (_position > M_PI) _position -= 2.0 * M_PI;
+        while (_position <= -M_PI) _position += 2.0 * M_PI;
+    }
 }
 
 - (void)tintColorDidChange
@@ -732,12 +742,9 @@ static CGRect adjustFrame(CGRect frame) {
         [CATransaction setDisableActions:YES];
         imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
-        // Provide an animation
-        // Key-frame animation to ensure rotates in correct direction
-        CGFloat midAngle = 0.5*(actual+current);
         CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-        animation.values = @[@(current), @(midAngle), @(actual)];
-        animation.keyTimes = @[@(0.0), @(0.5), @(1.0)];
+        animation.values = @[@(current), @(actual)];
+        animation.keyTimes = @[@(0.0), @(1.0)];
         animation.duration = duration;
         animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 

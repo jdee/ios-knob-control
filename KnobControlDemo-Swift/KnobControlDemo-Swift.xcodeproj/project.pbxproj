@@ -16,6 +16,9 @@
 		7B25BDB7195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDB6195B98E80060A1BA /* KnobControlDemo_SwiftTests.swift */; };
 		7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B25BDC1195B9DE40060A1BA /* IOSKnobControl.m */; };
 		7B3F7C14195D109000771BD8 /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7B3F7C12195D109000771BD8 /* ChangeLog */; };
+		7B5268731965DABF00732EA4 /* ScratchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5268721965DABF00732EA4 /* ScratchViewController.swift */; };
+		7B5268751965E36D00732EA4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5268741965E36D00732EA4 /* QuartzCore.framework */; };
+		7B5268781965E8C300732EA4 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5268771965E8C300732EA4 /* MediaPlayer.framework */; };
 		7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */; };
 		7BAFFA81195CDC1900C88446 /* ContinuousViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */; };
 /* End PBXBuildFile section */
@@ -54,6 +57,9 @@
 		7B25BDC4195B9E330060A1BA /* KnobControlDemo-Swift-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KnobControlDemo-Swift-Bridging-Header.h"; sourceTree = "<group>"; };
 		7B3F7C12195D109000771BD8 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = "<group>"; };
 		7B3F7C13195D109000771BD8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		7B5268721965DABF00732EA4 /* ScratchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScratchViewController.swift; sourceTree = "<group>"; };
+		7B5268741965E36D00732EA4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7B5268771965E8C300732EA4 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -63,6 +69,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B5268781965E8C300732EA4 /* MediaPlayer.framework in Frameworks */,
+				7B5268751965E36D00732EA4 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +92,7 @@
 				7B25BD9E195B98E80060A1BA /* KnobControlDemo-Swift */,
 				7B25BDB3195B98E80060A1BA /* KnobControlDemo-SwiftTests */,
 				7B25BDC3195B9DED0060A1BA /* IOSKnobControl */,
+				7B5268761965E37A00732EA4 /* Frameworks */,
 				7B25BD9D195B98E80060A1BA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -152,8 +161,18 @@
 				7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */,
 				7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */,
 				7B25BDA5195B98E80060A1BA /* RotaryDialViewController.swift */,
+				7B5268721965DABF00732EA4 /* ScratchViewController.swift */,
 			);
 			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		7B5268761965E37A00732EA4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7B5268771965E8C300732EA4 /* MediaPlayer.framework */,
+				7B5268741965E36D00732EA4 /* QuartzCore.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,6 +281,7 @@
 				7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */,
 				7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */,
 				7B204B16195D016A00873E27 /* DiscreteViewController.swift in Sources */,
+				7B5268731965DABF00732EA4 /* ScratchViewController.swift in Sources */,
 				7B25BDA2195B98E80060A1BA /* AppDelegate.swift in Sources */,
 				7B25BDA4195B98E80060A1BA /* FeedbackViewController.swift in Sources */,
 			);
