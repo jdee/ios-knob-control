@@ -58,7 +58,7 @@
 		7B199B6E189ABEC9003E7F6A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		7B199B76189ABEC9003E7F6A /* KnobControlDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "KnobControlDemoTests-Info.plist"; path = "KnobControlDemo-ObjCTests/KnobControlDemoTests-Info.plist"; sourceTree = "<group>"; };
 		7B199B78189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		7B199B7A189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "KnobControlDemo-ObjCTests.m"; path = "KnobControlDemo-ObjCTests/KnobControlDemo-ObjCTests.m"; sourceTree = "<group>"; };
+		7B199B7A189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "KnobControlDemo-ObjCTests.m"; sourceTree = "<group>"; };
 		7B199B84189AC13D003E7F6A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		7B199B87189AC2C6003E7F6A /* IOSKnobControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IOSKnobControl.h; path = ../IOSKnobControl.h; sourceTree = "<group>"; };
 		7B199B88189AC2C6003E7F6A /* IOSKnobControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IOSKnobControl.m; path = ../IOSKnobControl.m; sourceTree = "<group>"; };
@@ -162,8 +162,7 @@
 				7B199B7A189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m */,
 				7B199B75189ABEC9003E7F6A /* Supporting Files */,
 			);
-			name = "KnobControlDemo-ObjCTests";
-			path = KnobControlDemoTests;
+			path = "KnobControlDemo-ObjCTests";
 			sourceTree = "<group>";
 		};
 		7B199B75189ABEC9003E7F6A /* Supporting Files */ = {
