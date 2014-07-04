@@ -26,6 +26,25 @@
 @property (nonatomic) KCDAppDelegate* appDelegate;
 @end
 
+/*
+ * This demo presents a music player using an animated knob control to simulate a spinning 33 1/3 RPM vinyl record and
+ * play a single track from the user's iTunes library in an infinite loop.
+ * You can control the playback position by manually rotating the record using one-finger rotation. The position and
+ * track length are indicated using labels and a progress view. There is also a system volume control, but see the
+ * comments below in createMusicPlayer(). Note that the MPMusicPlayerController by default loses its state when the
+ * app enters the background. It stops playing, and it cannot resume with a simple call to play() after it returns to
+ * the foreground. A real music player app should solve this problem and allow playback to continue in the background,
+ * but for this demo, which is already a little more complex than the other tabs, we just restore the view to its initial
+ * state whenever it enters the foreground and let the user pick a new song.
+ *
+ * Also note that this is a case where the knob is no longer a knob. To simulate a turntable, the knob is made to rotate
+ * continuously at a constant angular velocity in the absence of gestures from the user. This is a novel use of the control.
+ * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore. Detection of touch
+ * up/down events is done in a cheap way in the animateControl() callback. And the IOSKnobControl's highlighted state is
+ * used to determine whether the user is currently interacting with it. This may be possible using the tracking and
+ * touchInside properties of the UIControl base class, but using the highlighted property has produced more consistent
+ * results. All these things would indicate necessary changes to the control if this were a typical use.
+ */
 @implementation KCDSpinViewController {
     IOSKnobControl* knobControl;
     CADisplayLink* displayLink;
@@ -77,6 +96,7 @@
     [self createMusicPlayer];
     [self createLoadingView];
 
+    // arrange to be notified via resumeFromBackground() when the app becomes active
     self.appDelegate.foregrounder = self;
 }
 
@@ -98,6 +118,9 @@
     }
 }
 
+#pragma mark - IBActions, protocol implementations and other callbacks
+
+// called when the user taps the button to select a track from iTunes
 - (void)selectTrack:(UIButton *)sender
 {
     [self addLoadingView];
@@ -108,6 +131,8 @@
     mediaPicker.prompt = @"Select a track";
     [self presentViewController:mediaPicker animated:YES completion:nil];
 }
+
+// --- implementation of Foregrounder protocol ---
 
 - (void)resumeFromBackground:(KCDAppDelegate *)theAppDelegate
 {
@@ -125,6 +150,37 @@
     [_iTunesButton setTitle:@"select iTunes track" forState:UIControlStateNormal];
 }
 
+// --- implementation of MPMediaPickerControllerDelegate protocol ---
+
+- (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [loadingView removeFromSuperview];
+
+    knobControl.enabled = YES;
+
+    mediaCollection = mediaItemCollection;
+
+    [musicPlayer setQueueWithItemCollection:mediaCollection];
+    [musicPlayer play];
+    displayLink.paused = NO;
+
+    trackLength = ((NSNumber*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyPlaybackDuration]).doubleValue;
+    NSLog(@"Selected item duration is %f", trackLength);
+    [self updateLabel:_trackLengthLabel withTime:trackLength];
+
+    NSString* title = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyTitle];
+    NSString* artist = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyArtist];
+    [_iTunesButton setTitle:[NSString stringWithFormat:@"%@ - %@", artist, title] forState:UIControlStateNormal];
+}
+
+- (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [loadingView removeFromSuperview];
+}
+
+// callback for the IOSKnobControl
 - (void)knobRotated:(IOSKnobControl*)sender
 {
     /*
@@ -136,6 +192,7 @@
     [self updateProgress];
 }
 
+// callback for the CADisplayLink
 - (void)animateKnob:(CADisplayLink*)link
 {
     // cheap way of detecting touch down/up events in this unusual scenario
@@ -175,33 +232,7 @@
     [self updateProgress];
 }
 
-- (void)mediaPicker:(MPMediaPickerController *)mediaPicker didPickMediaItems:(MPMediaItemCollection *)mediaItemCollection
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [loadingView removeFromSuperview];
-
-    knobControl.enabled = YES;
-
-    mediaCollection = mediaItemCollection;
-
-    [musicPlayer setQueueWithItemCollection:mediaCollection];
-    [musicPlayer play];
-    displayLink.paused = NO;
-
-    trackLength = ((NSNumber*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyPlaybackDuration]).doubleValue;
-    NSLog(@"Selected item duration is %f", trackLength);
-    [self updateLabel:_trackLengthLabel withTime:trackLength];
-
-    NSString* title = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyTitle];
-    NSString* artist = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyArtist];
-    [_iTunesButton setTitle:[NSString stringWithFormat:@"%@ - %@", artist, title] forState:UIControlStateNormal];
-}
-
-- (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-    [loadingView removeFromSuperview];
-}
+#pragma mark - Private methods
 
 - (void)createKnobControl
 {
