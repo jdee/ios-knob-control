@@ -105,8 +105,8 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
 
     func addLoadingView() {
         view.addSubview(loadingView)
-        /* The main reason for using constraints here (with rotation disabled) is to make the views in this demo layout properly on iOS 6 as well as 7+. This works on iOS 7, but not on 6 for some reason.
-         * However, it's also quite unnecessary. But it should work, I think.
+        /* The main reason for using constraints in the storyboard (with rotation disabled) is to make the views in this demo lay out properly on iOS 6 as well as 7+. These constraints work on iOS 7, but not on 6 for some reason.
+         * However, it's also quite unnecessary here, since the frames are explicitly computed in viewDidLoad above. But it should work, I think.
         view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
         view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1.0, constant: 0.0))

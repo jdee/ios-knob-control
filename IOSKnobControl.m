@@ -19,6 +19,10 @@
  * Return animations rotate through this many radians per second when self.timeScale == 1.0.
  */
 #define IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE 0.52359878163217 // M_PI/6.0 rad/s
+
+// 1,000 RPM, faster than a finger can reasonably rotate the knob. see comments in followGestureToPosition:duration:
+#define IKC_FAST_ANGULAR_VELOCITY (200.0 * IKC_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE)
+
 /*
  * Rotary dial animations are 10 times faster.
  */
@@ -736,25 +740,38 @@ static CGRect adjustFrame(CGRect frame) {
     float actual = self.clockwise ? position : -position;
     float current = self.clockwise ? _position : -_position;
 
-    if (duration > 0.0) {
-        // Gratefully borrowed from http://www.raywenderlich.com/56885/custom-control-for-ios-tutorial-a-reusable-knob
-        [CATransaction new];
-        [CATransaction setDisableActions:YES];
-        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+    // the CALayer already makes the rotation go the right way. this makes our computation of the minDuration
+    // accurate.
+    while (actual > current + M_PI) actual -= 2.0*M_PI;
+    while (actual <= current - M_PI) actual += 2.0*M_PI;
 
-        CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-        animation.values = @[@(current), @(actual)];
-        animation.keyTimes = @[@(0.0), @(1.0)];
-        animation.duration = duration;
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+    // Calling this method with duration == 0.0 previously elided the animation
+    // below and just assigned a new value to the transform property of the imageLayer. On iOS 7+, at least,
+    // this change was not instantaneous, and the default rotation rate for the CALayer was not fast enough to keep up with a
+    // quick finger. As a result, although (or perhaps because) pan events are received frequently when using IKCGestureOneFingerRotation,
+    // repeated assignments to the transform property without using an explicit animation usually made the control lag.
+    // Apparently it would eventually drop some of those
+    // transforms from its queue in an attempt to catch up and would end up rotating in the wrong direction.
+    // Since eliminating that in favor of this fast animation, the behavior of the knob under rotation has changed. Previously,
+    // I was used to watching the pip on the default knob image lag behind my finger if I started with the finger on top of the
+    // pip. Now the knob tracks so well, I can never see the pip; it's always right under my finger. Huzzah!
+    float minDuration = fabsf(actual-current)/IKC_FAST_ANGULAR_VELOCITY;
+    duration = MAX(minDuration, fabsf(duration));
 
-        [imageLayer addAnimation:animation forKey:nil];
+    // Gratefully borrowed from http://www.raywenderlich.com/56885/custom-control-for-ios-tutorial-a-reusable-knob
+    [CATransaction new];
+    [CATransaction setDisableActions:YES];
+    imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
+    animation.values = @[@(current), @(actual)];
+    animation.keyTimes = @[@(0.0), @(1.0)];
+    animation.duration = duration;
+    animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
+
+    [imageLayer addAnimation:animation forKey:nil];
         
-        [CATransaction commit];
-    }
-    else {
-        imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
-    }
+    [CATransaction commit];
 
     _position = position;
     if (_mode != IKCMRotaryDial)
@@ -951,9 +968,7 @@ static CGRect adjustFrame(CGRect frame) {
         default:
             // just track the touch while the gesture is in progress
             self.position = position;
-            if (rotating == NO) {
-                rotating = YES;
-            }
+            rotating = YES;
             break;
     }
 }
