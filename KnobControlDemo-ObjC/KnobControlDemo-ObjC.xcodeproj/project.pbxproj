@@ -11,7 +11,7 @@
 		7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */; };
 		7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B55189ABEC9003E7F6A /* InfoPlist.strings */; };
-		7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */; };
+		7B199B60189ABEC9003E7F6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B5E189ABEC9003E7F6A /* Main.storyboard */; };
 		7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B67189ABEC9003E7F6A /* Images.xcassets */; };
 		7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B6E189ABEC9003E7F6A /* XCTest.framework */; };
 		7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
@@ -51,7 +51,7 @@
 		7B199B5A189ABEC9003E7F6A /* KnobControlDemo-ObjC-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KnobControlDemo-ObjC-Prefix.pch"; sourceTree = "<group>"; };
 		7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDAppDelegate.h; sourceTree = "<group>"; };
 		7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KCDAppDelegate.m; sourceTree = "<group>"; };
-		7B199B5F189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
+		7B199B5F189ABEC9003E7F6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDContinuousViewController.h; sourceTree = "<group>"; };
 		7B199B67189ABEC9003E7F6A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../../Images.xcassets; sourceTree = "<group>"; };
 		7B199B6D189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KnobControlDemo-ObjCTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,8 +137,8 @@
 			children = (
 				7B199B5B189ABEC9003E7F6A /* KCDAppDelegate.h */,
 				7B199B5C189ABEC9003E7F6A /* KCDAppDelegate.m */,
-				7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */,
 				7B662CA51932A78D00C5D676 /* View Controllers */,
+				7B199B5E189ABEC9003E7F6A /* Main.storyboard */,
 				7B199B67189ABEC9003E7F6A /* Images.xcassets */,
 				7B199B53189ABEC9003E7F6A /* Supporting Files */,
 			);
@@ -281,7 +281,7 @@
 				7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */,
 				7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */,
 				7B199B85189AC13D003E7F6A /* README.md in Resources */,
-				7B199B60189ABEC9003E7F6A /* Main_iPhone.storyboard in Resources */,
+				7B199B60189ABEC9003E7F6A /* Main.storyboard in Resources */,
 				7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -339,12 +339,12 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		7B199B5E189ABEC9003E7F6A /* Main_iPhone.storyboard */ = {
+		7B199B5E189ABEC9003E7F6A /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				7B199B5F189ABEC9003E7F6A /* Base */,
 			);
-			name = Main_iPhone.storyboard;
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 		7B199B77189ABEC9003E7F6A /* InfoPlist.strings */ = {
