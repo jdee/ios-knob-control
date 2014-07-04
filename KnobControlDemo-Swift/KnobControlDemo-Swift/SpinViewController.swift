@@ -36,7 +36,7 @@ import UIKit
  * touchInside properties of the UIControl base class, but using the highlighted property has produced more consistent
  * results. All these things would indicate necessary changes to the control if this were a typical use.
  */
-class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
+class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
 
     // Storyboard outlets
     @IBOutlet var knobHolder : UIView

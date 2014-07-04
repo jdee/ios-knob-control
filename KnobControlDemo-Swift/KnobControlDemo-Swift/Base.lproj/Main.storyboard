@@ -76,10 +76,10 @@
             </objects>
             <point key="canvasLocation" x="2860" y="1821"/>
         </scene>
-        <!--Scratch View Controller - Scratch-->
+        <!--Spin View Controller - Spin-->
         <scene sceneID="wvb-Tn-9VG">
             <objects>
-                <viewController id="3ab-cB-v4V" customClass="ScratchViewController" customModule="KnobControlDemo_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="3ab-cB-v4V" customClass="SpinViewController" customModule="KnobControlDemo_Swift" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="KqY-a7-8XW"/>
                         <viewControllerLayoutGuide type="bottom" id="0dL-IY-lGG"/>
@@ -169,7 +169,7 @@
                             <constraint firstItem="CWB-lG-M28" firstAttribute="leading" secondItem="01j-Il-08J" secondAttribute="trailing" constant="8" id="wQv-FM-9TW"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Scratch" id="mUs-sp-8nG"/>
+                    <tabBarItem key="tabBarItem" title="Spin" id="mUs-sp-8nG"/>
                     <connections>
                         <outlet property="iTunesButton" destination="YGz-Xg-4Ue" id="YJw-Xa-lif"/>
                         <outlet property="knobHolder" destination="pg5-wA-kSM" id="P7t-zb-gr8"/>
