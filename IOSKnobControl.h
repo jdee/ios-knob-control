@@ -234,8 +234,8 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * and max if circular == NO. If the @a position is greater than max or less than min, it is adjusted to the closest of those values.
  * Next, the value of @a position is constrained to lie in (-M_PI,M_PI] by adding a (possibly zero or negative) integer multiple of 2*M_PI.
  * Finally, the @ref position property is set to this value. If @a animated is YES, the knob image gradually rotates to the new position;
- * otherwise the visual change is immediate. In either case, the @ref position property changes its value immediately, and a
- * UIControlEventValueChanged is generated.
+ * otherwise the visual change is immediate. In either case, the @ref position property changes its value immediately. No UIControlEventValueChanged 
+ * is generated.
  *
  * Though the @a position will be forced to lie between the @ref min and @ref max properties, it may otherwise be set to a disallowed position.
  * That is, if mode is IKCModeLinearReturn, the
