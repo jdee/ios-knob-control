@@ -774,10 +774,6 @@ static CGRect adjustFrame(CGRect frame) {
     [CATransaction commit];
 
     _position = position;
-    if (_mode != IKCMRotaryDial)
-    {
-        [self sendActionsForControlEvents:UIControlEventValueChanged];
-    }
 }
 
 #pragma mark - Private Methods: Gesture Recognition
@@ -970,6 +966,11 @@ static CGRect adjustFrame(CGRect frame) {
             self.position = position;
             rotating = YES;
             break;
+    }
+
+    if (_mode != IKCMRotaryDial)
+    {
+        [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
 }
 

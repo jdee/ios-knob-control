@@ -30,7 +30,11 @@ import UIKit
  *
  * Also note that this is a case where the knob is no longer a knob. To simulate a turntable, the knob is made to rotate
  * continuously at a constant angular velocity in the absence of gestures from the user. This is a novel use of the control.
- * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore.
+ * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore. Detection of touch
+ * up/down events is done in a cheap way in the animateControl() callback. And the IOSKnobControl's highlighted state is
+ * used to determine whether the user is currently interacting with it. This may be possible using the tracking and
+ * touchInside properties of the UIControl base class, but using the highlighted property has produced more consistent
+ * results. All these things would indicate necessary changes to the control if this were a typical use.
  */
 class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
 
@@ -50,7 +54,6 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
     var volumeView : MPVolumeView!
     var loadingView : UIView!
 
-    var lastPosition : Float = 0
     var trackLength : Double = 0
     var currentPlaybackTime : Double = 0
     var touchIsDown : Bool = false
@@ -92,8 +95,6 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
         createDisplayLink()
         createMusicPlayer()
         createLoadingView()
-
-        lastPosition = knobControl.position // 0 anyway
 
         // arrange to be notified via resumeFromBackground() when the app becomes active
         appDelegate.foregrounder = self
@@ -188,9 +189,9 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
             currentPlaybackTime = musicPlayer.currentPlaybackTime
         }
         else if touchIsDown && !knobControl.highlighted {
+            musicPlayer.currentPlaybackTime = normalizedPlaybackTime
             musicPlayer.play()
             NSLog("touch came up. setting currentPlaybackTime to %f", normalizedPlaybackTime)
-            musicPlayer.currentPlaybackTime = normalizedPlaybackTime
         }
         touchIsDown = knobControl.highlighted
 
@@ -199,22 +200,16 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
             return
         }
 
-        knobControl.position += Float(link.duration) * angularMomentum * Float(link.frameInterval)
-        lastPosition = knobControl.position
         currentPlaybackTime = musicPlayer.currentPlaybackTime
+        // knobControl.position += Float(link.duration) * Float(link.frameInterval) * angularMomentum
+        knobControl.position = Float(currentPlaybackTime) * angularMomentum
 
         updateProgress()
     }
 
     // callback for the IOSKnobControl
     func knobRotated(sender: IOSKnobControl) {
-        var delta = sender.position - lastPosition
-        lastPosition = sender.position
-
-        // NSLog("delta is %f; delta/omega = %f; currentPlaybackTime is %f", delta, Double(delta/angularMomentum), currentPlaybackTime)
-
-        currentPlaybackTime += Double(delta/angularMomentum)
-        
+        currentPlaybackTime = Double(sender.position/angularMomentum)
         updateProgress()
     }
 
@@ -261,6 +256,7 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
         // the whole view by adding a transparent view on top with an activity spinner. This is added as a subview of the main
         // view, on top of everything else, in selectTrack(), when the user taps the button. This is kind of hard to do in the
         // storyboard.
+        // This could be the reason for the delay: <MPRemoteMediaPickerController: 0x14e723e0> timed out waiting for fence barrier from com.apple.MusicUIService
         loadingView = UIView(frame: view.bounds)
         loadingView.opaque = false
         loadingView.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
