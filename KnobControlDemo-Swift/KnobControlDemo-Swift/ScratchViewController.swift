@@ -17,24 +17,45 @@ import MediaPlayer
 import QuartzCore // for CADisplayLink
 import UIKit
 
+/*
+ * This demo presents a music player using an animated knob control to simulate a spinning 33 1/3 RPM vinyl record and
+ * play a single track from the user's iTunes library in an infinite loop.
+ * You can control the playback position by manually rotating the record using one-finger rotation. The position and
+ * track length are indicated using labels and a progress view. There is also a system volume control, but see the
+ * comments below in createMusicPlayer(). Note that the MPMusicPlayerController by default loses its state when the
+ * app enters the background. It stops playing, and it cannot resume with a simple call to play() after it returns to
+ * the foreground. A real music player app should solve this problem and allow playback to continue in the background,
+ * but for this demo, which is already a little more complex than the other tabs, we just restore the view to its initial
+ * state whenever it enters the foreground and let the user pick a new song.
+ *
+ * Also note that this is a case where the knob is no longer a knob. To simulate a turntable, the knob is made to rotate
+ * continuously at a constant angular velocity in the absence of gestures from the user. This is a novel use of the control.
+ * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore.
+ */
 class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
 
+    // Storyboard outlets
     @IBOutlet var knobHolder : UIView
     @IBOutlet var iTunesButton : UIButton
     @IBOutlet var trackProgress : UIProgressView
     @IBOutlet var trackLengthLabel : UILabel
     @IBOutlet var trackProgressLabel : UILabel
+    @IBOutlet var volumeViewHolder : UIView
 
+    // other stored properties
     var knobControl : IOSKnobControl!
     var displayLink : CADisplayLink!
     var musicPlayer : MPMusicPlayerController!
     var mediaCollection : MPMediaItemCollection?
+    var volumeView : MPVolumeView!
     var loadingView : UIView!
 
     var lastPosition : Float = 0
     var trackLength : Double = 0
     var currentPlaybackTime : Double = 0
     var touchIsDown : Bool = false
+
+    // computed properties
 
     var normalizedPlaybackTime : Double {
     get {
@@ -52,70 +73,33 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
     }
     }
 
+    // constant(s)
+
     let angularMomentum = 10 * Float(M_PI) / 9 // 33 1/3 RPM = 100 rev./180 s
+
+    /*
+     * Never thought I'd miss the preprocessor, but where's mah pragma mark?
+     */
+
+    /*
+     * View lifecycle
+     */
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSLog("view did load")
-
-        knobControl = IOSKnobControl(frame:knobHolder.bounds, imageNamed:"disc")
-        knobControl.mode = .Continuous
-        knobControl.circular = true
-        knobControl.clockwise = true
-        knobControl.enabled = false    // wait till a track is selected to enable the control
-        knobControl.normalized = false // this lets us fast forward and rewind using the knob
-
-        knobControl.addTarget(self, action: "knobRotated:", forControlEvents: .ValueChanged)
-
-        knobHolder.addSubview(knobControl)
+        createKnobControl()
+        createDisplayLink()
+        createMusicPlayer()
+        createLoadingView()
 
         lastPosition = knobControl.position // 0 anyway
 
-        // CADisplayLink from CoreAnimation/QuartzCore calls the supplied selector on the main thread
-        // whenever it's time to prepare a frame for display. It includes a lot of conveniences, like
-        // easy scaling of the frame rate and automatic pause on background.
-        displayLink = CADisplayLink(target: self, selector: "animateKnob:")
-        displayLink.frameInterval = 3 // 20 fps
-        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
-
-        // could do this as a lazy prop or even a constant initializer perhaps
-        musicPlayer = MPMusicPlayerController.applicationMusicPlayer()
-        musicPlayer.repeatMode = .All
-
         // arrange to be notified via resumeFromBackground() when the app becomes active
         appDelegate.foregrounder = self
-
-        // The iTunes library load can take a little time, which can be confusing, so we can provide some feedback and disable
-        // the whole view by adding a transparent view on top with an activity spinner. This is added as a subview of the main
-        // view, on top of everything else, in selectTrack(), when the user taps the button. This is kind of hard to do in the
-        // storyboard.
-        loadingView = UIView(frame: view.bounds)
-        loadingView.opaque = false
-        loadingView.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
-
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-        spinner.startAnimating()
-        spinner.frame.origin.x = (view.bounds.size.width - spinner.frame.size.width) * 0.5
-        spinner.frame.origin.y = (view.bounds.size.height - spinner.frame.size.height) * 0.5
-        loadingView.addSubview(spinner)
-        loadingView.addConstraint(NSLayoutConstraint(item: spinner, attribute: .Leading, relatedBy: .Equal, toItem: loadingView, attribute: .Leading, multiplier: 1.0, constant: spinner.frame.origin.x))
-        loadingView.addConstraint(NSLayoutConstraint(item: spinner, attribute: .Top, relatedBy: .Equal, toItem: loadingView, attribute: .Top, multiplier: 1.0, constant: spinner.frame.origin.y))
-    }
-
-    func addLoadingView() {
-        view.addSubview(loadingView)
-        /* The main reason for using constraints in the storyboard (with rotation disabled) is to make the views in this demo lay out properly on iOS 6 as well as 7+. These constraints work on iOS 7, but not on 6 for some reason.
-         * However, it's also quite unnecessary here, since the frames are explicitly computed in viewDidLoad above. But it should work, I think.
-        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
-        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
-         */
     }
 
     override func viewWillUnload()  {
-        NSLog("view will unload")
         // not sure if this is necessary
         displayLink.invalidate()
         super.viewWillUnload()
@@ -137,6 +121,23 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
         }
     }
 
+    /*
+     * IBActions, protocol implementations and other callbacks.
+     */
+
+    // called when the user taps the button to select a track from iTunes
+    @IBAction func selectTrack(sender: UIButton) {
+        addLoadingView()
+
+        let picker = MPMediaPickerController(mediaTypes: .AnyAudio)
+        picker.allowsPickingMultipleItems = false
+        picker.delegate = self
+        picker.prompt = "Select a track"
+        presentViewController(picker, animated: true, completion: nil)
+    }
+
+    // --- implementation of Foregrounder protocol ---
+
     func resumeFromBackground(appDelegate: AppDelegate) {
         /*
          * The MPMusicPlayerController dumps the user's selection when the app is backgrounded.
@@ -151,48 +152,7 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
         iTunesButton.setTitle("select iTunes track", forState: .Normal)
     }
 
-    // called when the user taps the button to select a track from iTunes
-    @IBAction func selectTrack(sender: UIButton) {
-        addLoadingView()
-
-        let picker = MPMediaPickerController(mediaTypes: .AnyAudio)
-        picker.allowsPickingMultipleItems = false
-        picker.delegate = self
-        picker.prompt = "Select a track"
-        presentViewController(picker, animated: true, completion: nil)
-    }
-
-    func animateKnob(link: CADisplayLink) {
-        // cheap way of detecting touch down/up events in this unusual scenario
-        if !touchIsDown && knobControl.highlighted {
-            musicPlayer.pause()
-            currentPlaybackTime = musicPlayer.currentPlaybackTime
-        }
-        else if touchIsDown && !knobControl.highlighted {
-            musicPlayer.play()
-            NSLog("touch came up. setting currentPlaybackTime to %f", normalizedPlaybackTime)
-            musicPlayer.currentPlaybackTime = normalizedPlaybackTime
-        }
-        touchIsDown = knobControl.highlighted
-
-        // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
-        if touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == .Stopped {
-            return
-        }
-
-        knobControl.position += Float(link.duration) * angularMomentum * Float(link.frameInterval)
-        lastPosition = knobControl.position
-        currentPlaybackTime = musicPlayer.currentPlaybackTime
-
-        updateProgress()
-    }
-
-    func updateProgress() {
-        let progress = normalizedPlaybackTime / trackLength
-        // NSLog("Setting track progress to %f", progress)
-        trackProgress.progress = Float(progress)
-        updateLabel(trackProgressLabel, withTime: normalizedPlaybackTime)
-    }
+    // --- implementation of MPMediaPickerControllerDelegate protocol ---
 
     func mediaPicker(mediaPicker: MPMediaPickerController!, didPickMediaItems mediaItemCollection: MPMediaItemCollection!) {
         dismissViewControllerAnimated(true, completion: nil)
@@ -220,6 +180,33 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
         loadingView.removeFromSuperview()
     }
 
+    // callback for the CADisplayLink
+    func animateKnob(link: CADisplayLink) {
+        // cheap way of detecting touch down/up events in this unusual scenario
+        if !touchIsDown && knobControl.highlighted {
+            musicPlayer.pause()
+            currentPlaybackTime = musicPlayer.currentPlaybackTime
+        }
+        else if touchIsDown && !knobControl.highlighted {
+            musicPlayer.play()
+            NSLog("touch came up. setting currentPlaybackTime to %f", normalizedPlaybackTime)
+            musicPlayer.currentPlaybackTime = normalizedPlaybackTime
+        }
+        touchIsDown = knobControl.highlighted
+
+        // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
+        if touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == .Stopped {
+            return
+        }
+
+        knobControl.position += Float(link.duration) * angularMomentum * Float(link.frameInterval)
+        lastPosition = knobControl.position
+        currentPlaybackTime = musicPlayer.currentPlaybackTime
+
+        updateProgress()
+    }
+
+    // callback for the IOSKnobControl
     func knobRotated(sender: IOSKnobControl) {
         var delta = sender.position - lastPosition
         lastPosition = sender.position
@@ -227,13 +214,87 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
         // NSLog("delta is %f; delta/omega = %f; currentPlaybackTime is %f", delta, Double(delta/angularMomentum), currentPlaybackTime)
 
         currentPlaybackTime += Double(delta/angularMomentum)
-
+        
         updateProgress()
+    }
+
+    /*
+     * Internal convenience functions for DRYness, readability, and, in any other language, privacy.
+     */
+
+    func createKnobControl() {
+        knobControl = IOSKnobControl(frame:knobHolder.bounds, imageNamed:"disc")
+        knobControl.mode = .Continuous
+        knobControl.circular = true
+        knobControl.clockwise = true
+        knobControl.enabled = false    // wait till a track is selected to enable the control
+        knobControl.normalized = false // this lets us fast forward and rewind using the knob
+        knobControl.addTarget(self, action: "knobRotated:", forControlEvents: .ValueChanged)
+        knobHolder.addSubview(knobControl)
+    }
+
+    func createDisplayLink() {
+        // CADisplayLink from CoreAnimation/QuartzCore calls the supplied selector on the main thread
+        // whenever it's time to prepare a frame for display. It includes a lot of conveniences, like
+        // easy scaling of the frame rate and automatic pause on background.
+        displayLink = CADisplayLink(target: self, selector: "animateKnob:")
+        displayLink.frameInterval = 3 // 20 fps
+        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
+    }
+
+    func createMusicPlayer() {
+        // could do this as a lazy prop or even a constant initializer perhaps
+        musicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+        musicPlayer.repeatMode = .All
+
+        // this is the recommended (only?) way to adjust the system volume, which is what the
+        // MPMusicPlayerController requires. it's unsatisfying in a knob-control demo not to be able
+        // to use a volume knob. it might be possible to use the AVAudioPlayer with items from the
+        // MPMediaPicker. I've had spotty results adjusting the AVAudioPlayer volume before though.
+        // maybe this demo doesn't need to adjust the volume, but at least this is very simple.
+        volumeView = MPVolumeView(frame:volumeViewHolder.bounds)
+        volumeViewHolder.addSubview(volumeView)
+    }
+
+    func createLoadingView() {
+        // The iTunes library load can take a little time, which can be confusing, so we can provide some feedback and disable
+        // the whole view by adding a transparent view on top with an activity spinner. This is added as a subview of the main
+        // view, on top of everything else, in selectTrack(), when the user taps the button. This is kind of hard to do in the
+        // storyboard.
+        loadingView = UIView(frame: view.bounds)
+        loadingView.opaque = false
+        loadingView.backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        spinner.startAnimating()
+        spinner.frame.origin.x = (view.bounds.size.width - spinner.frame.size.width) * 0.5
+        spinner.frame.origin.y = (view.bounds.size.height - spinner.frame.size.height) * 0.5
+        loadingView.addSubview(spinner)
+        loadingView.addConstraint(NSLayoutConstraint(item: spinner, attribute: .Leading, relatedBy: .Equal, toItem: loadingView, attribute: .Leading, multiplier: 1.0, constant: spinner.frame.origin.x))
+        loadingView.addConstraint(NSLayoutConstraint(item: spinner, attribute: .Top, relatedBy: .Equal, toItem: loadingView, attribute: .Top, multiplier: 1.0, constant: spinner.frame.origin.y))
+    }
+
+    func addLoadingView() {
+        view.addSubview(loadingView)
+        /* The main reason for using constraints in the storyboard (with rotation disabled) is to make the views in this demo lay out properly on iOS 6 as well as 7+. These constraints work on iOS 7, but not on 6 for some reason.
+        * However, it's also quite unnecessary here, since the frames are explicitly computed in viewDidLoad above. But it should work, I think.
+        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Top, relatedBy: .Equal, toItem: view, attribute: .Top, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .Bottom, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Leading, relatedBy: .Equal, toItem: view, attribute: .Leading, multiplier: 1.0, constant: 0.0))
+        view.addConstraint(NSLayoutConstraint(item: loadingView, attribute: .Trailing, relatedBy: .Equal, toItem: view, attribute: .Trailing, multiplier: 1.0, constant: 0.0))
+        */
+    }
+
+    func updateProgress() {
+        let progress = normalizedPlaybackTime / trackLength
+        // NSLog("Setting track progress to %f", progress)
+        trackProgress.progress = Float(progress)
+        updateLabel(trackProgressLabel, withTime: normalizedPlaybackTime)
     }
 
     func updateLabel(label:UILabel, withTime time:Double) {
         var minutes = Int(time / 60)       // this is a floor
-        var seconds = Int(time % 60 + 0.5) // this is rounded up
+        var seconds = Int(time % 60 + 0.5) // this is rounded up or down
         if seconds == 60 {
             // if seconds rounds up to 60, increment minutes
             ++minutes
