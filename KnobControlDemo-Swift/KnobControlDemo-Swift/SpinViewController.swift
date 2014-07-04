@@ -100,12 +100,6 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         appDelegate.foregrounder = self
     }
 
-    override func viewWillUnload()  {
-        // not sure if this is necessary
-        displayLink.invalidate()
-        super.viewWillUnload()
-    }
-
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         if musicPlayer.nowPlayingItem {
@@ -295,9 +289,14 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     }
 
     func updateProgress() {
-        let progress = normalizedPlaybackTime / trackLength
-        // NSLog("Setting track progress to %f", progress)
-        trackProgress.progress = Float(progress)
+        if trackLength > 0 {
+            let progress = normalizedPlaybackTime / trackLength
+            // NSLog("Setting track progress to %f", progress)
+            trackProgress.progress = Float(progress)
+        }
+        else {
+            trackProgress.progress = 0
+        }
         updateLabel(trackProgressLabel, withTime: normalizedPlaybackTime)
     }
 

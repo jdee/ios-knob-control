@@ -15,11 +15,17 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol KCDForegrounder;
+#import "KCDForegrounder.h"
 
-@interface KCDAppDelegate : UIResponder <UIApplicationDelegate>
+@interface KCDSpinViewController : UIViewController <KCDForegrounder, MPMediaPickerControllerDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
-@property (nonatomic, weak) id<KCDForegrounder> foregrounder;
+@property (nonatomic) IBOutlet UIButton* iTunesButton;
+@property (nonatomic) IBOutlet UIView* knobHolder;
+@property (nonatomic) IBOutlet UILabel* trackProgressLabel;
+@property (nonatomic) IBOutlet UILabel* trackLengthLabel;
+@property (nonatomic) IBOutlet UIProgressView* trackProgress;
+@property (nonatomic) IBOutlet UIView* volumeViewHolder;
+
+- (IBAction)selectTrack:(UIButton*)sender;
 
 @end

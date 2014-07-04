@@ -27,6 +27,9 @@
 		7B52686E1965CD0000732EA4 /* KCDImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */; };
 		7B52686F1965CD0000732EA4 /* KCDRotaryDialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */; };
 		7B5268701965CF8900732EA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
+		7B577A5B19675DD1002D8327 /* KCDSpinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B577A5A19675DD1002D8327 /* KCDSpinViewController.m */; };
+		7B577A5E19675F6D002D8327 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B577A5C19675F6D002D8327 /* MediaPlayer.framework */; };
+		7B577A5F19675F6D002D8327 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B577A5D19675F6D002D8327 /* QuartzCore.framework */; };
 		7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7BE81C7F18B7B9DE0088814A /* ChangeLog */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +71,11 @@
 		7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDImageViewController.m; sourceTree = "<group>"; };
 		7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDFeedbackViewController.h; sourceTree = "<group>"; };
 		7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDFeedbackViewController.m; sourceTree = "<group>"; };
+		7B577A5919675DD1002D8327 /* KCDSpinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDSpinViewController.h; sourceTree = "<group>"; };
+		7B577A5A19675DD1002D8327 /* KCDSpinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDSpinViewController.m; sourceTree = "<group>"; };
+		7B577A5C19675F6D002D8327 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		7B577A5D19675F6D002D8327 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		7B577A601967627E002D8327 /* KCDForegrounder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDForegrounder.h; sourceTree = "<group>"; };
 		7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDRotaryDialViewController.h; sourceTree = "<group>"; };
 		7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDRotaryDialViewController.m; sourceTree = "<group>"; };
 		7B662CA91935364B00C5D676 /* KCDImageChooser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDImageChooser.h; sourceTree = "<group>"; };
@@ -80,6 +88,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B577A5E19675F6D002D8327 /* MediaPlayer.framework in Frameworks */,
+				7B577A5F19675F6D002D8327 /* QuartzCore.framework in Frameworks */,
 				7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */,
 				7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */,
 				7B199B4D189ABEC9003E7F6A /* Foundation.framework in Frameworks */,
@@ -124,6 +134,8 @@
 		7B199B4B189ABEC9003E7F6A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7B577A5C19675F6D002D8327 /* MediaPlayer.framework */,
+				7B577A5D19675F6D002D8327 /* QuartzCore.framework */,
 				7B199B4C189ABEC9003E7F6A /* Foundation.framework */,
 				7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */,
 				7B199B50189ABEC9003E7F6A /* UIKit.framework */,
@@ -192,11 +204,14 @@
 				7B2880B318E79EB800A0E726 /* KCDDiscreteViewController.m */,
 				7B2880BB18EB3E7A00A0E726 /* KCDFeedbackViewController.h */,
 				7B2880BC18EB3E7A00A0E726 /* KCDFeedbackViewController.m */,
+				7B577A601967627E002D8327 /* KCDForegrounder.h */,
 				7B662CA91935364B00C5D676 /* KCDImageChooser.h */,
 				7B2880B518E7A8C400A0E726 /* KCDImageViewController.h */,
 				7B2880B618E7A8C400A0E726 /* KCDImageViewController.m */,
 				7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */,
 				7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */,
+				7B577A5919675DD1002D8327 /* KCDSpinViewController.h */,
+				7B577A5A19675DD1002D8327 /* KCDSpinViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -301,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B577A5B19675DD1002D8327 /* KCDSpinViewController.m in Sources */,
 				7B5268701965CF8900732EA4 /* main.m in Sources */,
 				7B52686B1965CD0000732EA4 /* KCDAppDelegate.m in Sources */,
 				7B52686C1965CD0000732EA4 /* KCDDiscreteViewController.m in Sources */,
