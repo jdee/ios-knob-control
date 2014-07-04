@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['setfillcolor_3aforstate_3a',['setFillColor:forState:',['../interface_i_o_s_knob_control.html#a83352c92a82be8c401b5f9da78305146',1,'IOSKnobControl']]],
-  ['setimage_3aforstate_3a',['setImage:forState:',['../interface_i_o_s_knob_control.html#abba25b88e6d7970f21c5fb30c357c6e5',1,'IOSKnobControl']]],
-  ['setposition_3aanimated_3a',['setPosition:animated:',['../interface_i_o_s_knob_control.html#a40053d216509bab1ac68fe3c56cc7258',1,'IOSKnobControl']]],
-  ['settitlecolor_3aforstate_3a',['setTitleColor:forState:',['../interface_i_o_s_knob_control.html#a788502d5ced4d39a84dfce4eb5aafc0e',1,'IOSKnobControl']]]
+  ['position',['position',['../interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39',1,'IOSKnobControl']]],
+  ['positionindex',['positionIndex',['../interface_i_o_s_knob_control.html#a748c9f93832ff24e2c868c404e976969',1,'IOSKnobControl']]],
+  ['positions',['positions',['../interface_i_o_s_knob_control.html#a22a233530468c59a028ad0c579c857a1',1,'IOSKnobControl']]]
 ];

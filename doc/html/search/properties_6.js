@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['timescale',['timeScale',['../interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad',1,'IOSKnobControl']]],
-  ['titles',['titles',['../interface_i_o_s_knob_control.html#ae3ace0d2cf9907b8f9aa2e2ba150bf72',1,'IOSKnobControl']]]
+  ['position',['position',['../interface_i_o_s_knob_control.html#a9fd561975d0ccc747d3b40b5d4377d39',1,'IOSKnobControl']]],
+  ['positionindex',['positionIndex',['../interface_i_o_s_knob_control.html#a748c9f93832ff24e2c868c404e976969',1,'IOSKnobControl']]],
+  ['positions',['positions',['../interface_i_o_s_knob_control.html#a22a233530468c59a028ad0c579c857a1',1,'IOSKnobControl']]]
 ];

@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['timescale',['timeScale',['../interface_i_o_s_knob_control.html#a5a432d17639cf2b2ea1a61916215d6ad',1,'IOSKnobControl']]],
-  ['titlecolorforstate_3a',['titleColorForState:',['../interface_i_o_s_knob_control.html#a337007e4418821a9c1bd1aa1879c3151',1,'IOSKnobControl']]],
-  ['titles',['titles',['../interface_i_o_s_knob_control.html#ae3ace0d2cf9907b8f9aa2e2ba150bf72',1,'IOSKnobControl']]]
+  ['setfillcolor_3aforstate_3a',['setFillColor:forState:',['../interface_i_o_s_knob_control.html#a83352c92a82be8c401b5f9da78305146',1,'IOSKnobControl']]],
+  ['setimage_3aforstate_3a',['setImage:forState:',['../interface_i_o_s_knob_control.html#abba25b88e6d7970f21c5fb30c357c6e5',1,'IOSKnobControl']]],
+  ['setposition_3aanimated_3a',['setPosition:animated:',['../interface_i_o_s_knob_control.html#a40053d216509bab1ac68fe3c56cc7258',1,'IOSKnobControl']]],
+  ['settitlecolor_3aforstate_3a',['setTitleColor:forState:',['../interface_i_o_s_knob_control.html#a788502d5ced4d39a84dfce4eb5aafc0e',1,'IOSKnobControl']]]
 ];
