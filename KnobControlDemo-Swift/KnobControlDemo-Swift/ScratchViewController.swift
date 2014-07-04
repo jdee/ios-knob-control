@@ -78,7 +78,7 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
 
     // constant(s)
 
-    let angularMomentum = 10 * Float(M_PI) / 9 // 33 1/3 RPM = 100 rev./180 s
+    let angularVelocity = 10 * Float(M_PI) / 9 // 33 1/3 RPM = 100 rev./180 s
 
     /*
      * Never thought I'd miss the preprocessor, but where's mah pragma mark?
@@ -146,6 +146,7 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
          * selected, prompting the user to select again.
          */
         knobControl.position = 0
+        knobControl.enabled = false
         currentPlaybackTime = 0
         trackLength = 0
         updateProgress()
@@ -185,10 +186,12 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
     func animateKnob(link: CADisplayLink) {
         // cheap way of detecting touch down/up events in this unusual scenario
         if !touchIsDown && knobControl.highlighted {
+            // pause whenever a touch goes down
             musicPlayer.pause()
             currentPlaybackTime = musicPlayer.currentPlaybackTime
         }
         else if touchIsDown && !knobControl.highlighted {
+            // resume whenever the touch comes up
             musicPlayer.currentPlaybackTime = normalizedPlaybackTime
             musicPlayer.play()
             NSLog("touch came up. setting currentPlaybackTime to %f", normalizedPlaybackTime)
@@ -197,27 +200,45 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
 
         // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
         if touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == .Stopped {
+            // if the user is interacting with the knob (or nothing is selected), don't animate it
             return
         }
 
+        /*
+         * If the user is not interacting with the knob, update the currentPlaybackTime, which can
+         * be modified by turning the knob (see knobRotated: below), and adjust the position of
+         * both the knob and the progress view to reflect the new value.
+         */
+
         currentPlaybackTime = musicPlayer.currentPlaybackTime
+
+        // link.duration * link.frameInterval is how long it's been since the last invocation of
+        // this callback, so this is another alternative:
         // knobControl.position += Float(link.duration) * Float(link.frameInterval) * angularMomentum
-        knobControl.position = Float(currentPlaybackTime) * angularMomentum
+
+        // but this is simpler, given the way the knob control and music player work
+        knobControl.position = Float(currentPlaybackTime) * angularVelocity
 
         updateProgress()
     }
 
     // callback for the IOSKnobControl
     func knobRotated(sender: IOSKnobControl) {
-        currentPlaybackTime = Double(sender.position/angularMomentum)
+        /*
+         * Just update this ivar while the knob is being rotated, and adjust the progress view to reflect the same
+         * value. Only assign this to the musicPlayer's currentPlaybackTime property once play resumes when the
+         * touch comes up. See animateKnob() above.
+         */
+        currentPlaybackTime = Double(sender.position/angularVelocity)
         updateProgress()
     }
 
     /*
-     * Internal convenience functions for DRYness, readability, and, in any other language, privacy.
+     * Internal convenience functions for DRYness, readability, and, in other languages, privacy.
      */
 
     func createKnobControl() {
+        // use UIImage(named: "disc") for the .Normal state
         knobControl = IOSKnobControl(frame:knobHolder.bounds, imageNamed:"disc")
         knobControl.mode = .Continuous
         knobControl.circular = true
@@ -225,6 +246,7 @@ class ScratchViewController: UIViewController, MPMediaPickerControllerDelegate, 
         knobControl.enabled = false    // wait till a track is selected to enable the control
         knobControl.normalized = false // this lets us fast forward and rewind using the knob
         knobControl.addTarget(self, action: "knobRotated:", forControlEvents: .ValueChanged)
+        knobControl.setImage(UIImage(named:"disc-disabled"), forState: .Disabled)
         knobHolder.addSubview(knobControl)
     }
 
