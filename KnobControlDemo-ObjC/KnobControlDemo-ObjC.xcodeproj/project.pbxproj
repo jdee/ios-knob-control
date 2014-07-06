@@ -29,7 +29,6 @@
 		7B5268701965CF8900732EA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
 		7B577A5B19675DD1002D8327 /* KCDSpinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B577A5A19675DD1002D8327 /* KCDSpinViewController.m */; };
 		7B577A5E19675F6D002D8327 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B577A5C19675F6D002D8327 /* MediaPlayer.framework */; };
-		7B577A5F19675F6D002D8327 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B577A5D19675F6D002D8327 /* QuartzCore.framework */; };
 		7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7BE81C7F18B7B9DE0088814A /* ChangeLog */; };
 /* End PBXBuildFile section */
 
@@ -89,7 +88,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B577A5E19675F6D002D8327 /* MediaPlayer.framework in Frameworks */,
-				7B577A5F19675F6D002D8327 /* QuartzCore.framework in Frameworks */,
 				7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */,
 				7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */,
 				7B199B4D189ABEC9003E7F6A /* Foundation.framework in Frameworks */,
