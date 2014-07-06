@@ -69,7 +69,9 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * using a number of properties and methods. The control chooses an image based on state,
  * like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and
  * animates rotation of the current image in response, programmatically reading out the current angular position of the knob
- * and generating a UIControlEventValueChanged each time the knob rotates.
+ * and generating a UIControlEventValueChanged each time the knob rotates. It also generates
+ * the following control events when appropriate: UIControlEventTouchDown, UIControlEventTouchDragInside, 
+ * UIControlEventTouchUpInside, UIControlEventTouchCancel.
  *
  * The knob control and all images must be square. Images will usually be circles or regular polygons, with a
  * transparent background or a solid one that matches the view behind it. However, the aspect

@@ -570,7 +570,6 @@ static CGRect adjustFrame(CGRect frame) {
     if (number < 0 || number > 9) return;
 
     lastNumberDialed = number;
-    [self sendActionsForControlEvents:UIControlEventValueChanged];
 
     if (number == 0) number = 10;
 
@@ -926,6 +925,7 @@ static CGRect adjustFrame(CGRect frame) {
             if (r < self.frame.size.width*0.294) return;
 
             [self dialNumber:numberDialed(position)];
+            [self sendActionsForControlEvents:UIControlEventValueChanged];
             break;
         default:
             break;
@@ -941,7 +941,7 @@ static CGRect adjustFrame(CGRect frame) {
             {
                 [self snapToNearestPosition];
             }
-            else if (self.mode == IKCMRotaryDial)
+            else if (self.mode == IKCMRotaryDial && sender.state == UIGestureRecognizerStateEnded)
             {
                 double delta = currentTouch - touchStart;
                 while (delta <= -2.0*M_PI) delta += 2.0*M_PI;
@@ -963,6 +963,7 @@ static CGRect adjustFrame(CGRect frame) {
                 else
                 {
                     [self dialNumber:_numberDialed];
+                    [self sendActionsForControlEvents:UIControlEventValueChanged];
                 }
             }
 
