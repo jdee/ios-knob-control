@@ -1,10 +1,10 @@
 iOS Knob Control
 ================
 
-[imgur](http://i.imgur.com/79kJTnw.png)
-[imgur](http://i.imgur.com/JULtITx.png)
-[imgur](http://i.imgur.com/K4gPFE3.png)
-[imgur](http://i.imgur.com/rsLWAXo.png)
+![Spin](http://i.imgur.com/79kJTnw.png)
+![Continuous](http://i.imgur.com/JULtITx.png)
+![Rotary Dial](http://i.imgur.com/K4gPFE3.png)
+![Feedback](http://i.imgur.com/rsLWAXo.png)
 
 This is a generic, reusable knob control you can insert into any application.
 You may provide custom knob images or use the customizable default images.
