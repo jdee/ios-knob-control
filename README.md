@@ -2,11 +2,11 @@ iOS Knob Control
 ================
 
 ![Spin](http://i.imgur.com/79kJTnw.png)
-
+&nbsp;
 ![Continuous](http://i.imgur.com/JULtITx.png)
-
+&nbsp;
 ![Rotary Dial](http://i.imgur.com/K4gPFE3.png)
-
+&nbsp;
 ![Feedback](http://i.imgur.com/rsLWAXo.png)
 
 This is a generic, reusable knob control you can insert into any application.
