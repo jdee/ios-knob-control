@@ -30,11 +30,7 @@ import UIKit
  *
  * Also note that this is a case where the knob is no longer a knob. To simulate a turntable, the knob is made to rotate
  * continuously at a constant angular velocity in the absence of gestures from the user. This is a novel use of the control.
- * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore. Detection of touch
- * up/down events is done in a cheap way in the animateControl() callback. And the IOSKnobControl's highlighted state is
- * used to determine whether the user is currently interacting with it. This may be possible using the tracking and
- * touchInside properties of the UIControl base class, but using the highlighted property has produced more consistent
- * results. All these things would indicate necessary changes to the control if this were a typical use.
+ * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore.
  */
 class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
 
