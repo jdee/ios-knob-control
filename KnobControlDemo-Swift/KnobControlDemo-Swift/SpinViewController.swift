@@ -101,11 +101,11 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     }
 
     override func viewDidDisappear(animated: Bool) {
-        super.viewDidDisappear(animated)
         if musicPlayer.nowPlayingItem {
             musicPlayer.pause()
             displayLink.paused = true
         }
+        super.viewDidDisappear(animated)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -178,20 +178,6 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
 
     // callback for the CADisplayLink
     func animateKnob(link: CADisplayLink) {
-        // cheap way of detecting touch down/up events in this unusual scenario
-        if !touchIsDown && knobControl.highlighted {
-            // pause whenever a touch goes down
-            musicPlayer.pause()
-            currentPlaybackTime = musicPlayer.currentPlaybackTime
-        }
-        else if touchIsDown && !knobControl.highlighted {
-            // resume whenever the touch comes up
-            musicPlayer.currentPlaybackTime = normalizedPlaybackTime
-            musicPlayer.play()
-            NSLog("touch came up. setting currentPlaybackTime to %f", normalizedPlaybackTime)
-        }
-        touchIsDown = knobControl.highlighted
-
         // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
         if touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == .Stopped {
             // if the user is interacting with the knob (or nothing is selected), don't animate it
@@ -216,7 +202,9 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         updateProgress()
     }
 
-    // callback for the IOSKnobControl
+    // --- callbacks for the IOSKnobControl ---
+
+    // .ValueChanged
     func knobRotated(sender: IOSKnobControl) {
         /*
          * Just update this ivar while the knob is being rotated, and adjust the progress view to reflect the same
@@ -225,6 +213,23 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
          */
         currentPlaybackTime = Double(sender.position/angularVelocity)
         updateProgress()
+    }
+
+    // .TouchDown
+    func touchDown(sender: IOSKnobControl) {
+        // pause whenever a touch goes down
+        musicPlayer.pause()
+        currentPlaybackTime = musicPlayer.currentPlaybackTime
+        touchIsDown = true
+    }
+
+    // .TouchUpInside | .TouchCancel
+    func touchUp(sender: IOSKnobControl) {
+        // resume whenever the touch comes up
+        musicPlayer.currentPlaybackTime = normalizedPlaybackTime
+        musicPlayer.play()
+        NSLog("touch came up. setting currentPlaybackTime to %f", normalizedPlaybackTime)
+        touchIsDown = false
     }
 
     /*
@@ -240,6 +245,8 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         knobControl.enabled = false    // wait till a track is selected to enable the control
         knobControl.normalized = false // this lets us fast forward and rewind using the knob
         knobControl.addTarget(self, action: "knobRotated:", forControlEvents: .ValueChanged)
+        knobControl.addTarget(self, action: "touchDown:", forControlEvents: .TouchDown)
+        knobControl.addTarget(self, action: "touchUp:", forControlEvents: UIControlEvents(UIControlEvents.TouchCancel.toRaw() | UIControlEvents.TouchUpInside.toRaw()))
         knobControl.setImage(UIImage(named:"disc-disabled"), forState: .Disabled)
         knobHolder.addSubview(knobControl)
     }

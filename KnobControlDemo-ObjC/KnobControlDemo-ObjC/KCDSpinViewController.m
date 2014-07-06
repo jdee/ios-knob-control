@@ -57,7 +57,8 @@
     BOOL touchIsDown;
 }
 
-@dynamic normalizedPlaybackTime;
+// This never seems to make a bit of difference. Hence I forgot one of these originally.
+@dynamic normalizedPlaybackTime, appDelegate;
 
 - (double)normalizedPlaybackTime
 {
@@ -111,11 +112,11 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
     if (musicPlayer.nowPlayingItem) {
         [musicPlayer pause];
         displayLink.paused = YES;
     }
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - IBActions, protocol implementations and other callbacks
@@ -180,7 +181,9 @@
     [loadingView removeFromSuperview];
 }
 
-// callback for the IOSKnobControl
+// --- callbacks for the IOSKnobControl ---
+
+// UIControlEventValueChanged
 - (void)knobRotated:(IOSKnobControl*)sender
 {
     /*
@@ -192,22 +195,27 @@
     [self updateProgress];
 }
 
+// UIControlEventTouchDown
+- (void)touchDown:(IOSKnobControl*)sender
+{
+    // pause whenever a touch goes down
+    [musicPlayer pause];
+    currentPlaybackTime = musicPlayer.currentPlaybackTime;
+    touchIsDown = YES;
+}
+
+// UIControlEventTouchCancel | UIControlEventTouchUpInside
+- (void)touchUp:(IOSKnobControl*)sender
+{
+    // resume whenever the touch comes up
+    musicPlayer.currentPlaybackTime = self.normalizedPlaybackTime;
+    [musicPlayer play];
+    touchIsDown = NO;
+}
+
 // callback for the CADisplayLink
 - (void)animateKnob:(CADisplayLink*)link
 {
-    // cheap way of detecting touch down/up events in this unusual scenario
-    if (!touchIsDown && knobControl.highlighted) {
-        // pause whenever a touch goes down
-        [musicPlayer pause];
-        currentPlaybackTime = musicPlayer.currentPlaybackTime;
-    }
-    else if (touchIsDown && !knobControl.highlighted) {
-        // resume whenever the touch comes up
-        musicPlayer.currentPlaybackTime = self.normalizedPlaybackTime;
-        [musicPlayer play];
-    }
-    touchIsDown = knobControl.highlighted;
-
     // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
     if (touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == MPMoviePlaybackStateStopped) {
         // if the user is interacting with the knob (or nothing is selected), don't animate it
@@ -243,6 +251,8 @@
     knobControl.normalized = NO;
     knobControl.enabled = NO;
     [knobControl addTarget:self action:@selector(knobRotated:) forControlEvents:UIControlEventValueChanged];
+    [knobControl addTarget:self action:@selector(touchDown:) forControlEvents:UIControlEventTouchDown];
+    [knobControl addTarget:self action:@selector(touchUp:) forControlEvents:UIControlEventTouchCancel|UIControlEventTouchUpInside];
     [knobControl setImage:[UIImage imageNamed:@"disc-disabled"] forState:UIControlStateDisabled];
     [_knobHolder addSubview:knobControl];
 }
