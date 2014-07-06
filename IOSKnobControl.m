@@ -153,7 +153,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 #pragma mark - Object Lifecycle
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -163,7 +163,7 @@ static CGRect adjustFrame(CGRect frame) {
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame image:(UIImage *)image
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -175,7 +175,7 @@ static CGRect adjustFrame(CGRect frame) {
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame imageNamed:(NSString *)imageSetName
+- (instancetype)initWithFrame:(CGRect)frame imageNamed:(NSString *)imageSetName
 {
     self = [super initWithFrame:frame];
     if (self) {

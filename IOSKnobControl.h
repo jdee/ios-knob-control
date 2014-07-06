@@ -211,14 +211,14 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * setImage:forState: for the UIControlStateNormal state.
  * @param frame the initial frame for the control
  */
-- (id)initWithFrame:(CGRect)frame;
+- (instancetype)initWithFrame:(CGRect)frame;
 
 /**
  * Initialize the control with a specific knob image for the UIControlStateNormal state.
  * @param frame the initial frame for the control
  * @param image an image to use for the control's normal state
  */
-- (id)initWithFrame:(CGRect)frame image:(UIImage*)image;
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage*)image;
 
 /**
  * Initialize the control with a specific knob image for the UIControlStateNormal state. 
@@ -227,7 +227,7 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
  * @param frame the initial frame for the control
  * @param imageSetName the name of an image set in the application's asset catalog
  */
-- (id)initWithFrame:(CGRect)frame imageNamed:(NSString*)imageSetName;
+- (instancetype)initWithFrame:(CGRect)frame imageNamed:(NSString*)imageSetName;
 
 #pragma mark - Public Methods
 
