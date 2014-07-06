@@ -140,6 +140,7 @@
      */
     knobControl.position = 0.0;
     knobControl.enabled = NO;
+    knobControl.foregroundImage = nil;
     currentPlaybackTime = 0.0;
     trackLength = 0.0;
     [self updateProgress];
@@ -155,6 +156,7 @@
     [loadingView removeFromSuperview];
 
     knobControl.enabled = YES;
+    knobControl.foregroundImage = [UIImage imageNamed:@"tonearm"];
 
     mediaCollection = mediaItemCollection;
 
@@ -177,9 +179,7 @@
     [loadingView removeFromSuperview];
 }
 
-// --- callbacks for the IOSKnobControl ---
-
-// UIControlEventValueChanged
+// callback for the IOSKnobControl
 - (void)knobRotated:(IOSKnobControl*)sender
 {
     /*
@@ -191,27 +191,21 @@
     [self updateProgress];
 }
 
-// UIControlEventTouchDown
-- (void)touchDown:(IOSKnobControl*)sender
-{
-    // pause whenever a touch goes down
-    [musicPlayer pause];
-    currentPlaybackTime = musicPlayer.currentPlaybackTime;
-    touchIsDown = YES;
-}
-
-// UIControlEventTouchCancel | UIControlEventTouchUpInside
-- (void)touchUp:(IOSKnobControl*)sender
-{
-    // resume whenever the touch comes up
-    musicPlayer.currentPlaybackTime = self.normalizedPlaybackTime;
-    [musicPlayer play];
-    touchIsDown = NO;
-}
-
 // callback for the CADisplayLink
 - (void)animateKnob:(CADisplayLink*)link
 {
+    if (touchIsDown && !knobControl.highlighted) {
+        // resume whenever the touch comes up
+        musicPlayer.currentPlaybackTime = self.normalizedPlaybackTime;
+        [musicPlayer play];
+    }
+    else if (!touchIsDown && knobControl.highlighted) {
+        // pause whenever a touch goes down
+        [musicPlayer pause];
+        currentPlaybackTime = musicPlayer.currentPlaybackTime;
+    }
+    touchIsDown = knobControl.highlighted;
+
     // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
     if (touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == MPMoviePlaybackStateStopped) {
         // if the user is interacting with the knob (or nothing is selected), don't animate it
@@ -247,8 +241,6 @@
     knobControl.normalized = NO;
     knobControl.enabled = NO;
     [knobControl addTarget:self action:@selector(knobRotated:) forControlEvents:UIControlEventValueChanged];
-    [knobControl addTarget:self action:@selector(touchDown:) forControlEvents:UIControlEventTouchDown];
-    [knobControl addTarget:self action:@selector(touchUp:) forControlEvents:UIControlEventTouchCancel|UIControlEventTouchUpInside];
     [knobControl setImage:[UIImage imageNamed:@"disc-disabled"] forState:UIControlStateDisabled];
     [_knobHolder addSubview:knobControl];
 }

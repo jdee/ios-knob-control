@@ -207,6 +207,8 @@ static CGRect adjustFrame(CGRect frame) {
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.clipsToBounds = YES;
+
+    NSLog(@"initially UIControl has %d gesture recognizer(s)", self.gestureRecognizers.count);
 }
 
 #pragma mark - Public Methods, Properties and Overrides
@@ -802,8 +804,6 @@ static CGRect adjustFrame(CGRect frame) {
 // DEBT: Factor this stuff into a separate GR?
 - (void)handlePan:(UIPanGestureRecognizer *)sender
 {
-    [self sendActionsForGestureRecognizerState:sender.state];
-
     // most recent position of touch in center frame of control.
     CGPoint centerFrameBegin = [self transformLocationToCenterFrame:[sender locationInView:self]];
     CGPoint centerFrameTranslation = [self transformTranslationToCenterFrame:[sender translationInView:self]];
@@ -838,7 +838,8 @@ static CGRect adjustFrame(CGRect frame) {
     NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f (min=%f, max=%f), _position = %f",
           (sender.state == UIGestureRecognizerStateBegan ? "began" :
            sender.state == UIGestureRecognizerStateChanged ? "changed" :
-           sender.state == UIGestureRecognizerStateEnded ? "ended" : "<misc>"), touchStart, positionStart, touch, position, _min, _max, _position);
+           sender.state == UIGestureRecognizerStateEnded ? "ended" :
+           sender.state == UIGestureRecognizerStateCancelled ? "cancelled" : "<misc>"), touchStart, positionStart, touch, position, _min, _max, _position);
     //*/
 
     [self followGesture:sender toPosition:position];
@@ -846,8 +847,6 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)handleRotation:(UIRotationGestureRecognizer*)sender
 {
-    [self sendActionsForGestureRecognizerState:sender.state];
-
     if (sender.state == UIGestureRecognizerStateBegan) {
         positionStart = self.position;
     }
@@ -859,8 +858,6 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)handleVerticalPan:(UIPanGestureRecognizer*)sender
 {
-    [self sendActionsForGestureRecognizerState:sender.state];
-
     if (sender.state == UIGestureRecognizerStateBegan) {
         positionStart = self.position;
     }
@@ -873,8 +870,6 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)handleTap:(UITapGestureRecognizer*)sender
 {
-    [self sendActionsForGestureRecognizerState:sender.state];
-
     if (sender.state != UIGestureRecognizerStateEnded) return;
 
     CGPoint location = [sender locationInView:self];
@@ -982,29 +977,6 @@ static CGRect adjustFrame(CGRect frame) {
     if (_mode != IKCMRotaryDial)
     {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
-    }
-}
-
-// these are generated in addition to the UIControlEventValueChanged
-- (void)sendActionsForGestureRecognizerState:(UIGestureRecognizerState)state
-{
-    switch (state) {
-        case UIGestureRecognizerStateBegan:
-            [self sendActionsForControlEvents:UIControlEventTouchDown];
-            break;
-        case UIGestureRecognizerStateCancelled:
-            [self sendActionsForControlEvents:UIControlEventTouchCancel];
-            break;
-        case UIGestureRecognizerStateChanged:
-            [self sendActionsForControlEvents:UIControlEventTouchDragInside];
-            break;
-        case UIGestureRecognizerStateEnded:
-            // this is the same as UIGestureRecognizerStateRecognized. for discrete gestures (tap),
-            // this is generated, but not began, cancelled or changed.
-            [self sendActionsForControlEvents:UIControlEventTouchUpInside];
-            break;
-        default:
-            break;
     }
 }
 
