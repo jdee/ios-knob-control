@@ -57,7 +57,6 @@
 		7B3F7C12195D109000771BD8 /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = "<group>"; };
 		7B3F7C13195D109000771BD8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		7B5268721965DABF00732EA4 /* SpinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinViewController.swift; sourceTree = "<group>"; };
-		7B5268741965E36D00732EA4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7B5268771965E8C300732EA4 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousViewController.swift; sourceTree = "<group>"; };
@@ -168,7 +167,6 @@
 			isa = PBXGroup;
 			children = (
 				7B5268771965E8C300732EA4 /* MediaPlayer.framework */,
-				7B5268741965E36D00732EA4 /* QuartzCore.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

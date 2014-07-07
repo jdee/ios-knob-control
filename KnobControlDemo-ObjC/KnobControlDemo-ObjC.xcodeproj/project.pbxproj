@@ -73,7 +73,6 @@
 		7B577A5919675DD1002D8327 /* KCDSpinViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDSpinViewController.h; sourceTree = "<group>"; };
 		7B577A5A19675DD1002D8327 /* KCDSpinViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDSpinViewController.m; sourceTree = "<group>"; };
 		7B577A5C19675F6D002D8327 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
-		7B577A5D19675F6D002D8327 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		7B577A601967627E002D8327 /* KCDForegrounder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDForegrounder.h; sourceTree = "<group>"; };
 		7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDRotaryDialViewController.h; sourceTree = "<group>"; };
 		7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDRotaryDialViewController.m; sourceTree = "<group>"; };
@@ -133,7 +132,6 @@
 			isa = PBXGroup;
 			children = (
 				7B577A5C19675F6D002D8327 /* MediaPlayer.framework */,
-				7B577A5D19675F6D002D8327 /* QuartzCore.framework */,
 				7B199B4C189ABEC9003E7F6A /* Foundation.framework */,
 				7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */,
 				7B199B50189ABEC9003E7F6A /* UIKit.framework */,
