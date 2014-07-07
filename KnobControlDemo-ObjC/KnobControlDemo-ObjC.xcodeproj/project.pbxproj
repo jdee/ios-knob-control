@@ -7,15 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7B199B4D189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
-		7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */; };
-		7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B57189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B55189ABEC9003E7F6A /* InfoPlist.strings */; };
 		7B199B60189ABEC9003E7F6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B5E189ABEC9003E7F6A /* Main.storyboard */; };
 		7B199B68189ABEC9003E7F6A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B67189ABEC9003E7F6A /* Images.xcassets */; };
 		7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B6E189ABEC9003E7F6A /* XCTest.framework */; };
-		7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B4C189ABEC9003E7F6A /* Foundation.framework */; };
-		7B199B71189ABEC9003E7F6A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B199B50189ABEC9003E7F6A /* UIKit.framework */; };
 		7B199B79189ABEC9003E7F6A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B77189ABEC9003E7F6A /* InfoPlist.strings */; };
 		7B199B7B189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B7A189ABEC9003E7F6A /* KnobControlDemo-ObjCTests.m */; };
 		7B199B85189AC13D003E7F6A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7B199B84189AC13D003E7F6A /* README.md */; };
@@ -44,9 +39,6 @@
 
 /* Begin PBXFileReference section */
 		7B199B49189ABEC9003E7F6A /* KnobControlDemo-ObjC.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KnobControlDemo-ObjC.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7B199B4C189ABEC9003E7F6A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		7B199B50189ABEC9003E7F6A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		7B199B54189ABEC9003E7F6A /* KnobControlDemo-ObjC-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "KnobControlDemo-ObjC-Info.plist"; sourceTree = "<group>"; };
 		7B199B56189ABEC9003E7F6A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		7B199B58189ABEC9003E7F6A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -87,9 +79,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B577A5E19675F6D002D8327 /* MediaPlayer.framework in Frameworks */,
-				7B199B4F189ABEC9003E7F6A /* CoreGraphics.framework in Frameworks */,
-				7B199B51189ABEC9003E7F6A /* UIKit.framework in Frameworks */,
-				7B199B4D189ABEC9003E7F6A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,8 +87,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7B199B6F189ABEC9003E7F6A /* XCTest.framework in Frameworks */,
-				7B199B71189ABEC9003E7F6A /* UIKit.framework in Frameworks */,
-				7B199B70189ABEC9003E7F6A /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,9 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				7B577A5C19675F6D002D8327 /* MediaPlayer.framework */,
-				7B199B4C189ABEC9003E7F6A /* Foundation.framework */,
-				7B199B4E189ABEC9003E7F6A /* CoreGraphics.framework */,
-				7B199B50189ABEC9003E7F6A /* UIKit.framework */,
 				7B199B6E189ABEC9003E7F6A /* XCTest.framework */,
 			);
 			name = Frameworks;
