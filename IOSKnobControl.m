@@ -207,8 +207,6 @@ static CGRect adjustFrame(CGRect frame) {
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
     self.clipsToBounds = YES;
-
-    NSLog(@"initially UIControl has %d gesture recognizer(s)", self.gestureRecognizers.count);
 }
 
 #pragma mark - Public Methods, Properties and Overrides
@@ -526,7 +524,7 @@ static CGRect adjustFrame(CGRect frame) {
     if (_mode == IKCMRotaryDial && (gesture == IKCGTwoFingerRotation || gesture == IKCGVerticalPan))
     {
 #ifdef DEBUG
-        NSLog(@"IKCMRotaryDial only allows IKCGOneFingerRotation and IKCGTap");
+        NSLog(@"IKCModeRotaryDial only allows IKCGestureOneFingerRotation and IKCGestureTap");
 #endif // DEBUG
         return;
     }
