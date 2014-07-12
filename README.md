@@ -73,6 +73,11 @@ nothing to do with the control. The control uses ARC, so it cannot be used below
 without modification. It has not been tested below iOS 6.1, however, and there may be problems
 there that have not yet been discovered.
 
+Violation
+---------
+
+See [iOS Knob Control and Violation](https://gist.github.com/jdee/f3eeadeb0eaec725edd8).
+
 Documentation
 -------------
 
