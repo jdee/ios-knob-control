@@ -125,6 +125,12 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
 @property (nonatomic, readonly) UIColor* currentTitleColor;
 
 /**
+ * The font name to use when rendering text in the discrete modes, including rotary dial. Default is Helvetica. The font size is determined by the knob size and the number of positions.
+ * CoreText interprets the font name and prefers PostScript names.
+ */
+@property (nonatomic) NSString* fontName;
+
+/**
  * An image to render in the foreground. Like the background image, this is totally stationary. The knob image is sandwiched between them and is the only thing
  * that rotates. Obviously the foreground image has to be at least partly transparent. This is mainly useful for providing a stationary finger stop in the foreground of a
  * rotary dial, but it may be used with any mode.

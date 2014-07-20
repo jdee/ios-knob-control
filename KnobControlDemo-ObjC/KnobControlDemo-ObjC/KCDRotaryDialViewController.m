@@ -44,6 +44,8 @@
     knobControl.mode = IKCModeRotaryDial;
     knobControl.gesture = IKCGestureOneFingerRotation;
 
+    knobControl.fontName = @"TimesNewRomanPSMT";
+
     UIColor* normalColor, *highlightedColor, *titleColor;
     normalColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.0 alpha:0.7];
     highlightedColor = [UIColor colorWithRed:0.0 green:0.7 blue:0.0 alpha:0.7];

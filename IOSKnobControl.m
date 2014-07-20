@@ -13,6 +13,7 @@
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <CoreText/CoreText.h>
 #import "IOSKnobControl.h"
 
 /*
@@ -200,6 +201,7 @@ static CGRect adjustFrame(CGRect frame) {
     _timeScale = 1.0;
     _gesture = IKCGOneFingerRotation;
     _normalized = YES;
+    _fontName = @"Helvetica";
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
@@ -540,6 +542,18 @@ static CGRect adjustFrame(CGRect frame) {
         while (_position > M_PI) _position -= 2.0 * M_PI;
         while (_position <= -M_PI) _position += 2.0 * M_PI;
     }
+}
+
+- (void)setFontName:(NSString *)fontName
+{
+    UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:fontName size:0.0];
+    if ([fontDescriptor matchingFontDescriptorsWithMandatoryKeys:nil].count == 0) {
+        NSLog(@"Failed to find font name \"%@\".", fontName);
+        return;
+    }
+
+    _fontName = fontName;
+    [self updateImage];
 }
 
 - (void)tintColorDidChange
@@ -1128,25 +1142,22 @@ static CGRect adjustFrame(CGRect frame) {
     pipLayer.fillColor = self.currentTitleColor.CGColor;
     stopLayer.fillColor = self.currentTitleColor.CGColor;
 
-    for (CATextLayer* layer in markings) {
-        layer.foregroundColor = self.currentTitleColor.CGColor;
-    }
+    [self addMarkings];
 
-    for (CATextLayer* layer in dialMarkings)
-    {
-        layer.foregroundColor = self.currentTitleColor.CGColor;
-    }
+    [self createDialNumbers];
 }
 
 - (void)addMarkings
 {
-    markings = [NSMutableArray array];
     for (CATextLayer* layer in markings) {
         [layer removeFromSuperlayer];
     }
+    markings = [NSMutableArray array];
+
+    if ((_mode != IKCModeLinearReturn && _mode != IKCModeWheelOfFortune) || self.currentImage) return;
 
     CGFloat fontSize = self.fontSizeForTitles;
-    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+    UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
     int j;
     for (j=0; j<_positions; ++j) {
         // get the title for this marking (use j if none)
@@ -1157,15 +1168,11 @@ static CGRect adjustFrame(CGRect frame) {
             title = [NSString stringWithFormat:@"%d", j];
         }
 
-        // create a CATextLayer to display this string
-        CATextLayer* layer = [CATextLayer layer];
-        layer.string = title;
-        layer.alignmentMode = kCAAlignmentCenter;
+        CALayer* layer = [CALayer layer];
 
-        // set the font size and calculate the size of the title
-        layer.fontSize = fontSize;
-
-        CGSize textSize = [layer.string sizeOfTextWithFont:font];
+        CGSize textSize = [title sizeOfTextWithFont:font];
+        UIImage* image = [self renderLabelImageWithText:title size:textSize fontName:_fontName fontSize:fontSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor];
+        layer.contents = (id)image.CGImage;
 
         // place it at the appropriate angle, taking the clockwise switch into account
         float position;
@@ -1182,8 +1189,10 @@ static CGRect adjustFrame(CGRect frame) {
         float radius = 0.4*self.bounds.size.width - 0.5*textSize.height;
 
         // place and rotate
+        //*
         layer.frame = CGRectMake((0.5*self.bounds.size.width+radius*sin(actual))-0.5*textSize.width, (0.5*self.bounds.size.height-radius*cos(actual))-0.5*textSize.height, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+        // */
 
         // background is transparent
         layer.opaque = NO;
@@ -1193,6 +1202,59 @@ static CGRect adjustFrame(CGRect frame) {
 
         [shapeLayer addSublayer:layer];
     }
+}
+
+- (UIImage*)renderLabelImageWithText:(NSString*)text size:(CGSize)size fontName:(NSString*)fontName fontSize:(CGFloat)fontSize backgroundColor:(UIColor*)background foregroundColor:(UIColor*)foregroundColor
+{
+    // Account for screen resolution.
+    size.width *= [UIScreen mainScreen].scale;
+    size.height *= [UIScreen mainScreen].scale;
+
+    fontSize *= [UIScreen mainScreen].scale;
+
+    // create a bitmap context for CG and render into it with CT. then convert to a UIImage.
+    UIGraphicsBeginImageContext(size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    // fill with background color
+    CGContextSetFillColorWithColor(context, background.CGColor);
+    CGContextFillRect(context, CGRectMake(0.0, 0.0, size.width, size.height));
+
+    // Use CoreText to render directly
+    // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
+
+    CTFontRef font = CTFontCreateWithName((CFStringRef)fontName, fontSize, NULL);
+    CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
+    CFTypeRef values[] = { font, foregroundColor.CGColor };
+
+    CFDictionaryRef attributes =
+    CFDictionaryCreate(kCFAllocatorDefault, (const void**)&keys,
+                       (const void**)&values, sizeof(keys) / sizeof(keys[0]),
+                       &kCFTypeDictionaryKeyCallBacks,
+                       &kCFTypeDictionaryValueCallBacks);
+    CFRelease(font);
+
+    CFAttributedStringRef attributed = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)text, attributes);
+    CFRelease(attributes);
+
+    CTLineRef line = CTLineCreateWithAttributedString(attributed);
+    CFRelease(attributed);
+
+    // flip y
+    CGContextTranslateCTM(context, 0.0, size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+
+    // DEBT: This 0.2 is probably related to font ascents and shit like that. Should compute it. But this works for now.
+    CGContextSetTextPosition(context, 0.0, 0.2*size.height);
+    CTLineDraw(line, context);
+    CFRelease(line);
+
+    // get an image from the CG context
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    // here ya go
+    return newImage;
 }
 
 /*
@@ -1315,6 +1377,8 @@ static CGRect adjustFrame(CGRect frame) {
     }
     dialMarkings = [NSMutableArray array];
 
+    if (_mode != IKCModeRotaryDial || self.backgroundImage) return nil;
+
     float const dialRadius = 0.5 * self.frame.size.width;
 
     // this follows because the holes are positioned so that the margin between adjacent holes
@@ -1326,7 +1390,7 @@ static CGRect adjustFrame(CGRect frame) {
     float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
 
     CGFloat fontSize = self.fontSizeForTitles;
-    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+    UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
     int j;
     for (j=0; j<10; ++j)
     {
@@ -1334,14 +1398,15 @@ static CGRect adjustFrame(CGRect frame) {
         double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
         double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
 
-        CATextLayer* textLayer = [CATextLayer layer];
-        textLayer.string = [NSString stringWithFormat:@"%d", (j+1)%10];
-        textLayer.alignmentMode = kCAAlignmentCenter;
-        textLayer.fontSize = fontSize;
+        CALayer* textLayer = [CALayer layer];
+        NSString* text = [NSString stringWithFormat:@"%d", (j+1)%10];
+        CGSize textSize = [text sizeOfTextWithFont:font];
+        UIImage* image = [self renderLabelImageWithText:text size:textSize fontName:_fontName fontSize:fontSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor];
+        textLayer.contents = (id)image.CGImage;
+
         textLayer.backgroundColor = [UIColor clearColor].CGColor;
         textLayer.opaque = NO;
 
-        CGSize textSize = [textLayer.string sizeOfTextWithFont:font];
         textLayer.frame = CGRectMake(centerX-textSize.width*0.5, centerY-textSize.height*0.5, textSize.width, textSize.height);
 
         [dialMarkings addObject:textLayer];
@@ -1390,7 +1455,7 @@ static CGRect adjustFrame(CGRect frame) {
 - (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
 {
     CGFloat circumference = 0.0;
-    UIFont* font = [UIFont fontWithName:@"Helvetica" size:fontSize];
+    UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
     for (NSString* title in _titles) {
         CGSize textSize = [title sizeOfTextWithFont:font];
         circumference += textSize.width;

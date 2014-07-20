@@ -50,6 +50,8 @@ class RotaryDialViewController: UIViewController, ImageChooser {
         knobControl.mode = .RotaryDial
         knobControl.gesture = .OneFingerRotation
 
+        knobControl.fontName = "TimesNewRomanPSMT"
+
         //* color specification
         let normalColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 0.7)
         let highlightedColor = UIColor(red: 0.0, green: 0.7, blue: 0.0, alpha: 0.7)

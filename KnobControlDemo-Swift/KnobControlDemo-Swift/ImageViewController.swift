@@ -84,6 +84,7 @@ class ImageViewController: UIViewController {
         knobControl.circular = false
         knobControl.min = -π * 0.5
         knobControl.max = π * 0.5
+        knobControl.fontName = "TrebuchetMS"
 
         // color set up
         var titleColor = UIColor.whiteColor()

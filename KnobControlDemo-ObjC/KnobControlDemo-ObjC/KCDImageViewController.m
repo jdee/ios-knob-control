@@ -46,6 +46,7 @@
     knobControl.circular = NO;
     knobControl.min = -M_PI/2.0;
     knobControl.max = M_PI/2.0;
+    knobControl.fontName = @"TrebuchetMS";
 
     // tint and title colors
     UIColor* titleColor = [UIColor whiteColor];

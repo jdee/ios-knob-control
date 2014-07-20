@@ -69,6 +69,8 @@
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
+    knobControl.fontName = @"CourierNewPS-BoldMT";
+
     // tint and title colors
     if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
         knobControl.tintColor = [UIColor greenColor];
