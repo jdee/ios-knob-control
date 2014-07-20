@@ -5,7 +5,7 @@ iOS Knob Control
 &nbsp;
 ![Continuous](http://i.imgur.com/JULtITx.png)
 &nbsp;
-![Rotary Dial](http://i.imgur.com/K4gPFE3.png)
+![Rotary Dial](http://i.imgur.com/0eESFuq.png)
 &nbsp;
 ![Feedback](http://i.imgur.com/rsLWAXo.png)
 
