@@ -1370,14 +1370,14 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (CALayer*)createDialNumbers
 {
+    if (_mode != IKCModeRotaryDial || _backgroundImage) return nil;
+
     backgroundLayer.contents = nil;
     for (CALayer* layer in dialMarkings)
     {
         [layer removeFromSuperlayer];
     }
     dialMarkings = [NSMutableArray array];
-
-    if (_mode != IKCModeRotaryDial || self.backgroundImage) return nil;
 
     float const dialRadius = 0.5 * self.frame.size.width;
 
