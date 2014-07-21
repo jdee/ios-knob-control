@@ -30,8 +30,8 @@ import UIKit
 class RotaryDialViewController: UIViewController, ImageChooser {
 
     // Storyboard Outlets
-    @IBOutlet var knobHolder : UIView
-    @IBOutlet var numberLabel : UILabel
+    @IBOutlet var knobHolder : UIView!
+    @IBOutlet var numberLabel : UILabel!
 
     // Knob control
     var knobControl : IOSKnobControl!

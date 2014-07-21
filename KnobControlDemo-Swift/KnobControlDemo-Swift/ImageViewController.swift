@@ -49,7 +49,7 @@ import UIKit
 class ImageViewController: UIViewController {
 
     // Storyboard Outlet
-    @IBOutlet var knobHolder : UIView
+    @IBOutlet var knobHolder : UIView!
 
     // Knob control. See ContinuousViewController.swift for comments on the use of unwrapped
     // optionals here.
@@ -68,7 +68,7 @@ class ImageViewController: UIViewController {
     var imageTitle : String?
 
     // this property is assigned by the other VC in prepareForSegue(, sender:)
-    var titles : String[] = [ "(none)" ]
+    var titles : [String] = [ "(none)" ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +78,7 @@ class ImageViewController: UIViewController {
         // Create the knob Control
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.mode = .LinearReturn
-        knobControl.positions = titles.count // never inferred from titles; if they don't match, positions wins, and empty spaces are filled with index numbers (0, 1, ...)
+        knobControl.positions = UInt(titles.count) // never inferred from titles; if they don't match, positions wins, and empty spaces are filled with index numbers (0, 1, ...)
         knobControl.titles = titles
         knobControl.timeScale = 0.5
         knobControl.circular = false

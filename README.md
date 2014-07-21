@@ -65,7 +65,8 @@ and one in Swift, in the KnobControlDemo-Swift subdirectory. Both exercise the
 same functionality using the same Objective-C knob control. Both demos contain projects that can be used to build
 a simple demo app to exercise the different modes of the control and provide examples of use. Both use storyboards
 and autolayout and so require iOS 6.0 or greater. The control works on 64-bit
-devices.
+devices. (Swift requires both iOS 7.0 or greater on the device or simulator and Xcode6-Beta4 or later to compile
+Swift.)
 
 The control itself, the IOSKnobControl class, may be compiled down to iOS 5.0, but the demo
 projects will not build if the iOS Deployment Target is set below 6.0 for reasons that have

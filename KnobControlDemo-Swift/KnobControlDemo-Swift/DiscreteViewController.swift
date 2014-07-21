@@ -33,14 +33,14 @@ import UIKit
 class DiscreteViewController: UIViewController {
 
     // Storyboard Outlets
-    @IBOutlet var knobHolder : UIView
-    @IBOutlet var indexLabel : UILabel
-    @IBOutlet var positionLabel : UILabel
-    @IBOutlet var clockwiseSwitch : UISwitch
-    @IBOutlet var gestureControl : UISegmentedControl
-    @IBOutlet var modeControl : UISegmentedControl
-    @IBOutlet var timeScaleSlider : UISlider
-    @IBOutlet var imageControl : UISegmentedControl
+    @IBOutlet var knobHolder : UIView!
+    @IBOutlet var indexLabel : UILabel!
+    @IBOutlet var positionLabel : UILabel!
+    @IBOutlet var clockwiseSwitch : UISwitch!
+    @IBOutlet var gestureControl : UISegmentedControl!
+    @IBOutlet var modeControl : UISegmentedControl!
+    @IBOutlet var timeScaleSlider : UISlider!
+    @IBOutlet var imageControl : UISegmentedControl!
 
     // Knob control. See comments in ContinuousViewController on use of the unwrapped optional.
     var knobControl : IOSKnobControl!

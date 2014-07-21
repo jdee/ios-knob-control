@@ -27,8 +27,8 @@ import UIKit
 class FeedbackViewController: UIViewController {
 
     // Storyboard Outlets
-    @IBOutlet var knobHolder : UIView
-    @IBOutlet var dialHolder : UIView
+    @IBOutlet var knobHolder : UIView!
+    @IBOutlet var dialHolder : UIView!
 
     // Two cheers for the IOSKnobControl! Also see the comments in the ContinousViewController
     // on the use of unwrapped optionals

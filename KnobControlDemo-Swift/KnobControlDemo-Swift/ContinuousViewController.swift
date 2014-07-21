@@ -42,15 +42,15 @@ import UIKit
 class ContinuousViewController: UIViewController, ImageChooser {
 
     // Storyboard Outlets
-    @IBOutlet var knobHolder : UIView
-    @IBOutlet var positionLabel : UILabel
-    @IBOutlet var clockwiseSwitch : UISwitch
-    @IBOutlet var gestureControl : UISegmentedControl
-    @IBOutlet var circularSwitch : UISwitch
-    @IBOutlet var minHolder : UIView
-    @IBOutlet var maxHolder : UIView
-    @IBOutlet var minLabel : UILabel
-    @IBOutlet var maxLabel : UILabel
+    @IBOutlet var knobHolder : UIView!
+    @IBOutlet var positionLabel : UILabel!
+    @IBOutlet var clockwiseSwitch : UISwitch!
+    @IBOutlet var gestureControl : UISegmentedControl!
+    @IBOutlet var circularSwitch : UISwitch!
+    @IBOutlet var minHolder : UIView!
+    @IBOutlet var maxHolder : UIView!
+    @IBOutlet var minLabel : UILabel!
+    @IBOutlet var maxLabel : UILabel!
 
     // Three knob controls. Note that these are effectively extensions to the views defined in the storyboard.
     // Any other type of view or control from UIKit may be inserted directly into the storyboard and configured

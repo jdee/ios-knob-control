@@ -35,12 +35,12 @@ import UIKit
 class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
 
     // Storyboard outlets
-    @IBOutlet var knobHolder : UIView
-    @IBOutlet var iTunesButton : UIButton
-    @IBOutlet var trackProgress : UIProgressView
-    @IBOutlet var trackLengthLabel : UILabel
-    @IBOutlet var trackProgressLabel : UILabel
-    @IBOutlet var volumeViewHolder : UIView
+    @IBOutlet var knobHolder : UIView!
+    @IBOutlet var iTunesButton : UIButton!
+    @IBOutlet var trackProgress : UIProgressView!
+    @IBOutlet var trackLengthLabel : UILabel!
+    @IBOutlet var trackProgressLabel : UILabel!
+    @IBOutlet var volumeViewHolder : UIView!
 
     // other stored properties
     var knobControl : IOSKnobControl!
