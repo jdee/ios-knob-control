@@ -71,6 +71,8 @@
     knobControl.positionIndex = _imageTitle ? [_titles indexOfObject:_imageTitle] : [_titles indexOfObject:@"(none)"];
 }
 
+#pragma Action for storyboard outlet
+
 - (void)done:(id)sender
 {
     NSString* title = [_titles objectAtIndex:knobControl.positionIndex];

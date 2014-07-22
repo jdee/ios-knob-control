@@ -29,19 +29,21 @@ import UIKit
  */
 class RotaryDialViewController: UIViewController, ImageChooser {
 
-    // Storyboard Outlets
+    // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!
     @IBOutlet var numberLabel : UILabel!
 
-    // Knob control
+    // MARK: Knob control
     var knobControl : IOSKnobControl!
 
+    // MARK: Other state
     // Place to accumulate the number dialed
     var numberDialed = ""
 
     // State retention: stores the user's last selection from the ImageViewController
     var imageTitle : String?
-                            
+
+    // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -86,18 +88,21 @@ class RotaryDialViewController: UIViewController, ImageChooser {
         }
     }
 
+    // MARK: Image chooser delegate method
     func imageChosen(title: String?) {
         // save the user's choice and update the knob images
         imageTitle = title
         updateKnobImages()
     }
 
+    // MARK: Action for the knob control's .ValueChanged events
     func dialed(sender: IOSKnobControl) {
         // append the last digit dialed and display
         numberDialed = "\(numberDialed)\(sender.positionIndex)"
         numberLabel.text = numberDialed
     }
 
+    // MARK: Actions for storyboard outlets
     @IBAction func gestureChanged(sender: UISegmentedControl) {
         // change the gesture (1-finger rotation and tap only in rotary dial mode)
 
@@ -120,6 +125,7 @@ class RotaryDialViewController: UIViewController, ImageChooser {
         knobControl.timeScale = expf(sender.value)
     }
 
+    // MARK: Internal methods
     func updateKnobImages() {
         if let title = imageTitle {
             /*

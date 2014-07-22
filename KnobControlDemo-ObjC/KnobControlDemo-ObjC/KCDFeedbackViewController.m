@@ -34,6 +34,8 @@
     IOSKnobControl* dialView;
 }
 
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -67,6 +69,8 @@
     // events when the position is set programmatically, but who cares, since they're precisely
     // the same sequence of events as the first control.
 }
+
+#pragma mark - Knob control callback
 
 - (void)knobTurned:(IOSKnobControl*)sender
 {

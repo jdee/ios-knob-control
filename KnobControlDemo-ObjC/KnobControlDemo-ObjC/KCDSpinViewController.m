@@ -58,14 +58,6 @@
 
 - (double)normalizedPlaybackTime
 {
-    /* Swift:
-     var playbackTime = currentPlaybackTime % trackLength
-     if playbackTime < 0 {
-     playbackTime += trackLength
-     }
-     return playbackTime
-     */
-
     double completeLoops = 0.0;
     double playbackTime = modf(currentPlaybackTime/trackLength, &completeLoops) * trackLength;
     if (playbackTime < 0.0) {

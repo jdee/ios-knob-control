@@ -26,15 +26,17 @@ import UIKit
  */
 class FeedbackViewController: UIViewController {
 
-    // Storyboard Outlets
+    // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!
     @IBOutlet var dialHolder : UIView!
 
     // Two cheers for the IOSKnobControl! Also see the comments in the ContinousViewController
     // on the use of unwrapped optionals
+    // MARK: Knob controls
     var knobControl : IOSKnobControl!
     var dialView : IOSKnobControl!
 
+    // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -77,6 +79,7 @@ class FeedbackViewController: UIViewController {
         dialHolder.addSubview(dialView)
     }
 
+    // MARK: Action for the enabled knob control's .ValueChanged events
     func knobTurned(sender : IOSKnobControl) {
         // Here's the meat: Set the dialView's position to the knobControl's position whenever
         // the latter changes.

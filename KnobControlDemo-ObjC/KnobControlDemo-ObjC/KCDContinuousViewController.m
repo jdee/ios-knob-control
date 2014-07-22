@@ -43,6 +43,8 @@
     NSString* imageTitle;
 }
 
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -71,6 +73,47 @@
 
     NSLog(@"Min. knob position %f, max. knob position %f", minControl.position, maxControl.position);
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    // this is our only segue, so be lazy
+    KCDImageViewController* imageVC = (KCDImageViewController*)segue.destinationViewController;
+    imageVC.titles = @[@"(none)", @"knob", @"teardrop"];
+    imageVC.imageTitle = imageTitle;
+    imageVC.delegate = self;
+}
+
+#pragma mark - Knob control callback
+- (void)knobPositionChanged:(IOSKnobControl*)sender
+{
+    if (sender == knobControl) {
+        self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
+    }
+    else if (sender == minControl) {
+        self.minLabel.text = [NSString stringWithFormat:@"%.2f", minControl.position];
+        knobControl.min = minControl.position;
+    }
+    else if (sender == maxControl) {
+        self.maxLabel.text = [NSString stringWithFormat:@"%.2f", maxControl.position];
+        knobControl.max = maxControl.position;
+    }
+}
+
+#pragma mark - Image chooser delegate
+- (void)imageChosen:(NSString *)anImageTitle
+{
+    imageTitle = anImageTitle;
+    [self updateKnobImages];
+}
+
+#pragma mark - Handler for configuration controls
+
+- (void)somethingChanged:(id)sender
+{
+    [self updateKnobProperties];
+}
+
+#pragma mark - Internal methods
 
 - (void)updateKnobImages
 {
@@ -172,21 +215,6 @@
     minControl.enabled = maxControl.enabled = self.circularSwitch.on == NO;
 }
 
-- (void)knobPositionChanged:(IOSKnobControl*)sender
-{
-    if (sender == knobControl) {
-        self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
-    }
-    else if (sender == minControl) {
-        self.minLabel.text = [NSString stringWithFormat:@"%.2f", minControl.position];
-        knobControl.min = minControl.position;
-    }
-    else if (sender == maxControl) {
-        self.maxLabel.text = [NSString stringWithFormat:@"%.2f", maxControl.position];
-        knobControl.max = maxControl.position;
-    }
-}
-
 - (void)setupMinAndMaxControls
 {
     // Both controls use the same image in continuous mode with circular set to NO. The clockwise
@@ -215,28 +243,6 @@
     // add each to its placeholder
     [self.minControlView addSubview:minControl];
     [self.maxControlView addSubview:maxControl];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // this is our only segue, so be lazy
-    KCDImageViewController* imageVC = (KCDImageViewController*)segue.destinationViewController;
-    imageVC.titles = @[@"(none)", @"knob", @"teardrop"];
-    imageVC.imageTitle = imageTitle;
-    imageVC.delegate = self;
-}
-
-- (void)imageChosen:(NSString *)anImageTitle
-{
-    imageTitle = anImageTitle;
-    [self updateKnobImages];
-}
-
-#pragma mark - Handler for configuration controls
-
-- (void)somethingChanged:(id)sender
-{
-    [self updateKnobProperties];
 }
 
 @end

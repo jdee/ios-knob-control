@@ -32,7 +32,7 @@ import UIKit
  */
 class DiscreteViewController: UIViewController {
 
-    // Storyboard Outlets
+    // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!
     @IBOutlet var indexLabel : UILabel!
     @IBOutlet var positionLabel : UILabel!
@@ -42,10 +42,10 @@ class DiscreteViewController: UIViewController {
     @IBOutlet var timeScaleSlider : UISlider!
     @IBOutlet var imageControl : UISegmentedControl!
 
-    // Knob control. See comments in ContinuousViewController on use of the unwrapped optional.
+    // MARK: Knob control
     var knobControl : IOSKnobControl!
 
-    // computed properties for convenience when working with the hexagon demo
+    // MARK: computed properties for convenience when working with the hexagon demo
     var hexagonImage : UIImage {
     get {
         let suffix = clockwiseSwitch.on ? "cw" : "ccw"
@@ -59,6 +59,7 @@ class DiscreteViewController: UIViewController {
     }
     }
 
+    // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -85,6 +86,7 @@ class DiscreteViewController: UIViewController {
         updateKnobProperties()
     }
 
+    // MARK: Actions for storyboard outlets
     @IBAction func clockwiseChanged(sender: UISwitch) {
         // use the computed properties from above here
         if (useHexagonImages) {
@@ -98,12 +100,14 @@ class DiscreteViewController: UIViewController {
         updateKnobProperties()
     }
 
+    // MARK: Action for the knob control's .ValueChanged events
     func knobPositionChanged(sender: IOSKnobControl) {
         // display both the position and positionIndex properties
         indexLabel.text = String(knobControl.positionIndex)
         positionLabel.text = "%.02f" % knobControl.position
     }
 
+    // MARK: Internal methods
     func updateKnobProperties() {
         /*
          * Using exponentiation avoids compressing the scale below 1.0. The

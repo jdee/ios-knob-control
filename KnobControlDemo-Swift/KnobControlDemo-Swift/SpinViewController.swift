@@ -34,7 +34,7 @@ import UIKit
  */
 class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
 
-    // Storyboard outlets
+    // MARK: Storyboard outlets
     @IBOutlet var knobHolder : UIView!
     @IBOutlet var iTunesButton : UIButton!
     @IBOutlet var trackProgress : UIProgressView!
@@ -42,8 +42,9 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     @IBOutlet var trackProgressLabel : UILabel!
     @IBOutlet var volumeViewHolder : UIView!
 
-    // other stored properties
+    // MARK: Knob control
     var knobControl : IOSKnobControl!
+    // MARK: other stored properties
     var displayLink : CADisplayLink!
     var musicPlayer : MPMusicPlayerController!
     var mediaCollection : MPMediaItemCollection?
@@ -54,7 +55,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     var currentPlaybackTime : Double = 0
     var touchIsDown : Bool = false
 
-    // computed properties
+    // MARK: computed properties
 
     var normalizedPlaybackTime : Double {
     get {
@@ -72,16 +73,12 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     }
     }
 
-    // constant(s)
+    // MARK: constant(s)
 
     let angularVelocity = 10 * Float(M_PI) / 9 // 33 1/3 RPM = 100 rev./180 s
 
     /*
-     * Never thought I'd miss the preprocessor, but where's mah pragma mark?
-     */
-
-    /*
-     * View lifecycle
+     * MARK: View lifecycle
      */
 
     override func viewDidLoad() {
@@ -113,7 +110,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     }
 
     /*
-     * IBActions, protocol implementations and other callbacks.
+     * MARK: IBActions, protocol implementations and other callbacks.
      */
 
     // called when the user taps the button to select a track from iTunes
@@ -127,7 +124,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         presentViewController(picker, animated: true, completion: nil)
     }
 
-    // --- implementation of Foregrounder protocol ---
+    // MARK: --- implementation of Foregrounder protocol ---
 
     func resumeFromBackground(appDelegate: AppDelegate) {
         /*
@@ -145,7 +142,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         iTunesButton.setTitle("select iTunes track", forState: .Normal)
     }
 
-    // --- implementation of MPMediaPickerControllerDelegate protocol ---
+    // MARK: --- implementation of MPMediaPickerControllerDelegate protocol ---
 
     func mediaPicker(mediaPicker: MPMediaPickerController!, didPickMediaItems mediaItemCollection: MPMediaItemCollection!) {
         dismissViewControllerAnimated(true, completion: nil)
@@ -174,7 +171,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         loadingView.removeFromSuperview()
     }
 
-    // callback for the CADisplayLink
+    // MARK: callback for the CADisplayLink
     func animateKnob(link: CADisplayLink) {
         // Temporarily, at least, revert to this kluge. The UIControl base class seems to generate the
         // UIControlEventTouchXXX events, and they don't make much sense in this context. Perhaps there's
@@ -216,7 +213,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         updateProgress()
     }
 
-    // callback for the IOSKnobControl
+    // MARK: callback for the IOSKnobControl
     func knobRotated(sender: IOSKnobControl) {
         /*
          * Just update this ivar while the knob is being rotated, and adjust the progress view to reflect the same
@@ -228,7 +225,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     }
 
     /*
-     * Internal convenience functions for DRYness, readability, and, in other languages, privacy.
+     * MARK: Internal convenience functions for DRYness, readability, and, in other languages, privacy.
      */
 
     func createKnobControl() {

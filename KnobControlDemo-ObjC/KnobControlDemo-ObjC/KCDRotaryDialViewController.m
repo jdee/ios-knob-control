@@ -34,6 +34,7 @@
     NSString* numberDialed, *imageTitle;
 }
 
+#pragma mark - View lifecycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -69,6 +70,48 @@
     _numberLabel.text = @"(number dialed)";
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    KCDImageViewController* imageVC = (KCDImageViewController*)segue.destinationViewController;
+
+    imageVC.titles = @[@"(none)", @"telephone"];
+
+    imageVC.imageTitle = imageTitle;
+    imageVC.delegate = self;
+}
+
+#pragma mark - Knob control callback
+- (void)dialed:(IOSKnobControl*)sender
+{
+    numberDialed = [numberDialed stringByAppendingFormat:@"%ld", (long)knobControl.positionIndex];
+    _numberLabel.text = numberDialed;
+}
+
+#pragma mark - Actions for storyboard outlets
+- (void)gestureChanged:(UISegmentedControl *)sender
+{
+    knobControl.gesture = sender.selectedSegmentIndex == 0 ? IKCGestureOneFingerRotation : IKCGestureTap;
+}
+
+- (void)timeScaleChanged:(UISlider *)sender
+{
+    /*
+     * Using exponentiation avoids compressing the scale below 1.0. The
+     * slider starts at 0 in middle and ranges from -1 to 1, so the
+     * time scale can range from 1/e to e, and defaults to 1.
+     */
+    knobControl.timeScale = exp(sender.value);
+}
+
+#pragma mark - Image chooser delegate
+- (void)imageChosen:(NSString *)anImageTitle
+{
+    imageTitle = anImageTitle;
+    [self updateKnobImages];
+}
+
+#pragma mark - Internal methods
+
 - (void)updateKnobImages
 {
     if (imageTitle) {
@@ -91,43 +134,6 @@
         knobControl.backgroundImage = nil;
         knobControl.foregroundImage = nil;
     }
-}
-
-- (void)dialed:(IOSKnobControl*)sender
-{
-    numberDialed = [numberDialed stringByAppendingFormat:@"%ld", (long)knobControl.positionIndex];
-    _numberLabel.text = numberDialed;
-}
-
-- (void)gestureChanged:(UISegmentedControl *)sender
-{
-    knobControl.gesture = sender.selectedSegmentIndex == 0 ? IKCGestureOneFingerRotation : IKCGestureTap;
-}
-
-- (void)timeScaleChanged:(UISlider *)sender
-{
-    /*
-     * Using exponentiation avoids compressing the scale below 1.0. The
-     * slider starts at 0 in middle and ranges from -1 to 1, so the
-     * time scale can range from 1/e to e, and defaults to 1.
-     */
-    knobControl.timeScale = exp(sender.value);
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    KCDImageViewController* imageVC = (KCDImageViewController*)segue.destinationViewController;
-
-    imageVC.titles = @[@"(none)", @"telephone"];
-
-    imageVC.imageTitle = imageTitle;
-    imageVC.delegate = self;
-}
-
-- (void)imageChosen:(NSString *)anImageTitle
-{
-    imageTitle = anImageTitle;
-    [self updateKnobImages];
 }
 
 @end

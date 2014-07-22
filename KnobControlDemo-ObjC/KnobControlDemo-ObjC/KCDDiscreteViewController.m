@@ -35,6 +35,8 @@
     IOSKnobControl* knobControl;
 }
 
+#pragma mark - View lifecycle
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -50,6 +52,31 @@
 
     [self updateKnobProperties];
 }
+
+#pragma mark - Knob control callback
+
+- (void)knobPositionChanged:(IOSKnobControl*)sender
+{
+    self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
+    self.indexLabel.text = [NSString stringWithFormat:@"%ld", (long)knobControl.positionIndex];
+}
+
+#pragma mark - Handlers for configuration controls
+
+- (void)somethingChanged:(id)sender
+{
+    [self updateKnobProperties];
+}
+
+- (void)clockwiseChanged:(UISwitch *)sender
+{
+    if (self.useHexagonImages) {
+        [knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
+    }
+    [self updateKnobProperties];
+}
+
+#pragma mark - Internal methods
 
 - (void)updateKnobProperties
 {
@@ -91,12 +118,6 @@
     knobControl.position = knobControl.position;
 }
 
-- (void)knobPositionChanged:(IOSKnobControl*)sender
-{
-    self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld", (long)knobControl.positionIndex];
-}
-
 - (UIImage*)hexagonImage
 {
     return [UIImage imageNamed:self.clockwiseSwitch.on ? @"hexagon-cw" : @"hexagon-ccw"];
@@ -105,21 +126,6 @@
 - (BOOL)useHexagonImages
 {
     return _demoControl.selectedSegmentIndex > 0;
-}
-
-#pragma mark - Handlers for configuration controls
-
-- (void)somethingChanged:(id)sender
-{
-    [self updateKnobProperties];
-}
-
-- (void)clockwiseChanged:(UISwitch *)sender
-{
-    if (self.useHexagonImages) {
-        [knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
-    }
-    [self updateKnobProperties];
 }
 
 @end

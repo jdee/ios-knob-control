@@ -48,11 +48,10 @@ import UIKit
  */
 class ImageViewController: UIViewController {
 
-    // Storyboard Outlet
+    // MARK: Storyboard Outlet
     @IBOutlet var knobHolder : UIView!
 
-    // Knob control. See ContinuousViewController.swift for comments on the use of unwrapped
-    // optionals here.
+    // MARK: Knob control.
     var knobControl : IOSKnobControl!
 
     /*
@@ -61,8 +60,10 @@ class ImageViewController: UIViewController {
      * calling back the delegate in done() around line 102. This has the potential to create
      * a strong reference loop, but see the remarks above. Not in this case, so meh for now.
      */
+    // MARK: Image chooser delegate
     var delegate : ImageChooser?
 
+    // MARK: Other state
     // state retention: if set, the specified imageTitle will be rotated to the top when the
     // view is first displayed, reflecting the user's previous choice.
     var imageTitle : String?
@@ -70,6 +71,7 @@ class ImageViewController: UIViewController {
     // this property is assigned by the other VC in prepareForSegue(, sender:)
     var titles : [String] = [ "(none)" ]
 
+    // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -121,6 +123,7 @@ class ImageViewController: UIViewController {
         }
     }
 
+    // MARK: Action for storyboard outlet
     @IBAction func done(sender: UIButton) {
         // The user has spoken
 

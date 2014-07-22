@@ -15,7 +15,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import UIKit
 
-// convenience for formatting
 @infix func % (format: String, val: Float) -> String {
     return String(format: format, val)
 }
@@ -41,7 +40,7 @@ import UIKit
  */
 class ContinuousViewController: UIViewController, ImageChooser {
 
-    // Storyboard Outlets
+    // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!
     @IBOutlet var positionLabel : UILabel!
     @IBOutlet var clockwiseSwitch : UISwitch!
@@ -52,22 +51,16 @@ class ContinuousViewController: UIViewController, ImageChooser {
     @IBOutlet var minLabel : UILabel!
     @IBOutlet var maxLabel : UILabel!
 
-    // Three knob controls. Note that these are effectively extensions to the views defined in the storyboard.
-    // Any other type of view or control from UIKit may be inserted directly into the storyboard and configured
-    // there. These controls would be used in place of the corresponding xxxHolder UIViews if they were directly
-    // available to IB, and they are immediately and permanently initialized in viewDidLoad(). Without making
-    // them optionals, this VC would have to have a custom initializer to set them, and the controls would have
-    // to be created before the view was loaded from the storyboard. Making them unwrapped optionals initializes
-    // them automatically to nil and allows them to be used safely without explicit unwrapping, since they are
-    // guaranteed to be assigned before any code that refers to them.
-
-    // In addition, Swift allows you to celebrate the IOSKnobControl with three cheers.
+    // MARK: Knob controls
+    // Swift allows you to celebrate the IOSKnobControl with three cheers.
     var knobControl : IOSKnobControl!
     var minControl : IOSKnobControl!
     var maxControl : IOSKnobControl!
 
+    // MARK: Misc. state
     var imageTitle : String?
 
+    // MARK: View lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -133,11 +126,13 @@ class ContinuousViewController: UIViewController, ImageChooser {
         }
     }
 
+    // MARK: Action for storyboard outlets
     @IBAction func somethingChanged(sender: AnyObject?) {
         // rather than responding separately to each input, just consult them all whenever any one changes
         updateKnobProperties()
     }
 
+    // MARK: Delegate method
     func imageChosen(title: String?) {
         // store the title selected; will be nil if "(none)" selected
         imageTitle = title
@@ -147,6 +142,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
         updateKnobImages()
     }
 
+    // MARK: Action for the knob controls' .ValueChanged events
     func knobPositionChanged(sender: IOSKnobControl) {
         // update the appropriate fields depending on which knob changed
         if sender === knobControl {
@@ -162,6 +158,7 @@ class ContinuousViewController: UIViewController, ImageChooser {
         }
     }
 
+    // MARK: Internal methods
     func updateKnobProperties() {
         // set the gesture according to the segmented control
         switch (gestureControl.selectedSegmentIndex) {
