@@ -42,16 +42,6 @@ typedef NS_ENUM(NSInteger, IKCMode) {
     IKCModeRotaryDial      ///< Like an old rotary telephone dial.
 };
 
-/*
- * For brevity, the individual enumerated values were previously named IKCMLinearReturn, etc. But the longer names provide for better interoperability with Swift.
- * By changing the enumeration names, these become IKCMode.LinearReturn, IKCMode.Continuous, etc. These macros are provided for compatibility with the previous versions.
- * DEBT: Should I use something other than macros? It may be advantageous to mark these deprecated some day, and I'm not sure if that can be done with macros.
- */
-#define IKCMLinearReturn IKCModeLinearReturn
-#define IKCMWheelOfFortune IKCModeWheelOfFortune
-#define IKCMContinuous IKCModeContinuous
-#define IKCMRotaryDial IKCModeRotaryDial
-
 typedef NS_ENUM(NSInteger, IKCGesture) {
     IKCGestureOneFingerRotation, ///< Custom gesture handling. One finger rotates the knob.
     IKCGestureTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture. (Not available with IKCModeRotaryDial.)
@@ -59,10 +49,25 @@ typedef NS_ENUM(NSInteger, IKCGesture) {
     IKCGestureTap                ///< Uses a tap gesture. The knob rotates to the position tapped. In rotary dial mode, rotates from the position tapped (dials that number).
 };
 
-#define IKCGOneFingerRotation IKCGestureOneFingerRotation
-#define IKCGTwoFingerRotation IKCGestureTwoFingerRotation
-#define IKCGVerticalPan IKCGestureVerticalPan
-#define IKCGTap IKCGestureTap
+#ifndef IKC_DISABLE_DEPRECATED
+/*
+ * For brevity, the individual enumerated values were previously named IKCMLinearReturn, etc. But the longer names provide for better interoperability with Swift.
+ * By changing the enumeration names, these become IKCMode.LinearReturn, IKCMode.Continuous, etc., which can be used without the type qualification. These static constants
+ * are provided for compatibility with the previous versions. If the static constants cause any linking problems, please use the new enumerations instead and
+ * #define IKC_DISABLE_DEPRECATED. It's unlikely that this would happen in any circumstance, but it's most likely if you are compiling the control into a library.
+ * If you simply drop the .h and .m into your app, there will be no issues.
+ */
+
+static const NSInteger IKCMLinearReturn DEPRECATED_MSG_ATTRIBUTE("Use IKCModeLinearReturn instead") = IKCModeLinearReturn;
+static const NSInteger IKCMWheelOfFortune DEPRECATED_MSG_ATTRIBUTE("Use IKCModeWheelOfFortune instead") = IKCModeWheelOfFortune;
+static const NSInteger IKCMContinuous DEPRECATED_MSG_ATTRIBUTE("Use IKCModeContinuous instead") = IKCModeContinuous;
+static const NSInteger IKCMRotaryDial DEPRECATED_MSG_ATTRIBUTE("Use IKCModeRotaryDial instead") = IKCModeRotaryDial;
+
+static const NSInteger IKCGOneFingerRotation DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureOneFingerRotation instead") = IKCGestureOneFingerRotation;
+static const NSInteger IKCGTwoFingerRotation DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTwoFingerRotation instead") = IKCGestureTwoFingerRotation;
+static const NSInteger IKCGVerticalPan DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureVerticalPan instead") = IKCGestureVerticalPan;
+static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap instead") = IKCGestureTap;
+#endif // IKC_DISABLE_DEPRECATED
 
 /**
  * A simple, reusable rotary control. You may provide custom knob images or use the default images, which may be customized

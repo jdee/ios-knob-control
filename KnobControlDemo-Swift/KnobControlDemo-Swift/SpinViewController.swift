@@ -225,10 +225,10 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     }
 
     /*
-     * MARK: Internal convenience functions for DRYness, readability, and, in other languages, privacy.
+     * MARK: Internal convenience functions for DRYness, readability
      */
 
-    func createKnobControl() {
+    private func createKnobControl() {
         // use UIImage(named: "disc") for the .Normal state
         knobControl = IOSKnobControl(frame:knobHolder.bounds, imageNamed:"disc")
         knobControl.mode = .Continuous
@@ -241,7 +241,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         knobHolder.addSubview(knobControl)
     }
 
-    func createDisplayLink() {
+    private func createDisplayLink() {
         // CADisplayLink from CoreAnimation/QuartzCore calls the supplied selector on the main thread
         // whenever it's time to prepare a frame for display. It includes a lot of conveniences, like
         // easy scaling of the frame rate and automatic pause on background.
@@ -250,7 +250,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
     }
 
-    func createMusicPlayer() {
+    private func createMusicPlayer() {
         // could do this as a lazy prop or even a constant initializer perhaps
         musicPlayer = MPMusicPlayerController.applicationMusicPlayer()
         musicPlayer.repeatMode = .All
@@ -264,7 +264,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         volumeViewHolder.addSubview(volumeView)
     }
 
-    func createLoadingView() {
+    private func createLoadingView() {
         // The iTunes library load can take a little time, which can be confusing, so we can provide some feedback and disable
         // the whole view by adding a transparent view on top with an activity spinner. This is added as a subview of the main
         // view, on top of everything else, in selectTrack(), when the user taps the button. This is kind of hard to do in the
@@ -281,11 +281,11 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         loadingView.addSubview(spinner)
     }
 
-    func addLoadingView() {
+    private func addLoadingView() {
         view.addSubview(loadingView)
     }
 
-    func updateProgress() {
+    private func updateProgress() {
         if trackLength > 0 {
             let progress = normalizedPlaybackTime / trackLength
             // NSLog("Setting track progress to %f", progress)
@@ -297,7 +297,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
         updateLabel(trackProgressLabel, withTime: normalizedPlaybackTime)
     }
 
-    func updateLabel(label:UILabel, withTime time:Double) {
+    private func updateLabel(label:UILabel, withTime time:Double) {
         var minutes = Int(time / 60)       // this is a floor
         var seconds = Int(time % 60 + 0.5) // this is rounded up or down
         if seconds == 60 {

@@ -191,7 +191,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setDefaults
 {
-    _mode = IKCMLinearReturn;
+    _mode = IKCModeLinearReturn;
     _clockwise = NO;
     _position = 0.0;
     _circular = YES;
@@ -199,7 +199,7 @@ static CGRect adjustFrame(CGRect frame) {
     _max = M_PI - IKC_EPSILON;
     _positions = 2;
     _timeScale = 1.0;
-    _gesture = IKCGOneFingerRotation;
+    _gesture = IKCGestureOneFingerRotation;
     _normalized = YES;
     _fontName = @"Helvetica";
 
@@ -334,7 +334,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setFrame:(CGRect)frame
 {
-    if (_mode == IKCMRotaryDial)
+    if (_mode == IKCModeRotaryDial)
     {
         frame = adjustFrame(frame);
     }
@@ -401,11 +401,11 @@ static CGRect adjustFrame(CGRect frame) {
     _mode = mode;
     [self updateImage];
 
-    if (_mode == IKCMRotaryDial)
+    if (_mode == IKCModeRotaryDial)
     {
-        if (_gesture == IKCGVerticalPan || _gesture == IKCGTwoFingerRotation)
+        if (_gesture == IKCGestureVerticalPan || _gesture == IKCGestureTwoFingerRotation)
         {
-            _gesture = IKCGOneFingerRotation;
+            _gesture = IKCGestureOneFingerRotation;
         }
         _clockwise = NO; // dial clockwise, but all calcs assume ccw
         _circular = NO;
@@ -418,13 +418,13 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setCircular:(BOOL)circular
 {
-    if (_mode == IKCMRotaryDial) return;
+    if (_mode == IKCModeRotaryDial) return;
     _circular = circular;
 }
 
 - (void)setClockwise:(BOOL)clockwise
 {
-    if (_mode == IKCMRotaryDial) return;
+    if (_mode == IKCModeRotaryDial) return;
 
     _clockwise = clockwise;
     [imageLayer removeFromSuperlayer];
@@ -458,7 +458,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setPositionIndex:(NSInteger)positionIndex
 {
-    if (self.mode == IKCMContinuous || self.mode == IKCMRotaryDial) return;
+    if (self.mode == IKCModeContinuous || self.mode == IKCModeRotaryDial) return;
 
     float position = self.circular ? (2.0*M_PI/_positions)*positionIndex : ((self.max - self.min)/_positions)*(positionIndex+0.5) + self.min;
     [self setPosition:position animated:NO];
@@ -466,8 +466,8 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (NSInteger)positionIndex
 {
-    if (self.mode == IKCMContinuous) return -1;
-    if (self.mode == IKCMRotaryDial) return lastNumberDialed;
+    if (self.mode == IKCModeContinuous) return -1;
+    if (self.mode == IKCModeRotaryDial) return lastNumberDialed;
     return [self positionIndexForPosition:_position];
 }
 
@@ -482,7 +482,7 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setMin:(float)min
 {
     // this property is effectively readonly in this mode
-    if (_mode == IKCMRotaryDial) return;
+    if (_mode == IKCModeRotaryDial) return;
 
     _min = min;
 
@@ -491,7 +491,7 @@ static CGRect adjustFrame(CGRect frame) {
 
     if (_position < _min) self.position = _min;
 
-    if (_mode == IKCMContinuous || _mode == IKCMRotaryDial || [self imageForState:UIControlStateNormal]) return;
+    if (_mode == IKCModeContinuous || _mode == IKCModeRotaryDial || [self imageForState:UIControlStateNormal]) return;
 
     // if we are rendering a discrete knob with titles, re-render the titles now that min/max has changed
     [imageLayer removeFromSuperlayer];
@@ -503,7 +503,7 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setMax:(float)max
 {
     // this property is effectively readonly in this mode
-    if (_mode == IKCMRotaryDial) return;
+    if (_mode == IKCModeRotaryDial) return;
 
     _max = max;
 
@@ -512,7 +512,7 @@ static CGRect adjustFrame(CGRect frame) {
 
     if (_position > _max) self.position = _max;
 
-    if (_mode == IKCMContinuous || _mode == IKCMRotaryDial || [self imageForState:UIControlStateNormal]) return;
+    if (_mode == IKCModeContinuous || _mode == IKCModeRotaryDial || [self imageForState:UIControlStateNormal]) return;
 
     // if we are rendering a discrete knob with titles, re-render the titles now that min/max has changed
     [imageLayer removeFromSuperlayer];
@@ -523,7 +523,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setGesture:(IKCGesture)gesture
 {
-    if (_mode == IKCMRotaryDial && (gesture == IKCGTwoFingerRotation || gesture == IKCGVerticalPan))
+    if (_mode == IKCModeRotaryDial && (gesture == IKCGestureTwoFingerRotation || gesture == IKCGestureVerticalPan))
     {
 #ifdef DEBUG
         NSLog(@"IKCModeRotaryDial only allows IKCGestureOneFingerRotation and IKCGestureTap");
@@ -580,7 +580,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)dialNumber:(int)number
 {
-    if (_mode != IKCMRotaryDial) return;
+    if (_mode != IKCModeRotaryDial) return;
     if (number < 0 || number > 9) return;
 
     lastNumberDialed = number;
@@ -710,7 +710,7 @@ static CGRect adjustFrame(CGRect frame) {
     const float threshold = 0.9*M_PI/_positions;
 
     switch (self.mode) {
-        case IKCMWheelOfFortune:
+        case IKCModeWheelOfFortune:
             // Exclude the outer 10% of each segment. Otherwise, like continuous mode.
             // If it has to be returned to the interior of the segment, the animation
             // is the same as the slow return animation, but it returns to the nearest
@@ -795,16 +795,16 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (gestureRecognizer) [self removeGestureRecognizer:gestureRecognizer];
 
-    if (_gesture == IKCGOneFingerRotation) {
+    if (_gesture == IKCGestureOneFingerRotation) {
         gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
     }
-    else if (_gesture == IKCGTwoFingerRotation) {
+    else if (_gesture == IKCGestureTwoFingerRotation) {
         gestureRecognizer = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(handleRotation:)];
     }
-    else if (_gesture == IKCGVerticalPan) {
+    else if (_gesture == IKCGestureVerticalPan) {
         gestureRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleVerticalPan:)];
     }
-    else if (_gesture == IKCGTap)
+    else if (_gesture == IKCGestureTap)
     {
         gestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
     }
@@ -891,22 +891,22 @@ static CGRect adjustFrame(CGRect frame) {
 
     switch (self.mode)
     {
-        case IKCMContinuous:
+        case IKCModeContinuous:
             // DEBT: This is the first gesture that provides an absolute position. Previously all gestures
             // only rotated the image *by* a certain amount. This gesture rotates the image *to* a specific
             // position. This assumes a certain orientation of the image. For now, assume the pointer is
             // at the top.
             self.position = position - M_PI_2;
             break;
-        case IKCMLinearReturn:
-        case IKCMWheelOfFortune:
+        case IKCModeLinearReturn:
+        case IKCModeWheelOfFortune:
             // DEBT: And that works poorly with discrete modes. If I tap Feb, it doesn't mean I want Jan to
             // rotate to that point. It means I want Feb at the top. Things would work the same as the
             // continuous mode if you had discrete labels and something like the continuous knob image.
             // For now:
             [self snapToNearestPositionWithPosition:_position-position+M_PI_2 duration:0.0];
             break;
-        case IKCMRotaryDial:
+        case IKCModeRotaryDial:
             // This is the reason this gesture was introduced. The user can simply tap a number on the dial,
             // and the dial will rotate around and back as though they had dialed.
 
@@ -944,11 +944,11 @@ static CGRect adjustFrame(CGRect frame) {
     switch (sender.state) {
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
-            if (self.mode == IKCMLinearReturn || self.mode == IKCMWheelOfFortune)
+            if (self.mode == IKCModeLinearReturn || self.mode == IKCModeWheelOfFortune)
             {
                 [self snapToNearestPosition];
             }
-            else if (self.mode == IKCMRotaryDial && sender.state == UIGestureRecognizerStateEnded)
+            else if (self.mode == IKCModeRotaryDial && sender.state == UIGestureRecognizerStateEnded)
             {
                 double delta = currentTouch - touchStart;
                 while (delta <= -2.0*M_PI) delta += 2.0*M_PI;
@@ -986,7 +986,7 @@ static CGRect adjustFrame(CGRect frame) {
             break;
     }
 
-    if (_mode != IKCMRotaryDial)
+    if (_mode != IKCModeRotaryDial)
     {
         [self sendActionsForControlEvents:UIControlEventValueChanged];
     }
@@ -1051,7 +1051,7 @@ static CGRect adjustFrame(CGRect frame) {
         }
         dialMarkings = nil;
     }
-    else if (_mode == IKCMRotaryDial)
+    else if (_mode == IKCModeRotaryDial)
     {
         [self createDialNumbers];
     }
@@ -1103,7 +1103,7 @@ static CGRect adjustFrame(CGRect frame) {
         }
     }
 
-    if (_foregroundImage || _mode == IKCMRotaryDial)
+    if (_foregroundImage || _mode == IKCModeRotaryDial)
     {
         [foregroundLayer removeFromSuperlayer];
         foregroundLayer = [CALayer layer];
@@ -1266,14 +1266,14 @@ static CGRect adjustFrame(CGRect frame) {
     if (!shapeLayer) {
         switch (_mode)
         {
-            case IKCMContinuous:
+            case IKCModeContinuous:
                 [self createKnobWithPip];
                 break;
-            case IKCMLinearReturn:
-            case IKCMWheelOfFortune:
+            case IKCModeLinearReturn:
+            case IKCModeWheelOfFortune:
                 [self createKnobWithMarkings];
                 break;
-            case IKCMRotaryDial:
+            case IKCModeRotaryDial:
                 [self createRotaryDial];
                 break;
 #ifdef DEBUG
