@@ -225,7 +225,7 @@ class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, For
     }
 
     /*
-     * MARK: Internal convenience functions for DRYness, readability
+     * MARK: Private convenience functions for DRYness, readability
      */
 
     private func createKnobControl() {

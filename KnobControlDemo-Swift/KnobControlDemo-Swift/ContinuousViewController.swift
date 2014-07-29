@@ -81,24 +81,9 @@ class ContinuousViewController: UIViewController, ImageChooser {
         maxControl.position = knobControl.max
 
         // Set the colors for the default knob images.
-        if (knobControl.respondsToSelector("setTintColor:")) {
-            // iOS 7+
-            knobControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-            minControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-            maxControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
-        }
-        else {
-            // can still customize piecemeal below iOS 7 (or in iOS 7+ instead of just using the tintColor)
-            let titleColor = UIColor.whiteColor()
-            knobControl.setTitleColor(titleColor, forState: .Normal)
-            knobControl.setTitleColor(titleColor, forState: .Highlighted)
-
-            minControl.setTitleColor(titleColor, forState: .Normal)
-            minControl.setTitleColor(titleColor, forState: .Highlighted)
-
-            maxControl.setTitleColor(titleColor, forState: .Normal)
-            maxControl.setTitleColor(titleColor, forState: .Highlighted)
-        }
+        knobControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        minControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+        maxControl.tintColor = UIColor(hue: 0.5, saturation: 1.0, brightness: 1.0, alpha: 1.0)
 
         // add knob controls as subviews of their holders and arrange actions for each one in response to .ValueChanged events
         knobControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)

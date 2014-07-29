@@ -71,10 +71,7 @@ class DiscreteViewController: UIViewController {
 
         // Customize the colors for the months demo (with a generated image)
         let titleColor = UIColor.whiteColor()
-        if (knobControl.respondsToSelector("setTintColor:")) {
-            // iOS 7+
-            knobControl.tintColor = UIColor.greenColor()
-        }
+        knobControl.tintColor = UIColor.greenColor()
         knobControl.setTitleColor(titleColor, forState: .Normal)
         knobControl.setTitleColor(titleColor, forState: .Highlighted)
 

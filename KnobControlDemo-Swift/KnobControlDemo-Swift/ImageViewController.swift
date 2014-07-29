@@ -89,14 +89,10 @@ class ImageViewController: UIViewController {
         knobControl.fontName = "TrebuchetMS"
 
         // color set up
-        var titleColor = UIColor.whiteColor()
-        if (knobControl.respondsToSelector("setTintColor:")) {
-            knobControl.tintColor = UIColor.yellowColor()
-            titleColor = UIColor.blackColor()
-        }
+        var titleColor = UIColor.blackColor()
+        knobControl.tintColor = UIColor.yellowColor()
 
         knobControl.setTitleColor(titleColor, forState: .Normal)
-        knobControl.setTitleColor(titleColor, forState: .Highlighted)
 
         // add as a subview to the holder
         knobHolder.addSubview(knobControl)
