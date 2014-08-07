@@ -109,6 +109,129 @@ static CGRect adjustFrame(CGRect frame) {
 
 @end
 
+#pragma mark - IKCTextLayer interface
+/**
+ * Custom text layer. Looks much better than CATextLayer. Destined for the Violation framework.
+ */
+@interface IKCTextLayer : CALayer
+
+#pragma mark - Properties
+@property (nonatomic, copy) NSString* fontName;
+@property (nonatomic) CGFloat fontSize;
+@property (nonatomic) CGColorRef foregroundColor;
+@property (nonatomic, copy) id string;
+@property (nonatomic) CGFloat horizMargin, vertMargin;
+
+#pragma mark - Object lifecycle
++ (instancetype)layer;
+
+@end
+
+#pragma mark - IKCTextLayer implementation
+@implementation IKCTextLayer
+
+#pragma mark - Object lifecycle
++ (instancetype)layer
+{
+    return [[self alloc] init];
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _fontSize = 0.0;
+        _foregroundColor = [UIColor blackColor].CGColor;
+        CFRetain(_foregroundColor);
+        _horizMargin = _vertMargin = 0.0;
+
+        self.opaque = NO;
+        self.backgroundColor = [UIColor clearColor].CGColor;
+
+        [self setNeedsDisplay];
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    if (_foregroundColor) CFRelease(_foregroundColor);
+}
+
+#pragma mark - Property override
+- (void)setForegroundColor:(CGColorRef)foregroundColor
+{
+    if (!foregroundColor) return;
+
+    if (_foregroundColor) CFRelease(_foregroundColor);
+    _foregroundColor = foregroundColor;
+    CFRetain(_foregroundColor);
+}
+
+#pragma mark - Custom text display with CoreText.
+- (void)display
+{
+    CGSize size = self.bounds.size;
+    size.width *= [UIScreen mainScreen].scale;
+    size.height *= [UIScreen mainScreen].scale;
+
+    CGFloat fontSize = _fontSize * [UIScreen mainScreen].scale;
+
+    CGFloat horizMargin = _horizMargin * [UIScreen mainScreen].scale;
+    CGFloat vertMargin = _vertMargin * [UIScreen mainScreen].scale;
+
+    UIGraphicsBeginImageContext(size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+
+    // Use CoreText to render directly
+    // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
+
+    CTFontRef font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
+    assert(font);
+
+    /*
+     CFStringRef fname = CTFontCopyPostScriptName(font);
+     NSLog(@"Using font %@", (__bridge NSString*)fname);
+     CFRelease(fname);
+     // */
+
+    CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
+    CFTypeRef values[] = { font, _foregroundColor };
+
+    CFDictionaryRef attributes =
+    CFDictionaryCreate(kCFAllocatorDefault, (const void**)&keys,
+                       (const void**)&values, sizeof(keys) / sizeof(keys[0]),
+                       &kCFTypeDictionaryKeyCallBacks,
+                       &kCFTypeDictionaryValueCallBacks);
+    CFRelease(font);
+
+    CFAttributedStringRef attributed = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)_string, attributes);
+    CFRelease(attributes);
+
+    CTLineRef line = CTLineCreateWithAttributedString(attributed);
+    CFRelease(attributed);
+
+    // flip y
+    CGContextTranslateCTM(context, 0.0, size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+
+    // compute vertical position from font metrics
+    CGFloat belowBaseline = CTFontGetLeading(font) + CTFontGetDescent(font) + vertMargin;
+    CGFloat lineHeight = belowBaseline + CTFontGetAscent(font) + vertMargin;
+
+    CGFloat x = horizMargin;
+    CGFloat y = belowBaseline / lineHeight * size.height;
+
+    CGContextSetTextPosition(context, x, y);
+    CTLineDraw(line, context);
+    CFRelease(line);
+
+    self.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
+    UIGraphicsEndImageContext();
+}
+
+@end
+
 /*
  * Used in dialNumber:. There doesn't seem to be an appropriate delegate protocol for CAAnimation. 
  * The animationDidStop:finished: message is
@@ -1225,8 +1348,6 @@ static CGRect adjustFrame(CGRect frame) {
             title = [NSString stringWithFormat:@"%d", j];
         }
 
-        CALayer* layer = [CALayer layer];
-
         NSInteger currentIndex = self.positionIndex;
         UIFont* titleFont = currentIndex == j ? headlineFont : font;
 
@@ -1240,8 +1361,13 @@ static CGRect adjustFrame(CGRect frame) {
         textSize.width += 2.0 * horizMargin;
         textSize.height += 2.0 * vertMargin;
 
-        UIImage* image = [self renderLabelImageWithText:title size:textSize fontName:_fontName fontSize:titleFont.pointSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor horizMargin:horizMargin vertMargin:vertMargin];
-        layer.contents = (id)image.CGImage;
+        IKCTextLayer* layer = [IKCTextLayer layer];
+        layer.string = title;
+        layer.horizMargin = horizMargin;
+        layer.vertMargin = vertMargin;
+        layer.fontSize = titleFont.pointSize;
+        layer.fontName = _fontName;
+        layer.foregroundColor = self.currentTitleColor.CGColor;
 
         // place it at the appropriate angle, taking the clockwise switch into account
         float position;
@@ -1258,15 +1384,9 @@ static CGRect adjustFrame(CGRect frame) {
         float radius = 0.4*self.bounds.size.width - 0.5*textSize.height;
 
         // place and rotate
-        //*
         layer.position = CGPointMake(self.bounds.origin.x + 0.5*self.bounds.size.width+radius*sin(actual), self.bounds.origin.y + 0.5*self.bounds.size.height-radius*cos(actual));
         layer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
-        // */
-
-        // background is transparent
-        layer.opaque = NO;
-        layer.backgroundColor = [UIColor clearColor].CGColor;
 
         /* Useful for analyzing layout
         layer.borderWidth = 1.0;
@@ -1278,73 +1398,6 @@ static CGRect adjustFrame(CGRect frame) {
 
         [shapeLayer addSublayer:layer];
     }
-}
-
-- (UIImage*)renderLabelImageWithText:(NSString*)text size:(CGSize)size fontName:(NSString*)fontName fontSize:(CGFloat)fontSize backgroundColor:(UIColor*)background foregroundColor:(UIColor*)foregroundColor horizMargin:(CGFloat)horizMargin vertMargin:(CGFloat)vertMargin
-{
-    // Account for screen resolution.
-    size.width *= [UIScreen mainScreen].scale;
-    size.height *= [UIScreen mainScreen].scale;
-
-    fontSize *= [UIScreen mainScreen].scale;
-
-    // create a bitmap context for CG and render into it with CT. then convert to a UIImage.
-    UIGraphicsBeginImageContext(size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-
-    // fill with background color
-    CGContextSetFillColorWithColor(context, background.CGColor);
-    CGContextFillRect(context, CGRectMake(0.0, 0.0, size.width, size.height));
-
-    // Use CoreText to render directly
-    // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
-
-    CTFontRef font = CTFontCreateWithName((CFStringRef)fontName, fontSize, NULL);
-    assert(font);
-
-    /*
-    CFStringRef fname = CTFontCopyPostScriptName(font);
-    NSLog(@"Using font %@", (__bridge NSString*)fname);
-    CFRelease(fname);
-    // */
-
-    CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
-    CFTypeRef values[] = { font, foregroundColor.CGColor };
-
-    CFDictionaryRef attributes =
-    CFDictionaryCreate(kCFAllocatorDefault, (const void**)&keys,
-                       (const void**)&values, sizeof(keys) / sizeof(keys[0]),
-                       &kCFTypeDictionaryKeyCallBacks,
-                       &kCFTypeDictionaryValueCallBacks);
-    CFRelease(font);
-
-    CFAttributedStringRef attributed = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)text, attributes);
-    CFRelease(attributes);
-
-    CTLineRef line = CTLineCreateWithAttributedString(attributed);
-    CFRelease(attributed);
-
-    // flip y
-    CGContextTranslateCTM(context, 0.0, size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-
-    // compute vertical position from font metrics
-    CGFloat belowBaseline = CTFontGetLeading(font) + CTFontGetDescent(font) + vertMargin;
-    CGFloat lineHeight = belowBaseline + CTFontGetAscent(font) + vertMargin;
-
-    CGFloat x = horizMargin;
-    CGFloat y = belowBaseline / lineHeight * size.height;
-
-    CGContextSetTextPosition(context, x, y);
-    CTLineDraw(line, context);
-    CFRelease(line);
-
-    // get an image from the CG context
-    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    // here ya go
-    return newImage;
 }
 
 /*
@@ -1489,14 +1542,13 @@ static CGRect adjustFrame(CGRect frame) {
         double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
         double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
 
-        CALayer* textLayer = [CALayer layer];
         NSString* text = [NSString stringWithFormat:@"%d", (j+1)%10];
         CGSize textSize = [text sizeOfTextWithFont:font];
-        UIImage* image = [self renderLabelImageWithText:text size:textSize fontName:_fontName fontSize:fontSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor horizMargin:0.0 vertMargin:0.0];
-        textLayer.contents = (id)image.CGImage;
-
-        textLayer.backgroundColor = [UIColor clearColor].CGColor;
-        textLayer.opaque = NO;
+        IKCTextLayer* textLayer = [IKCTextLayer layer];
+        textLayer.string = text;
+        textLayer.foregroundColor = self.currentTitleColor.CGColor;
+        textLayer.fontSize = fontSize;
+        textLayer.fontName = _fontName;
 
         textLayer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         textLayer.position = CGPointMake(centerX, centerY);
