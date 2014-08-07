@@ -1036,7 +1036,8 @@ static CGRect adjustFrame(CGRect frame) {
     if (!backgroundLayer)
     {
         backgroundLayer = [CALayer layer];
-        backgroundLayer.frame = self.frame;
+        backgroundLayer.bounds = self.bounds;
+        backgroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         backgroundLayer.backgroundColor = [UIColor clearColor].CGColor;
         backgroundLayer.opaque = NO;
         [self.layer addSublayer:backgroundLayer];
@@ -1068,7 +1069,8 @@ static CGRect adjustFrame(CGRect frame) {
     if (!middleLayer)
     {
         middleLayer = [CALayer layer];
-        middleLayer.frame = self.frame;
+        middleLayer.bounds = self.bounds;
+        middleLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         middleLayer.backgroundColor = [UIColor clearColor].CGColor;
         middleLayer.opaque = NO;
         [self.layer addSublayer:middleLayer];
@@ -1083,7 +1085,8 @@ static CGRect adjustFrame(CGRect frame) {
 
         if (!imageLayer) {
             imageLayer = [CALayer layer];
-            imageLayer.frame = self.frame;
+            imageLayer.bounds = self.bounds;
+            imageLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
             imageLayer.backgroundColor = [UIColor clearColor].CGColor;
             imageLayer.opaque = NO;
 
@@ -1107,7 +1110,8 @@ static CGRect adjustFrame(CGRect frame) {
     {
         [foregroundLayer removeFromSuperlayer];
         foregroundLayer = [CALayer layer];
-        foregroundLayer.frame = self.frame;
+        foregroundLayer.bounds = self.bounds;
+        foregroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         foregroundLayer.backgroundColor = [UIColor clearColor].CGColor;
         foregroundLayer.opaque = NO;
         [self.layer addSublayer:foregroundLayer];
@@ -1190,7 +1194,8 @@ static CGRect adjustFrame(CGRect frame) {
 
         // place and rotate
         //*
-        layer.frame = CGRectMake((0.5*self.bounds.size.width+radius*sin(actual))-0.5*textSize.width, (0.5*self.bounds.size.height-radius*cos(actual))-0.5*textSize.height, textSize.width, textSize.height);
+        layer.position = CGPointMake(self.bounds.origin.x + 0.5*self.bounds.size.width+radius*sin(actual), self.bounds.origin.y + 0.5*self.bounds.size.height-radius*cos(actual));
+        layer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
         // */
 
@@ -1294,7 +1299,8 @@ static CGRect adjustFrame(CGRect frame) {
 {
     shapeLayer = [CAShapeLayer layer];
     shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-    shapeLayer.frame = self.frame;
+    shapeLayer.bounds = self.bounds;
+    shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
 
@@ -1305,7 +1311,8 @@ static CGRect adjustFrame(CGRect frame) {
 
     pipLayer = [CAShapeLayer layer];
     pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-    pipLayer.frame = self.frame;
+    pipLayer.bounds = self.bounds;
+    pipLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     pipLayer.opaque = NO;
     pipLayer.backgroundColor = [UIColor clearColor].CGColor;
 
@@ -1318,7 +1325,8 @@ static CGRect adjustFrame(CGRect frame) {
 {
     shapeLayer = [CAShapeLayer layer];
     shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-    shapeLayer.frame = self.frame;
+    shapeLayer.bounds = self.bounds;
+    shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
 
@@ -1361,7 +1369,8 @@ static CGRect adjustFrame(CGRect frame) {
 
     shapeLayer = [CAShapeLayer layer];
     shapeLayer.path = path.CGPath;
-    shapeLayer.frame = self.frame;
+    shapeLayer.bounds = self.bounds;
+    shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
 
@@ -1407,7 +1416,8 @@ static CGRect adjustFrame(CGRect frame) {
         textLayer.backgroundColor = [UIColor clearColor].CGColor;
         textLayer.opaque = NO;
 
-        textLayer.frame = CGRectMake(centerX-textSize.width*0.5, centerY-textSize.height*0.5, textSize.width, textSize.height);
+        textLayer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
+        textLayer.position = CGPointMake(centerX, centerY);
 
         [dialMarkings addObject:textLayer];
         [backgroundLayer addSublayer:textLayer];
@@ -1425,17 +1435,17 @@ static CGRect adjustFrame(CGRect frame) {
     // the near point is the point nearest the center of the dial, at the edge of the
     // outer tap ring. (see handleTap: for where the 0.586 comes from.)
 
-    float nearX = self.frame.size.width*0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.5);
-    float nearY = self.frame.size.height*0.5 * (1.0 + 0.586 * 0.5);
+    float nearX = self.bounds.size.width*0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.5);
+    float nearY = self.bounds.size.height*0.5 * (1.0 + 0.586 * 0.5);
 
     // the opposite edge is tangent to the perimeter of the dial. the width of the far side
     // is stopWidth * self.frame.size.height * 0.5.
 
-    float upperEdgeX = self.frame.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 + stopWidth * 0.5);
-    float upperEdgeY = self.frame.size.height*0.5 * (1.0 + 0.5 - stopWidth * sqrt(3.0)*0.5);
+    float upperEdgeX = self.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 + stopWidth * 0.5);
+    float upperEdgeY = self.bounds.size.height*0.5 * (1.0 + 0.5 - stopWidth * sqrt(3.0)*0.5);
 
-    float lowerEdgeX = self.frame.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 - stopWidth * 0.5);
-    float lowerEdgeY = self.frame.size.height*0.5 * (1.0 + 0.5 + stopWidth * sqrt(3.0)*0.5);
+    float lowerEdgeX = self.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 - stopWidth * 0.5);
+    float lowerEdgeY = self.bounds.size.height*0.5 * (1.0 + 0.5 + stopWidth * sqrt(3.0)*0.5);
 
     UIBezierPath* path = [UIBezierPath bezierPath];
     [path moveToPoint:CGPointMake(nearX, nearY)];
@@ -1445,7 +1455,8 @@ static CGRect adjustFrame(CGRect frame) {
 
     stopLayer = [CAShapeLayer layer];
     stopLayer.path = path.CGPath;
-    stopLayer.frame = self.frame;
+    stopLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+    stopLayer.bounds = self.bounds;
     stopLayer.backgroundColor = [UIColor clearColor].CGColor;
     stopLayer.opaque = NO;
 
@@ -1467,13 +1478,20 @@ static CGRect adjustFrame(CGRect frame) {
 - (CGFloat)fontSizeForTitles
 {
     CGFloat fontSize = 0.0;
-    CGFloat fontSizes[] = { /* 36.0, */ 24.0, 18.0, 14.0, 12.0, 10.0, 9.0, 8.0, 7.0 };
+    CGFloat fontSizes[] = { 23.0, 22.0, 21.0, 20.0, 19.0, 18.0, 17.0, 16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0 };
+
+    CGFloat styleHeadlineSize = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize;
 
     double angle = _circular ? 2.0*M_PI : _max - _min;
 
     int index;
     for (index=0; index<sizeof(fontSizes)/sizeof(CGFloat); ++index) {
         fontSize = fontSizes[index];
+        if (fontSize > styleHeadlineSize) {
+            // don't display anything larger than the current headline size (max. 23 pts.)
+            continue;
+        }
+
         CGFloat circumference = [self titleCircumferenceWithFontSize:fontSize];
 
         // Empirically, this 0.25 works out well. This allows for a little padding between text segments.
