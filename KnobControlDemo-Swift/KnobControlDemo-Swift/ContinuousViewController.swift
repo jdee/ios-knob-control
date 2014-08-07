@@ -38,7 +38,7 @@ import UIKit
  *
  * Knob controls are always created programmatically and inserted as subviews of placeholder views (usually UIViews, but can be anything).
  */
-class ContinuousViewController: UIViewController, ImageChooser {
+class ContinuousViewController: BaseViewController, ImageChooser {
 
     // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!

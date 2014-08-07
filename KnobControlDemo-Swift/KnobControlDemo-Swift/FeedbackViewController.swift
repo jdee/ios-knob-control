@@ -24,7 +24,7 @@ import UIKit
  * position of the top knob control, acting like a VU meter. This demo has no
  * configuration controls.
  */
-class FeedbackViewController: UIViewController {
+class FeedbackViewController: BaseViewController {
 
     // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!

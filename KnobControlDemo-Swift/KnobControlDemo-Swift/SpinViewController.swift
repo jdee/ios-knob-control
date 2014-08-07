@@ -32,7 +32,7 @@ import UIKit
  * continuously at a constant angular velocity in the absence of gestures from the user. This is a novel use of the control.
  * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore.
  */
-class SpinViewController: UIViewController, MPMediaPickerControllerDelegate, Foregrounder {
+class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, Foregrounder {
 
     // MARK: Storyboard outlets
     @IBOutlet var knobHolder : UIView!

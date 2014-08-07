@@ -30,7 +30,7 @@ import UIKit
  * -- hexagon: the control uses one of two image sets from the asset catalog, each a hexagon with index values printed around the sides; changing the
  *    clockwise setting switches to a different image with numbers rendered in the opposite direction
  */
-class DiscreteViewController: UIViewController {
+class DiscreteViewController: BaseViewController {
 
     // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!
@@ -81,6 +81,11 @@ class DiscreteViewController: UIViewController {
 
         // initialize all other properties based on initial control values
         updateKnobProperties()
+    }
+
+    override func adjustLayout() {
+        super.adjustLayout()
+        knobControl.setNeedsLayout()
     }
 
     // MARK: Actions for storyboard outlets

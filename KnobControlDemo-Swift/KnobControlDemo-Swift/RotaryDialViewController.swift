@@ -27,7 +27,7 @@ import UIKit
  * that allows the user to use the dial with a set of images. The default dial images are rendered by the control as in
  * the other modes.
  */
-class RotaryDialViewController: UIViewController, ImageChooser {
+class RotaryDialViewController: BaseViewController, ImageChooser {
 
     // MARK: Storyboard Outlets
     @IBOutlet var knobHolder : UIView!
@@ -86,6 +86,11 @@ class RotaryDialViewController: UIViewController, ImageChooser {
             imageVC.titles = [ "(none)", "telephone" ] // specify the images to use
             imageVC.imageTitle = imageTitle            // pass in the user's last choice or nil for "(none)"
         }
+    }
+
+    override func adjustLayout() {
+        super.adjustLayout()
+        knobControl.setNeedsLayout()
     }
 
     // MARK: Image chooser delegate method

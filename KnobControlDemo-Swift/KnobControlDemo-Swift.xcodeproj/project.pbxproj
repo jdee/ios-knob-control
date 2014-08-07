@@ -20,6 +20,7 @@
 		7B5268781965E8C300732EA4 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5268771965E8C300732EA4 /* MediaPlayer.framework */; };
 		7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */; };
 		7BAFFA81195CDC1900C88446 /* ContinuousViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */; };
+		7BCAA9EA1993124B00B23F4F /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCAA9E91993124B00B23F4F /* BaseViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		7B5268771965E8C300732EA4 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousViewController.swift; sourceTree = "<group>"; };
+		7BCAA9E91993124B00B23F4F /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 		7B5268711965CFCD00732EA4 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7BCAA9E91993124B00B23F4F /* BaseViewController.swift */,
 				7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */,
 				7B204B15195D016A00873E27 /* DiscreteViewController.swift */,
 				7B25BDA3195B98E80060A1BA /* FeedbackViewController.swift */,
@@ -285,6 +288,7 @@
 				7B25BDC2195B9DE40060A1BA /* IOSKnobControl.m in Sources */,
 				7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */,
 				7B204B16195D016A00873E27 /* DiscreteViewController.swift in Sources */,
+				7BCAA9EA1993124B00B23F4F /* BaseViewController.swift in Sources */,
 				7B5268731965DABF00732EA4 /* SpinViewController.swift in Sources */,
 				7B25BDA2195B98E80060A1BA /* AppDelegate.swift in Sources */,
 				7B25BDA4195B98E80060A1BA /* FeedbackViewController.swift in Sources */,

@@ -171,7 +171,6 @@ static CGRect adjustFrame(CGRect frame) {
         [self setImage:image forState:UIControlStateNormal];
         [self setDefaults];
         [self setupGestureRecognizer];
-        [self updateImage];
     }
     return self;
 }
@@ -184,7 +183,6 @@ static CGRect adjustFrame(CGRect frame) {
         [self setImage:image forState:UIControlStateNormal];
         [self setDefaults];
         [self setupGestureRecognizer];
-        [self updateImage];
     }
     return self;
 }
@@ -244,7 +242,7 @@ static CGRect adjustFrame(CGRect frame) {
      * If we just now changed the image currently in use (the image for the current state), update it now.
      */
     if (index == [self indexForState:self.state]) {
-        [self updateImage];
+        [self setNeedsLayout];
     }
 }
 
@@ -286,7 +284,7 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     if (index == [self indexForState:self.state]) {
-        [self updateImage];
+        [self setNeedsLayout];
     }
 }
 
@@ -328,7 +326,7 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     if (index == [self indexForState:self.state]) {
-        [self updateImage];
+        [self setNeedsLayout];
     }
 }
 
@@ -344,13 +342,13 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setBackgroundImage:(UIImage *)backgroundImage
 {
     _backgroundImage = backgroundImage;
-    [self updateImage];
+    [self setNeedsLayout];
 }
 
 - (void)setForegroundImage:(UIImage *)foregroundImage
 {
     _foregroundImage = foregroundImage;
-    [self updateImage];
+    [self setNeedsLayout];
 }
 
 - (void)setEnabled:(BOOL)enabled
@@ -358,19 +356,19 @@ static CGRect adjustFrame(CGRect frame) {
     [super setEnabled:enabled];
     gestureRecognizer.enabled = enabled;
 
-    [self updateImage];
+    [self setNeedsLayout];
 }
 
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    [self updateImage];
+    [self setNeedsLayout];
 }
 
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
-    [self updateImage];
+    [self setNeedsLayout];
 }
 
 - (void)setPositions:(NSUInteger)positions
@@ -399,7 +397,7 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setMode:(IKCMode)mode
 {
     _mode = mode;
-    [self updateImage];
+    [self setNeedsLayout];
 
     if (_mode == IKCModeRotaryDial)
     {
@@ -431,7 +429,7 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer = nil;
     imageLayer = [self createShapeLayer];
     [self.layer addSublayer:imageLayer];
-    [self updateImage];
+    [self setNeedsLayout];
 }
 
 - (void)setPosition:(float)position
@@ -553,7 +551,7 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     _fontName = fontName;
-    [self updateImage];
+    [self setNeedsLayout];
 }
 
 - (void)tintColorDidChange
@@ -614,6 +612,12 @@ static CGRect adjustFrame(CGRect frame) {
     [imageLayer addAnimation:animation forKey:nil];
 
     [CATransaction commit];
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self updateImage];
 }
 
 #pragma mark - Private Methods: Geometry
@@ -977,7 +981,7 @@ static CGRect adjustFrame(CGRect frame) {
             rotating = NO;
 
             // revert from highlighted to normal
-            [self updateImage];
+            [self setNeedsLayout];
             break;
         default:
             // just track the touch while the gesture is in progress

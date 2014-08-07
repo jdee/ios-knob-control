@@ -46,7 +46,7 @@ import UIKit
  * top, where it is mest legible. Then she taps the Choose button, the model view controller
  * disappears, and the main view controller's imageChosen() method is called.
  */
-class ImageViewController: UIViewController {
+class ImageViewController: BaseViewController {
 
     // MARK: Storyboard Outlet
     @IBOutlet var knobHolder : UIView!
