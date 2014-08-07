@@ -548,8 +548,15 @@ static CGRect adjustFrame(CGRect frame) {
 {
     UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:fontName size:0.0];
     if ([fontDescriptor matchingFontDescriptorsWithMandatoryKeys:nil].count == 0) {
-        NSLog(@"Failed to find font name \"%@\".", fontName);
-        return;
+        /*
+         * On iOS 6, the matchingBlah: call returns 0 for valid fonts. So we do this check too
+         * before giving up.
+         */
+        UIFont* font = [UIFont fontWithName:fontName size:17.0];
+        if (!font) {
+            NSLog(@"Failed to find font name \"%@\".", fontName);
+            return;
+        }
     }
 
     _fontName = fontName;
