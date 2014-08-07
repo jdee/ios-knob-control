@@ -15,18 +15,23 @@
 
 #import "KCDBaseViewController.h"
 
-@interface KCDDiscreteViewController : KCDBaseViewController
+@interface KCDBaseViewController ()
 
-@property (nonatomic) IBOutlet UIView* knobControlView;
-@property (nonatomic) IBOutlet UILabel* positionLabel;
-@property (nonatomic) IBOutlet UILabel* indexLabel;
-@property (nonatomic) IBOutlet UISegmentedControl* modeControl;
-@property (nonatomic) IBOutlet UISlider* timeScaleControl;
-@property (nonatomic) IBOutlet UISwitch* clockwiseSwitch;
-@property (nonatomic) IBOutlet UISegmentedControl* gestureControl;
-@property (nonatomic) IBOutlet UISegmentedControl* demoControl;
+@end
 
-- (IBAction)somethingChanged:(id)sender;
-- (IBAction)clockwiseChanged:(UISwitch*)sender;
+@implementation KCDBaseViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
+        // iOS 7+ (dynamic type)
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustLayout) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    }
+}
+
+- (void)adjustLayout {
+    [self.view setNeedsLayout];
+}
 
 @end

@@ -24,6 +24,7 @@
 		7B5268701965CF8900732EA4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B199B58189ABEC9003E7F6A /* main.m */; };
 		7B577A5B19675DD1002D8327 /* KCDSpinViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7B577A5A19675DD1002D8327 /* KCDSpinViewController.m */; };
 		7B577A5E19675F6D002D8327 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B577A5C19675F6D002D8327 /* MediaPlayer.framework */; };
+		7BCAA9ED1993180400B23F4F /* KCDBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BCAA9EC1993180400B23F4F /* KCDBaseViewController.m */; };
 		7BE81C8018B7B9DE0088814A /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7BE81C7F18B7B9DE0088814A /* ChangeLog */; };
 /* End PBXBuildFile section */
 
@@ -69,6 +70,8 @@
 		7B662CA61932A7EF00C5D676 /* KCDRotaryDialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDRotaryDialViewController.h; sourceTree = "<group>"; };
 		7B662CA71932A7EF00C5D676 /* KCDRotaryDialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDRotaryDialViewController.m; sourceTree = "<group>"; };
 		7B662CA91935364B00C5D676 /* KCDImageChooser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KCDImageChooser.h; sourceTree = "<group>"; };
+		7BCAA9EB1993180400B23F4F /* KCDBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KCDBaseViewController.h; sourceTree = "<group>"; };
+		7BCAA9EC1993180400B23F4F /* KCDBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KCDBaseViewController.m; sourceTree = "<group>"; };
 		7BCC770A1965C7FF004FC6FC /* KCDContinuousViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KCDContinuousViewController.m; path = "KnobControlDemo-ObjC/KCDContinuousViewController.m"; sourceTree = SOURCE_ROOT; };
 		7BE81C7F18B7B9DE0088814A /* ChangeLog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = ChangeLog; path = ../ChangeLog; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -178,6 +181,8 @@
 		7B662CA51932A78D00C5D676 /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				7BCAA9EB1993180400B23F4F /* KCDBaseViewController.h */,
+				7BCAA9EC1993180400B23F4F /* KCDBaseViewController.m */,
 				7B199B64189ABEC9003E7F6A /* KCDContinuousViewController.h */,
 				7BCC770A1965C7FF004FC6FC /* KCDContinuousViewController.m */,
 				7B2880B218E79EB800A0E726 /* KCDDiscreteViewController.h */,
@@ -300,6 +305,7 @@
 				7B5268701965CF8900732EA4 /* main.m in Sources */,
 				7B52686B1965CD0000732EA4 /* KCDAppDelegate.m in Sources */,
 				7B52686C1965CD0000732EA4 /* KCDDiscreteViewController.m in Sources */,
+				7BCAA9ED1993180400B23F4F /* KCDBaseViewController.m in Sources */,
 				7B52686D1965CD0000732EA4 /* KCDFeedbackViewController.m in Sources */,
 				7B52686E1965CD0000732EA4 /* KCDImageViewController.m in Sources */,
 				7B52686F1965CD0000732EA4 /* KCDRotaryDialViewController.m in Sources */,

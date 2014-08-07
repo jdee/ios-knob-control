@@ -80,6 +80,12 @@
     imageVC.delegate = self;
 }
 
+- (void)adjustLayout
+{
+    [super adjustLayout];
+    [knobControl setNeedsLayout];
+}
+
 #pragma mark - Knob control callback
 - (void)dialed:(IOSKnobControl*)sender
 {

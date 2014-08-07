@@ -1486,7 +1486,11 @@ static CGRect adjustFrame(CGRect frame) {
     CGFloat fontSize = 0.0;
     CGFloat fontSizes[] = { 23.0, 22.0, 21.0, 20.0, 19.0, 18.0, 17.0, 16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0 };
 
-    CGFloat styleHeadlineSize = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize;
+    CGFloat styleHeadlineSize = 23.0;
+
+    if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
+        styleHeadlineSize = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize;
+    }
 
     double angle = _circular ? 2.0*M_PI : _max - _min;
 

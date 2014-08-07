@@ -53,6 +53,12 @@
     [self updateKnobProperties];
 }
 
+- (void)adjustLayout
+{
+    [super adjustLayout];
+    [knobControl setNeedsLayout];
+}
+
 #pragma mark - Knob control callback
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
