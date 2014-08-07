@@ -1252,7 +1252,7 @@ static CGRect adjustFrame(CGRect frame) {
 
         imageLayer.contents = (id)image.CGImage;
     }
-    else {
+    else if (![imageLayer isKindOfClass:CAShapeLayer.class]) {
         [imageLayer removeFromSuperlayer];
         imageLayer = [self createShapeLayer];
         [middleLayer addSublayer:imageLayer];
@@ -1296,24 +1296,110 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)updateShapeLayer
 {
-    shapeLayer.fillColor = self.currentFillColor.CGColor;
-    pipLayer.fillColor = self.currentTitleColor.CGColor;
-    stopLayer.fillColor = self.currentTitleColor.CGColor;
+    if (!self.currentImage) {
+        switch (_mode) {
+            case IKCModeLinearReturn:
+            case IKCModeWheelOfFortune:
+                [self updateKnobWithMarkings];
+                break;
+            case IKCModeRotaryDial:
+                [self updateRotaryDial];
+                break;
+            default:
+                break;
+        }
 
-    [self addMarkings];
-
-    [self createDialNumbers];
+        shapeLayer.fillColor = self.currentFillColor.CGColor;
+        pipLayer.fillColor = self.currentTitleColor.CGColor;
+        stopLayer.fillColor = self.currentTitleColor.CGColor;
+    }
 }
 
-- (void)addMarkings
+- (void)updateKnobWithMarkings
 {
-    for (CATextLayer* layer in markings) {
-        [layer removeFromSuperlayer];
+    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    shapeLayer.bounds = self.bounds;
+    shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+
+    [self updateMarkings];
+}
+
+- (void)updateRotaryDial
+{
+    UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.5 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
+
+    float const dialRadius = 0.5 * self.frame.size.width;
+
+    // this follows because the holes are positioned so that the margin between adjacent holes
+    // is the same as the margin between each hole and the rim of the dial. see the discussion
+    // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
+    // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
+    // must be at least 214x214.
+    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
+    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
+
+    int j;
+    for (j=0; j<10; ++j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
     }
-    markings = [NSMutableArray array];
+    for (--j; j>=0; --j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:1.5*M_PI-centerAngle endAngle:M_PI_2-centerAngle clockwise:YES];
+    }
 
-    if ((_mode != IKCModeLinearReturn && _mode != IKCModeWheelOfFortune) || self.currentImage) return;
+    shapeLayer.path = path.CGPath;
+    shapeLayer.bounds = self.bounds;
+    shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+}
 
+- (void)updateDialNumbers
+{
+    float const dialRadius = 0.5 * self.frame.size.width;
+
+    // this follows because the holes are positioned so that the margin between adjacent holes
+    // is the same as the margin between each hole and the rim of the dial. see the discussion
+    // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
+    // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
+    // must be at least 214x214.
+    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
+    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
+
+    CGFloat fontSize = self.fontSizeForTitles;
+    UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
+    int j;
+    for (j=0; j<10; ++j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
+
+        NSString* text = [NSString stringWithFormat:@"%d", (j+1)%10];
+        CGSize textSize = [text sizeOfTextWithFont:font];
+        IKCTextLayer* textLayer = dialMarkings[j];
+        textLayer.string = text;
+        textLayer.foregroundColor = self.currentTitleColor.CGColor;
+        textLayer.fontSize = fontSize;
+        textLayer.fontName = _fontName;
+
+        textLayer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
+        textLayer.position = CGPointMake(centerX, centerY);
+
+        [textLayer setNeedsDisplay];
+
+        [dialMarkings addObject:textLayer];
+        [backgroundLayer addSublayer:textLayer];
+    }
+}
+
+- (void)updateMarkings
+{
     CGFloat fontSize = self.fontSizeForTitles;
     UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:_fontName size:fontSize];
     UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
@@ -1338,6 +1424,8 @@ static CGRect adjustFrame(CGRect frame) {
     assert(font);
     assert(headlineFont);
 
+    assert(markings.count == _positions);
+
     int j;
     for (j=0; j<_positions; ++j) {
         // get the title for this marking (use j if none)
@@ -1360,8 +1448,9 @@ static CGRect adjustFrame(CGRect frame) {
 
         textSize.width += 2.0 * horizMargin;
         textSize.height += 2.0 * vertMargin;
+        
+        IKCTextLayer* layer = markings[j];
 
-        IKCTextLayer* layer = [IKCTextLayer layer];
         layer.string = title;
         layer.horizMargin = horizMargin;
         layer.vertMargin = vertMargin;
@@ -1388,14 +1477,29 @@ static CGRect adjustFrame(CGRect frame) {
         layer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
-        /* Useful for analyzing layout
-        layer.borderWidth = 1.0;
+        /*
         layer.borderColor = self.currentTitleColor.CGColor;
+        layer.borderWidth = 1.0;
         layer.cornerRadius = 2.0;
         // */
 
-        [markings addObject:layer];
+        [layer setNeedsDisplay];
+    }
+}
 
+- (void)addMarkings
+{
+    for (CATextLayer* layer in markings) {
+        [layer removeFromSuperlayer];
+    }
+    markings = [NSMutableArray array];
+
+    if ((_mode != IKCModeLinearReturn && _mode != IKCModeWheelOfFortune) || self.currentImage) return;
+
+    int j;
+    for (j=0; j<_positions; ++j) {
+        IKCTextLayer* layer = [IKCTextLayer layer];
+        [markings addObject:layer];
         [shapeLayer addSublayer:layer];
     }
 }
@@ -1460,9 +1564,6 @@ static CGRect adjustFrame(CGRect frame) {
 - (CAShapeLayer*)createKnobWithMarkings
 {
     shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-    shapeLayer.bounds = self.bounds;
-    shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
 
@@ -1474,40 +1575,12 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (CAShapeLayer*)createRotaryDial
 {
-    UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.5 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
-
-    float const dialRadius = 0.5 * self.frame.size.width;
-
-    // this follows because the holes are positioned so that the margin between adjacent holes
-    // is the same as the margin between each hole and the rim of the dial. see the discussion
-    // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
-    // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
-    // must be at least 214x214.
-    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
-    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
-
-    int j;
-    for (j=0; j<10; ++j)
-    {
-        double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
-        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
-    }
-    for (--j; j>=0; --j)
-    {
-        double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
-        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:1.5*M_PI-centerAngle endAngle:M_PI_2-centerAngle clockwise:YES];
-    }
 
     shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = path.CGPath;
-    shapeLayer.bounds = self.bounds;
-    shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
+
+    [self createDialNumbers];
 
     return shapeLayer;
 }
@@ -1523,39 +1596,12 @@ static CGRect adjustFrame(CGRect frame) {
     }
     dialMarkings = [NSMutableArray array];
 
-    float const dialRadius = 0.5 * self.frame.size.width;
-
-    // this follows because the holes are positioned so that the margin between adjacent holes
-    // is the same as the margin between each hole and the rim of the dial. see the discussion
-    // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
-    // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
-    // must be at least 214x214.
-    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
-    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
-
-    CGFloat fontSize = self.fontSizeForTitles;
-    UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
     int j;
-    for (j=0; j<10; ++j)
-    {
-        double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
-
-        NSString* text = [NSString stringWithFormat:@"%d", (j+1)%10];
-        CGSize textSize = [text sizeOfTextWithFont:font];
-        IKCTextLayer* textLayer = [IKCTextLayer layer];
-        textLayer.string = text;
-        textLayer.foregroundColor = self.currentTitleColor.CGColor;
-        textLayer.fontSize = fontSize;
-        textLayer.fontName = _fontName;
-
-        textLayer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
-        textLayer.position = CGPointMake(centerX, centerY);
-
-        [dialMarkings addObject:textLayer];
-        [backgroundLayer addSublayer:textLayer];
+    for (j=0; j<10; ++j) {
+        [dialMarkings addObject: [IKCTextLayer layer]];
     }
+
+    [self updateDialNumbers];
 
     return backgroundLayer;
 }
