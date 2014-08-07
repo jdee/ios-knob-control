@@ -337,6 +337,7 @@ static CGRect adjustFrame(CGRect frame) {
         frame = adjustFrame(frame);
     }
     [super setFrame:frame];
+    [self setNeedsLayout];
 }
 
 - (void)setBackgroundImage:(UIImage *)backgroundImage
@@ -418,6 +419,7 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (_mode == IKCModeRotaryDial) return;
     _circular = circular;
+    [self setNeedsLayout];
 }
 
 - (void)setClockwise:(BOOL)clockwise
@@ -556,9 +558,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)tintColorDidChange
 {
-    if ([imageLayer isKindOfClass:CAShapeLayer.class]) {
-        [self updateShapeLayer];
-    }
+    [self setNeedsLayout];
 }
 
 - (UIImage*)currentImage
@@ -1040,12 +1040,12 @@ static CGRect adjustFrame(CGRect frame) {
     if (!backgroundLayer)
     {
         backgroundLayer = [CALayer layer];
-        backgroundLayer.bounds = self.bounds;
-        backgroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         backgroundLayer.backgroundColor = [UIColor clearColor].CGColor;
         backgroundLayer.opaque = NO;
         [self.layer addSublayer:backgroundLayer];
     }
+    backgroundLayer.bounds = self.bounds;
+    backgroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
 
     if (_backgroundImage)
     {
@@ -1073,12 +1073,12 @@ static CGRect adjustFrame(CGRect frame) {
     if (!middleLayer)
     {
         middleLayer = [CALayer layer];
-        middleLayer.bounds = self.bounds;
-        middleLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         middleLayer.backgroundColor = [UIColor clearColor].CGColor;
         middleLayer.opaque = NO;
         [self.layer addSublayer:middleLayer];
     }
+    middleLayer.bounds = self.bounds;
+    middleLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
 
     UIImage* image = self.currentImage;
     if (image) {
@@ -1089,8 +1089,6 @@ static CGRect adjustFrame(CGRect frame) {
 
         if (!imageLayer) {
             imageLayer = [CALayer layer];
-            imageLayer.bounds = self.bounds;
-            imageLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
             imageLayer.backgroundColor = [UIColor clearColor].CGColor;
             imageLayer.opaque = NO;
 
@@ -1109,6 +1107,8 @@ static CGRect adjustFrame(CGRect frame) {
             [middleLayer addSublayer:imageLayer];
         }
     }
+    imageLayer.bounds = self.bounds;
+    imageLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
 
     if (_foregroundImage || _mode == IKCModeRotaryDial)
     {
@@ -1135,6 +1135,8 @@ static CGRect adjustFrame(CGRect frame) {
     }
     else
     {
+        foregroundLayer.bounds = self.bounds;
+        foregroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         [stopLayer removeFromSuperlayer];
         stopLayer = nil;
         [foregroundLayer removeFromSuperlayer];
