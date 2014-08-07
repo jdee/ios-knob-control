@@ -36,7 +36,7 @@
 #define IKC_FINGER_HOLE_RADIUS 22.0
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
-#define IKC_TARGET_VERSION 0x010201
+#define IKC_TARGET_VERSION 0x010300
 #define IKC_TARGET_BUILD 1
 
 /*
@@ -1033,6 +1033,8 @@ static CGRect adjustFrame(CGRect frame) {
  */
 - (void)updateImage
 {
+    self.layer.bounds = self.bounds;
+    self.layer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     /*
      * There is always a background layer. It may just have no contents and no
      * sublayers.
@@ -1101,11 +1103,9 @@ static CGRect adjustFrame(CGRect frame) {
         imageLayer.contents = (id)image.CGImage;
     }
     else {
-        if (![imageLayer isKindOfClass:CAShapeLayer.class]) {
-            [imageLayer removeFromSuperlayer];
-            imageLayer = [self createShapeLayer];
-            [middleLayer addSublayer:imageLayer];
-        }
+        [imageLayer removeFromSuperlayer];
+        imageLayer = [self createShapeLayer];
+        [middleLayer addSublayer:imageLayer];
     }
     imageLayer.bounds = self.bounds;
     imageLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
@@ -1135,8 +1135,6 @@ static CGRect adjustFrame(CGRect frame) {
     }
     else
     {
-        foregroundLayer.bounds = self.bounds;
-        foregroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         [stopLayer removeFromSuperlayer];
         stopLayer = nil;
         [foregroundLayer removeFromSuperlayer];
@@ -1274,29 +1272,27 @@ static CGRect adjustFrame(CGRect frame) {
  */
 - (CAShapeLayer*)createShapeLayer
 {
-    if (!shapeLayer) {
-        switch (_mode)
-        {
-            case IKCModeContinuous:
-                [self createKnobWithPip];
-                break;
-            case IKCModeLinearReturn:
-            case IKCModeWheelOfFortune:
-                [self createKnobWithMarkings];
-                break;
-            case IKCModeRotaryDial:
-                [self createRotaryDial];
-                break;
+    switch (_mode)
+    {
+        case IKCModeContinuous:
+            [self createKnobWithPip];
+            break;
+        case IKCModeLinearReturn:
+        case IKCModeWheelOfFortune:
+            [self createKnobWithMarkings];
+            break;
+        case IKCModeRotaryDial:
+            [self createRotaryDial];
+            break;
 #ifdef DEBUG
-            default:
-                NSLog(@"Unexpected mode: %d", _mode);
-                abort();
+        default:
+            NSLog(@"Unexpected mode: %d", _mode);
+            abort();
 #endif // DEBUG
-        }
-
-        float actual = self.clockwise ? self.position : -self.position;
-        shapeLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
     }
+
+    float actual = self.clockwise ? self.position : -self.position;
+    shapeLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
     return shapeLayer;
 }
@@ -1336,7 +1332,6 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
 
-    [pipLayer removeFromSuperlayer];
     pipLayer = nil;
     [self addMarkings];
 
