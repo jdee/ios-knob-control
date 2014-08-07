@@ -102,7 +102,12 @@
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
-    knobControl.fontName = @"CourierNewPS-BoldMT";
+    // knobControl.fontName = @"CourierNewPS-BoldMT";
+    knobControl.fontName = @"Menlo-Bold";
+    // knobControl.fontName = @"Georgia-Bold";
+    // knobControl.fontName = @"TimesNewRomanPS-BoldMT";
+    // knobControl.fontName = @"AvenirNext-Bold";
+    // knobControl.fontName = @"TrebuchetMS-Bold";
 
     // tint and title colors
     if ([knobControl respondsToSelector:@selector(setTintColor:)]) {

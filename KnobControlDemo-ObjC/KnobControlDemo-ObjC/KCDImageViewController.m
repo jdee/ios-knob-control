@@ -46,7 +46,13 @@
     knobControl.circular = NO;
     knobControl.min = -M_PI/2.0;
     knobControl.max = M_PI/2.0;
-    knobControl.fontName = @"TrebuchetMS";
+
+    // knobControl.fontName = @"CourierNewPS-BoldMT";
+    // knobControl.fontName = @"Menlo-Bold";
+    // knobControl.fontName = @"Georgia-Bold";
+    // knobControl.fontName = @"TimesNewRomanPS-BoldMT";
+    // knobControl.fontName = @"AvenirNext-Bold";
+    knobControl.fontName = @"TrebuchetMS-Bold";
 
     // tint and title colors
     UIColor* titleColor = [UIColor whiteColor];

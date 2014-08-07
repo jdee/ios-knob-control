@@ -45,7 +45,12 @@
     knobControl.mode = IKCModeRotaryDial;
     knobControl.gesture = IKCGestureOneFingerRotation;
 
-    knobControl.fontName = @"TimesNewRomanPSMT";
+    // knobControl.fontName = @"CourierNewPS-BoldMT";
+    // knobControl.fontName = @"Menlo-Bold";
+    // knobControl.fontName = @"Georgia-Bold";
+    // knobControl.fontName = @"TimesNewRomanPS-BoldMT";
+    knobControl.fontName = @"AvenirNext-Bold";
+    // knobControl.fontName = @"TrebuchetMS-Bold";
 
     UIColor* normalColor, *highlightedColor, *titleColor;
     normalColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.0 alpha:0.7];
