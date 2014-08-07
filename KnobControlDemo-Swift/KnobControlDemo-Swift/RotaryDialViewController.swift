@@ -52,7 +52,12 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
         knobControl.mode = .RotaryDial
         knobControl.gesture = .OneFingerRotation
 
-        knobControl.fontName = "TimesNewRomanPSMT"
+        // knobControl.fontName = "CourierNewPS-BoldMT"
+        // knobControl.fontName = "Menlo-Bold"
+        // knobControl.fontName = "Georgia-Bold"
+        // knobControl.fontName = "TimesNewRomanPS-BoldMT"
+        knobControl.fontName = "AvenirNext-Bold"
+        // knobControl.fontName = "TrebuchetMS-Bold"
 
         //* color specification
         let normalColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 0.7)

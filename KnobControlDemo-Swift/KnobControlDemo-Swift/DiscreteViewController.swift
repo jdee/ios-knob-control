@@ -67,7 +67,12 @@ class DiscreteViewController: BaseViewController {
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.circular = true
 
-        knobControl.fontName = "CourierNewPS-BoldMT"
+        // knobControl.fontName = "CourierNewPS-BoldMT"
+        knobControl.fontName = "Menlo-Bold"
+        // knobControl.fontName = "Georgia-Bold"
+        // knobControl.fontName = "TimesNewRomanPS-BoldMT"
+        // knobControl.fontName = "AvenirNext-Bold"
+        // knobControl.fontName = "TrebuchetMS-Bold"
 
         // Customize the colors for the months demo (with a generated image)
         let titleColor = UIColor.whiteColor()

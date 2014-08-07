@@ -34,6 +34,7 @@
 // but I'm reluctant to introduce a new property just for rotary dial mode, and I'm not sure whether it's really necessary. it would only be useful for very
 // large dials (on an iPad).
 #define IKC_FINGER_HOLE_RADIUS 22.0
+#define IKC_TITLE_MARGIN_RATIO 0.1
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
 #define IKC_TARGET_VERSION 0x010300
@@ -148,6 +149,7 @@ static CGRect adjustFrame(CGRect frame) {
     UIColor* titleColor[4];
     BOOL rotating;
     int lastNumberDialed, _numberDialed;
+    NSInteger lastPositionIndex;
 }
 
 @dynamic positionIndex, nearestPosition;
@@ -203,6 +205,8 @@ static CGRect adjustFrame(CGRect frame) {
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
+
+    lastPositionIndex = 0;
 
     self.opaque = NO;
     self.backgroundColor = [UIColor clearColor];
@@ -552,7 +556,8 @@ static CGRect adjustFrame(CGRect frame) {
          * On iOS 6, the matchingBlah: call returns 0 for valid fonts. So we do this check too
          * before giving up.
          */
-        UIFont* font = [UIFont fontWithName:fontName size:17.0];
+        UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:fontName size:17.0];
+        UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
         if (!font) {
             NSLog(@"Failed to find font name \"%@\".", fontName);
             return;
@@ -624,10 +629,21 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)layoutSubviews
 {
     [super layoutSubviews];
+    lastPositionIndex = self.positionIndex;
     [self updateImage];
 }
 
 #pragma mark - Private Methods: Geometry
+
+- (void)checkPositionIndex
+{
+    if (self.positionIndex == lastPositionIndex) {
+        return;
+    }
+
+    lastPositionIndex = self.positionIndex;
+    [self setNeedsLayout];
+}
 
 - (NSInteger)positionIndexForPosition:(float)position
 {
@@ -798,6 +814,10 @@ static CGRect adjustFrame(CGRect frame) {
     [CATransaction commit];
 
     _position = position;
+
+    if (_mode == IKCModeLinearReturn || _mode == IKCModeWheelOfFortune) {
+        [self checkPositionIndex];
+    }
 }
 
 #pragma mark - Private Methods: Gesture Recognition
@@ -1172,7 +1192,29 @@ static CGRect adjustFrame(CGRect frame) {
     if ((_mode != IKCModeLinearReturn && _mode != IKCModeWheelOfFortune) || self.currentImage) return;
 
     CGFloat fontSize = self.fontSizeForTitles;
-    UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
+    UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:_fontName size:fontSize];
+    UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+    assert(font);
+
+    /*
+     * Zoom the title at the top to the headline size if fontSize is smaller than the current headline font size
+     * (makes use of Dynamic Type, so requires iOS 7+). DEBT: Zoom to 17 pts or something on iOS 6?
+     */
+    UIFont* headlineFont = font;
+    CGFloat headlinePointSize = font.pointSize;
+    if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
+        UIFontDescriptor* headlineFontDesc = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
+        if (headlineFontDesc.pointSize > fontSize) {
+            headlinePointSize = headlineFontDesc.pointSize;
+            headlineFontDesc = [UIFontDescriptor fontDescriptorWithName:_fontName size:headlinePointSize];
+            headlineFont = [UIFont fontWithDescriptor:headlineFontDesc size:0.0];
+            assert(headlineFont);
+        }
+    }
+
+    assert(font);
+    assert(headlineFont);
+
     int j;
     for (j=0; j<_positions; ++j) {
         // get the title for this marking (use j if none)
@@ -1185,8 +1227,20 @@ static CGRect adjustFrame(CGRect frame) {
 
         CALayer* layer = [CALayer layer];
 
-        CGSize textSize = [title sizeOfTextWithFont:font];
-        UIImage* image = [self renderLabelImageWithText:title size:textSize fontName:_fontName fontSize:fontSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor];
+        NSInteger currentIndex = self.positionIndex;
+        UIFont* titleFont = currentIndex == j ? headlineFont : font;
+
+        // NSLog(@"Using title font %@ %f", titleFont.fontName, titleFont.pointSize);
+
+        // These computations need work.
+        CGSize textSize = [title sizeOfTextWithFont:titleFont];
+        CGFloat horizMargin = IKC_TITLE_MARGIN_RATIO * textSize.width;
+        CGFloat vertMargin = IKC_TITLE_MARGIN_RATIO * textSize.height;
+
+        textSize.width += 2.0 * horizMargin;
+        textSize.height += 2.0 * vertMargin;
+
+        UIImage* image = [self renderLabelImageWithText:title size:textSize fontName:_fontName fontSize:titleFont.pointSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor horizMargin:horizMargin vertMargin:vertMargin];
         layer.contents = (id)image.CGImage;
 
         // place it at the appropriate angle, taking the clockwise switch into account
@@ -1214,13 +1268,19 @@ static CGRect adjustFrame(CGRect frame) {
         layer.opaque = NO;
         layer.backgroundColor = [UIColor clearColor].CGColor;
 
+        /* Useful for analyzing layout
+        layer.borderWidth = 1.0;
+        layer.borderColor = self.currentTitleColor.CGColor;
+        layer.cornerRadius = 2.0;
+        // */
+
         [markings addObject:layer];
 
         [shapeLayer addSublayer:layer];
     }
 }
 
-- (UIImage*)renderLabelImageWithText:(NSString*)text size:(CGSize)size fontName:(NSString*)fontName fontSize:(CGFloat)fontSize backgroundColor:(UIColor*)background foregroundColor:(UIColor*)foregroundColor
+- (UIImage*)renderLabelImageWithText:(NSString*)text size:(CGSize)size fontName:(NSString*)fontName fontSize:(CGFloat)fontSize backgroundColor:(UIColor*)background foregroundColor:(UIColor*)foregroundColor horizMargin:(CGFloat)horizMargin vertMargin:(CGFloat)vertMargin
 {
     // Account for screen resolution.
     size.width *= [UIScreen mainScreen].scale;
@@ -1240,6 +1300,14 @@ static CGRect adjustFrame(CGRect frame) {
     // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
 
     CTFontRef font = CTFontCreateWithName((CFStringRef)fontName, fontSize, NULL);
+    assert(font);
+
+    /*
+    CFStringRef fname = CTFontCopyPostScriptName(font);
+    NSLog(@"Using font %@", (__bridge NSString*)fname);
+    CFRelease(fname);
+    // */
+
     CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
     CFTypeRef values[] = { font, foregroundColor.CGColor };
 
@@ -1260,8 +1328,14 @@ static CGRect adjustFrame(CGRect frame) {
     CGContextTranslateCTM(context, 0.0, size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
 
-    // DEBT: This 0.2 is probably related to font ascents and shit like that. Should compute it. But this works for now.
-    CGContextSetTextPosition(context, 0.0, 0.2*size.height);
+    // compute vertical position from font metrics
+    CGFloat belowBaseline = CTFontGetLeading(font) + CTFontGetDescent(font) + vertMargin;
+    CGFloat lineHeight = belowBaseline + CTFontGetAscent(font) + vertMargin;
+
+    CGFloat x = horizMargin;
+    CGFloat y = belowBaseline / lineHeight * size.height;
+
+    CGContextSetTextPosition(context, x, y);
     CTLineDraw(line, context);
     CFRelease(line);
 
@@ -1418,7 +1492,7 @@ static CGRect adjustFrame(CGRect frame) {
         CALayer* textLayer = [CALayer layer];
         NSString* text = [NSString stringWithFormat:@"%d", (j+1)%10];
         CGSize textSize = [text sizeOfTextWithFont:font];
-        UIImage* image = [self renderLabelImageWithText:text size:textSize fontName:_fontName fontSize:fontSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor];
+        UIImage* image = [self renderLabelImageWithText:text size:textSize fontName:_fontName fontSize:fontSize backgroundColor:[UIColor clearColor] foregroundColor:self.currentTitleColor horizMargin:0.0 vertMargin:0.0];
         textLayer.contents = (id)image.CGImage;
 
         textLayer.backgroundColor = [UIColor clearColor].CGColor;
@@ -1471,13 +1545,13 @@ static CGRect adjustFrame(CGRect frame) {
     return stopLayer;
 }
 
-- (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
+- (CGFloat)titleCircumferenceWithFont:(UIFont*)font
 {
     CGFloat max = 0.0;
-    UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
     for (NSString* title in _titles) {
         CGSize textSize = [title sizeOfTextWithFont:font];
-        max = MAX(max, textSize.width);
+        CGFloat width = textSize.width * (1.0 + 2.0 * IKC_TITLE_MARGIN_RATIO);
+        max = MAX(max, width);
     }
 
     return max * _positions;
@@ -1504,7 +1578,16 @@ static CGRect adjustFrame(CGRect frame) {
             continue;
         }
 
-        CGFloat circumference = [self titleCircumferenceWithFontSize:fontSize];
+        // NSLog(@"Looking for font %@ %f", _fontName, fontSize);
+        UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:_fontName size:fontSize];
+        UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+
+        if (!font) {
+            // Assume it will eventually find one.
+            continue;
+        }
+
+        CGFloat circumference = [self titleCircumferenceWithFont:font];
 
         // Empirically, this 0.25 works out well. This allows for a little padding between text segments.
         if (circumference <= angle*self.bounds.size.width*0.25) break;

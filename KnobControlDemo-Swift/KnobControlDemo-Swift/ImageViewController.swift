@@ -86,7 +86,13 @@ class ImageViewController: BaseViewController {
         knobControl.circular = false
         knobControl.min = -π * 0.5
         knobControl.max = π * 0.5
-        knobControl.fontName = "TrebuchetMS"
+
+        // knobControl.fontName = "CourierNewPS-BoldMT"
+        // knobControl.fontName = "Menlo-Bold"
+        // knobControl.fontName = "Georgia-Bold"
+        // knobControl.fontName = "TimesNewRomanPS-BoldMT"
+        // knobControl.fontName = "AvenirNext-Bold"
+        knobControl.fontName = "TrebuchetMS-Bold"
 
         // color set up
         var titleColor = UIColor.blackColor()
