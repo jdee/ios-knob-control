@@ -1454,20 +1454,20 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (CGFloat)titleCircumferenceWithFontSize:(CGFloat)fontSize
 {
-    CGFloat circumference = 0.0;
+    CGFloat max = 0.0;
     UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
     for (NSString* title in _titles) {
         CGSize textSize = [title sizeOfTextWithFont:font];
-        circumference += textSize.width;
+        max = MAX(max, textSize.width);
     }
 
-    return circumference;
+    return max * _positions;
 }
 
 - (CGFloat)fontSizeForTitles
 {
     CGFloat fontSize = 0.0;
-    CGFloat fontSizes[] = { /* 36.0, */ 24.0, 18.0, 14.0, 12.0, 10.0 };
+    CGFloat fontSizes[] = { /* 36.0, */ 24.0, 18.0, 14.0, 12.0, 10.0, 9.0, 8.0, 7.0 };
 
     double angle = _circular ? 2.0*M_PI : _max - _min;
 
