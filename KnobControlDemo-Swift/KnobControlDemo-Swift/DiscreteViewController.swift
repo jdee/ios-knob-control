@@ -74,11 +74,8 @@ class DiscreteViewController: BaseViewController {
         // knobControl.fontName = "AvenirNext-Bold"
         // knobControl.fontName = "TrebuchetMS-Bold"
 
-        // Customize the colors for the months demo (with a generated image)
-        let titleColor = UIColor.blackColor()
-        knobControl.tintColor = UIColor.whiteColor()
-        knobControl.setTitleColor(titleColor, forState: .Normal)
-        knobControl.setTitleColor(titleColor, forState: .Highlighted)
+        knobControl.setFillColor(UIColor.lightGrayColor(), forState: .Normal)
+        knobControl.setFillColor(UIColor(red:0.9, green:0.9, blue:0.9, alpha:1.0), forState: .Highlighted)
 
         // specify an action for the .ValueChanged event and add as a subview to the knobHolder UIView
         knobControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
