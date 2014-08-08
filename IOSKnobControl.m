@@ -505,19 +505,19 @@ static CGRect adjustFrame(CGRect frame) {
     [super setEnabled:enabled];
     gestureRecognizer.enabled = enabled;
 
-    [self setNeedsLayout];
+    [self updateControlState];
 }
 
 - (void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    [self setNeedsLayout];
+    [self updateControlState];
 }
 
 - (void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
-    [self setNeedsLayout];
+    [self updateControlState];
 }
 
 - (void)setPositions:(NSUInteger)positions
@@ -1162,7 +1162,7 @@ static CGRect adjustFrame(CGRect frame) {
             rotating = NO;
 
             // revert from highlighted to normal
-            [self setNeedsLayout];
+            [self updateControlState];
             break;
         default:
             // just track the touch while the gesture is in progress
@@ -1346,9 +1346,31 @@ static CGRect adjustFrame(CGRect frame) {
                 break;
         }
 
+        [self updateControlState];
+    }
+}
+
+/*
+ * There are several things that require a full layout: Changing the appearance of the control (image vs. none, different font size, etc.),
+ * changing the frame (resizing). And many other things, like changing the background image, redraw the control entirely because it's
+ * easier to call setNeedsLayout than it is to factor out the pieces that are affected by each possible property change.
+ * 
+ * However, control state changes frequently, and the changes have to be fast to avoid interfering with animations. Hence this separate method
+ * called whenever state changes.
+ */
+- (void)updateControlState
+{
+    if (self.currentImage) {
+        imageLayer.contents = (id)self.currentImage.CGImage;
+    }
+    else {
         shapeLayer.fillColor = self.currentFillColor.CGColor;
         pipLayer.fillColor = self.currentTitleColor.CGColor;
         stopLayer.fillColor = self.currentTitleColor.CGColor;
+
+        for (IKCTextLayer* layer in markings) {
+            layer.foregroundColor = self.currentTitleColor.CGColor;
+        }
     }
 }
 
@@ -1426,6 +1448,11 @@ static CGRect adjustFrame(CGRect frame) {
 
         textLayer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         textLayer.position = CGPointMake(centerX, centerY);
+        /*
+        textLayer.borderColor = self.currentTitleColor.CGColor;
+        textLayer.borderWidth = 1.0;
+        textLayer.cornerRadius = 2.0;
+        // */
 
         [textLayer setNeedsDisplay];
 
