@@ -238,6 +238,8 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
         knobControl.normalized = false // this lets us fast forward and rewind using the knob
         knobControl.addTarget(self, action: "knobRotated:", forControlEvents: .ValueChanged)
         knobControl.setImage(UIImage(named:"disc-disabled"), forState: .Disabled)
+        knobControl.shadow = true
+        knobControl.clipsToBounds = false
         knobHolder.addSubview(knobControl)
     }
 

@@ -71,6 +71,8 @@ class ContinuousViewController: BaseViewController, ImageChooser {
         knobControl.mode = .Continuous
         knobControl.min = -π * 0.5
         knobControl.max = π * 0.5
+        knobControl.shadow = true
+        knobControl.clipsToBounds = false
 
         minControl = IOSKnobControl(frame: minHolder.bounds)
         minControl.mode = .Continuous
@@ -100,6 +102,8 @@ class ContinuousViewController: BaseViewController, ImageChooser {
 
         knobPositionChanged(minControl)
         knobPositionChanged(maxControl)
+
+        updateKnobImages()
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {

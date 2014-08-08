@@ -52,6 +52,7 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
         knobControl.mode = .RotaryDial
         knobControl.gesture = .OneFingerRotation
         knobControl.shadow = true
+        knobControl.clipsToBounds = false
 
         // knobControl.fontName = "CourierNewPS-BoldMT"
         // knobControl.fontName = "Menlo-Bold"
