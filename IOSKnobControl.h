@@ -230,8 +230,8 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 
 /**
  * Only applicable in IKCModeLinearReturn and IKCModeWheelOfFortune when no image is present, and the knob image is generated from the titles property. If set to YES, the
- * control will enlarge the top title up to the current Dynamic Type headline font size (i.e., [UIFontDescriptor 
- * preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize) on iOS 7+ or 17 pts. on iOS 6. The default value is YES.
+ * control will enlarge the top title up to the current Dynamic Type headline font size (i.e., [UIFontDescriptor
+ * preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize) on iOS 7+ or 17 pts. on iOS 6 or below. The default value is YES.
  */
 @property (nonatomic) BOOL zoomTopTitle;
 

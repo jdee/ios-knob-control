@@ -1524,10 +1524,20 @@ static CGRect adjustFrame(CGRect frame) {
     UIFont* headlineFont = font;
     CGFloat headlinePointSize = font.pointSize;
     if (_zoomTopTitle && [UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
+        // iOS 7+
         UIFontDescriptor* headlineFontDesc = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
         if (headlineFontDesc.pointSize > fontSize) {
             headlinePointSize = headlineFontDesc.pointSize;
             headlineFontDesc = [UIFontDescriptor fontDescriptorWithName:_fontName size:headlinePointSize];
+            headlineFont = [UIFont fontWithDescriptor:headlineFontDesc size:0.0];
+            assert(headlineFont);
+        }
+    }
+    else if (_zoomTopTitle) {
+        // iOS 5 & 6
+        headlinePointSize = 17.0;
+        if (headlinePointSize > fontSize) {
+            UIFontDescriptor* headlineFontDesc = [UIFontDescriptor fontDescriptorWithName:_fontName size:headlinePointSize];
             headlineFont = [UIFont fontWithDescriptor:headlineFontDesc size:0.0];
             assert(headlineFont);
         }
