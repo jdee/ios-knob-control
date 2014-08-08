@@ -571,6 +571,15 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (_mode == IKCModeRotaryDial) return;
     _circular = circular;
+
+    if (!_circular) {
+        self.position = MIN(MAX(_position, _min), _max);
+    }
+    else if (_normalized) {
+        while (_position > M_PI) _position -= 2.0 * M_PI;
+        while (_position <= -M_PI) _position += 2.0 * M_PI;
+    }
+
     [self setNeedsLayout];
 }
 
@@ -643,7 +652,7 @@ static CGRect adjustFrame(CGRect frame) {
 
     if (_position < _min) self.position = _min;
 
-    if (_mode == IKCModeContinuous || _mode == IKCModeRotaryDial || [self imageForState:UIControlStateNormal]) return;
+    if (_mode == IKCModeContinuous || self.currentImage) return;
 
     // if we are rendering a discrete knob with titles, re-render the titles now that min/max has changed
     [imageLayer removeFromSuperlayer];
@@ -664,7 +673,7 @@ static CGRect adjustFrame(CGRect frame) {
 
     if (_position > _max) self.position = _max;
 
-    if (_mode == IKCModeContinuous || _mode == IKCModeRotaryDial || [self imageForState:UIControlStateNormal]) return;
+    if (_mode == IKCModeContinuous || self.currentImage) return;
 
     // if we are rendering a discrete knob with titles, re-render the titles now that min/max has changed
     [imageLayer removeFromSuperlayer];
@@ -690,10 +699,16 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setNormalized:(BOOL)normalized
 {
     _normalized = normalized;
-    if (_normalized) {
+
+    if (!_circular) {
+        self.position = MIN(MAX(_position, _min), _max);
+    }
+    else if (_normalized) {
         while (_position > M_PI) _position -= 2.0 * M_PI;
         while (_position <= -M_PI) _position += 2.0 * M_PI;
     }
+
+    [self setNeedsLayout];
 }
 
 - (void)setFontName:(NSString *)fontName
