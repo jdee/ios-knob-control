@@ -78,6 +78,8 @@ static CGRect adjustFrame(CGRect frame) {
     return frame;
 }
 
+#pragma mark - String deprecation wrapper
+
 @protocol NSStringDeprecatedMethods
 - (CGSize)sizeWithFont:(UIFont*)font;
 @end
@@ -121,6 +123,8 @@ static CGRect adjustFrame(CGRect frame) {
 @property (nonatomic, copy) id string;
 @property (nonatomic) CGFloat horizMargin, vertMargin;
 @property (nonatomic) BOOL adjustsFontSizeForAttributed;
+
+@property (nonatomic, readonly) CFAttributedStringRef attributedString;
 
 + (instancetype)layer;
 
@@ -170,80 +174,9 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)display
 {
-    CGFloat fontSize = _fontSize * [UIScreen mainScreen].scale;
-
-    // Use CoreText to render directly
-    // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
-
-    CTFontRef font;
-
-    CFAttributedStringRef attributed;
-    if ([_string isKindOfClass:NSAttributedString.class]) {
-        CFMutableAttributedStringRef mutableAttributed = CFAttributedStringCreateMutableCopy(kCFAllocatorDefault, 0, (CFAttributedStringRef)_string);
-        attributed = mutableAttributed;
-
-        font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
-        assert(font);
-        CGColorRef fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, kCTForegroundColorAttributeName, NULL);
-
-        /*
-         * As with views like UILabel, reset the foregroundColor and fontName properties to those attributes of the
-         * string at location 0.
-         */
-        _foregroundColor = (CGColorRef)CFBridgingRetain([UIColor colorWithCGColor: fg]);
-        _fontName = CFBridgingRelease(CTFontCopyPostScriptName(font));
-
-        CGFloat pointSize = CTFontGetSize(font);
-        // NSLog(@"point size for attrib. string: %f", pointSize);
-
-        if (_adjustsFontSizeForAttributed && pointSize != fontSize) {
-            CTFontRef newFont = CTFontCreateCopyWithAttributes(font, fontSize, NULL, NULL);
-            CFRange range;
-            range.location = 0;
-            range.length = CFAttributedStringGetLength(mutableAttributed);
-            CFAttributedStringSetAttribute(mutableAttributed, range, kCTFontAttributeName, newFont);
-            CFRelease(newFont);
-            // NSLog(@"point size for new font: %f", fontSize);
-        }
-        else if (!_adjustsFontSizeForAttributed && [UIScreen mainScreen].scale > 1.0) {
-            fontSize = [UIScreen mainScreen].scale * pointSize;
-
-            CTFontRef newFont = CTFontCreateCopyWithAttributes(font, fontSize, NULL, NULL);
-            CFRange range;
-            range.location = 0;
-            range.length = CFAttributedStringGetLength(mutableAttributed);
-            CFAttributedStringSetAttribute(mutableAttributed, range, kCTFontAttributeName, newFont);
-            CFRelease(newFont);
-            // NSLog(@"point size for new font: %f", fontSize);
-        }
-        _fontSize = fontSize / [UIScreen mainScreen].scale;
-    }
-    else {
-        font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
-        assert(font);
-
-        /*
-        CFStringRef fname = CTFontCopyPostScriptName(font);
-        NSLog(@"Using font %@", (__bridge NSString*)fname);
-        CFRelease(fname);
-        // */
-
-        CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
-        CFTypeRef values[] = { font, _foregroundColor };
-
-        CFDictionaryRef attributes =
-        CFDictionaryCreate(kCFAllocatorDefault, (const void**)&keys,
-                           (const void**)&values, sizeof(keys) / sizeof(keys[0]),
-                           &kCFTypeDictionaryKeyCallBacks,
-                           &kCFTypeDictionaryValueCallBacks);
-        CFRelease(font);
-        attributed = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)_string, attributes);
-        CFRelease(attributes);
-    }
-
-    CTLineRef line = CTLineCreateWithAttributedString(attributed);
-    CFRelease(attributed);
-
+    /*
+     * Scale params for display resolution.
+     */
     CGSize size = self.bounds.size;
     CGFloat horizMargin = _horizMargin;
     CGFloat vertMargin = _vertMargin;
@@ -254,16 +187,30 @@ static CGRect adjustFrame(CGRect frame) {
     horizMargin = _horizMargin * [UIScreen mainScreen].scale;
     vertMargin = _vertMargin * [UIScreen mainScreen].scale;
 
+    /*
+     * Get the attributed string to render
+     */
+    CFAttributedStringRef attributed = self.attributedString;
+
+    // the font used by the attributed string
+    CTFontRef font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
+    assert(font);
+
+    // compute vertical position from font metrics
+    CGFloat belowBaseline = CTFontGetLeading(font) + CTFontGetDescent(font) + vertMargin;
+    CGFloat lineHeight = belowBaseline + CTFontGetAscent(font) + vertMargin;
+
+    // Make a CTLine to render from the attributed string
+    CTLineRef line = CTLineCreateWithAttributedString(attributed);
+    CFRelease(attributed);
+
+    // Generate a bitmap context at the correct resolution
     UIGraphicsBeginImageContext(size);
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     // flip y
     CGContextTranslateCTM(context, 0.0, size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
-
-    // compute vertical position from font metrics
-    CGFloat belowBaseline = CTFontGetLeading(font) + CTFontGetDescent(font) + vertMargin;
-    CGFloat lineHeight = belowBaseline + CTFontGetAscent(font) + vertMargin;
 
     CGFloat x = horizMargin;
     CGFloat y = belowBaseline / lineHeight * size.height;
@@ -272,8 +219,123 @@ static CGRect adjustFrame(CGRect frame) {
     CTLineDraw(line, context);
     CFRelease(line);
 
+    // Get the generated bitmap and use it for the layer's contents.
     self.contents = (id)UIGraphicsGetImageFromCurrentImageContext().CGImage;
     UIGraphicsEndImageContext();
+}
+
+- (CFAttributedStringRef)attributedString
+{
+    CGFloat fontSize = _fontSize * [UIScreen mainScreen].scale;
+
+    CTFontRef font;
+
+    CFAttributedStringRef attributed;
+
+    /*
+     * _string can be an attributed string or a plain string. in the end, we need an attributed string.
+     */
+    if ([_string isKindOfClass:NSAttributedString.class]) {
+        /*
+         * It's an attributed string. Make a mutable copy.
+         */
+        CFMutableAttributedStringRef mutableAttributed = CFAttributedStringCreateMutableCopy(kCFAllocatorDefault, 0, (CFAttributedStringRef)_string);
+        attributed = mutableAttributed;
+
+        CFRange wholeString;
+        wholeString.location = 0;
+        wholeString.length = CFAttributedStringGetLength(attributed);
+
+        font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
+
+        /*
+         * Massage the font attribute for a number of reasons:
+         * 1. No font was specified for the input (like a plain string)
+         */
+        if (!font) {
+            font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
+            CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTFontAttributeName, font);
+            CFRelease(font);
+        }
+        assert(font);
+
+        CGFloat pointSize = CTFontGetSize(font);
+        // NSLog(@"point size for attrib. string: %f", pointSize);
+
+        // 2. It's at the top and has to zoom.
+        if (_adjustsFontSizeForAttributed && pointSize != fontSize) {
+            /*
+             * Need to adjust to the specified fontSize
+             */
+            CTFontRef newFont = CTFontCreateCopyWithAttributes(font, fontSize, NULL, NULL);
+            CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTFontAttributeName, newFont);
+            CFRelease(newFont);
+            // NSLog(@"point size for new font: %f", fontSize);
+        }
+        // 3. This is a high-res image, so we render at double the size.
+        else if (!_adjustsFontSizeForAttributed && [UIScreen mainScreen].scale > 1.0) {
+            /*
+             * Need to increase the font size for this hi-res image
+             */
+            fontSize = [UIScreen mainScreen].scale * pointSize;
+
+            CTFontRef newFont = CTFontCreateCopyWithAttributes(font, fontSize, NULL, NULL);
+            CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTFontAttributeName, newFont);
+            CFRelease(newFont);
+            // NSLog(@"point size for new font: %f", fontSize);
+        }
+        else {
+            /*
+             * No change. Update the fontName attribute.
+             */
+            font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
+            _fontName = CFBridgingRelease(CTFontCopyPostScriptName(font));
+        }
+
+        /*
+         * As with views like UILabel, reset the foregroundColor and fontName properties to those attributes of the
+         * string at location 0.
+         */
+        CGColorRef fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, kCTForegroundColorAttributeName, NULL);
+        if (fg) {
+            _foregroundColor = (CGColorRef)CFBridgingRetain([UIColor colorWithCGColor: fg]);
+        }
+        else {
+            // no foreground color specified, so give it one (like a plain string)
+            CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTForegroundColorAttributeName, _foregroundColor);
+        }
+
+        _fontSize = fontSize / [UIScreen mainScreen].scale;
+    }
+    else {
+        /*
+         * Plain string. Get the necessary font.
+         */
+        font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
+        assert(font);
+
+        /*
+         CFStringRef fname = CTFontCopyPostScriptName(font);
+         NSLog(@"Using font %@", (__bridge NSString*)fname);
+         CFRelease(fname);
+         // */
+
+        CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
+        CFTypeRef values[] = { font, _foregroundColor };
+
+        CFDictionaryRef attributes =
+        CFDictionaryCreate(kCFAllocatorDefault, (const void**)&keys,
+                           (const void**)&values, sizeof(keys) / sizeof(keys[0]),
+                           &kCFTypeDictionaryKeyCallBacks,
+                           &kCFTypeDictionaryValueCallBacks);
+        CFRelease(font);
+
+        // create an attributed string with a foreground color and a font
+        attributed = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)_string, attributes);
+        CFRelease(attributes);
+    }
+
+    return attributed;
 }
 
 @end
@@ -300,6 +362,8 @@ static CGRect adjustFrame(CGRect frame) {
     _knobControl.enabled = YES;
 }
 @end
+
+#pragma mark - IOSKnobControl implementation
 
 @interface IOSKnobControl()
 /*
@@ -1624,7 +1688,7 @@ static CGRect adjustFrame(CGRect frame) {
         float actual = _clockwise ? -position : position;
 
         // distance from the center to place the upper left corner
-        float radius = 0.4*self.bounds.size.width - 0.5*textSize.height;
+        float radius = 0.45*self.bounds.size.width - 0.5*textSize.height;
 
         // place and rotate
         layer.position = CGPointMake(self.bounds.origin.x + 0.5*self.bounds.size.width+radius*sin(actual), self.bounds.origin.y + 0.5*self.bounds.size.height-radius*cos(actual));
@@ -1845,8 +1909,8 @@ static CGRect adjustFrame(CGRect frame) {
 
         // NSLog(@"With font size %f: circumference %f/%f", fontSize, circumference, angle*self.bounds.size.width*0.25);
 
-        // Empirically, this 0.25 works out well. This allows for a little padding between text segments.
-        if (circumference <= angle*self.bounds.size.width*0.25) break;
+        // Empirically, this factor works out well. This allows for a little padding between text segments.
+        if (circumference <= angle*self.bounds.size.width*0.4) break;
     }
 
     return fontSize;

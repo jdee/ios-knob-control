@@ -158,7 +158,7 @@ class DiscreteViewController: BaseViewController {
             let titles = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
 
             let font = UIFont(name: knobControl.fontName, size: 14.0)
-            let italicFontDesc = UIFontDescriptor(name: "Menlo Bold Italic", size: 14.0)
+            let italicFontDesc = UIFontDescriptor(name: "Verdana-BoldItalic", size: 14.0)
             let italicFont = UIFont(descriptor: italicFontDesc, size: 0.0)
 
             var attribTitles = [NSAttributedString]()
