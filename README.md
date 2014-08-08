@@ -1,11 +1,11 @@
 iOS Knob Control
 ================
 
-![Spin](http://i.imgur.com/79kJTnw.png)
+![Spin](http://i.imgur.com/Ybdb91w.png)
 &nbsp;
-![Continuous](http://i.imgur.com/JULtITx.png)
+![Continuous](http://i.imgur.com/IGMKta8.png)
 &nbsp;
-![Rotary Dial](http://i.imgur.com/yrlnGvC.png)
+![Rotary Dial](http://i.imgur.com/PlFTU1c.png)
 &nbsp;
 ![Feedback](http://i.imgur.com/rsLWAXo.png)
 

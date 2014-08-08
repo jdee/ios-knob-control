@@ -1530,7 +1530,7 @@ static CGRect adjustFrame(CGRect frame) {
         layer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
-        //*
+        /*
         layer.borderColor = self.currentTitleColor.CGColor;
         layer.borderWidth = 1.0;
         layer.cornerRadius = 2.0;
