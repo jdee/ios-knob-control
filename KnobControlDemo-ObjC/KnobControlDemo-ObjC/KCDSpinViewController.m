@@ -232,6 +232,8 @@
     knobControl.circular = YES;
     knobControl.normalized = NO;
     knobControl.enabled = NO;
+    knobControl.shadow = YES;
+    knobControl.clipsToBounds = NO;
     [knobControl addTarget:self action:@selector(knobRotated:) forControlEvents:UIControlEventValueChanged];
     [knobControl setImage:[UIImage imageNamed:@"disc-disabled"] forState:UIControlStateDisabled];
     [_knobHolder addSubview:knobControl];

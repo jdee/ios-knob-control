@@ -54,6 +54,8 @@
     // basic continuous knob configuration
     knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
     knobControl.mode = IKCModeContinuous;
+    knobControl.shadow = YES;
+    knobControl.clipsToBounds = NO;
 
     // arrange to be notified whenever the knob turns
     [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];

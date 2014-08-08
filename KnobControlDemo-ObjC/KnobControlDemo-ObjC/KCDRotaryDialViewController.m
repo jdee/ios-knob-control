@@ -45,6 +45,7 @@
     knobControl.mode = IKCModeRotaryDial;
     knobControl.gesture = IKCGestureOneFingerRotation;
     knobControl.shadow = YES;
+    knobControl.clipsToBounds = NO;
 
     // knobControl.fontName = @"CourierNewPS-BoldMT";
     // knobControl.fontName = @"Menlo-Bold";
