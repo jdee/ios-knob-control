@@ -160,13 +160,15 @@ class DiscreteViewController: BaseViewController {
         else {
             let titles = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
 
-            // example with attributed titles
             let font = UIFont(name: knobControl.fontName, size: 14.0)
+            let italicFontDesc = UIFontDescriptor(name: "Menlo Bold Italic", size: 14.0)
+            let italicFont = UIFont(descriptor: italicFontDesc, size: 0.0)
 
             var attribTitles = [NSAttributedString]()
 
             for (index, title) in enumerate(titles) {
-                let attributed = NSAttributedString(string: title, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor(hue:CGFloat(index)/CGFloat(titles.count), saturation:1.0, brightness:1.0, alpha:1.0)])
+                let textColor = UIColor(hue:CGFloat(index)/CGFloat(titles.count), saturation:1.0, brightness:1.0, alpha:1.0)
+                let attributed = NSAttributedString(string: title, attributes: [NSFontAttributeName: index % 2 == 0 ? font : italicFont, NSForegroundColorAttributeName: textColor])
                 attribTitles.append(attributed)
             }
             knobControl.titles = attribTitles

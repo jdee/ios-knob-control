@@ -94,7 +94,23 @@
     }
     else {
         knobControl.positions = 12;
-        knobControl.titles = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
+        NSArray* titles = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
+
+        UIFont* font = [UIFont fontWithName:@"Menlo-Bold" size:14.0];
+        UIFontDescriptor* italicFontDescriptor = [UIFontDescriptor fontDescriptorWithName:@"Menlo Bold Italic" size:14.0];
+        UIFont* italicFont = [UIFont fontWithDescriptor:italicFontDescriptor size:0.0];
+
+        NSMutableArray* attribTitles = [NSMutableArray array];
+        for (int j=0; j<titles.count; ++j) {
+            NSString* title = titles[j];
+
+            UIColor* textColor = [UIColor colorWithHue:((CGFloat)j)/(CGFloat)titles.count saturation:1.0 brightness:1.0 alpha:1.0];
+            NSAttributedString* attributed = [[NSAttributedString alloc] initWithString:title attributes:@{ NSFontAttributeName: (j % 2 == 0 ? font : italicFont), NSForegroundColorAttributeName: textColor }];
+            [attribTitles addObject:attributed];
+        }
+
+        knobControl.titles = attribTitles;
+
         [knobControl setImage:nil forState:UIControlStateNormal];
     }
 
@@ -111,10 +127,10 @@
 
     // tint and title colors
     if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
-        knobControl.tintColor = [UIColor greenColor];
+        knobControl.tintColor = [UIColor whiteColor];
     }
 
-    UIColor* titleColor = [UIColor whiteColor];
+    UIColor* titleColor = [UIColor blackColor];
     [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
     [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
 
