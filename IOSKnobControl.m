@@ -748,8 +748,7 @@ static CGRect adjustFrame(CGRect frame) {
          * before giving up.
          */
         UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:fontName size:17.0];
-        UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
-        if (!font) {
+        if (![UIFont fontWithDescriptor:fontDescriptor size:0.0] && ![UIFont fontWithName:fontName size:17.0]) {
             NSLog(@"Failed to find font name \"%@\".", fontName);
             return;
         }
@@ -1478,7 +1477,11 @@ static CGRect adjustFrame(CGRect frame) {
     float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
     float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
 
-    CGFloat fontSize = self.fontSizeForTitles;
+    CGFloat fontSize = 17.0;
+    if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
+        fontSize = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize;
+    }
+
     UIFont* font = [UIFont fontWithName:_fontName size:fontSize];
     int j;
     for (j=0; j<10; ++j)
@@ -1487,7 +1490,7 @@ static CGRect adjustFrame(CGRect frame) {
         double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
         double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
 
-        NSString* text = [NSString stringWithFormat:@"%d", (j+1)%10];
+        NSString* text = [NSString stringWithFormat:@"%d", (j + 1) % 10];
         CGSize textSize = [text sizeOfTextWithFont:font];
         IKCTextLayer* textLayer = dialMarkings[j];
         textLayer.string = text;
@@ -1794,6 +1797,7 @@ static CGRect adjustFrame(CGRect frame) {
         }
         else if ([titleObject isKindOfClass:NSString.class]) {
             textSize = [(NSString*)titleObject sizeOfTextWithFont:font];
+            NSLog(@"textSize: %f x %f", textSize.width, textSize.height);
         }
         CGFloat width = textSize.width * (1.0 + 2.0 * IKC_TITLE_MARGIN_RATIO);
         max = MAX(max, width);
@@ -1804,7 +1808,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (CGFloat)fontSizeForTitles
 {
-    CGFloat styleHeadlineSize = 46.0;
+    CGFloat styleHeadlineSize = 17.0;
 
     if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
         styleHeadlineSize = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize;
@@ -1814,7 +1818,7 @@ static CGRect adjustFrame(CGRect frame) {
     double angle = _circular ? 2.0*M_PI : _max - _min;
 
     CGFloat fontSize;
-    for (fontSize = 46.0; fontSize >= 7.0; fontSize -= 1.0) {
+    for (fontSize = 23.0; fontSize >= 7.0; fontSize -= 1.0) {
         if (fontSize > styleHeadlineSize) {
             // don't display anything larger than the current headline size (max. 23 pts.)
             continue;
@@ -1825,13 +1829,17 @@ static CGRect adjustFrame(CGRect frame) {
         UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
 
         if (!font) {
+            font = [UIFont fontWithName:_fontName size:fontSize];
+        }
+
+        if (!font) {
             // Assume it will eventually find one.
             continue;
         }
 
         CGFloat circumference = [self titleCircumferenceWithFont:font];
 
-        // NSLog(@"With font size %f: circumference %f/%f", fontDescriptor.pointSize, circumference, angle*self.bounds.size.width*0.25);
+        NSLog(@"With font size %f: circumference %f/%f", fontSize, circumference, angle*self.bounds.size.width*0.25);
 
         // Empirically, this 0.25 works out well. This allows for a little padding between text segments.
         if (circumference <= angle*self.bounds.size.width*0.25) break;
