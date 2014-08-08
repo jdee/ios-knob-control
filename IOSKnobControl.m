@@ -166,6 +166,8 @@ static CGRect adjustFrame(CGRect frame) {
     if (_foregroundColor) CFRelease(_foregroundColor);
     _foregroundColor = foregroundColor;
     CFRetain(_foregroundColor);
+
+    [self setNeedsDisplay];
 }
 
 #pragma mark - Custom text display with CoreText.
