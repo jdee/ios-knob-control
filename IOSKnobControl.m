@@ -186,27 +186,36 @@ static CGRect adjustFrame(CGRect frame) {
     // Use CoreText to render directly
     // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
 
-    CTFontRef font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
-    assert(font);
+    CTFontRef font;
 
-    /*
-     CFStringRef fname = CTFontCopyPostScriptName(font);
-     NSLog(@"Using font %@", (__bridge NSString*)fname);
-     CFRelease(fname);
-     // */
+    CFAttributedStringRef attributed;
+    if ([_string isKindOfClass:NSAttributedString.class]) {
+        attributed = CFAttributedStringCreateCopy(kCFAllocatorDefault, (CFAttributedStringRef)_string);
+        font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
+        assert(font);
+    }
+    else {
+        font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
+        assert(font);
 
-    CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
-    CFTypeRef values[] = { font, _foregroundColor };
+        /*
+         CFStringRef fname = CTFontCopyPostScriptName(font);
+         NSLog(@"Using font %@", (__bridge NSString*)fname);
+         CFRelease(fname);
+         // */
 
-    CFDictionaryRef attributes =
-    CFDictionaryCreate(kCFAllocatorDefault, (const void**)&keys,
-                       (const void**)&values, sizeof(keys) / sizeof(keys[0]),
-                       &kCFTypeDictionaryKeyCallBacks,
-                       &kCFTypeDictionaryValueCallBacks);
-    CFRelease(font);
+        CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
+        CFTypeRef values[] = { font, _foregroundColor };
 
-    CFAttributedStringRef attributed = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)_string, attributes);
-    CFRelease(attributes);
+        CFDictionaryRef attributes =
+        CFDictionaryCreate(kCFAllocatorDefault, (const void**)&keys,
+                           (const void**)&values, sizeof(keys) / sizeof(keys[0]),
+                           &kCFTypeDictionaryKeyCallBacks,
+                           &kCFTypeDictionaryValueCallBacks);
+        CFRelease(font);
+        attributed = CFAttributedStringCreate(kCFAllocatorDefault, (CFStringRef)_string, attributes);
+        CFRelease(attributes);
+    }
 
     CTLineRef line = CTLineCreateWithAttributedString(attributed);
     CFRelease(attributed);
@@ -1446,10 +1455,18 @@ static CGRect adjustFrame(CGRect frame) {
     for (j=0; j<_positions; ++j) {
         // get the title for this marking (use j if none)
         NSString* title;
-        if (j < _titles.count) title = [_titles objectAtIndex:j];
+        NSAttributedString* attribTitle;
+        id titleObject;
+        if (j < _titles.count) titleObject = [_titles objectAtIndex:j];
 
-        if (!title) {
+        if (!titleObject) {
             title = [NSString stringWithFormat:@"%d", j];
+        }
+        else if ([titleObject isKindOfClass:NSAttributedString.class]) {
+            attribTitle = titleObject;
+        }
+        else if ([titleObject isKindOfClass:NSString.class]) {
+            title = titleObject;
         }
 
         NSInteger currentIndex = self.positionIndex;
@@ -1458,7 +1475,14 @@ static CGRect adjustFrame(CGRect frame) {
         // NSLog(@"Using title font %@ %f", titleFont.fontName, titleFont.pointSize);
 
         // These computations need work.
-        CGSize textSize = [title sizeOfTextWithFont:titleFont];
+        CGSize textSize;
+
+        if (attribTitle) {
+            textSize = attribTitle.size;
+        }
+        else if (title) {
+            textSize = [title sizeOfTextWithFont:titleFont];
+        }
         CGFloat horizMargin = IKC_TITLE_MARGIN_RATIO * textSize.width;
         CGFloat vertMargin = IKC_TITLE_MARGIN_RATIO * textSize.height;
 
@@ -1467,9 +1491,11 @@ static CGRect adjustFrame(CGRect frame) {
         
         IKCTextLayer* layer = markings[j];
 
-        layer.string = title;
+        layer.string = titleObject;
         layer.horizMargin = horizMargin;
         layer.vertMargin = vertMargin;
+
+        // these things are all ignored if layer.string is an attributed string
         layer.fontSize = titleFont.pointSize;
         layer.fontName = _fontName;
         layer.foregroundColor = self.currentTitleColor.CGColor;

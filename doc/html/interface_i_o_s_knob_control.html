@@ -884,7 +884,9 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices. </p>
+<p>Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices.</p>
+<p>Entries may be NSStrings, NSAttributedStrings, or a mix. If NSAttributedStrings are used, the kCTFontAttributeName/NSFontAttributeName must be set at the initial position. NSStrings make use of the fontName property and titleColorForState(). NSAttributedStrings do not use the configured title colors per state either. You have to specify the foreground color for an NSAttributedString.</p>
+<p>DEBT: This is a strong argument for having an array of titles per state. Alternately, when attributed strings are used, any missing attribute (font or foreground color) could be filled in from the defaults. Attributed string support is very fresh and not well tested. </p>
 
 </div>
 </div>
@@ -894,7 +896,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Aug 7 2014 17:17:51 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Aug 7 2014 18:20:48 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

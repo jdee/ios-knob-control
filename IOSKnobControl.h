@@ -215,6 +215,13 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 /**
  * Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position
  * indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices.
+ *
+ * Entries may be NSStrings, NSAttributedStrings, or a mix. If NSAttributedStrings are used, the kCTFontAttributeName/NSFontAttributeName must be set at the initial position.
+ * NSStrings make use of the fontName property and titleColorForState(). NSAttributedStrings do not use the configured title colors per state either. You have to specify the
+ * foreground color for an NSAttributedString.
+ *
+ * DEBT: This is a strong argument for having an array of titles per state. Alternately, when attributed strings are used, any missing attribute (font or foreground color)
+ * could be filled in from the defaults. Attributed string support is very fresh and not well tested.
  */
 @property (nonatomic) NSArray* titles;
 
