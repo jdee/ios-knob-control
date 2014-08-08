@@ -93,12 +93,12 @@
         [knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
     }
     else {
-        knobControl.positions = 12;
         NSArray* titles = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
+        knobControl.positions = titles.count;
 
-        UIFont* font = [UIFont fontWithName:@"Menlo-Bold" size:14.0];
-        UIFontDescriptor* italicFontDescriptor = [UIFontDescriptor fontDescriptorWithName:@"Menlo Bold Italic" size:14.0];
-        UIFont* italicFont = [UIFont fontWithDescriptor:italicFontDescriptor size:0.0];
+        UIFont* font = [UIFont fontWithName:@"Verdana-Bold" size:14.0];
+        UIFont* italicFont = [UIFont fontWithName:@"Verdana-BoldItalic" size:14.0];
+        assert(italicFont);
 
         NSMutableArray* attribTitles = [NSMutableArray array];
         for (int j=0; j<titles.count; ++j) {
@@ -118,21 +118,8 @@
     knobControl.clockwise = self.clockwiseSwitch.on;
     knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
-    // knobControl.fontName = @"CourierNewPS-BoldMT";
-    knobControl.fontName = @"Menlo-Bold";
-    // knobControl.fontName = @"Georgia-Bold";
-    // knobControl.fontName = @"TimesNewRomanPS-BoldMT";
-    // knobControl.fontName = @"AvenirNext-Bold";
-    // knobControl.fontName = @"TrebuchetMS-Bold";
-
-    // tint and title colors
-    if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
-        knobControl.tintColor = [UIColor whiteColor];
-    }
-
-    UIColor* titleColor = [UIColor blackColor];
-    [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
-    [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
+    [knobControl setFillColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [knobControl setFillColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
 
     /*
      * Using exponentiation avoids compressing the scale below 1.0. The

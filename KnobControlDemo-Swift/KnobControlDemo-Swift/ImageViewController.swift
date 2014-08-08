@@ -88,7 +88,7 @@ class ImageViewController: BaseViewController {
         knobControl.max = π * 0.5
 
         // knobControl.fontName = "CourierNewPS-BoldMT"
-        // knobControl.fontName = "Menlo-Bold"
+        // knobControl.fontName = "Verdana-Bold"
         // knobControl.fontName = "Georgia-Bold"
         // knobControl.fontName = "TimesNewRomanPS-BoldMT"
         // knobControl.fontName = "AvenirNext-Bold"

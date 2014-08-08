@@ -68,7 +68,7 @@ class DiscreteViewController: BaseViewController {
         knobControl.circular = true
 
         // knobControl.fontName = "CourierNewPS-BoldMT"
-        knobControl.fontName = "Menlo-Bold"
+        knobControl.fontName = "Verdana-Bold"
         // knobControl.fontName = "Georgia-Bold"
         // knobControl.fontName = "TimesNewRomanPS-BoldMT"
         // knobControl.fontName = "AvenirNext-Bold"

@@ -48,7 +48,7 @@
     knobControl.clipsToBounds = NO;
 
     // knobControl.fontName = @"CourierNewPS-BoldMT";
-    // knobControl.fontName = @"Menlo-Bold";
+    // knobControl.fontName = @"Verdana-Bold";
     // knobControl.fontName = @"Georgia-Bold";
     // knobControl.fontName = @"TimesNewRomanPS-BoldMT";
     knobControl.fontName = @"AvenirNext-Bold";

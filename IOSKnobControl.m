@@ -34,7 +34,7 @@
 // but I'm reluctant to introduce a new property just for rotary dial mode, and I'm not sure whether it's really necessary. it would only be useful for very
 // large dials (on an iPad).
 #define IKC_FINGER_HOLE_RADIUS 22.0
-#define IKC_TITLE_MARGIN_RATIO 0.1
+#define IKC_TITLE_MARGIN_RATIO 0.2
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
 #define IKC_TARGET_VERSION 0x010300
@@ -1227,6 +1227,19 @@ static CGRect adjustFrame(CGRect frame) {
 
 #pragma mark - Private Methods: Image Management
 
+- (UIFont*)fontWithSize:(CGFloat)fontSize
+{
+    /*
+     * Different things work in different environments, so:
+     */
+
+    UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:_fontName size:fontSize];
+    UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+    if (font) return font;
+
+    return [UIFont fontWithName:_fontName size:fontSize];
+}
+
 - (UIColor*)getTintColor
 {
     /*
@@ -1516,8 +1529,7 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)updateMarkings
 {
     CGFloat fontSize = self.fontSizeForTitles;
-    UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:_fontName size:fontSize];
-    UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
+    UIFont* font = [self fontWithSize:fontSize];
     assert(font);
 
     /*
@@ -1531,8 +1543,7 @@ static CGRect adjustFrame(CGRect frame) {
         UIFontDescriptor* headlineFontDesc = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
         if (headlineFontDesc.pointSize > fontSize) {
             headlinePointSize = headlineFontDesc.pointSize;
-            headlineFontDesc = [UIFontDescriptor fontDescriptorWithName:_fontName size:headlinePointSize];
-            headlineFont = [UIFont fontWithDescriptor:headlineFontDesc size:0.0];
+            headlineFont = [self fontWithSize:headlinePointSize];
             assert(headlineFont);
         }
     }
@@ -1540,8 +1551,7 @@ static CGRect adjustFrame(CGRect frame) {
         // iOS 5 & 6
         headlinePointSize = 17.0;
         if (headlinePointSize > fontSize) {
-            UIFontDescriptor* headlineFontDesc = [UIFontDescriptor fontDescriptorWithName:_fontName size:headlinePointSize];
-            headlineFont = [UIFont fontWithDescriptor:headlineFontDesc size:0.0];
+            headlineFont = [self fontWithSize:headlinePointSize];
             assert(headlineFont);
         }
     }
@@ -1797,7 +1807,7 @@ static CGRect adjustFrame(CGRect frame) {
         }
         else if ([titleObject isKindOfClass:NSString.class]) {
             textSize = [(NSString*)titleObject sizeOfTextWithFont:font];
-            NSLog(@"textSize: %f x %f", textSize.width, textSize.height);
+            // NSLog(@"textSize: %f x %f", textSize.width, textSize.height);
         }
         CGFloat width = textSize.width * (1.0 + 2.0 * IKC_TITLE_MARGIN_RATIO);
         max = MAX(max, width);
@@ -1825,13 +1835,7 @@ static CGRect adjustFrame(CGRect frame) {
         }
 
         // NSLog(@"Looking for font %@ %f", _fontName, fontSize);
-        UIFontDescriptor* fontDescriptor = [UIFontDescriptor fontDescriptorWithName:_fontName size:fontSize];
-        UIFont* font = [UIFont fontWithDescriptor:fontDescriptor size:0.0];
-
-        if (!font) {
-            font = [UIFont fontWithName:_fontName size:fontSize];
-        }
-
+        UIFont* font = [self fontWithSize:fontSize];
         if (!font) {
             // Assume it will eventually find one.
             continue;
@@ -1839,7 +1843,7 @@ static CGRect adjustFrame(CGRect frame) {
 
         CGFloat circumference = [self titleCircumferenceWithFont:font];
 
-        NSLog(@"With font size %f: circumference %f/%f", fontSize, circumference, angle*self.bounds.size.width*0.25);
+        // NSLog(@"With font size %f: circumference %f/%f", fontSize, circumference, angle*self.bounds.size.width*0.25);
 
         // Empirically, this 0.25 works out well. This allows for a little padding between text segments.
         if (circumference <= angle*self.bounds.size.width*0.25) break;
