@@ -51,6 +51,7 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.mode = .RotaryDial
         knobControl.gesture = .OneFingerRotation
+        knobControl.shadow = true
 
         // knobControl.fontName = "CourierNewPS-BoldMT"
         // knobControl.fontName = "Menlo-Bold"

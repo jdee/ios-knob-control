@@ -325,6 +325,7 @@ static CGRect adjustFrame(CGRect frame) {
     _gesture = IKCGestureOneFingerRotation;
     _normalized = YES;
     _fontName = @"Helvetica";
+    _shadow = NO;
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
@@ -688,6 +689,12 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     _fontName = fontName;
+    [self setNeedsLayout];
+}
+
+- (void)setShadow:(BOOL)shadow
+{
+    _shadow = shadow;
     [self setNeedsLayout];
 }
 
@@ -1231,6 +1238,8 @@ static CGRect adjustFrame(CGRect frame) {
     }
     middleLayer.bounds = self.bounds;
     middleLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+    middleLayer.shadowOpacity = _shadow ? 1.0 : 0.0;
+    middleLayer.shadowOffset = CGSizeMake(0, 3); // DEBT: Make all the shadow params configurable
 
     UIImage* image = self.currentImage;
     if (image) {
@@ -1291,6 +1300,9 @@ static CGRect adjustFrame(CGRect frame) {
         foregroundLayer = nil;
     }
 
+    foregroundLayer.shadowOpacity = _shadow ? 1.0 : 0.0;
+    foregroundLayer.shadowOffset = CGSizeMake(0, 3);
+
     [self updateShapeLayer];
 }
 
@@ -1326,9 +1338,8 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)updateRotaryDial
 {
-    UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.5 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
-
-    float const dialRadius = 0.5 * self.frame.size.width;
+    float const dialRadius = 0.45 * self.bounds.size.width;
+    UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:dialRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
 
     // this follows because the holes are positioned so that the margin between adjacent holes
     // is the same as the margin between each hole and the rim of the dial. see the discussion
@@ -1361,7 +1372,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)updateDialNumbers
 {
-    float const dialRadius = 0.5 * self.frame.size.width;
+    float const dialRadius = 0.45 * self.bounds.size.width;
 
     // this follows because the holes are positioned so that the margin between adjacent holes
     // is the same as the margin between each hole and the rim of the dial. see the discussion
@@ -1615,17 +1626,17 @@ static CGRect adjustFrame(CGRect frame) {
     // the near point is the point nearest the center of the dial, at the edge of the
     // outer tap ring. (see handleTap: for where the 0.586 comes from.)
 
-    float nearX = self.bounds.size.width*0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.5);
-    float nearY = self.bounds.size.height*0.5 * (1.0 + 0.586 * 0.5);
+    float nearX = self.bounds.size.width*0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.45);
+    float nearY = self.bounds.size.height*0.5 * (1.0 + 0.586 * 0.45);
 
     // the opposite edge is tangent to the perimeter of the dial. the width of the far side
     // is stopWidth * self.frame.size.height * 0.5.
 
-    float upperEdgeX = self.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 + stopWidth * 0.5);
-    float upperEdgeY = self.bounds.size.height*0.5 * (1.0 + 0.5 - stopWidth * sqrt(3.0)*0.5);
+    float upperEdgeX = self.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.45 + stopWidth * 0.45);
+    float upperEdgeY = self.bounds.size.height*0.5 * (1.0 + 0.45 - stopWidth * sqrt(3.0)*0.45);
 
-    float lowerEdgeX = self.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 - stopWidth * 0.5);
-    float lowerEdgeY = self.bounds.size.height*0.5 * (1.0 + 0.5 + stopWidth * sqrt(3.0)*0.5);
+    float lowerEdgeX = self.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.45 - stopWidth * 0.45);
+    float lowerEdgeY = self.bounds.size.height*0.5 * (1.0 + 0.45 + stopWidth * sqrt(3.0)*0.45);
 
     UIBezierPath* path = [UIBezierPath bezierPath];
     [path moveToPoint:CGPointMake(nearX, nearY)];

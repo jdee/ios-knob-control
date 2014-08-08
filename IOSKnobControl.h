@@ -199,6 +199,11 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 @property (nonatomic) NSUInteger positions;
 
 /**
+ * Determine whether to draw a shadow behind the knob. Default is NO.
+ */
+@property (nonatomic) BOOL shadow;
+
+/**
  * Used to specify the time scale for return animations.
  * Default is 1.0. The duration of the animation is proportional to this property.
  * Set the number below 1.0 to speed up the animation, and above to slow it down.

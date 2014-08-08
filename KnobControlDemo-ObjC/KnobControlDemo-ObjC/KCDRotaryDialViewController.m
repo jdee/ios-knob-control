@@ -44,6 +44,7 @@
     knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
     knobControl.mode = IKCModeRotaryDial;
     knobControl.gesture = IKCGestureOneFingerRotation;
+    knobControl.shadow = YES;
 
     // knobControl.fontName = @"CourierNewPS-BoldMT";
     // knobControl.fontName = @"Menlo-Bold";
