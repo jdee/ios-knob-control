@@ -172,16 +172,8 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)display
 {
     CGSize size = self.bounds.size;
-    size.width *= [UIScreen mainScreen].scale;
-    size.height *= [UIScreen mainScreen].scale;
-
-    CGFloat fontSize = _fontSize * [UIScreen mainScreen].scale;
-
-    CGFloat horizMargin = _horizMargin * [UIScreen mainScreen].scale;
-    CGFloat vertMargin = _vertMargin * [UIScreen mainScreen].scale;
-
-    UIGraphicsBeginImageContext(size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGFloat horizMargin = _horizMargin;
+    CGFloat vertMargin = _vertMargin;
 
     // Use CoreText to render directly
     // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
@@ -193,16 +185,32 @@ static CGRect adjustFrame(CGRect frame) {
         attributed = CFAttributedStringCreateCopy(kCFAllocatorDefault, (CFAttributedStringRef)_string);
         font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
         assert(font);
+        CGColorRef fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, kCTForegroundColorAttributeName, NULL);
+
+        /*
+         * As with views like UILabel, reset the foregroundColor and fontName properties to those attributes of the
+         * string at location 0.
+         */
+        _foregroundColor = (CGColorRef)CFBridgingRetain([UIColor colorWithCGColor: fg]);
+        _fontName = CFBridgingRelease(CTFontCopyPostScriptName(font));
     }
     else {
+        size.width *= [UIScreen mainScreen].scale;
+        size.height *= [UIScreen mainScreen].scale;
+
+        CGFloat fontSize = _fontSize * [UIScreen mainScreen].scale;
+
+        horizMargin = _horizMargin * [UIScreen mainScreen].scale;
+        vertMargin = _vertMargin * [UIScreen mainScreen].scale;
+
         font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
         assert(font);
 
         /*
-         CFStringRef fname = CTFontCopyPostScriptName(font);
-         NSLog(@"Using font %@", (__bridge NSString*)fname);
-         CFRelease(fname);
-         // */
+        CFStringRef fname = CTFontCopyPostScriptName(font);
+        NSLog(@"Using font %@", (__bridge NSString*)fname);
+        CFRelease(fname);
+        // */
 
         CFStringRef keys[] = { kCTFontAttributeName, kCTForegroundColorAttributeName };
         CFTypeRef values[] = { font, _foregroundColor };
@@ -219,6 +227,9 @@ static CGRect adjustFrame(CGRect frame) {
 
     CTLineRef line = CTLineCreateWithAttributedString(attributed);
     CFRelease(attributed);
+
+    UIGraphicsBeginImageContext(size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
 
     // flip y
     CGContextTranslateCTM(context, 0.0, size.height);
@@ -1519,7 +1530,7 @@ static CGRect adjustFrame(CGRect frame) {
         layer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
-        /*
+        //*
         layer.borderColor = self.currentTitleColor.CGColor;
         layer.borderWidth = 1.0;
         layer.cornerRadius = 2.0;
@@ -1686,8 +1697,15 @@ static CGRect adjustFrame(CGRect frame) {
 - (CGFloat)titleCircumferenceWithFont:(UIFont*)font
 {
     CGFloat max = 0.0;
-    for (NSString* title in _titles) {
-        CGSize textSize = [title sizeOfTextWithFont:font];
+    for (id titleObject in _titles) {
+
+        CGSize textSize;
+        if ([titleObject isKindOfClass:NSAttributedString.class]) {
+            textSize = [(NSAttributedString*)titleObject size];
+        }
+        else if ([titleObject isKindOfClass:NSString.class]) {
+            textSize = [(NSString*)titleObject sizeOfTextWithFont:font];
+        }
         CGFloat width = textSize.width * (1.0 + 2.0 * IKC_TITLE_MARGIN_RATIO);
         max = MAX(max, width);
     }

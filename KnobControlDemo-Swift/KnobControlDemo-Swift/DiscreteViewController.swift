@@ -156,13 +156,26 @@ class DiscreteViewController: BaseViewController {
             knobControl.setImage(hexagonImage, forState: .Normal)
         }
         else {
+            let titles = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
+
+            /* example with attributed titles
+            let font = UIFont(name: knobControl.fontName, size: 14.0)
+
+            var attribTitles = [NSAttributedString]()
+
+            for title in titles {
+                let attributed = NSAttributedString(string: title, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()])
+                attribTitles.append(attributed)
+            }
+            knobControl.titles = attribTitles
+            // */
+
+            knobControl.titles = titles
             knobControl.positions = 12
-            knobControl.titles = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
             knobControl.setImage(nil, forState: .Normal)
         }
 
         // Good idea to do this to make the knob reset itself after changing certain params.
         knobControl.position = knobControl.position
     }
-
 }

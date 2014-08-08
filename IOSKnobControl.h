@@ -222,6 +222,9 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  *
  * DEBT: This is a strong argument for having an array of titles per state. Alternately, when attributed strings are used, any missing attribute (font or foreground color)
  * could be filled in from the defaults. Attributed string support is very fresh and not well tested.
+ *
+ * Note that if you use attributed strings, you have total control over how the text will be rendered. In particular, the font size will never be computed or altered for an
+ * attributed string. This means an attributed string cannot zoom to a larger size.
  */
 @property (nonatomic) NSArray* titles;
 
