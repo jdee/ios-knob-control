@@ -115,14 +115,13 @@ static CGRect adjustFrame(CGRect frame) {
  */
 @interface IKCTextLayer : CALayer
 
-#pragma mark - Properties
 @property (nonatomic, copy) NSString* fontName;
 @property (nonatomic) CGFloat fontSize;
 @property (nonatomic) CGColorRef foregroundColor;
 @property (nonatomic, copy) id string;
 @property (nonatomic) CGFloat horizMargin, vertMargin;
+@property (nonatomic) BOOL adjustsFontSizeForAttributed;
 
-#pragma mark - Object lifecycle
 + (instancetype)layer;
 
 @end
@@ -130,7 +129,6 @@ static CGRect adjustFrame(CGRect frame) {
 #pragma mark - IKCTextLayer implementation
 @implementation IKCTextLayer
 
-#pragma mark - Object lifecycle
 + (instancetype)layer
 {
     return [[self alloc] init];
@@ -144,6 +142,7 @@ static CGRect adjustFrame(CGRect frame) {
         _foregroundColor = [UIColor blackColor].CGColor;
         CFRetain(_foregroundColor);
         _horizMargin = _vertMargin = 0.0;
+        _adjustsFontSizeForAttributed = NO;
 
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor].CGColor;
@@ -158,7 +157,6 @@ static CGRect adjustFrame(CGRect frame) {
     if (_foregroundColor) CFRelease(_foregroundColor);
 }
 
-#pragma mark - Property override
 - (void)setForegroundColor:(CGColorRef)foregroundColor
 {
     if (!foregroundColor) return;
@@ -170,12 +168,9 @@ static CGRect adjustFrame(CGRect frame) {
     [self setNeedsDisplay];
 }
 
-#pragma mark - Custom text display with CoreText.
 - (void)display
 {
-    CGSize size = self.bounds.size;
-    CGFloat horizMargin = _horizMargin;
-    CGFloat vertMargin = _vertMargin;
+    CGFloat fontSize = _fontSize * [UIScreen mainScreen].scale;
 
     // Use CoreText to render directly
     // from https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/CoreText_Programming/LayoutOperations/LayoutOperations.html#//apple_ref/doc/uid/TP40005533-CH12-SW2
@@ -184,7 +179,9 @@ static CGRect adjustFrame(CGRect frame) {
 
     CFAttributedStringRef attributed;
     if ([_string isKindOfClass:NSAttributedString.class]) {
-        attributed = CFAttributedStringCreateCopy(kCFAllocatorDefault, (CFAttributedStringRef)_string);
+        CFMutableAttributedStringRef mutableAttributed = CFAttributedStringCreateMutableCopy(kCFAllocatorDefault, 0, (CFAttributedStringRef)_string);
+        attributed = mutableAttributed;
+
         font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
         assert(font);
         CGColorRef fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, kCTForegroundColorAttributeName, NULL);
@@ -195,16 +192,33 @@ static CGRect adjustFrame(CGRect frame) {
          */
         _foregroundColor = (CGColorRef)CFBridgingRetain([UIColor colorWithCGColor: fg]);
         _fontName = CFBridgingRelease(CTFontCopyPostScriptName(font));
+
+        CGFloat pointSize = CTFontGetSize(font);
+        // NSLog(@"point size for attrib. string: %f", pointSize);
+
+        if (_adjustsFontSizeForAttributed && pointSize != fontSize) {
+            CTFontRef newFont = CTFontCreateCopyWithAttributes(font, fontSize, NULL, NULL);
+            CFRange range;
+            range.location = 0;
+            range.length = CFAttributedStringGetLength(mutableAttributed);
+            CFAttributedStringSetAttribute(mutableAttributed, range, kCTFontAttributeName, newFont);
+            CFRelease(newFont);
+            // NSLog(@"point size for new font: %f", fontSize);
+        }
+        else if (!_adjustsFontSizeForAttributed && [UIScreen mainScreen].scale > 1.0) {
+            fontSize = [UIScreen mainScreen].scale * pointSize;
+
+            CTFontRef newFont = CTFontCreateCopyWithAttributes(font, fontSize, NULL, NULL);
+            CFRange range;
+            range.location = 0;
+            range.length = CFAttributedStringGetLength(mutableAttributed);
+            CFAttributedStringSetAttribute(mutableAttributed, range, kCTFontAttributeName, newFont);
+            CFRelease(newFont);
+            // NSLog(@"point size for new font: %f", fontSize);
+        }
+        _fontSize = fontSize / [UIScreen mainScreen].scale;
     }
     else {
-        size.width *= [UIScreen mainScreen].scale;
-        size.height *= [UIScreen mainScreen].scale;
-
-        CGFloat fontSize = _fontSize * [UIScreen mainScreen].scale;
-
-        horizMargin = _horizMargin * [UIScreen mainScreen].scale;
-        vertMargin = _vertMargin * [UIScreen mainScreen].scale;
-
         font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
         assert(font);
 
@@ -230,6 +244,16 @@ static CGRect adjustFrame(CGRect frame) {
     CTLineRef line = CTLineCreateWithAttributedString(attributed);
     CFRelease(attributed);
 
+    CGSize size = self.bounds.size;
+    CGFloat horizMargin = _horizMargin;
+    CGFloat vertMargin = _vertMargin;
+
+    size.width *= [UIScreen mainScreen].scale;
+    size.height *= [UIScreen mainScreen].scale;
+
+    horizMargin = _horizMargin * [UIScreen mainScreen].scale;
+    vertMargin = _vertMargin * [UIScreen mainScreen].scale;
+
     UIGraphicsBeginImageContext(size);
     CGContextRef context = UIGraphicsGetCurrentContext();
 
@@ -254,6 +278,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 @end
 
+#pragma mark - IKCAnimationDelegate
 /*
  * Used in dialNumber:. There doesn't seem to be an appropriate delegate protocol for CAAnimation. 
  * The animationDidStop:finished: message is
@@ -348,6 +373,7 @@ static CGRect adjustFrame(CGRect frame) {
     _normalized = YES;
     _fontName = @"Helvetica";
     _shadow = NO;
+    _zoomTopTitle = YES;
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
@@ -736,6 +762,12 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setShadow:(BOOL)shadow
 {
     _shadow = shadow;
+    [self setNeedsLayout];
+}
+
+- (void)setZoomTopTitle:(BOOL)zoomTopTitle
+{
+    _zoomTopTitle = zoomTopTitle;
     [self setNeedsLayout];
 }
 
@@ -1491,7 +1523,7 @@ static CGRect adjustFrame(CGRect frame) {
      */
     UIFont* headlineFont = font;
     CGFloat headlinePointSize = font.pointSize;
-    if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
+    if (_zoomTopTitle && [UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
         UIFontDescriptor* headlineFontDesc = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
         if (headlineFontDesc.pointSize > fontSize) {
             headlinePointSize = headlineFontDesc.pointSize;
@@ -1526,14 +1558,15 @@ static CGRect adjustFrame(CGRect frame) {
 
         NSInteger currentIndex = self.positionIndex;
         UIFont* titleFont = currentIndex == j ? headlineFont : font;
+        CGFloat pointSize = currentIndex == j ? headlinePointSize : fontSize;
 
-        // NSLog(@"Using title font %@ %f", titleFont.fontName, titleFont.pointSize);
+        // NSLog(@"Using title font %@, %f", titleFont.fontName, titleFont.pointSize);
 
         // These computations need work.
         CGSize textSize;
 
         if (attribTitle) {
-            textSize = attribTitle.size;
+            textSize = _zoomTopTitle && currentIndex == j ? [attribTitle.string sizeOfTextWithFont:titleFont] : attribTitle.size;
         }
         else if (title) {
             textSize = [title sizeOfTextWithFont:titleFont];
@@ -1549,9 +1582,10 @@ static CGRect adjustFrame(CGRect frame) {
         layer.string = titleObject;
         layer.horizMargin = horizMargin;
         layer.vertMargin = vertMargin;
+        layer.adjustsFontSizeForAttributed = _zoomTopTitle && currentIndex == j;
 
         // these things are all ignored if layer.string is an attributed string
-        layer.fontSize = titleFont.pointSize;
+        layer.fontSize = pointSize; // except this if adjustsFontSizeForAttributed is set
         layer.fontName = _fontName;
         layer.foregroundColor = self.currentTitleColor.CGColor;
 
@@ -1574,7 +1608,7 @@ static CGRect adjustFrame(CGRect frame) {
         layer.bounds = CGRectMake(0, 0, textSize.width, textSize.height);
         layer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
-        /*
+        //*
         layer.borderColor = self.currentTitleColor.CGColor;
         layer.borderWidth = 1.0;
         layer.cornerRadius = 2.0;
@@ -1745,7 +1779,8 @@ static CGRect adjustFrame(CGRect frame) {
 
         CGSize textSize;
         if ([titleObject isKindOfClass:NSAttributedString.class]) {
-            textSize = [(NSAttributedString*)titleObject size];
+            NSAttributedString* attributed = (NSAttributedString*)titleObject;
+            textSize = attributed.size;
         }
         else if ([titleObject isKindOfClass:NSString.class]) {
             textSize = [(NSString*)titleObject sizeOfTextWithFont:font];
@@ -1759,20 +1794,17 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (CGFloat)fontSizeForTitles
 {
-    CGFloat fontSize = 0.0;
-    CGFloat fontSizes[] = { 23.0, 22.0, 21.0, 20.0, 19.0, 18.0, 17.0, 16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0 };
-
-    CGFloat styleHeadlineSize = 23.0;
+    CGFloat styleHeadlineSize = 46.0;
 
     if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
         styleHeadlineSize = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize;
     }
+    // NSLog(@"Size of headline style: %f", styleHeadlineSize);
 
     double angle = _circular ? 2.0*M_PI : _max - _min;
 
-    int index;
-    for (index=0; index<sizeof(fontSizes)/sizeof(CGFloat); ++index) {
-        fontSize = fontSizes[index];
+    CGFloat fontSize;
+    for (fontSize = 46.0; fontSize >= 7.0; fontSize -= 1.0) {
         if (fontSize > styleHeadlineSize) {
             // don't display anything larger than the current headline size (max. 23 pts.)
             continue;
@@ -1788,6 +1820,8 @@ static CGRect adjustFrame(CGRect frame) {
         }
 
         CGFloat circumference = [self titleCircumferenceWithFont:font];
+
+        // NSLog(@"With font size %f: circumference %f/%f", fontDescriptor.pointSize, circumference, angle*self.bounds.size.width*0.25);
 
         // Empirically, this 0.25 works out well. This allows for a little padding between text segments.
         if (circumference <= angle*self.bounds.size.width*0.25) break;

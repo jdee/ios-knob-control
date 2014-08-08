@@ -75,14 +75,16 @@ class DiscreteViewController: BaseViewController {
         // knobControl.fontName = "TrebuchetMS-Bold"
 
         // Customize the colors for the months demo (with a generated image)
-        let titleColor = UIColor.whiteColor()
-        knobControl.tintColor = UIColor.greenColor()
+        let titleColor = UIColor.blackColor()
+        knobControl.tintColor = UIColor.whiteColor()
         knobControl.setTitleColor(titleColor, forState: .Normal)
         knobControl.setTitleColor(titleColor, forState: .Highlighted)
 
         // specify an action for the .ValueChanged event and add as a subview to the knobHolder UIView
         knobControl.addTarget(self, action: "knobPositionChanged:", forControlEvents: .ValueChanged)
         knobHolder.addSubview(knobControl)
+
+        knobPositionChanged(knobControl)
 
         // initialize all other properties based on initial control values
         updateKnobProperties()
@@ -158,19 +160,17 @@ class DiscreteViewController: BaseViewController {
         else {
             let titles = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
 
-            /* example with attributed titles
+            // example with attributed titles
             let font = UIFont(name: knobControl.fontName, size: 14.0)
 
             var attribTitles = [NSAttributedString]()
 
-            for title in titles {
-                let attributed = NSAttributedString(string: title, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor.whiteColor()])
+            for (index, title) in enumerate(titles) {
+                let attributed = NSAttributedString(string: title, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: UIColor(hue:CGFloat(index)/CGFloat(titles.count), saturation:1.0, brightness:1.0, alpha:1.0)])
                 attribTitles.append(attributed)
             }
             knobControl.titles = attribTitles
-            // */
 
-            knobControl.titles = titles
             knobControl.positions = 12
             knobControl.setImage(nil, forState: .Normal)
         }
