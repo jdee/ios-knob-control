@@ -910,7 +910,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Only applicable if zoomTopTitle is set in IKCModeLinearReturn or IKCModeWheelOfFortune with no image. Specifies the point size to which the top title should be enlarged. If set to 0, on iOS 7+ the Dynamic Type headline size will be used; on iOS 5 or 6 a 17 pt font will be used. Otherwise, the specified point size will be used. The default is 0. </p>
+<p>Only applicable if zoomTopTitle is set in IKCModeLinearReturn or IKCModeWheelOfFortune with no image. Specifies the point size to which the top title should be enlarged. If set to 0, on iOS 7+ the Dynamic Type headline size (i.e., [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize) will be used; on iOS 5 or 6 a 17 pt font will be used. Otherwise, the specified point size will be used. The default is 0. </p>
 
 </div>
 </div>
@@ -931,7 +931,7 @@ Properties</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Only applicable in IKCModeLinearReturn and IKCModeWheelOfFortune when no image is present, and the knob image is generated from the titles property. If set to YES, the control will enlarge the top title up to the current Dynamic Type headline font size (i.e., [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize) on iOS 7+ or 17 pts. on iOS 6 or below. The default value is YES. </p>
+<p>Only applicable in IKCModeLinearReturn and IKCModeWheelOfFortune when no image is present, and the knob image is generated from the titles property. If set to YES, the control will enlarge the top title up to a certain size (see zoomPointSize above). The default value is YES. </p>
 
 </div>
 </div>
@@ -941,7 +941,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Aug 12 2014 20:54:14 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Aug 12 2014 20:59:17 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>
