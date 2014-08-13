@@ -46,13 +46,10 @@ import UIKit
  * top, where it is mest legible. Then she taps the Choose button, the model view controller
  * disappears, and the main view controller's imageChosen() method is called.
  */
-class ImageViewController: BaseViewController {
+class ImageViewController: BaseViewController, Foregrounder {
 
     // MARK: Storyboard Outlet
     @IBOutlet var knobHolder : UIView!
-
-    // MARK: Knob control.
-    var knobControl : IOSKnobControl!
 
     /*
      * Hmm. I'd like to make this a weak reference, but the delegate here is a VC that's

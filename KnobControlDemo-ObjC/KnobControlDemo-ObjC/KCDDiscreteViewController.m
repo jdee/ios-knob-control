@@ -31,9 +31,7 @@
  * -- hexagon: the control uses one of two image sets from the asset catalog, each a hexagon with index values printed around the sides; changing the
  *    clockwise setting switches to a different image with numbers rendered in the opposite direction
  */
-@implementation KCDDiscreteViewController {
-    IOSKnobControl* knobControl;
-}
+@implementation KCDDiscreteViewController
 
 #pragma mark - View lifecycle
 
@@ -42,29 +40,23 @@
     [super viewDidLoad];
 
     // basic IOSKnobControl initialization (using default settings) with an image from the bundle
-    knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds /* imageNamed:@"hexagon-ccw" */];
+    self.knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds /* imageNamed:@"hexagon-ccw" */];
 
     // arrange to be notified whenever the knob turns
-    [knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.knobControl addTarget:self action:@selector(knobPositionChanged:) forControlEvents:UIControlEventValueChanged];
 
     // Now hook it up to the demo
-    [self.knobControlView addSubview:knobControl];
+    [self.knobControlView addSubview:self.knobControl];
 
     [self updateKnobProperties];
-}
-
-- (void)adjustLayout
-{
-    [super adjustLayout];
-    [knobControl setNeedsLayout];
 }
 
 #pragma mark - Knob control callback
 
 - (void)knobPositionChanged:(IOSKnobControl*)sender
 {
-    self.positionLabel.text = [NSString stringWithFormat:@"%.2f", knobControl.position];
-    self.indexLabel.text = [NSString stringWithFormat:@"%ld", (long)knobControl.positionIndex];
+    self.positionLabel.text = [NSString stringWithFormat:@"%.2f", self.knobControl.position];
+    self.indexLabel.text = [NSString stringWithFormat:@"%ld", (long)self.knobControl.positionIndex];
 }
 
 #pragma mark - Handlers for configuration controls
@@ -77,7 +69,7 @@
 - (void)clockwiseChanged:(UISwitch *)sender
 {
     if (self.useHexagonImages) {
-        [knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
+        [self.knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
     }
     [self updateKnobProperties];
 }
@@ -86,15 +78,15 @@
 
 - (void)updateKnobProperties
 {
-    knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCModeLinearReturn : IKCModeWheelOfFortune;
+    self.knobControl.mode = self.modeControl.selectedSegmentIndex == 0 ? IKCModeLinearReturn : IKCModeWheelOfFortune;
 
     if (self.useHexagonImages) {
-        knobControl.positions = 6;
-        [knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
+        self.knobControl.positions = 6;
+        [self.knobControl setImage:self.hexagonImage forState:UIControlStateNormal];
     }
     else {
         NSArray* titles = @[@"Jan", @"Feb", @"Mar", @"Apr", @"May", @"Jun", @"Jul", @"Aug", @"Sep", @"Oct", @"Nov", @"Dec"];
-        knobControl.positions = titles.count;
+        self.knobControl.positions = titles.count;
 
         UIFont* font = [UIFont fontWithName:@"Verdana-Bold" size:14.0];
         UIFont* italicFont = [UIFont fontWithName:@"Verdana-BoldItalic" size:14.0];
@@ -109,27 +101,27 @@
             [attribTitles addObject:attributed];
         }
 
-        knobControl.titles = attribTitles;
+        self.knobControl.titles = attribTitles;
 
-        [knobControl setImage:nil forState:UIControlStateNormal];
+        [self.knobControl setImage:nil forState:UIControlStateNormal];
     }
 
-    knobControl.circular = YES;
-    knobControl.clockwise = self.clockwiseSwitch.on;
-    knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
+    self.knobControl.circular = YES;
+    self.knobControl.clockwise = self.clockwiseSwitch.on;
+    self.knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
 
-    [knobControl setFillColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-    [knobControl setFillColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0] forState:UIControlStateHighlighted];
+    [self.knobControl setFillColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
+    [self.knobControl setFillColor:[UIColor colorWithRed:0.9 green:0.9 blue:0.9 alpha:1.0] forState:UIControlStateHighlighted];
 
     /*
      * Using exponentiation avoids compressing the scale below 1.0. The
      * slider starts at 0 in middle and ranges from -1 to 1, so the
      * time scale can range from 1/e to e, and defaults to 1.
      */
-    knobControl.timeScale = exp(self.timeScaleControl.value);
+    self.knobControl.timeScale = exp(self.timeScaleControl.value);
 
     // Good idea to do this to make the knob reset itself after changing certain params.
-    knobControl.position = knobControl.position;
+    self.knobControl.position = self.knobControl.position;
 }
 
 - (UIImage*)hexagonImage

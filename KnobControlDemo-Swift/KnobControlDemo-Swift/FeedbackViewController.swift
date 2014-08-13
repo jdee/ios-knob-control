@@ -33,7 +33,6 @@ class FeedbackViewController: BaseViewController {
     // Two cheers for the IOSKnobControl! Also see the comments in the ContinousViewController
     // on the use of unwrapped optionals
     // MARK: Knob controls
-    var knobControl : IOSKnobControl!
     var dialView : IOSKnobControl!
 
     // MARK: View lifecycle

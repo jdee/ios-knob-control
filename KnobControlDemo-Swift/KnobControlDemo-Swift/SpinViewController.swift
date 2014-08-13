@@ -42,8 +42,6 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
     @IBOutlet var trackProgressLabel : UILabel!
     @IBOutlet var volumeViewHolder : UIView!
 
-    // MARK: Knob control
-    var knobControl : IOSKnobControl!
     // MARK: other stored properties
     var displayLink : CADisplayLink!
     var musicPlayer : MPMusicPlayerController!
@@ -64,12 +62,6 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
             playbackTime += trackLength
         }
         return playbackTime
-    }
-    }
-
-    var appDelegate : AppDelegate {
-    get {
-        return UIApplication.sharedApplication().delegate as AppDelegate
     }
     }
 
@@ -126,7 +118,9 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
 
     // MARK: --- implementation of Foregrounder protocol ---
 
-    func resumeFromBackground(appDelegate: AppDelegate) {
+    override func resumeFromBackground(appDelegate: AppDelegate) {
+        super.resumeFromBackground(appDelegate)
+
         /*
          * The MPMusicPlayerController dumps the user's selection when the app is backgrounded.
          * This is OK for this demo app, but reset the view to its state when no track is

@@ -28,9 +28,7 @@
  * top, where it is mest legible. Then she taps the Choose button, the model view controller
  * disappears, and the main view controller's imageChosen() method is called.
  */
-@implementation KCDImageViewController {
-    IOSKnobControl* knobControl;
-}
+@implementation KCDImageViewController
 
 #pragma mark - View Lifecycle
 
@@ -38,33 +36,33 @@
 {
     [super viewDidLoad];
 
-    knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
-    knobControl.mode = IKCModeLinearReturn;
-    knobControl.positions = _titles.count;
-    knobControl.titles = _titles;
-    knobControl.timeScale = 0.5;
-    knobControl.circular = NO;
-    knobControl.min = -M_PI/2.0;
-    knobControl.max = M_PI/2.0;
+    self.knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
+    self.knobControl.mode = IKCModeLinearReturn;
+    self.knobControl.positions = _titles.count;
+    self.knobControl.titles = _titles;
+    self.knobControl.timeScale = 0.5;
+    self.knobControl.circular = NO;
+    self.knobControl.min = -M_PI/2.0;
+    self.knobControl.max = M_PI/2.0;
 
-    // knobControl.fontName = @"CourierNewPS-BoldMT";
-    // knobControl.fontName = @"Verdana-Bold";
-    // knobControl.fontName = @"Georgia-Bold";
-    // knobControl.fontName = @"TimesNewRomanPS-BoldMT";
-    // knobControl.fontName = @"AvenirNext-Bold";
-    knobControl.fontName = @"TrebuchetMS-Bold";
+    // self.knobControl.fontName = @"CourierNewPS-BoldMT";
+    // self.knobControl.fontName = @"Verdana-Bold";
+    // self.knobControl.fontName = @"Georgia-Bold";
+    // self.knobControl.fontName = @"TimesNewRomanPS-BoldMT";
+    // self.knobControl.fontName = @"AvenirNext-Bold";
+    self.knobControl.fontName = @"TrebuchetMS-Bold";
 
     // tint and title colors
     UIColor* titleColor = [UIColor whiteColor];
-    if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
-        knobControl.tintColor = [UIColor yellowColor];
+    if ([self.knobControl respondsToSelector:@selector(setTintColor:)]) {
+        self.knobControl.tintColor = [UIColor yellowColor];
         titleColor = [UIColor blackColor];
     }
 
-    [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
-    [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
+    [self.knobControl setTitleColor:titleColor forState:UIControlStateNormal];
+    [self.knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
 
-    [_knobHolder addSubview:knobControl];
+    [_knobHolder addSubview:self.knobControl];
 
     // note that we don't care here when the knob is rotated; we don't do anything in response in the app code.
     // only in done() when the user taps Choose do we consult the knob's positionIndex to find the chosen title
@@ -74,14 +72,14 @@
 {
     [super viewWillAppear:animated];
 
-    knobControl.positionIndex = _imageTitle ? [_titles indexOfObject:_imageTitle] : [_titles indexOfObject:@"(none)"];
+    self.knobControl.positionIndex = _imageTitle ? [_titles indexOfObject:_imageTitle] : [_titles indexOfObject:@"(none)"];
 }
 
 #pragma Action for storyboard outlet
 
 - (void)done:(id)sender
 {
-    NSString* title = [_titles objectAtIndex:knobControl.positionIndex];
+    NSString* title = [_titles objectAtIndex:self.knobControl.positionIndex];
 
     if ([title isEqualToString:@"(none)"]) {
         title = nil;

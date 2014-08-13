@@ -42,7 +42,6 @@
  * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore.
  */
 @implementation KCDSpinViewController {
-    IOSKnobControl* knobControl;
     CADisplayLink* displayLink;
     MPMusicPlayerController* musicPlayer;
     MPMediaItemCollection* mediaCollection;
@@ -130,9 +129,9 @@
      * This is OK for this demo app, but reset the view to its state when no track is
      * selected, prompting the user to select again.
      */
-    knobControl.position = 0.0;
-    knobControl.enabled = NO;
-    knobControl.foregroundImage = nil;
+    self.knobControl.position = 0.0;
+    self.knobControl.enabled = NO;
+    self.knobControl.foregroundImage = nil;
     currentPlaybackTime = 0.0;
     trackLength = 0.0;
     [self updateProgress];
@@ -147,8 +146,8 @@
     [self dismissViewControllerAnimated:YES completion:nil];
     [loadingView removeFromSuperview];
 
-    knobControl.enabled = YES;
-    knobControl.foregroundImage = [UIImage imageNamed:@"tonearm"];
+    self.knobControl.enabled = YES;
+    self.knobControl.foregroundImage = [UIImage imageNamed:@"tonearm"];
 
     mediaCollection = mediaItemCollection;
 
@@ -186,17 +185,17 @@
 // callback for the CADisplayLink
 - (void)animateKnob:(CADisplayLink*)link
 {
-    if (touchIsDown && !knobControl.highlighted) {
+    if (touchIsDown && !self.knobControl.highlighted) {
         // resume whenever the touch comes up
         musicPlayer.currentPlaybackTime = self.normalizedPlaybackTime;
         [musicPlayer play];
     }
-    else if (!touchIsDown && knobControl.highlighted) {
+    else if (!touchIsDown && self.knobControl.highlighted) {
         // pause whenever a touch goes down
         [musicPlayer pause];
         currentPlaybackTime = musicPlayer.currentPlaybackTime;
     }
-    touchIsDown = knobControl.highlighted;
+    touchIsDown = self.knobControl.highlighted;
 
     // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
     if (touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == MPMoviePlaybackStateStopped) {
@@ -214,10 +213,10 @@
 
     // link.duration * link.frameInterval is how long it's been since the last invocation of
     // this callback, so this is another alternative:
-    // knobControl.position += Float(link.duration) * Float(link.frameInterval) * angularMomentum
+    // self.knobControl.position += Float(link.duration) * Float(link.frameInterval) * angularMomentum
 
     // but this is simpler, given the way the knob control and music player work
-    knobControl.position = currentPlaybackTime * IKC_33RPM_ANGULAR_VELOCITY;
+    self.knobControl.position = currentPlaybackTime * IKC_33RPM_ANGULAR_VELOCITY;
 
     [self updateProgress];
 }
@@ -226,17 +225,17 @@
 
 - (void)createKnobControl
 {
-    knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds imageNamed:@"disc"];
-    knobControl.mode = IKCModeContinuous;
-    knobControl.clockwise = YES;
-    knobControl.circular = YES;
-    knobControl.normalized = NO;
-    knobControl.enabled = NO;
-    knobControl.shadow = YES;
-    knobControl.clipsToBounds = NO;
-    [knobControl addTarget:self action:@selector(knobRotated:) forControlEvents:UIControlEventValueChanged];
-    [knobControl setImage:[UIImage imageNamed:@"disc-disabled"] forState:UIControlStateDisabled];
-    [_knobHolder addSubview:knobControl];
+    self.knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds imageNamed:@"disc"];
+    self.knobControl.mode = IKCModeContinuous;
+    self.knobControl.clockwise = YES;
+    self.knobControl.circular = YES;
+    self.knobControl.normalized = NO;
+    self.knobControl.enabled = NO;
+    self.knobControl.shadow = YES;
+    self.knobControl.clipsToBounds = NO;
+    [self.knobControl addTarget:self action:@selector(knobRotated:) forControlEvents:UIControlEventValueChanged];
+    [self.knobControl setImage:[UIImage imageNamed:@"disc-disabled"] forState:UIControlStateDisabled];
+    [_knobHolder addSubview:self.knobControl];
 }
 
 - (void)createDisplayLink

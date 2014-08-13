@@ -15,7 +15,25 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import UIKit
 
-class BaseViewController: UIViewController {
+class BaseViewController: UIViewController, Foregrounder {
+
+    var appDelegate : AppDelegate {
+    get {
+        return UIApplication.sharedApplication().delegate as AppDelegate
+    }
+    }
+
+    // MARK: Knob control
+    var knobControl: IOSKnobControl!
+
+    // DEBT: Why is this suddenly necessary?
+    init(coder aDecoder: NSCoder!) {
+        super.init(coder: aDecoder)
+    }
+
+    init(nibName nibNameOrNil: String!, bundle nibBundleOrNil: NSBundle!) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,9 +41,21 @@ class BaseViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "adjustLayout", name: UIContentSizeCategoryDidChangeNotification, object: nil)
     }
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        appDelegate.foregrounder = self
+        adjustLayout()
+    }
+
+    func resumeFromBackground(appDelegate: AppDelegate) {
+        adjustLayout()
+    }
+
     func adjustLayout() {
         view.invalidateIntrinsicContentSize()
         view.setNeedsLayout()
+        knobControl.setNeedsLayout()
     }
 
 }

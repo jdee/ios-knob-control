@@ -53,7 +53,6 @@ class ContinuousViewController: BaseViewController, ImageChooser {
 
     // MARK: Knob controls
     // Swift allows you to celebrate the IOSKnobControl with three cheers.
-    var knobControl : IOSKnobControl!
     var minControl : IOSKnobControl!
     var maxControl : IOSKnobControl!
 

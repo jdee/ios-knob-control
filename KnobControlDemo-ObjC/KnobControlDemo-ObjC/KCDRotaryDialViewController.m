@@ -30,7 +30,6 @@
  * the other modes.
  */
 @implementation KCDRotaryDialViewController {
-    IOSKnobControl* knobControl;
     NSString* numberDialed, *imageTitle;
 }
 
@@ -41,18 +40,18 @@
 
     imageTitle = @"(none)";
 
-    knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
-    knobControl.mode = IKCModeRotaryDial;
-    knobControl.gesture = IKCGestureOneFingerRotation;
-    knobControl.shadow = YES;
-    knobControl.clipsToBounds = NO;
+    self.knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
+    self.knobControl.mode = IKCModeRotaryDial;
+    self.knobControl.gesture = IKCGestureOneFingerRotation;
+    self.knobControl.shadow = YES;
+    self.knobControl.clipsToBounds = NO;
 
-    // knobControl.fontName = @"CourierNewPS-BoldMT";
-    // knobControl.fontName = @"Verdana-Bold";
-    // knobControl.fontName = @"Georgia-Bold";
-    // knobControl.fontName = @"TimesNewRomanPS-BoldMT";
-    knobControl.fontName = @"AvenirNext-Bold";
-    // knobControl.fontName = @"TrebuchetMS-Bold";
+    // self.knobControl.fontName = @"CourierNewPS-BoldMT";
+    // self.knobControl.fontName = @"Verdana-Bold";
+    // self.knobControl.fontName = @"Georgia-Bold";
+    // self.knobControl.fontName = @"TimesNewRomanPS-BoldMT";
+    self.knobControl.fontName = @"AvenirNext-Bold";
+    // self.knobControl.fontName = @"TrebuchetMS-Bold";
 
     UIColor* normalColor, *highlightedColor, *titleColor;
     normalColor = [UIColor colorWithRed:0.0 green:0.5 blue:0.0 alpha:0.7];
@@ -60,13 +59,13 @@
     titleColor = [UIColor colorWithRed:0.0 green:0.3 blue:0.0 alpha:1.0];
 
     //*
-    [knobControl setFillColor:normalColor forState:UIControlStateNormal];
-    [knobControl setFillColor:highlightedColor forState:UIControlStateHighlighted];
-    [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
+    [self.knobControl setFillColor:normalColor forState:UIControlStateNormal];
+    [self.knobControl setFillColor:highlightedColor forState:UIControlStateHighlighted];
+    [self.knobControl setTitleColor:titleColor forState:UIControlStateNormal];
     //*/
 
-    [knobControl addTarget:self action:@selector(dialed:) forControlEvents:UIControlEventValueChanged];
-    [_knobHolder addSubview:knobControl];
+    [self.knobControl addTarget:self action:@selector(dialed:) forControlEvents:UIControlEventValueChanged];
+    [_knobHolder addSubview:self.knobControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -87,23 +86,17 @@
     imageVC.delegate = self;
 }
 
-- (void)adjustLayout
-{
-    [super adjustLayout];
-    [knobControl setNeedsLayout];
-}
-
 #pragma mark - Knob control callback
 - (void)dialed:(IOSKnobControl*)sender
 {
-    numberDialed = [numberDialed stringByAppendingFormat:@"%ld", (long)knobControl.positionIndex];
+    numberDialed = [numberDialed stringByAppendingFormat:@"%ld", (long)self.knobControl.positionIndex];
     _numberLabel.text = numberDialed;
 }
 
 #pragma mark - Actions for storyboard outlets
 - (void)gestureChanged:(UISegmentedControl *)sender
 {
-    knobControl.gesture = sender.selectedSegmentIndex == 0 ? IKCGestureOneFingerRotation : IKCGestureTap;
+    self.knobControl.gesture = sender.selectedSegmentIndex == 0 ? IKCGestureOneFingerRotation : IKCGestureTap;
 }
 
 - (void)timeScaleChanged:(UISlider *)sender
@@ -113,7 +106,7 @@
      * slider starts at 0 in middle and ranges from -1 to 1, so the
      * time scale can range from 1/e to e, and defaults to 1.
      */
-    knobControl.timeScale = exp(sender.value);
+    self.knobControl.timeScale = exp(sender.value);
 }
 
 #pragma mark - Image chooser delegate
@@ -134,18 +127,18 @@
          * Image sets ending in -background or -foreground, if any, are used for the background and
          * foreground images.
          */
-        [knobControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
-        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
-        [knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
-        knobControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
-        knobControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
+        [self.knobControl setImage:[UIImage imageNamed:imageTitle] forState:UIControlStateNormal];
+        [self.knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-highlighted", imageTitle]] forState:UIControlStateHighlighted];
+        [self.knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
+        self.knobControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
+        self.knobControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
     }
     else {
-        [knobControl setImage:nil forState:UIControlStateNormal];
-        [knobControl setImage:nil forState:UIControlStateHighlighted];
-        [knobControl setImage:nil forState:UIControlStateDisabled];
-        knobControl.backgroundImage = nil;
-        knobControl.foregroundImage = nil;
+        [self.knobControl setImage:nil forState:UIControlStateNormal];
+        [self.knobControl setImage:nil forState:UIControlStateHighlighted];
+        [self.knobControl setImage:nil forState:UIControlStateDisabled];
+        self.knobControl.backgroundImage = nil;
+        self.knobControl.foregroundImage = nil;
     }
 }
 

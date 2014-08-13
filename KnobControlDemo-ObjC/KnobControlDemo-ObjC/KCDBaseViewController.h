@@ -14,8 +14,14 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "KCDForegrounder.h"
 
-@interface KCDBaseViewController : UIViewController
+@class IOSKnobControl;
+
+@interface KCDBaseViewController : UIViewController<KCDForegrounder>
+
+@property (nonatomic) IOSKnobControl* knobControl;
+@property (nonatomic, readonly) KCDAppDelegate* appDelegate;
 
 - (void)adjustLayout;
 

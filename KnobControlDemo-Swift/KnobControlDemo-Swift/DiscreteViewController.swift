@@ -42,9 +42,6 @@ class DiscreteViewController: BaseViewController {
     @IBOutlet var timeScaleSlider : UISlider!
     @IBOutlet var imageControl : UISegmentedControl!
 
-    // MARK: Knob control
-    var knobControl : IOSKnobControl!
-
     // MARK: computed properties for convenience when working with the hexagon demo
     var hexagonImage : UIImage {
     get {
@@ -85,11 +82,6 @@ class DiscreteViewController: BaseViewController {
 
         // initialize all other properties based on initial control values
         updateKnobProperties()
-    }
-
-    override func adjustLayout() {
-        super.adjustLayout()
-        knobControl.setNeedsLayout()
     }
 
     // MARK: Actions for storyboard outlets

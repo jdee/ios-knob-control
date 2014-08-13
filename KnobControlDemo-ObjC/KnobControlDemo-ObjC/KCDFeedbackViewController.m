@@ -30,7 +30,6 @@
  * configuration controls.
  */
 @implementation KCDFeedbackViewController {
-    IOSKnobControl* knobControl;
     IOSKnobControl* dialView;
 }
 
@@ -40,29 +39,29 @@
 {
     [super viewDidLoad];
 
-    knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
-    knobControl.mode = IKCModeContinuous;
-    knobControl.circular = NO;
-    knobControl.min = -0.25*M_PI;
-    knobControl.max = 0.25*M_PI;
-    if ([knobControl respondsToSelector:@selector(setTintColor:)]) {
+    self.knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
+    self.knobControl.mode = IKCModeContinuous;
+    self.knobControl.circular = NO;
+    self.knobControl.min = -0.25*M_PI;
+    self.knobControl.max = 0.25*M_PI;
+    if ([self.knobControl respondsToSelector:@selector(setTintColor:)]) {
         // default anyway
-        knobControl.tintColor = [UIColor blueColor];
+        self.knobControl.tintColor = [UIColor blueColor];
     }
     UIColor* titleColor = [UIColor whiteColor];
-    [knobControl setTitleColor:titleColor forState:UIControlStateNormal];
-    [knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
+    [self.knobControl setTitleColor:titleColor forState:UIControlStateNormal];
+    [self.knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
 
-    [knobControl addTarget:self action:@selector(knobTurned:) forControlEvents:UIControlEventValueChanged];
-    [_knobHolder addSubview:knobControl];
+    [self.knobControl addTarget:self action:@selector(knobTurned:) forControlEvents:UIControlEventValueChanged];
+    [_knobHolder addSubview:self.knobControl];
 
     dialView = [[IOSKnobControl alloc] initWithFrame:_dialHolder.bounds imageNamed:@"needle"];
     dialView.mode = IKCModeContinuous;
     dialView.enabled = NO;
-    dialView.clockwise = knobControl.clockwise;
-    dialView.circular = knobControl.circular;
-    dialView.min = knobControl.min;
-    dialView.max = knobControl.max;
+    dialView.clockwise = self.knobControl.clockwise;
+    dialView.circular = self.knobControl.circular;
+    dialView.min = self.knobControl.min;
+    dialView.max = self.knobControl.max;
     [_dialHolder addSubview:dialView];
 
     // no need to arrange an action for UIControlEventValueChanged. this control will still generate those

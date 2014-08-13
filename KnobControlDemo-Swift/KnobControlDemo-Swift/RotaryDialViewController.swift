@@ -33,9 +33,6 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
     @IBOutlet var knobHolder : UIView!
     @IBOutlet var numberLabel : UILabel!
 
-    // MARK: Knob control
-    var knobControl : IOSKnobControl!
-
     // MARK: Other state
     // Place to accumulate the number dialed
     var numberDialed = ""
@@ -93,11 +90,6 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
             imageVC.titles = [ "(none)", "telephone" ] // specify the images to use
             imageVC.imageTitle = imageTitle            // pass in the user's last choice or nil for "(none)"
         }
-    }
-
-    override func adjustLayout() {
-        super.adjustLayout()
-        knobControl.setNeedsLayout()
     }
 
     // MARK: Image chooser delegate method
