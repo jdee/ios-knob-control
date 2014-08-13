@@ -438,6 +438,7 @@ static CGRect adjustFrame(CGRect frame) {
     _fontName = @"Helvetica";
     _shadow = NO;
     _zoomTopTitle = YES;
+    _zoomPointSize = 0.0;
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
@@ -1597,23 +1598,26 @@ static CGRect adjustFrame(CGRect frame) {
     assert(font);
 
     /*
-     * Zoom the title at the top to the headline size if fontSize is smaller than the current headline font size
-     * (makes use of Dynamic Type, so requires iOS 7+). DEBT: Zoom to 17 pts or something on iOS 6?
+     * Zoom the title at the top if fontSize is smaller than the specified size.
      */
     UIFont* headlineFont = font;
     CGFloat headlinePointSize = font.pointSize;
-    if (_zoomTopTitle && [UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
-        // iOS 7+
-        UIFontDescriptor* headlineFontDesc = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
-        if (headlineFontDesc.pointSize > fontSize) {
-            headlinePointSize = headlineFontDesc.pointSize;
-            headlineFont = [self fontWithSize:headlinePointSize];
-            assert(headlineFont);
+    if (_zoomTopTitle) {
+        headlinePointSize = _zoomPointSize;
+        if (headlinePointSize == 0.0) {
+            if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
+                // iOS 7+
+                UIFontDescriptor* headlineFontDesc = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline];
+                if (headlineFontDesc.pointSize > fontSize) {
+                    headlinePointSize = headlineFontDesc.pointSize;
+                }
+            }
+            else {
+                // iOS 5 & 6
+                headlinePointSize = 17.0;
+            }
         }
-    }
-    else if (_zoomTopTitle) {
-        // iOS 5 & 6
-        headlinePointSize = 17.0;
+
         if (headlinePointSize > fontSize) {
             headlineFont = [self fontWithSize:headlinePointSize];
             assert(headlineFont);
@@ -1740,7 +1744,7 @@ static CGRect adjustFrame(CGRect frame) {
             break;
 #ifdef DEBUG
         default:
-            NSLog(@"Unexpected mode: %d", _mode);
+            NSLog(@"Unexpected mode: %d", (int)_mode);
             abort();
 #endif // DEBUG
     }

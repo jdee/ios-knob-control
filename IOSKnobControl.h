@@ -216,17 +216,20 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  * Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position
  * indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices.
  *
- * Entries may be NSStrings, NSAttributedStrings, or a mix. If NSAttributedStrings are used, the kCTFontAttributeName/NSFontAttributeName must be set at the initial position.
- * NSStrings make use of the fontName property and titleColorForState(). NSAttributedStrings do not use the configured title colors per state either. You have to specify the
- * foreground color for an NSAttributedString.
- *
- * DEBT: This is a strong argument for having an array of titles per state. Alternately, when attributed strings are used, any missing attribute (font or foreground color)
- * could be filled in from the defaults. Attributed string support is very fresh and not well tested.
- *
- * Note that if you use attributed strings, you have total control over how the text will be rendered. In particular, the font size will never be computed or altered for an
- * attributed string. This means an attributed string cannot zoom to a larger size.
+ * Entries may be NSStrings, NSAttributedStrings, or a mix. If an NSAttributedString does not specify the NSFontAttributeName or the NSForegroundColorAttributeName, the
+ * attribute will be supplied as for NSStrings (from the currentTitleColor and fontName properties, and the font size will be determined to fit the knob or by zooming the top
+ * title). If an attributed string specifies a font, and the zoomTopTitle property is set to YES, the attributed string's font size will be increased. Otherwise, the
+ * attributed string's specified attributes will be used. Except for zooming the top title, specified font sizes of attributed strings are never adjusted to fit the knob
+ * like plain string titles.
  */
 @property (nonatomic) NSArray* titles;
+
+/**
+ * Only applicable if zoomTopTitle is set in IKCModeLinearReturn or IKCModeWheelOfFortune with no image. Specifies the point size to which the top title should be enlarged.
+ * If set to 0, on iOS 7+ the Dynamic Type headline size will be used; on iOS 5 or 6 a 17 pt font will be used. Otherwise, the specified point size will be used. The default
+ * is 0.
+ */
+@property (nonatomic) CGFloat zoomPointSize;
 
 /**
  * Only applicable in IKCModeLinearReturn and IKCModeWheelOfFortune when no image is present, and the knob image is generated from the titles property. If set to YES, the

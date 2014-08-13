@@ -165,6 +165,8 @@ Properties</h2></td></tr>
 <tr class="separator:a5a432d17639cf2b2ea1a61916215d6ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3ace0d2cf9907b8f9aa2e2ba150bf72"><td class="memItemLeft" align="right" valign="top">NSArray *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#ae3ace0d2cf9907b8f9aa2e2ba150bf72">titles</a></td></tr>
 <tr class="separator:ae3ace0d2cf9907b8f9aa2e2ba150bf72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88548ceb83df2477a574bb4853f8e977"><td class="memItemLeft" align="right" valign="top">CGFloat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#a88548ceb83df2477a574bb4853f8e977">zoomPointSize</a></td></tr>
+<tr class="separator:a88548ceb83df2477a574bb4853f8e977"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abdb3f3c9c8efe3bb611aa600b605553b"><td class="memItemLeft" align="right" valign="top">BOOL&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="interface_i_o_s_knob_control.html#abdb3f3c9c8efe3bb611aa600b605553b">zoomTopTitle</a></td></tr>
 <tr class="separator:abdb3f3c9c8efe3bb611aa600b605553b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -887,9 +889,28 @@ Properties</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices.</p>
-<p>Entries may be NSStrings, NSAttributedStrings, or a mix. If NSAttributedStrings are used, the kCTFontAttributeName/NSFontAttributeName must be set at the initial position. NSStrings make use of the fontName property and titleColorForState(). NSAttributedStrings do not use the configured title colors per state either. You have to specify the foreground color for an NSAttributedString.</p>
-<p>DEBT: This is a strong argument for having an array of titles per state. Alternately, when attributed strings are used, any missing attribute (font or foreground color) could be filled in from the defaults. Attributed string support is very fresh and not well tested.</p>
-<p>Note that if you use attributed strings, you have total control over how the text will be rendered. In particular, the font size will never be computed or altered for an attributed string. This means an attributed string cannot zoom to a larger size. </p>
+<p>Entries may be NSStrings, NSAttributedStrings, or a mix. If an NSAttributedString does not specify the NSFontAttributeName or the NSForegroundColorAttributeName, the attribute will be supplied as for NSStrings (from the currentTitleColor and fontName properties, and the font size will be determined to fit the knob or by zooming the top title). If an attributed string specifies a font, and the zoomTopTitle property is set to YES, the attributed string's font size will be increased. Otherwise, the attributed string's specified attributes will be used. Except for zooming the top title, specified font sizes of attributed strings are never adjusted to fit the knob like plain string titles. </p>
+
+</div>
+</div>
+<a class="anchor" id="a88548ceb83df2477a574bb4853f8e977"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">- (CGFloat) zoomPointSize</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">read</span><span class="mlabel">write</span><span class="mlabel">nonatomic</span><span class="mlabel">assign</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Only applicable if zoomTopTitle is set in IKCModeLinearReturn or IKCModeWheelOfFortune with no image. Specifies the point size to which the top title should be enlarged. If set to 0, on iOS 7+ the Dynamic Type headline size will be used; on iOS 5 or 6 a 17 pt font will be used. Otherwise, the specified point size will be used. The default is 0. </p>
 
 </div>
 </div>
@@ -920,7 +941,7 @@ Properties</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Aug 8 2014 13:05:10 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Aug 12 2014 20:54:14 for iOS Knob Control by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>
