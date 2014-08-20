@@ -10,7 +10,7 @@ var indexSectionsWithContent =
   0: "bcdfgimnpstz",
   1: "i",
   2: "dfist",
-  3: "bcfgmnpstz",
+  3: "bcdfgmnpstz",
   4: "i"
 };
 

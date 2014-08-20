@@ -130,6 +130,12 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 @property (nonatomic, readonly) UIColor* currentTitleColor;
 
 /**
+ * This property is passed to the animation layers that make up the knob. It can improve response by consuming more resources. Default is NO. See the CALayer class reference for
+ * more details.
+ */
+@property (nonatomic) BOOL drawsAsynchronously;
+
+/**
  * The font name to use when rendering text in the discrete modes, including rotary dial. Default is Helvetica. The font size is determined by the knob size and the number of positions.
  * CoreText interprets the font name and prefers PostScript names.
  */

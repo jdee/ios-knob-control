@@ -453,6 +453,7 @@ static CGRect adjustFrame(CGRect frame) {
     _shadow = NO;
     _zoomTopTitle = YES;
     _zoomPointSize = 0.0;
+    _drawsAsynchronously = NO;
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
@@ -849,6 +850,12 @@ static CGRect adjustFrame(CGRect frame) {
     [self setNeedsLayout];
 }
 
+- (void)setDrawsAsynchronously:(BOOL)drawsAsynchronously
+{
+    _drawsAsynchronously = drawsAsynchronously;
+    [self setNeedsLayout];
+}
+
 - (void)tintColorDidChange
 {
     [self setNeedsLayout];
@@ -1079,19 +1086,17 @@ static CGRect adjustFrame(CGRect frame) {
     float minDuration = fabsf(actual-current)/IKC_FAST_ANGULAR_VELOCITY;
     duration = MAX(minDuration, fabsf(duration));
 
-    // Gratefully borrowed from http://www.raywenderlich.com/56885/custom-control-for-ios-tutorial-a-reusable-knob
     [CATransaction new];
     [CATransaction setDisableActions:YES];
-    imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
-
-    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
-    animation.values = @[@(current), @(actual)];
-    animation.keyTimes = @[@(0.0), @(1.0)];
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    animation.fromValue = @(current);
+    animation.toValue = @(actual);
     animation.duration = duration;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 
     [imageLayer addAnimation:animation forKey:nil];
-        
+
+    imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
     [CATransaction commit];
 
     _position = position;
@@ -1416,6 +1421,7 @@ static CGRect adjustFrame(CGRect frame) {
             imageLayer = [CALayer layer];
             imageLayer.backgroundColor = [UIColor clearColor].CGColor;
             imageLayer.opaque = NO;
+            imageLayer.drawsAsynchronously = _drawsAsynchronously;
 
             float actual = self.clockwise ? self.position : -self.position;
             imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
@@ -1486,8 +1492,17 @@ static CGRect adjustFrame(CGRect frame) {
                 break;
         }
 
-        [self updateControlState];
     }
+
+    // do this directly in setDrawsAsynchronously?
+    imageLayer.drawsAsynchronously = _drawsAsynchronously;
+    shapeLayer.drawsAsynchronously = _drawsAsynchronously;
+    pipLayer.drawsAsynchronously = _drawsAsynchronously;
+    for (IKCTextLayer* layer in markings) {
+        layer.drawsAsynchronously = _drawsAsynchronously;
+    }
+
+    [self updateControlState];
 }
 
 /*
@@ -1733,6 +1748,7 @@ static CGRect adjustFrame(CGRect frame) {
     int j;
     for (j=0; j<_positions; ++j) {
         IKCTextLayer* layer = [IKCTextLayer layer];
+        layer.drawsAsynchronously = _drawsAsynchronously;
         [markings addObject:layer];
         [shapeLayer addSublayer:layer];
     }
@@ -1777,6 +1793,7 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
+    shapeLayer.drawsAsynchronously = _drawsAsynchronously;
 
     for (CATextLayer* layer in markings) {
         [layer removeFromSuperlayer];
@@ -1789,6 +1806,7 @@ static CGRect adjustFrame(CGRect frame) {
     pipLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     pipLayer.opaque = NO;
     pipLayer.backgroundColor = [UIColor clearColor].CGColor;
+    pipLayer.drawsAsynchronously = _drawsAsynchronously;
 
     [shapeLayer addSublayer:pipLayer];
 
@@ -1800,6 +1818,7 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer = [CAShapeLayer layer];
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
+    shapeLayer.drawsAsynchronously = _drawsAsynchronously;
 
     pipLayer = nil;
     [self addMarkings];
@@ -1813,6 +1832,7 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer = [CAShapeLayer layer];
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
+    shapeLayer.drawsAsynchronously = _drawsAsynchronously;
 
     [self createDialNumbers];
 
@@ -1832,7 +1852,9 @@ static CGRect adjustFrame(CGRect frame) {
 
     int j;
     for (j=0; j<10; ++j) {
-        [dialMarkings addObject: [IKCTextLayer layer]];
+        IKCTextLayer* layer = [IKCTextLayer layer];
+        layer.drawsAsynchronously = _drawsAsynchronously;
+        [dialMarkings addObject: layer];
     }
 
     [self updateDialNumbers];
