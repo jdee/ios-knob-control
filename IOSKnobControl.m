@@ -298,11 +298,27 @@ static CGRect adjustFrame(CGRect frame) {
          */
         CGColorRef fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, kCTForegroundColorAttributeName, NULL);
         if (fg) {
-            _foregroundColor = (CGColorRef)CFBridgingRetain([UIColor colorWithCGColor: fg]);
+            if (_foregroundColor) CFRelease(_foregroundColor);
+            _foregroundColor = (CGColorRef)CFRetain(fg);
         }
         else {
-            // no foreground color specified, so give it one (like a plain string)
-            CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTForegroundColorAttributeName, _foregroundColor);
+            /*
+             * kCTForegroundColorAttributeName == "CTForegroundColor"
+             * NSForegroundColorAttributeName == "NSColor"
+             *
+             * Apparently in iOS 7, these attributes were bridged/mapped/whatever. That is, the view controller could construct an
+             * NSAttributedString using NSForegroundColorAttributeName, and in here, a check for kCTForegroundColorAttributeName
+             * would produce the same value. But that's no longer the case in iOS 8. So we accept both here.
+             */
+            fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, (__bridge CFStringRef)NSForegroundColorAttributeName, NULL);
+            if (fg) {
+                if (_foregroundColor) CFRelease(_foregroundColor);
+                _foregroundColor = (CGColorRef)CFRetain(fg);
+            }
+            else {
+                // no foreground color specified, so give it one (like a plain string)
+                CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTForegroundColorAttributeName, _foregroundColor);
+            }
         }
 
         _fontSize = fontSize / [UIScreen mainScreen].scale;
