@@ -298,8 +298,7 @@ static CGRect adjustFrame(CGRect frame) {
          */
         CGColorRef fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, kCTForegroundColorAttributeName, NULL);
         if (fg) {
-            if (_foregroundColor) CFRelease(_foregroundColor);
-            _foregroundColor = (CGColorRef)CFRetain(fg);
+            self.foregroundColor = fg;
         }
         else {
             /*
@@ -312,8 +311,7 @@ static CGRect adjustFrame(CGRect frame) {
              */
             fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, (__bridge CFStringRef)NSForegroundColorAttributeName, NULL);
             if (fg) {
-                if (_foregroundColor) CFRelease(_foregroundColor);
-                _foregroundColor = (CGColorRef)CFRetain(fg);
+                self.foregroundColor = fg;
             }
             else {
                 // no foreground color specified, so give it one (like a plain string)
