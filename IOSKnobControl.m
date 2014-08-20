@@ -123,6 +123,7 @@ static CGRect adjustFrame(CGRect frame) {
 @property (nonatomic, copy) id string;
 @property (nonatomic) CGFloat horizMargin, vertMargin;
 @property (nonatomic) BOOL adjustsFontSizeForAttributed;
+@property (nonatomic, readonly) BOOL ignoringForegroundColor;
 
 @property (nonatomic, readonly) CFAttributedStringRef attributedString;
 
@@ -147,6 +148,7 @@ static CGRect adjustFrame(CGRect frame) {
         CFRetain(_foregroundColor);
         _horizMargin = _vertMargin = 0.0;
         _adjustsFontSizeForAttributed = NO;
+        _ignoringForegroundColor = NO;
 
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor].CGColor;
@@ -165,11 +167,18 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (!foregroundColor) return;
 
+    // _ignoringForegroundColor is set if the input is an attributed string with a specified
+    // foreground color attribute. in that case, we don't need to redraw when this method
+    // is called.
+    // DEBT: Also set _ignoring when there's no title color change from the previous state
+    // to the current one?
+    if (!_ignoringForegroundColor && !CGColorEqualToColor(foregroundColor, _foregroundColor)) {
+        [self setNeedsDisplay];
+    }
+
     if (_foregroundColor) CFRelease(_foregroundColor);
     _foregroundColor = foregroundColor;
     CFRetain(_foregroundColor);
-
-    [self setNeedsDisplay];
 }
 
 - (void)display
@@ -231,6 +240,7 @@ static CGRect adjustFrame(CGRect frame) {
     CTFontRef font;
 
     CFAttributedStringRef attributed;
+    _ignoringForegroundColor = NO;
 
     /*
      * _string can be an attributed string or a plain string. in the end, we need an attributed string.
@@ -298,6 +308,7 @@ static CGRect adjustFrame(CGRect frame) {
          */
         CGColorRef fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, kCTForegroundColorAttributeName, NULL);
         if (fg) {
+            _ignoringForegroundColor = YES;
             self.foregroundColor = fg;
         }
         else {
@@ -311,6 +322,7 @@ static CGRect adjustFrame(CGRect frame) {
              */
             fg = (CGColorRef)CFAttributedStringGetAttribute(attributed, 0, (__bridge CFStringRef)NSForegroundColorAttributeName, NULL);
             if (fg) {
+                _ignoringForegroundColor = YES;
                 self.foregroundColor = fg;
             }
             else {
