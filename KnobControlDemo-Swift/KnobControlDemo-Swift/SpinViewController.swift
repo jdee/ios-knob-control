@@ -86,7 +86,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
     }
 
     override func viewDidDisappear(animated: Bool) {
-        if musicPlayer.nowPlayingItem {
+        if musicPlayer.nowPlayingItem != nil {
             musicPlayer.pause()
             displayLink.paused = true
         }
@@ -95,7 +95,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if musicPlayer.nowPlayingItem {
+        if musicPlayer.nowPlayingItem != nil {
             musicPlayer.play()
             displayLink.paused = false
         }
@@ -184,7 +184,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
         touchIsDown = knobControl.highlighted
 
         // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
-        if touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == .Stopped {
+        if touchIsDown || musicPlayer.nowPlayingItem == nil || musicPlayer.playbackState == .Stopped {
             // if the user is interacting with the knob (or nothing is selected), don't animate it
             return
         }

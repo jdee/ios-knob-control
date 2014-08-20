@@ -15,7 +15,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import UIKit
 
-@infix func % (format: String, val: Float) -> String {
+func % (format: String, val: Float) -> String {
     return String(format: format, val)
 }
 
@@ -125,7 +125,7 @@ class ContinuousViewController: BaseViewController, ImageChooser {
         // store the title selected; will be nil if "(none)" selected
         imageTitle = title
 
-        NSLog("selected image title %@", (title ? title! : "(none)"))
+        NSLog("selected image title %@", (title != nil ? title! : "(none)"))
 
         updateKnobImages()
     }

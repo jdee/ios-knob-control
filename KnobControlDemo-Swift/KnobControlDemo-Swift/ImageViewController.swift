@@ -29,7 +29,7 @@ import UIKit
  * Since the other VC does not retain a strong reference to this one, there's no loop.
  * But this is good practice.
  */
-@class_protocol protocol ImageChooser {
+protocol ImageChooser : class {
     // called when the user taps the Choose button
     // title is the string selected from the list or nil if "(none)" was selected
     func imageChosen(title: String?)
