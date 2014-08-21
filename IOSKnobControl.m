@@ -1176,7 +1176,9 @@ static CGRect adjustFrame(CGRect frame) {
     currentTouch = touch;
 
     /*
-    NSLog(@"knob turned. state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f (min=%f, max=%f), _position = %f",
+    CGPoint locationInView = [sender locationInView:self];
+    NSLog(@"knob turned. touch at (%f, %f), state = %s, touchStart = %f, positionStart = %f, touch = %f, position = %f (min=%f, max=%f), _position = %f",
+          locationInView.x, locationInView.y,
           (sender.state == UIGestureRecognizerStateBegan ? "began" :
            sender.state == UIGestureRecognizerStateChanged ? "changed" :
            sender.state == UIGestureRecognizerStateEnded ? "ended" :

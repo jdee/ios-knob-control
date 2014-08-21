@@ -442,6 +442,7 @@
 				GCC_PREFIX_HEADER = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Prefix.pch";
 				INFOPLIST_FILE = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Info.plist";
 				PRODUCT_NAME = "KnobControlDemo-ObjC";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -455,6 +456,7 @@
 				GCC_PREFIX_HEADER = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Prefix.pch";
 				INFOPLIST_FILE = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Info.plist";
 				PRODUCT_NAME = "KnobControlDemo-ObjC";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

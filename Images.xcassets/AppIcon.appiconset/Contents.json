@@ -3,37 +3,61 @@
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "knobcontrol-29x29.png",
+      "filename" : "ikc-29x29.png",
       "scale" : "1x"
     },
     {
       "size" : "29x29",
       "idiom" : "iphone",
-      "filename" : "knobcontrol-58x58.png",
+      "filename" : "ikc-58x58.png",
       "scale" : "2x"
     },
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "knobcontrol-80x80.png",
+      "filename" : "ikc-80x80.png",
       "scale" : "2x"
     },
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "knobcontrol-57x57.png",
+      "filename" : "ikc-57x57.png",
       "scale" : "1x"
     },
     {
       "size" : "57x57",
       "idiom" : "iphone",
-      "filename" : "knobcontrol-114x114.png",
+      "filename" : "ikc-114x114.png",
       "scale" : "2x"
     },
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "knobcontrol-120x120.png",
+      "filename" : "ikc-120x120.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "72x72",
+      "idiom" : "ipad",
+      "filename" : "ikc-72x72.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "72x72",
+      "idiom" : "ipad",
+      "filename" : "ikc-144x144.png",
+      "scale" : "2x"
+    },
+    {
+      "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "ikc-76x76.png",
+      "scale" : "1x"
+    },
+    {
+      "size" : "76x76",
+      "idiom" : "ipad",
+      "filename" : "ikc-152x152.png",
       "scale" : "2x"
     }
   ],
