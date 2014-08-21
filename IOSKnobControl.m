@@ -124,6 +124,8 @@ static CGRect adjustFrame(CGRect frame) {
 @property (nonatomic) CGFloat horizMargin, vertMargin;
 @property (nonatomic) BOOL adjustsFontSizeForAttributed;
 @property (nonatomic, readonly) BOOL ignoringForegroundColor;
+@property (nonatomic, readonly) BOOL ignoringFontName;
+@property (nonatomic, readonly) BOOL ignoringFontSize;
 
 @property (nonatomic, readonly) CFAttributedStringRef attributedString;
 
@@ -149,6 +151,7 @@ static CGRect adjustFrame(CGRect frame) {
         _horizMargin = _vertMargin = 0.0;
         _adjustsFontSizeForAttributed = NO;
         _ignoringForegroundColor = NO;
+        _ignoringFontName = _ignoringFontSize = NO;
 
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor].CGColor;
@@ -161,6 +164,66 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)dealloc
 {
     if (_foregroundColor) CFRelease(_foregroundColor);
+}
+
+- (void)setHorizMargin:(CGFloat)horizMargin
+{
+    if (_horizMargin != horizMargin) [self setNeedsDisplay];
+    _horizMargin = horizMargin;
+}
+
+- (void)setVertMargin:(CGFloat)vertMargin
+{
+    if (_vertMargin != vertMargin) [self setNeedsDisplay];
+    _vertMargin = vertMargin;
+}
+
+- (void)setString:(id)string
+{
+    BOOL currentIsAttributed = [_string isKindOfClass:NSAttributedString.class];
+    BOOL newIsAttributed = [string isKindOfClass:NSAttributedString.class];
+
+    if (currentIsAttributed != newIsAttributed) {
+        [self setNeedsDisplay];
+    }
+    else if (currentIsAttributed) {
+        NSAttributedString* currentValue = _string;
+        NSAttributedString* newValue = string;
+
+        if (![currentValue isEqualToAttributedString:newValue]) {
+            [self setNeedsDisplay];
+        }
+    }
+    else {
+        NSString* currentValue = _string;
+        NSString* newValue = string;
+
+        if (![currentValue isEqualToString:newValue]) {
+            [self setNeedsDisplay];
+        }
+    }
+
+    _string = string;
+}
+
+- (void)setFontName:(NSString *)fontName
+{
+    if (!_ignoringFontName && ![_fontName isEqualToString:fontName]) [self setNeedsDisplay];
+    _fontName = fontName;
+}
+
+- (void)setFontSize:(CGFloat)fontSize
+{
+    if (!_ignoringFontSize && _fontSize != fontSize) [self setNeedsDisplay];
+    _fontSize = fontSize;
+}
+
+- (void)setAdjustsFontSizeForAttributed:(BOOL)adjustsFontSizeForAttributed
+{
+    if ([_string isKindOfClass:NSAttributedString.class] && _adjustsFontSizeForAttributed != adjustsFontSizeForAttributed) {
+        [self setNeedsDisplay];
+    }
+    _adjustsFontSizeForAttributed = adjustsFontSizeForAttributed;
 }
 
 - (void)setForegroundColor:(CGColorRef)foregroundColor
@@ -240,7 +303,7 @@ static CGRect adjustFrame(CGRect frame) {
     CTFontRef font;
 
     CFAttributedStringRef attributed;
-    _ignoringForegroundColor = NO;
+    _ignoringForegroundColor = _ignoringFontName = _ignoringFontSize = NO;
 
     /*
      * _string can be an attributed string or a plain string. in the end, we need an attributed string.
@@ -262,7 +325,9 @@ static CGRect adjustFrame(CGRect frame) {
          * Massage the font attribute for a number of reasons:
          * 1. No font was specified for the input (like a plain string)
          */
+        BOOL createdNewFont = NO;
         if (!font) {
+            createdNewFont = YES;
             font = CTFontCreateWithName((CFStringRef)_fontName, fontSize, NULL);
             CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTFontAttributeName, font);
             CFRelease(font);
@@ -281,6 +346,8 @@ static CGRect adjustFrame(CGRect frame) {
             CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTFontAttributeName, newFont);
             CFRelease(newFont);
             // NSLog(@"point size for new font: %f", fontSize);
+            _ignoringFontName = !createdNewFont;
+            _ignoringFontSize = NO;
         }
         // 3. This is a high-res image, so we render at double the size.
         else if (!_adjustsFontSizeForAttributed && [UIScreen mainScreen].scale > 1.0) {
@@ -293,6 +360,8 @@ static CGRect adjustFrame(CGRect frame) {
             CFAttributedStringSetAttribute(mutableAttributed, wholeString, kCTFontAttributeName, newFont);
             CFRelease(newFont);
             // NSLog(@"point size for new font: %f", fontSize);
+            _ignoringFontName = !createdNewFont;
+            _ignoringFontSize = !createdNewFont;
         }
         else {
             /*
@@ -300,6 +369,8 @@ static CGRect adjustFrame(CGRect frame) {
              */
             font = CFAttributedStringGetAttribute(attributed, 0, kCTFontAttributeName, NULL);
             _fontName = CFBridgingRelease(CTFontCopyPostScriptName(font));
+            _ignoringFontName = !createdNewFont;
+            _ignoringFontSize = !createdNewFont;
         }
 
         /*

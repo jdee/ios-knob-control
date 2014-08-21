@@ -196,11 +196,8 @@
         // can still customize piecemeal below iOS 7
         UIColor* titleColor = [UIColor whiteColor];
         [minControl setTitleColor:titleColor forState:UIControlStateNormal];
-        [minControl setTitleColor:titleColor forState:UIControlStateHighlighted];
         [maxControl setTitleColor:titleColor forState:UIControlStateNormal];
-        [maxControl setTitleColor:titleColor forState:UIControlStateHighlighted];
         [self.knobControl setTitleColor:titleColor forState:UIControlStateNormal];
-        [self.knobControl setTitleColor:titleColor forState:UIControlStateHighlighted];
     }
 
     minControl.gesture = maxControl.gesture = self.knobControl.gesture = IKCGestureOneFingerRotation + self.gestureControl.selectedSegmentIndex;
