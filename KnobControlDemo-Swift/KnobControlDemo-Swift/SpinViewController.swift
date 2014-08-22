@@ -80,15 +80,15 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         createMusicPlayer()
         createDisplayLink()
         createLoadingView()
-        setupToolbar()
+        setupToolbar(musicPlayer.playbackState)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePlaybackState", name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateCurrentTrack", name: MPMusicPlayerControllerNowPlayingItemDidChangeNotification, object: nil)
+        // NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateCurrentTrack", name: MPMusicPlayerControllerNowPlayingItemDidChangeNotification, object: nil)
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        updateMusicPlayer()
+        updateMusicPlayer(musicPlayer.playbackState)
     }
 
     /*
@@ -110,12 +110,11 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         if musicPlayer.nowPlayingItem != nil {
             if musicPlayer.playbackState == MPMusicPlaybackState.Paused || musicPlayer.playbackState == MPMusicPlaybackState.Stopped {
                 musicPlayer.play()
-                // The musicPlayer's playbackState property doesn't change right away, so we don't
-                // get the toolbar button right unless we track the state ourselves.
-                displayLink.paused = false
+                updateMusicPlayer(.Playing)
             }
             else if musicPlayer.playbackState == .Playing {
                 musicPlayer.pause()
+                updateMusicPlayer(.Paused)
             }
         }
     }
@@ -123,7 +122,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
     // MARK: Foregrounder protocol implementation
     override func resumeFromBackground(appDelegate: AppDelegate) {
         super.resumeFromBackground(appDelegate)
-        updateMusicPlayer()
+        updateMusicPlayer(musicPlayer.playbackState)
     }
 
     // MARK: --- implementation of MPMediaPickerControllerDelegate protocol ---
@@ -139,9 +138,8 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
         musicPlayer.setQueueWithItemCollection(mediaItemCollection)
         musicPlayer.play()
-        displayLink.paused = false
 
-        updateMusicPlayer()
+        updateMusicPlayer(.Playing)
     }
 
     func mediaPickerDidCancel(mediaPicker: MPMediaPickerController!) {
@@ -176,7 +174,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         touchIsDown = knobControl.highlighted
 
         // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
-        if touchIsDown || musicPlayer.nowPlayingItem == nil || musicPlayer.playbackState == .Stopped || musicPlayer.playbackState == .Paused {
+        if touchIsDown || musicPlayer.nowPlayingItem == nil {
             // if the user is interacting with the knob (or nothing is selected), don't animate it
             return
         }
@@ -272,7 +270,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         view.addSubview(loadingView)
     }
 
-    private func setupToolbar() {
+    private func setupToolbar(playbackState: MPMusicPlaybackState) {
         let width = toolbar.bounds.size.width - 60
 
         // this is the recommended (only?) way to adjust the system volume, which is what the
@@ -288,7 +286,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         let volumeItem = UIBarButtonItem(customView: volumeView)
         volumeItem.width = width
 
-        if musicPlayer.nowPlayingItem == nil || musicPlayer.playbackState == .Playing {
+        if musicPlayer.nowPlayingItem == nil || playbackState == .Playing {
             toolbar.items = [ UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: "togglePlayState:"), volumeItem ]
         }
         else {
@@ -325,19 +323,28 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
     }
 
     func updateCurrentTrack() {
-        updateMusicPlayer()
+        updateMusicPlayer(musicPlayer.playbackState)
     }
 
     func updatePlaybackState() {
-        updateMusicPlayer()
+        if musicPlayer.playbackState != .Playing {
+            /*
+             * DEBT: This fixes a particular scenario: Pause anything you're playing in the demo. Tap the button
+             * at the top to select a new iTunes track. Once you select a new track, the picker view goes away,
+             * the track starts playing, and the knob doesn't turn. The reason? After the mediaPicker:didPickYadda: call
+             * we get a call here with playbackState != .Playing. Everything else seems to work.
+             */
+            return
+        }
+        updateMusicPlayer(musicPlayer.playbackState)
     }
 
-    func updateMusicPlayer() {
+    func updateMusicPlayer(playbackState: MPMusicPlaybackState) {
         // The user could muck around with the iPod app while we're in the bg.
-        displayLink.paused = musicPlayer.playbackState != .Playing
+        displayLink.paused = playbackState != .Playing
 
-        #if DEBUG
-            if musicPlayer.playbackState == .Playing {
+        #if VERBOSE
+            if playbackState == .Playing {
             NSLog("Current playback state: playing")
             }
             else {
@@ -346,7 +353,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         #endif
 
         updateSelectedItem()
-        setupToolbar()
+        setupToolbar(playbackState)
     }
 
     func updateSelectedItem() {
