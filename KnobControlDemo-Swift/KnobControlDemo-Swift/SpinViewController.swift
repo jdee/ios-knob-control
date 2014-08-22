@@ -32,7 +32,7 @@ import UIKit
  * continuously at a constant angular velocity in the absence of gestures from the user. This is a novel use of the control.
  * The animation is done externally with the assistance of the CADisplayLink utility from QuartzCore.
  */
-class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, Foregrounder {
+class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
     // MARK: Storyboard outlets
     @IBOutlet var knobHolder : UIView!
@@ -40,7 +40,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
     @IBOutlet var trackProgress : UIProgressView!
     @IBOutlet var trackLengthLabel : UILabel!
     @IBOutlet var trackProgressLabel : UILabel!
-    @IBOutlet var volumeViewHolder : UIView!
+    @IBOutlet var toolbar: UIToolbar!
 
     // MARK: other stored properties
     var displayLink : CADisplayLink!
@@ -67,7 +67,9 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
 
     // MARK: constant(s)
 
-    let angularVelocity = 10 * Float(M_PI) / 9 // 33 1/3 RPM = 100 rev./180 s
+    let angularVelocity = 10 * Float(M_PI) / 9 // 33 1/3 RPM = 100 rev./180 s = 10π/9 rad/s
+
+    private var playbackState = MPMusicPlaybackState.Stopped
 
     /*
      * MARK: View lifecycle
@@ -77,28 +79,10 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
         super.viewDidLoad()
 
         createKnobControl()
-        createDisplayLink()
         createMusicPlayer()
+        createDisplayLink()
         createLoadingView()
-
-        // arrange to be notified via resumeFromBackground() when the app becomes active
-        appDelegate.foregrounder = self
-    }
-
-    override func viewDidDisappear(animated: Bool) {
-        if musicPlayer.nowPlayingItem != nil {
-            musicPlayer.pause()
-            displayLink.paused = true
-        }
-        super.viewDidDisappear(animated)
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        if musicPlayer.nowPlayingItem != nil {
-            musicPlayer.play()
-            displayLink.paused = false
-        }
+        setupToolbar()
     }
 
     /*
@@ -116,24 +100,21 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
         presentViewController(picker, animated: true, completion: nil)
     }
 
-    // MARK: --- implementation of Foregrounder protocol ---
-
-    override func resumeFromBackground(appDelegate: AppDelegate) {
-        super.resumeFromBackground(appDelegate)
-
-        /*
-         * The MPMusicPlayerController dumps the user's selection when the app is backgrounded.
-         * This is OK for this demo app, but reset the view to its state when no track is
-         * selected, prompting the user to select again.
-         */
-        knobControl.position = 0
-        knobControl.enabled = false
-        knobControl.foregroundImage = nil
-        currentPlaybackTime = 0
-        trackLength = 0
-        updateProgress()
-        updateLabel(trackLengthLabel, withTime: trackLength)
-        iTunesButton.setTitle("select iTunes track", forState: .Normal)
+    @IBAction func togglePlayState(sender: UIBarButtonItem!) {
+        if musicPlayer.nowPlayingItem != nil {
+            if playbackState == .Paused || playbackState == .Stopped {
+                musicPlayer.play()
+                // The musicPlayer's playbackState property doesn't change right away, so we don't
+                // get the toolbar button right unless we track the state ourselves.
+                playbackState = .Playing
+                displayLink.paused = false
+            }
+            else if playbackState == .Playing {
+                musicPlayer.pause()
+                playbackState = .Paused
+            }
+            setupToolbar()
+        }
     }
 
     // MARK: --- implementation of MPMediaPickerControllerDelegate protocol ---
@@ -151,13 +132,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
         musicPlayer.play()
         displayLink.paused = false
 
-        trackLength = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyPlaybackDuration) as Double
-        NSLog("Selected item duration is %f", trackLength)
-        updateLabel(trackLengthLabel, withTime: trackLength)
-
-        let trackName = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyTitle) as String
-        let artist = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyArtist) as String
-        iTunesButton.setTitle(String(format: "%@ - %@", artist, trackName), forState: .Normal)
+        updateSelectedItem()
     }
 
     func mediaPickerDidCancel(mediaPicker: MPMediaPickerController!) {
@@ -172,19 +147,25 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
         // a way to override it with custom behavior, but for now I can't.
         if touchIsDown && !knobControl.highlighted {
             // resume whenever the touch comes up
+            NSLog("when touch came up, current playback time: %f/%f", currentPlaybackTime, trackLength)
             musicPlayer.currentPlaybackTime = normalizedPlaybackTime
-            musicPlayer.play()
+            if playbackState == .Playing {
+                musicPlayer.play()
+            }
             NSLog("touch came up. setting currentPlaybackTime to %f", normalizedPlaybackTime)
         }
         else if !touchIsDown && knobControl.highlighted {
             // pause whenever a touch goes down
-            musicPlayer.pause()
+            if playbackState == .Playing {
+                musicPlayer.pause()
+            }
             currentPlaybackTime = musicPlayer.currentPlaybackTime
+            NSLog("Touch went down. Current playback time: %f/%f", currentPlaybackTime, trackLength)
         }
         touchIsDown = knobControl.highlighted
 
         // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
-        if touchIsDown || musicPlayer.nowPlayingItem == nil || musicPlayer.playbackState == .Stopped {
+        if touchIsDown || musicPlayer.nowPlayingItem == nil || playbackState == .Stopped || playbackState == .Paused {
             // if the user is interacting with the knob (or nothing is selected), don't animate it
             return
         }
@@ -222,6 +203,25 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
      * MARK: Private convenience functions for DRYness, readability
      */
 
+    func updateSelectedItem() {
+        trackLength = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyPlaybackDuration) as Double
+        NSLog("Selected item duration is %f", trackLength)
+        updateLabel(trackLengthLabel, withTime: trackLength)
+
+        currentPlaybackTime = musicPlayer.currentPlaybackTime
+        NSLog("Current playback time is %f", currentPlaybackTime)
+        updateLabel(trackProgressLabel, withTime: currentPlaybackTime)
+
+        updateProgress()
+
+        let trackName = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyTitle) as String
+        let artist = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyArtist) as String
+        iTunesButton.setTitle(String(format: "%@ - %@", artist, trackName), forState: .Normal)
+
+        knobControl.enabled = true
+        knobControl.position = angularVelocity * Float(currentPlaybackTime)
+    }
+
     private func createKnobControl() {
         // use UIImage(named: "disc") for the .Normal state
         knobControl = IOSKnobControl(frame:knobHolder.bounds, imageNamed:"disc")
@@ -244,20 +244,51 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate, F
         displayLink = CADisplayLink(target: self, selector: "animateKnob:")
         displayLink.frameInterval = 3 // 20 fps
         displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
+
+        if playbackState == .Playing {
+            displayLink.paused = false
+        }
     }
 
     private func createMusicPlayer() {
         // could do this as a lazy prop or even a constant initializer perhaps
-        musicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+        musicPlayer = MPMusicPlayerController.iPodMusicPlayer()
         musicPlayer.repeatMode = .All
+
+        playbackState = musicPlayer.playbackState
+
+        if musicPlayer.nowPlayingItem != nil {
+            updateSelectedItem()
+        }
+    }
+
+    private func setupToolbar() {
+        let width = toolbar.bounds.size.width - 60
 
         // this is the recommended (only?) way to adjust the system volume, which is what the
         // MPMusicPlayerController requires. it's unsatisfying in a knob-control demo not to be able
-        // to use a volume knob. it might be possible to use the AVAudioPlayer with items from the
-        // MPMediaPicker. I've had spotty results adjusting the AVAudioPlayer volume before though.
-        // maybe this demo doesn't need to adjust the volume, but at least this is very simple.
-        volumeView = MPVolumeView(frame:volumeViewHolder.bounds)
-        volumeViewHolder.addSubview(volumeView)
+        // to use a volume knob.
+
+        // origin x and y don't matter here. I can specify the width of the bar button item and the height of the volumeView.
+        // I can't control the absolute positioning within the toolbar.
+        volumeView = MPVolumeView(frame:CGRectMake(0, 0, width, toolbar.bounds.size.height - 16))
+        volumeView.layer.borderColor = UIColor.blackColor().CGColor
+        // volumeView.layer.borderWidth = 1
+
+        let volumeItem = UIBarButtonItem(customView: volumeView)
+        volumeItem.width = width
+
+        if musicPlayer.nowPlayingItem == nil || playbackState == .Playing {
+            toolbar.items = [ UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: "togglePlayState:"), volumeItem ]
+        }
+        else {
+            toolbar.items = [ UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: "togglePlayState:"), volumeItem ]
+        }
+
+        if musicPlayer.nowPlayingItem == nil {
+            let pauseButton = toolbar.items[0] as UIBarButtonItem
+            pauseButton.enabled = false
+        }
     }
 
     private func createLoadingView() {
