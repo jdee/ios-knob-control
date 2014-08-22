@@ -467,6 +467,7 @@ static CGRect adjustFrame(CGRect frame) {
  * Returns the nearest allowed position
  */
 @property (readonly) float nearestPosition;
+@property (readonly) BOOL currentFillColorIsOpaque;
 @end
 
 @implementation IOSKnobControl {
@@ -1396,6 +1397,13 @@ static CGRect adjustFrame(CGRect frame) {
 
 #pragma mark - Private Methods: Image Management
 
+- (BOOL)currentFillColorIsOpaque
+{
+    CGFloat red, green, blue, alpha;
+    [self.currentFillColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    return alpha == 1.0;
+}
+
 - (UIFont*)fontWithSize:(CGFloat)fontSize
 {
     /*
@@ -1602,6 +1610,7 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (self.currentImage) {
         imageLayer.contents = (id)self.currentImage.CGImage;
+        middleLayer.shadowPath = NULL;
     }
     else {
         shapeLayer.fillColor = self.currentFillColor.CGColor;
@@ -1610,6 +1619,22 @@ static CGRect adjustFrame(CGRect frame) {
 
         for (IKCTextLayer* layer in markings) {
             layer.foregroundColor = self.currentTitleColor.CGColor;
+        }
+
+        /*
+         * It's the middleLayer that casts the shadow. (If the imageLayer casts a shadow, the shadow rotates with it).
+         * Shadows are expensive if you leave it to the layer to figure out its path. For simple cases, whenever we're rendering
+         * an opaque, circular knob, we set middleLayer.shadowPath. In the case of rotary dial mode, transparency means that the
+         * shadow path, in the coordinates of the middleLayer, changes as the finger holes rotate and would have to be specified
+         * frame by frame during the rotation. Which could still speed things up. If a transparent fill color is used for the
+         * knob, it's possible for the pip or markings to cast a shadow. That may be unusual, but we don't cache the shadow path
+         * in that case.
+         */
+        if (_mode != IKCModeRotaryDial && self.currentFillColorIsOpaque) {
+            middleLayer.shadowPath = shapeLayer.path;
+        }
+        else {
+            middleLayer.shadowPath = NULL;
         }
     }
 }

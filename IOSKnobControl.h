@@ -205,7 +205,9 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 @property (nonatomic) NSUInteger positions;
 
 /**
- * Determine whether to draw a shadow behind the knob. Default is NO.
+ * Determine whether to draw a shadow behind the knob. Default is NO. Note that this can be an expensive option. See https://github.com/jdee/ios-knob-control/issues/24.
+ * Currently, performance is best when using an opaque fill color in any mode except rotary dial. Performance may be poor whenever using shadows with custom
+ * images.
  */
 @property (nonatomic) BOOL shadow;
 
