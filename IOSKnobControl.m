@@ -1619,6 +1619,7 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+    shapeLayer.shadowPath = shapeLayer.path;
 
     [self updateMarkings];
 }
@@ -1655,6 +1656,7 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.path = path.CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+    shapeLayer.shadowPath = path.CGPath;
 }
 
 - (void)updateDialNumbers
@@ -1734,8 +1736,6 @@ static CGRect adjustFrame(CGRect frame) {
         if (headlinePointSize > fontSize) {
             headlineFont = [self fontWithSize:headlinePointSize];
             assert(headlineFont);
-        }
-        else {
         }
     }
 
@@ -1879,6 +1879,7 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
     shapeLayer.drawsAsynchronously = _drawsAsynchronously;
+    shapeLayer.shadowPath = shapeLayer.path;
 
     for (CATextLayer* layer in markings) {
         [layer removeFromSuperlayer];
@@ -1980,6 +1981,7 @@ static CGRect adjustFrame(CGRect frame) {
     stopLayer.bounds = self.bounds;
     stopLayer.backgroundColor = [UIColor clearColor].CGColor;
     stopLayer.opaque = NO;
+    stopLayer.shadowPath = path.CGPath;
 
     return stopLayer;
 }
