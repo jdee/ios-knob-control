@@ -84,6 +84,9 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePlaybackState", name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: nil)
         // NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateCurrentTrack", name: MPMusicPlayerControllerNowPlayingItemDidChangeNotification, object: nil)
+
+        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        appDelegate.foregrounder = self
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -374,6 +377,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
             knobControl.enabled = true
             knobControl.position = angularVelocity * Float(currentPlaybackTime)
+            knobControl.foregroundImage = UIImage(named: "tonearm")
         }
         else {
             /*
@@ -382,6 +386,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
             iTunesButton.setTitle("Select iTunes track", forState: .Normal)
             displayLink.paused = true
             knobControl.enabled = false
+            knobControl.foregroundImage = nil
 
             updateLabel(trackLengthLabel, withTime: 0)
             updateLabel(trackProgressLabel, withTime: 0)

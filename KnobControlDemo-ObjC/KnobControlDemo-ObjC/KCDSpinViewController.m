@@ -80,9 +80,13 @@
     touchIsDown = NO;
 
     [self createKnobControl];
-    [self createDisplayLink];
     [self createMusicPlayer];
+    [self createDisplayLink];
     [self createLoadingView];
+
+    [self setupToolbar:musicPlayer.playbackState];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePlaybackState) name:MPMusicPlayerControllerPlaybackStateDidChangeNotification object:nil];
 
     // arrange to be notified via resumeFromBackground() when the app becomes active
     self.appDelegate.foregrounder = self;
@@ -91,19 +95,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (musicPlayer.nowPlayingItem) {
-        [musicPlayer play];
-        displayLink.paused = NO;
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    if (musicPlayer.nowPlayingItem) {
-        [musicPlayer pause];
-        displayLink.paused = YES;
-    }
-    [super viewDidDisappear:animated];
+    [self updateMusicPlayer:musicPlayer.playbackState];
 }
 
 #pragma mark - IBActions, protocol implementations and other callbacks
@@ -120,23 +112,25 @@
     [self presentViewController:mediaPicker animated:YES completion:nil];
 }
 
+- (void)togglePlayState:(UIBarButtonItem*)sender
+{
+    if (musicPlayer.nowPlayingItem) {
+        if (musicPlayer.playbackState == MPMusicPlaybackStatePaused || musicPlayer.playbackState == MPMusicPlaybackStateStopped) {
+            [musicPlayer play];
+            [self updateMusicPlayer:MPMusicPlaybackStatePlaying];
+        }
+        else {
+            [musicPlayer pause];
+            [self updateMusicPlayer:MPMusicPlaybackStatePaused];
+        }
+    }
+}
+
 // --- implementation of Foregrounder protocol ---
 
 - (void)resumeFromBackground:(KCDAppDelegate *)theAppDelegate
 {
-    /*
-     * The MPMusicPlayerController dumps the user's selection when the app is backgrounded.
-     * This is OK for this demo app, but reset the view to its state when no track is
-     * selected, prompting the user to select again.
-     */
-    self.knobControl.position = 0.0;
-    self.knobControl.enabled = NO;
-    self.knobControl.foregroundImage = nil;
-    currentPlaybackTime = 0.0;
-    trackLength = 0.0;
-    [self updateProgress];
-    [self updateLabel:_trackLengthLabel withTime:trackLength];
-    [_iTunesButton setTitle:@"select iTunes track" forState:UIControlStateNormal];
+    [self updateMusicPlayer:musicPlayer.playbackState];
 }
 
 // --- implementation of MPMediaPickerControllerDelegate protocol ---
@@ -155,13 +149,7 @@
     [musicPlayer play];
     displayLink.paused = NO;
 
-    trackLength = ((NSNumber*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyPlaybackDuration]).doubleValue;
-    NSLog(@"Selected item duration is %f", trackLength);
-    [self updateLabel:_trackLengthLabel withTime:trackLength];
-
-    NSString* title = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyTitle];
-    NSString* artist = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyArtist];
-    [_iTunesButton setTitle:[NSString stringWithFormat:@"%@ - %@", artist, title] forState:UIControlStateNormal];
+    [self updateMusicPlayer:MPMusicPlaybackStatePlaying];
 }
 
 - (void)mediaPickerDidCancel:(MPMediaPickerController *)mediaPicker
@@ -188,17 +176,19 @@
     if (touchIsDown && !self.knobControl.highlighted) {
         // resume whenever the touch comes up
         musicPlayer.currentPlaybackTime = self.normalizedPlaybackTime;
+        [musicPlayer beginGeneratingPlaybackNotifications];
         [musicPlayer play];
     }
     else if (!touchIsDown && self.knobControl.highlighted) {
         // pause whenever a touch goes down
+        [musicPlayer endGeneratingPlaybackNotifications];
         [musicPlayer pause];
         currentPlaybackTime = musicPlayer.currentPlaybackTime;
     }
     touchIsDown = self.knobControl.highlighted;
 
     // .Stopped shouldn't happen if musicPlayer.repeatMode == .All
-    if (touchIsDown || !musicPlayer.nowPlayingItem || musicPlayer.playbackState == MPMoviePlaybackStateStopped) {
+    if (touchIsDown || !musicPlayer.nowPlayingItem) {
         // if the user is interacting with the knob (or nothing is selected), don't animate it
         return;
     }
@@ -246,15 +236,19 @@
     displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(animateKnob:)];
     displayLink.frameInterval = 3; // 20 fps
     [displayLink addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
+
+    if (musicPlayer.playbackState == MPMusicPlaybackStatePlaying) {
+        displayLink.paused = NO;
+    }
 }
 
 - (void)createMusicPlayer
 {
-    musicPlayer = [MPMusicPlayerController applicationMusicPlayer];
+    musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
     musicPlayer.repeatMode = MPMusicRepeatModeAll;
+    [musicPlayer beginGeneratingPlaybackNotifications];
 
-    volumeView = [[MPVolumeView alloc] initWithFrame:_volumeViewHolder.bounds];
-    [_volumeViewHolder addSubview:volumeView];
+    [self updateSelectedItem];
 }
 
 - (void)createLoadingView
@@ -282,6 +276,27 @@
     [self.view addSubview:loadingView];
 }
 
+- (void)setupToolbar:(MPMusicPlaybackState)playbackState
+{
+    CGFloat width = _toolbar.bounds.size.width - 60;
+
+    volumeView = [[MPVolumeView alloc] initWithFrame:CGRectMake(0, 0, width, _toolbar.bounds.size.height - 16)];
+    UIBarButtonItem* volumeItem = [[UIBarButtonItem alloc] initWithCustomView:volumeView];
+    volumeItem.width = width;
+
+    if (!musicPlayer.nowPlayingItem || playbackState == MPMusicPlaybackStatePlaying) {
+        _toolbar.items = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(togglePlayState:)], volumeItem ];
+    }
+    else {
+        _toolbar.items = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(togglePlayState:)], volumeItem ];
+    }
+
+    if (!musicPlayer.nowPlayingItem) {
+        UIBarButtonItem* pauseButton = _toolbar.items.firstObject;
+        pauseButton.enabled = NO;
+    }
+}
+
 - (void)updateProgress
 {
     if (trackLength > 0.0) {
@@ -307,6 +322,52 @@
         seconds = 0;
     }
     label.text = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
+}
+
+- (void)updatePlaybackState
+{
+    if (musicPlayer.playbackState != MPMusicPlaybackStatePlaying) return;
+
+    [self updateMusicPlayer:musicPlayer.playbackState];
+}
+
+- (void)updateMusicPlayer:(MPMusicPlaybackState)playbackState
+{
+    displayLink.paused = playbackState != MPMusicPlaybackStatePlaying;
+    [self updateSelectedItem];
+    [self setupToolbar:playbackState];
+}
+
+- (void)updateSelectedItem
+{
+    if (musicPlayer.nowPlayingItem) {
+        trackLength = ((NSNumber*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyPlaybackDuration]).doubleValue;
+        NSLog(@"Selected item duration is %f", trackLength);
+        [self updateLabel:_trackLengthLabel withTime:trackLength];
+
+        currentPlaybackTime = musicPlayer.currentPlaybackTime;
+        [self updateLabel:_trackProgressLabel withTime:currentPlaybackTime];
+
+        [self updateProgress];
+
+        NSString* title = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyTitle];
+        NSString* artist = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyArtist];
+        [_iTunesButton setTitle:[NSString stringWithFormat:@"%@ - %@", artist, title] forState:UIControlStateNormal];
+
+        self.knobControl.enabled = YES;
+        self.knobControl.position = IKC_33RPM_ANGULAR_VELOCITY * currentPlaybackTime;
+        self.knobControl.foregroundImage = [UIImage imageNamed:@"tonearm"];
+    }
+    else {
+        [_iTunesButton setTitle:@"select iTunes track" forState:UIControlStateNormal];
+        displayLink.paused = YES;
+        self.knobControl.enabled = NO;
+        self.knobControl.foregroundImage = nil;
+
+        [self updateLabel:_trackProgressLabel withTime:0.0];
+        [self updateLabel:_trackLengthLabel withTime:0.0];
+        [self updateProgress];
+    }
 }
 
 @end

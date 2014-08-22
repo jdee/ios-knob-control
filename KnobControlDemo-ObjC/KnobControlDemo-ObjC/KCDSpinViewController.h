@@ -24,7 +24,7 @@
 @property (nonatomic) IBOutlet UILabel* trackProgressLabel;
 @property (nonatomic) IBOutlet UILabel* trackLengthLabel;
 @property (nonatomic) IBOutlet UIProgressView* trackProgress;
-@property (nonatomic) IBOutlet UIView* volumeViewHolder;
+@property (nonatomic) IBOutlet UIToolbar* toolbar;
 
 - (IBAction)selectTrack:(UIButton*)sender;
 
