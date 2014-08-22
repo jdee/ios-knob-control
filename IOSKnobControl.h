@@ -36,17 +36,28 @@
  * In both cases, the circle may or may not be closed.
  */
 typedef NS_ENUM(NSInteger, IKCMode) {
-    IKCModeLinearReturn,   ///< Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
-    IKCModeWheelOfFortune, ///< Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
-    IKCModeContinuous,     ///< Like a circular generalization of the slider control.
-    IKCModeRotaryDial      ///< Like an old rotary telephone dial.
+    /// Like a circular generalization of the picker view control. The knob turns continuously, but it can only come to rest at certain allowed positions. After being released, it animates to an allowed position at a fixed rate.
+    IKCModeLinearReturn,
+    /// Like a carnival wheel. Knob can stop at any position in a segment with the exception of narrow strips between them. If it lands very near the boundary between segments, it animates to the closest side.
+    IKCModeWheelOfFortune,
+    /// Like a circular generalization of the slider control.
+    IKCModeContinuous,
+    /// Like an old rotary telephone dial.
+    IKCModeRotaryDial
 };
 
+/**
+ * A knob control may be configured to respond to one of several gestures.
+ */
 typedef NS_ENUM(NSInteger, IKCGesture) {
-    IKCGestureOneFingerRotation, ///< Custom gesture handling. One finger rotates the knob.
-    IKCGestureTwoFingerRotation, ///< Uses the standard iOS two-finger rotation gesture. (Not available with IKCModeRotaryDial.)
-    IKCGestureVerticalPan,       ///< Uses a vertical pan gesture. The image still rotates. (Not available with IKCModeRotaryDial.)
-    IKCGestureTap                ///< Uses a tap gesture. The knob rotates to the position tapped. In rotary dial mode, rotates from the position tapped (dials that number).
+    /// Custom gesture handling. One finger rotates the knob.
+    IKCGestureOneFingerRotation,
+    /// Uses the standard iOS two-finger rotation gesture. (Not available with IKCModeRotaryDial.)
+    IKCGestureTwoFingerRotation,
+    /// Uses a vertical pan gesture. The image still rotates. (Not available with IKCModeRotaryDial.)
+    IKCGestureVerticalPan,
+    /// Uses a tap gesture. The knob rotates to the position tapped. In rotary dial mode, rotates from the position tapped (dials that number).
+    IKCGestureTap
 };
 
 #ifndef IKC_DISABLE_DEPRECATED
@@ -70,7 +81,7 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 #endif // IKC_DISABLE_DEPRECATED
 
 /**
- * A simple, reusable rotary control. You may provide custom knob images or use the default images, which may be customized
+ * This is a simple, reusable rotary control. You may provide custom knob images or use the default images, which may be customized
  * using a number of properties and methods. The control chooses an image based on state,
  * like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and
  * animates rotation of the current image in response, programmatically reading out the current angular position of the knob
@@ -88,18 +99,49 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @interface IOSKnobControl : UIControl
 
-#pragma mark - Properties
+#pragma mark - Creating a knob control
 
 /**
- * If set, the specified image is rendered in the background of the control. The default value is nil.
- *
- * If mode is IKCMRotaryDial, and backgroundImage is nil, the numbers on the dial will be rendered as the
- * background. Use this property to supply your own dial background instead of the generated one.
+ * @name Creating a knob control
  */
-@property (nonatomic) UIImage* backgroundImage;
 
 /**
- * If this property is set to YES, the circle is closed. That is, all angular positions in (-M_PI,M_PI] are allowed, and -M_PI is identified with M_PI, so it is possible to
+ * Inherited initializer
+ *
+ * Inherited from UIView and UIControl. No image is yet specified. Must subsequently call at least
+ * setImage:forState: for the UIControlStateNormal state.
+ * @param frame the initial frame for the control
+ */
+- (instancetype)initWithFrame:(CGRect)frame;
+
+/**
+ * Initialize the control with an image
+ *
+ * Initialize the control with a specific knob image for the UIControlStateNormal state.
+ * @param frame the initial frame for the control
+ * @param image an image to use for the control's normal state
+ */
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage*)image;
+
+/**
+ * Initialize the control with a specific knob image for the UIControlStateNormal state.
+ *
+ * The image used will be [UIImage imageNamed:imageSetName]. The image will be selected appropriately for the screen density
+ * from the specified image set in the application's asset catalog named imageSetName.
+ * @param frame the initial frame for the control
+ * @param imageSetName the name of an image set in the application's asset catalog
+ */
+- (instancetype)initWithFrame:(CGRect)frame imageNamed:(NSString*)imageSetName;
+
+#pragma mark - Specifying knob control behavior
+
+/**
+ * @name Specifying knob control behavior
+ */
+
+/** Whether the knob rotates all the way around
+ *
+ * If this property is set to YES, the circle is closed. That is, all angular positions in (-π, π] are allowed, and -π is identified with π, so it is possible to
  * continue around the circle. The min and max properties of the control are ignored.
  *
  * If this property is set to NO, the circle is open, and the min and max properties are consulted.
@@ -108,40 +150,99 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @property (nonatomic) BOOL circular;
 
-/**
+/** Whether the position property increases when the knob rotates clockwise (vs. counterclockwise)
+ *
  * Specifies whether the value of position increases when the knob is turned clockwise instead of counterclockwise.
  * The default value of this property is NO. It is ignored in IKCModeRotaryDial.
  */
 @property (nonatomic) BOOL clockwise;
 
-/**
- * The fill color for the current state.
- */
-@property (nonatomic, readonly) UIColor* currentFillColor;
-
-/**
- * The image to use for the current state.
- */
-@property (nonatomic, readonly) UIImage* currentImage;
-
-/**
- * The title color to use for the current state.
- */
-@property (nonatomic, readonly) UIColor* currentTitleColor;
-
-/**
+/** Whether to render certain things asynchronously
+ *
  * This property is passed to the animation layers that make up the knob. It can improve response by consuming more resources. Default is NO. See the CALayer class reference for
  * more details.
  */
 @property (nonatomic) BOOL drawsAsynchronously;
 
+/** Gesture to use
+ *
+ * Specifies the gesture the control should recognize. The default is IKCGestureOneFingerRotation.
+ * @see IKCGesture
+ */
+@property (nonatomic) IKCGesture gesture;
+
+/** Maximum value of position
+ *
+ * Maximum value of the position property if circular == NO. It is ignored in IKCModeRotaryDial. All values are valid, but min and max must be no more than 2π apart. The last one set wins.
+ * For example, if you first set min to 0 and max to 3π, min will be adjusted to 2π after max is set. If you set max first and then min, max will be adjusted to π after min is set.
+ * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
+ * value.
+ */
+@property (nonatomic) float max;
+
+/** Minimum value of position
+ *
+ * Minimum value of the position property if circular == NO. It is ignored in IKCModeRotaryDial. All values are valid, but min and max must be no more than 2π apart. The last one set wins.
+ * For example, if you first set min to 0 and max to 3π, min will be adjusted to 2π after max is set. If you set max first and then min, max will be adjusted to π after min is set.
+ * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
+ * value.
+ */
+@property (nonatomic) float min;
+
+/** Overall knob control mode
+ *
+ * Specifies which mode to use for this knob control. IKCModeLinearReturn is the default.
+ * @see IKCMode
+ */
+@property (nonatomic) IKCMode mode;
+
+/** Whether position is normalized
+ *
+ * Only consulted if circular is YES. If YES, the position property will always be normalized to lie in (-π, π]. If NO, position can increase or decrease beyond those bounds, allowing
+ * determination of the number of complete revolutions. If circular is NO, this property is ignored, and the min and max properties are consulted instead. Defaults to YES.
+ */
+@property (nonatomic) BOOL normalized;
+
+/** Number of discrete positions
+ *
+ * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous or rotary dial modes.
+ */
+@property (nonatomic) NSUInteger positions;
+
+/** Animation time scale
+ *
+ * Used to specify the time scale for return animations.
+ * Default is 1.0. The duration of the animation is proportional to this property.
+ * Set the number below 1.0 to speed up the animation, and above to slow it down.
+ * Return animations will rotate through π/6/timeScale radians per second or
+ * through 2π in timeScale x 12 s.
+ */
+@property (nonatomic) float timeScale;
+
+#pragma mark - Customizing knob control appearance
+
 /**
+ * @name Customizing knob control appearance
+ */
+
+/** Optional background image
+ *
+ * If set, the specified image is rendered in the background of the control. The default value is nil.
+ *
+ * If mode is IKCMRotaryDial, and backgroundImage is nil, the numbers on the dial will be rendered as the
+ * background. Use this property to supply your own dial background instead of the generated one.
+ */
+@property (nonatomic) UIImage* backgroundImage;
+
+/** Font name for generated titles
+ *
  * The font name to use when rendering text in the discrete modes, including rotary dial. Default is Helvetica. The font size is determined by the knob size and the number of positions.
  * CoreText interprets the font name and prefers PostScript names.
  */
 @property (nonatomic) NSString* fontName;
 
-/**
+/** Optional foreground image
+ *
  * An image to render in the foreground. Like the background image, this is totally stationary. The knob image is sandwiched between them and is the only thing
  * that rotates. Obviously the foreground image has to be at least partly transparent. This is mainly useful for providing a stationary finger stop in the foreground of a
  * rotary dial, but it may be used with any mode.
@@ -150,77 +251,17 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @property (nonatomic) UIImage* foregroundImage;
 
-/**
- * Specifies the gesture the control should recognize. The default is IKCGestureOneFingerRotation.
- */
-@property (nonatomic) IKCGesture gesture;
-
-/**
- * Maximum value of the position property if circular == NO. It is ignored in IKCModeRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
- * For example, if you first set min to 0 and max to 3*M_PI, min will be adjusted to 2*M_PI after max is set. If you set max first and then min, max will be adjusted to M_PI after min is set. 
- * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
- * value.
- */
-@property (nonatomic) float max;
-
-/**
- * Minimum value of the position property if circular == NO. It is ignored in IKCModeRotaryDial. All values are valid, but min and max must be no more than 2*M_PI apart. The last one set wins.
- * For example, if you first set min to 0 and max to 3*M_PI, min will be adjusted to 2*M_PI after max is set. If you set max first and then min, max will be adjusted to M_PI after min is set.
- * In all cases, if the current knob position is outside the allowed range, it will be made to lie within that range after the min or max is adjusted, by setting either to the min or max
- * value.
- */
-@property (nonatomic) float min;
-
-/**
- * Specifies which mode to use for this knob control. IKCModeLinearReturn is the default.
- */
-@property (nonatomic) IKCMode mode;
-
-/**
- * Only consulted if circular is YES. If YES, the position property will always be normalized to lie in (-M_PI,M_PI]. If NO, position can increase or decrease beyond those bounds, allowing
- * determination of the number of complete revolutions. If circular is NO, this property is ignored, and the min and max properties are consulted instead. Defaults to YES.
- */
-@property (nonatomic) BOOL normalized;
-
-/**
- * Current angular position, in radians, of the knob. Initial value is 0. Limited to (-M_PI,M_PI]. See @ref setPosition:animated: for more details,
- * including the role of the @ref circular, @ref min and @ref max properties. Assigning to this property results in a call to that method, with animated = NO.
- */
-@property (nonatomic) float position;
-
-/**
- * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min)*positions. If circular is YES, the min and max
- * properties are ignored, and then positionIndex is position/2/M_PI*positions.
- * This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from
- * 0 to positions-1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -M_PI/6 to M_PI/6. The region from
- * -M_PI/2 to -M_PI/6 will have positionIndex 5 instead of -1.
+/** Draw a shadow
  *
- * In IKCModeRotaryDial, this property is used to represent the number last dialed. This property should be consulted whenever a UIControlEventValueChanged is generated.
- */
-@property (nonatomic) NSInteger positionIndex;
-
-/**
- * Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical max?) Not consulted in continuous or rotary dial modes.
- */
-@property (nonatomic) NSUInteger positions;
-
-/**
- * Determine whether to draw a shadow behind the knob. Default is NO. Note that this can be an expensive option. See https://github.com/jdee/ios-knob-control/issues/24.
+ * Determine whether to draw a shadow behind the knob. Default is NO.
+ * @warning Note that this can be an expensive option. See https://github.com/jdee/ios-knob-control/issues/24.
  * Currently, performance is best when using an opaque fill color in any mode except rotary dial. Performance may be poor whenever using shadows with custom
  * images.
  */
 @property (nonatomic) BOOL shadow;
 
-/**
- * Used to specify the time scale for return animations.
- * Default is 1.0. The duration of the animation is proportional to this property.
- * Set the number below 1.0 to speed up the animation, and above to slow it down.
- * Return animations will rotate through M_PI/6/timeScale radians per second or
- * through 2*M_PI in 12*timeScale s.
- */
-@property (nonatomic) float timeScale;
-
-/**
+/** Titles for generated knob in discrete modes
+ *
  * Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position
  * indices will be rendered instead (0, 1, 2, ...). If the length of titles is less than positions, remaining titles will be supplied by indices.
  *
@@ -232,66 +273,125 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @property (nonatomic) NSArray* titles;
 
-/**
+/** Point size to which to zoom top title
+ *
  * Only applicable if zoomTopTitle is set in IKCModeLinearReturn or IKCModeWheelOfFortune with no image. Specifies the point size to which the top title should be enlarged.
  * If set to 0, on iOS 7+ the Dynamic Type headline size (i.e., [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize) will be used; on
  * iOS 5 or 6 a 17 pt font will be used. Otherwise, the specified point size will be used. The default is 0.
  */
 @property (nonatomic) CGFloat zoomPointSize;
 
-/**
+/** Zoom the top title (in case it's too small)
+ *
  * Only applicable in IKCModeLinearReturn and IKCModeWheelOfFortune when no image is present, and the knob image is generated from the titles property. If set to YES, the
  * control will enlarge the top title up to a certain size (see zoomPointSize above). The default value is YES.
  */
 @property (nonatomic) BOOL zoomTopTitle;
 
-#pragma mark - Object Lifecycle
-
-/**
- * Inherited from UIView and UIControl. No image is yet specified. Must subsequently call at least
- * setImage:forState: for the UIControlStateNormal state.
- * @param frame the initial frame for the control
+/** Set the image for a given state
+ *
+ * Set the image to use for a specific control state. Unlike the case with imageForState:, the state parameter
+ * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+ * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no image values will be
+ * modified.
+ * @param image the image to use for the specified state
+ * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
  */
-- (instancetype)initWithFrame:(CGRect)frame;
+- (void)setImage:(UIImage *)image forState:(UIControlState)state;
 
-/**
- * Initialize the control with a specific knob image for the UIControlStateNormal state.
- * @param frame the initial frame for the control
- * @param image an image to use for the control's normal state
+/** Set the fill color for a given state
+ *
+ * Set the fill color to use for the knob in a specific control state. Unlike the case with fillColorForState:, the state parameter
+ * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+ * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no fill color values will be
+ * modified.
+ * @param color the fill color to use for the specified state
+ * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
  */
-- (instancetype)initWithFrame:(CGRect)frame image:(UIImage*)image;
+- (void)setFillColor:(UIColor*)color forState:(UIControlState)state;
 
-/**
- * Initialize the control with a specific knob image for the UIControlStateNormal state. 
- * The image used will be [UIImage imageNamed:imageSetName]. The image will be selected appropriately for the screen density
- * from the specified image set in the application's asset catalog named @a imageSetName.
- * @param frame the initial frame for the control
- * @param imageSetName the name of an image set in the application's asset catalog
+/** Set the title color for a given state
+ *
+ * Set the title color to use for the knob in a specific control state. Unlike the case with titleColorForState:, the state parameter
+ * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+ * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no title color values will be
+ * modified.
+ * @param color the title color to use for the specified state
+ * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
  */
-- (instancetype)initWithFrame:(CGRect)frame imageNamed:(NSString*)imageSetName;
+- (void)setTitleColor:(UIColor*)color forState:(UIControlState)state;
 
-#pragma mark - Public Methods
+#pragma mark - Accessing knob control state (position and index)
 
 /**
- * Set the @ref position property of the control with or without animation. The specified @a position will first be constrained to lie between min
- * and max if circular == NO. If the @a position is greater than max or less than min, it is adjusted to the closest of those values.
- * Next, the value of @a position is constrained to lie in (-M_PI,M_PI] by adding a (possibly zero or negative) integer multiple of 2*M_PI.
- * Finally, the @ref position property is set to this value. If @a animated is YES, the knob image gradually rotates to the new position;
- * otherwise the visual change is immediate. In either case, the @ref position property changes its value immediately. No UIControlEventValueChanged 
+ * @name Accessing knob control state (position and index)
+ */
+
+/** Current knob position
+ *
+ * Current angular position, in radians, of the knob. Initial value is 0. Limited to (-π, π]. See setPosition:animated: for more details,
+ * including the role of the circular, min and max properties. Assigning to this property results in a call to that method, with animated = NO.
+ */
+@property (nonatomic) float position;
+
+/** Current knob position index
+ *
+ * Current position index in discrete mode. Which of the positions is selected? This is simply (position-min)/(max-min) x positions. If circular is YES, the min and max
+ * properties are ignored, and then positionIndex is (position/2/π) x positions.
+ * This property always returns a non-negative number. While position may return a negative angle, positionIndex will range from
+ * 0 to positions - 1. For example, if positions is 6 and circular is YES, positionIndex 0 will range from position -π/6 to π/6. The region from
+ * -π/2 to -π/6 will have positionIndex 5 instead of -1.
+ *
+ * In IKCModeRotaryDial, this property is used to represent the number last dialed. This property should be consulted whenever a UIControlEventValueChanged is generated.
+ */
+@property (nonatomic) NSInteger positionIndex;
+
+/** Set position to a new value
+ *
+ * Set the position property of the control with or without animation. The specified position will first be constrained to lie between min
+ * and max if circular == NO. If the position is greater than max or less than min, it is adjusted to the closest of those values.
+ * Next, the value of position is constrained to lie in (-π, π] by adding a (possibly zero or negative) integer multiple of 2π.
+ * Finally, the position property is set to this value. If animated is YES, the knob image gradually rotates to the new position;
+ * otherwise the visual change is immediate. In either case, the position property changes its value immediately. No UIControlEventValueChanged
  * is generated.
  *
- * Though the @a position will be forced to lie between the @ref min and @ref max properties, it may otherwise be set to a disallowed position.
+ * Though the position will be forced to lie between the min and max properties, it may otherwise be set to a disallowed position.
  * That is, if mode is IKCModeLinearReturn, the
  * knob may be positioned between discrete positions, and if mode is IKCModeWheelOfFortune, the knob may be positioned exactly
  * on a boundary between segments. If the control is enabled, any subsequent gesture will probably result in a return
  * animation to the nearest allowed position.
- * @param position the new angular position for the knob; will be adjusted to lie within (-M_PI,M_PI] and respect the min and max properties if circular is NO
+ * @param position the new angular position for the knob; will be adjusted to lie within (-π, π] and respect the min and max properties if circular is NO
  * @param animated if YES, animate the transition to the new position; otherwise, the transition is instantaneous
  */
 - (void)setPosition:(float)position animated:(BOOL)animated;
 
+#pragma mark - Getting current state
+
 /**
- * Retrieve the image to use for a particular control state. The @a state argument may be any bitwise combination
+ * @name Getting current state
+ */
+
+/** The current fill color
+ *
+ * The fill color for the current state.
+ */
+@property (nonatomic, readonly) UIColor* currentFillColor;
+
+/** The current image
+ *
+ * The image to use for the current state.
+ */
+@property (nonatomic, readonly) UIImage* currentImage;
+
+/** The current title color
+ *
+ * The title color to use for the current state.
+ */
+@property (nonatomic, readonly) UIColor* currentTitleColor;
+
+/** Image for a given state
+ *
+ * Retrieve the image to use for a particular control state. The state argument may be any bitwise combination
  * of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The image for the
  * higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
  * the disabled image will be returned. If no image has been configured for the specified state (e.g., in this example,
@@ -302,18 +402,9 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 - (UIImage *)imageForState:(UIControlState)state;
 
-/**
- * Set the image to use for a specific control state. Unlike the case with imageForState:, the @a state parameter
- * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
- * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no image values will be
- * modified.
- * @param image the image to use for the specified state
- * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
- */
-- (void)setImage:(UIImage *)image forState:(UIControlState)state;
-
-/**
- * Retrieve the fill color to use for the generated knob image in a particular control state. The @a state argument may be any bitwise combination
+/** Fill color for a given state
+ *
+ * Retrieve the fill color to use for the generated knob image in a particular control state. The state argument may be any bitwise combination
  * of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The fill color for the
  * higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
  * the disabled fill color will be returned. If no fill color has been configured for the specified state (e.g., in this example,
@@ -324,18 +415,9 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 - (UIColor*)fillColorForState:(UIControlState)state;
 
-/**
- * Set the fill color to use for the knob in a specific control state. Unlike the case with fillColorForState:, the @a state parameter
- * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
- * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no fill color values will be
- * modified.
- * @param color the fill color to use for the specified state
- * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
- */
-- (void)setFillColor:(UIColor*)color forState:(UIControlState)state;
-
-/**
- * Retrieve the title color to use for the generated knob image in a particular control state. The @a state argument may be any bitwise combination
+/** Title color for a given state
+ *
+ * Retrieve the title color to use for the generated knob image in a particular control state. The state argument may be any bitwise combination
  * of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The title color for the
  * higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
  * the disabled title color will be returned. If no title color has been configured for the specified state (e.g., in this example,
@@ -346,21 +428,18 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 - (UIColor*)titleColorForState:(UIControlState)state;
 
-/**
- * Set the title color to use for the knob in a specific control state. Unlike the case with titleColorForState:, the @a state parameter
- * must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
- * Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no title color values will be
- * modified.
- * @param color the title color to use for the specified state
- * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
- */
-- (void)setTitleColor:(UIColor*)color forState:(UIControlState)state;
+#pragma mark - Dialing a number (rotary dial mode)
 
 /**
+ * @name Dialing a number (rotary dial mode)
+ */
+
+/** Dial a number
+ *
  * ICKModeRotaryDial only.
- * Programmatically dial a @a number on the control. This causes the dial to rotate clockwise as though the user had dialed the specified
- * @a number and then to rotate back to the rest position. It generates a UIControlEventValueChanged and sets the value of the
- * positionIndex property to @a number.
+ * Programmatically dial a number on the control. This causes the dial to rotate clockwise as though the user had dialed the specified
+ * number and then to rotate back to the rest position. It generates a UIControlEventValueChanged and sets the value of the
+ * positionIndex property to number.
  * @param number the number to dial
  */
 - (void)dialNumber:(int)number;

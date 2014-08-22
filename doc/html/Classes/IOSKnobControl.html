@@ -1,0 +1,2345 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>IOSKnobControl Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 961)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">IOS Knob Control </a></h1>
+				<a id="developerHome" href="../index.html">Jimmy Dee</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">IOSKnobControl Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	<option value="properties">Properties</option>
+	
+	<option value="//api/name/backgroundImage">&nbsp;&nbsp;&nbsp;&nbsp;backgroundImage</option>
+	
+	<option value="//api/name/circular">&nbsp;&nbsp;&nbsp;&nbsp;circular</option>
+	
+	<option value="//api/name/clockwise">&nbsp;&nbsp;&nbsp;&nbsp;clockwise</option>
+	
+	<option value="//api/name/currentFillColor">&nbsp;&nbsp;&nbsp;&nbsp;currentFillColor</option>
+	
+	<option value="//api/name/currentImage">&nbsp;&nbsp;&nbsp;&nbsp;currentImage</option>
+	
+	<option value="//api/name/currentTitleColor">&nbsp;&nbsp;&nbsp;&nbsp;currentTitleColor</option>
+	
+	<option value="//api/name/drawsAsynchronously">&nbsp;&nbsp;&nbsp;&nbsp;drawsAsynchronously</option>
+	
+	<option value="//api/name/fontName">&nbsp;&nbsp;&nbsp;&nbsp;fontName</option>
+	
+	<option value="//api/name/foregroundImage">&nbsp;&nbsp;&nbsp;&nbsp;foregroundImage</option>
+	
+	<option value="//api/name/gesture">&nbsp;&nbsp;&nbsp;&nbsp;gesture</option>
+	
+	<option value="//api/name/max">&nbsp;&nbsp;&nbsp;&nbsp;max</option>
+	
+	<option value="//api/name/min">&nbsp;&nbsp;&nbsp;&nbsp;min</option>
+	
+	<option value="//api/name/mode">&nbsp;&nbsp;&nbsp;&nbsp;mode</option>
+	
+	<option value="//api/name/normalized">&nbsp;&nbsp;&nbsp;&nbsp;normalized</option>
+	
+	<option value="//api/name/position">&nbsp;&nbsp;&nbsp;&nbsp;position</option>
+	
+	<option value="//api/name/positionIndex">&nbsp;&nbsp;&nbsp;&nbsp;positionIndex</option>
+	
+	<option value="//api/name/positions">&nbsp;&nbsp;&nbsp;&nbsp;positions</option>
+	
+	<option value="//api/name/shadow">&nbsp;&nbsp;&nbsp;&nbsp;shadow</option>
+	
+	<option value="//api/name/timeScale">&nbsp;&nbsp;&nbsp;&nbsp;timeScale</option>
+	
+	<option value="//api/name/titles">&nbsp;&nbsp;&nbsp;&nbsp;titles</option>
+	
+	<option value="//api/name/zoomPointSize">&nbsp;&nbsp;&nbsp;&nbsp;zoomPointSize</option>
+	
+	<option value="//api/name/zoomTopTitle">&nbsp;&nbsp;&nbsp;&nbsp;zoomTopTitle</option>
+	
+	
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/dialNumber:">&nbsp;&nbsp;&nbsp;&nbsp;- dialNumber:</option>
+	
+	<option value="//api/name/fillColorForState:">&nbsp;&nbsp;&nbsp;&nbsp;- fillColorForState:</option>
+	
+	<option value="//api/name/imageForState:">&nbsp;&nbsp;&nbsp;&nbsp;- imageForState:</option>
+	
+	<option value="//api/name/initWithFrame:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithFrame:</option>
+	
+	<option value="//api/name/initWithFrame:image:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithFrame:image:</option>
+	
+	<option value="//api/name/initWithFrame:imageNamed:">&nbsp;&nbsp;&nbsp;&nbsp;- initWithFrame:imageNamed:</option>
+	
+	<option value="//api/name/setFillColor:forState:">&nbsp;&nbsp;&nbsp;&nbsp;- setFillColor:forState:</option>
+	
+	<option value="//api/name/setImage:forState:">&nbsp;&nbsp;&nbsp;&nbsp;- setImage:forState:</option>
+	
+	<option value="//api/name/setPosition:animated:">&nbsp;&nbsp;&nbsp;&nbsp;- setPosition:animated:</option>
+	
+	<option value="//api/name/setTitleColor:forState:">&nbsp;&nbsp;&nbsp;&nbsp;- setTitleColor:forState:</option>
+	
+	<option value="//api/name/titleColorForState:">&nbsp;&nbsp;&nbsp;&nbsp;- titleColorForState:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Creating a knob control">Creating a knob control</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Specifying knob control behavior">Specifying knob control behavior</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Customizing knob control appearance">Customizing knob control appearance</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Accessing knob control state (position and index)">Accessing knob control state (position and index)</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Getting current state">Getting current state</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#task_Dialing a number (rotary dial mode)">Dialing a number (rotary dial mode)</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#properties">Properties</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/backgroundImage">backgroundImage</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/circular">circular</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/clockwise">clockwise</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/currentFillColor">currentFillColor</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/currentImage">currentImage</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/currentTitleColor">currentTitleColor</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/drawsAsynchronously">drawsAsynchronously</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/fontName">fontName</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/foregroundImage">foregroundImage</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/gesture">gesture</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/max">max</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/min">min</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/mode">mode</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/normalized">normalized</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/position">position</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/positionIndex">positionIndex</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/positions">positions</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shadow">shadow</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/timeScale">timeScale</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/titles">titles</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/zoomPointSize">zoomPointSize</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/zoomTopTitle">zoomTopTitle</a></span></li>
+	
+</ul></li>
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/dialNumber:">dialNumber:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/fillColorForState:">fillColorForState:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/imageForState:">imageForState:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithFrame:">initWithFrame:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithFrame:image:">initWithFrame:image:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/initWithFrame:imageNamed:">initWithFrame:imageNamed:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setFillColor:forState:">setFillColor:forState:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setImage:forState:">setImage:forState:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setPosition:animated:">setPosition:animated:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setTitleColor:forState:">setTitleColor:forState:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/titleColorForState:">titleColorForState:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="IOSKnobControl Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">IOSKnobControl Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">UIControl</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">IOSKnobControl.h</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>This is a simple, reusable rotary control. You may provide custom knob images or use the default images, which may be customized
+using a number of properties and methods. The control chooses an image based on state,
+like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation <a href="#//api/name/gesture">gesture</a> and
+animates rotation of the current image in response, programmatically reading out the current angular <a href="#//api/name/position">position</a> of the knob
+and generating a UIControlEventValueChanged each time the knob rotates.</p>
+
+<p>The knob control and all images must be square. Images will usually be circles or regular polygons, with a
+transparent background or a solid one that matches the view behind it. However, the aspect
+ratio must be 1:1. The effect of the animation is <a href="#//api/name/circular">circular</a> rotation. This only works if the control
+is square. You can produce other effects, for example, by partially clipping a square control
+or using an oblong background. But the control itself always has to be square. If an oblong frame is specified
+for the control, the frame will be made square. The larger of the original sides will will be used for both the
+width and height. The origin of the frame will be unchanged.</p>
+
+<p>The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1.</p>
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						<a title="Creating a knob control" name="task_Creating a knob control"></a>
+						<h3 class="subsubtitle task-title">Creating a knob control</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithFrame:">&ndash;&nbsp;initWithFrame:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithFrame:image:">&ndash;&nbsp;initWithFrame:image:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/initWithFrame:imageNamed:">&ndash;&nbsp;initWithFrame:imageNamed:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Specifying knob control behavior" name="task_Specifying knob control behavior"></a>
+						<h3 class="subsubtitle task-title">Specifying knob control behavior</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/circular">&nbsp;&nbsp;circular</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/clockwise">&nbsp;&nbsp;clockwise</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/drawsAsynchronously">&nbsp;&nbsp;drawsAsynchronously</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/gesture">&nbsp;&nbsp;gesture</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/max">&nbsp;&nbsp;max</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/min">&nbsp;&nbsp;min</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/mode">&nbsp;&nbsp;mode</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/normalized">&nbsp;&nbsp;normalized</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/positions">&nbsp;&nbsp;positions</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/timeScale">&nbsp;&nbsp;timeScale</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li>
+						</ul>
+						
+						
+						<a title="Customizing knob control appearance" name="task_Customizing knob control appearance"></a>
+						<h3 class="subsubtitle task-title">Customizing knob control appearance</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/backgroundImage">&nbsp;&nbsp;backgroundImage</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/fontName">&nbsp;&nbsp;fontName</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/foregroundImage">&nbsp;&nbsp;foregroundImage</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shadow">&nbsp;&nbsp;shadow</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/titles">&nbsp;&nbsp;titles</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/zoomPointSize">&nbsp;&nbsp;zoomPointSize</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/zoomTopTitle">&nbsp;&nbsp;zoomTopTitle</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setImage:forState:">&ndash;&nbsp;setImage:forState:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setFillColor:forState:">&ndash;&nbsp;setFillColor:forState:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setTitleColor:forState:">&ndash;&nbsp;setTitleColor:forState:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Accessing knob control state (position and index)" name="task_Accessing knob control state (position and index)"></a>
+						<h3 class="subsubtitle task-title">Accessing knob control state (position and index)</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/position">&nbsp;&nbsp;position</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/positionIndex">&nbsp;&nbsp;positionIndex</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setPosition:animated:">&ndash;&nbsp;setPosition:animated:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Getting current state" name="task_Getting current state"></a>
+						<h3 class="subsubtitle task-title">Getting current state</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/currentFillColor">&nbsp;&nbsp;currentFillColor</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/currentImage">&nbsp;&nbsp;currentImage</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/currentTitleColor">&nbsp;&nbsp;currentTitleColor</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/imageForState:">&ndash;&nbsp;imageForState:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/fillColorForState:">&ndash;&nbsp;fillColorForState:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/titleColorForState:">&ndash;&nbsp;titleColorForState:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+						
+						<a title="Dialing a number (rotary dial mode)" name="task_Dialing a number (rotary dial mode)"></a>
+						<h3 class="subsubtitle task-title">Dialing a number (rotary dial mode)</h3>
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/dialNumber:">&ndash;&nbsp;dialNumber:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Properties" name="properties"></a>
+						<h2 class="subtitle subtitle-methods">Properties</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/backgroundImage" title="backgroundImage"></a>
+	<h3 class="subsubtitle method-title">backgroundImage</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Optional background image</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) UIImage *backgroundImage</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Optional background image</p>
+
+<p>If set, the specified image is rendered in the background of the control. The default value is nil.</p>
+
+<p>If <a href="#//api/name/mode">mode</a> is IKCMRotaryDial, and backgroundImage is nil, the numbers on the dial will be rendered as the
+background. Use this property to supply your own dial background instead of the generated one.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/circular" title="circular"></a>
+	<h3 class="subsubtitle method-title">circular</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Whether the knob rotates all the way around</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL circular</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Whether the knob rotates all the way around</p>
+
+<p>If this property is set to YES, the circle is closed. That is, all angular <a href="#//api/name/positions">positions</a> in (-π, π] are allowed, and -π is identified with π, so it is possible to
+continue around the circle. The <a href="#//api/name/min">min</a> and <a href="#//api/name/max">max</a> properties of the control are ignored.</p>
+
+<p>If this property is set to NO, the circle is open, and the <a href="#//api/name/min">min</a> and <a href="#//api/name/max">max</a> properties are consulted.</p>
+
+<p>The default value of this property is YES. It is ignored in IKCModeRotaryDial.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/clockwise" title="clockwise"></a>
+	<h3 class="subsubtitle method-title">clockwise</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Whether the <a href="#//api/name/position">position</a> property increases when the knob rotates clockwise (vs. counterclockwise)</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL clockwise</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Whether the <a href="#//api/name/position">position</a> property increases when the knob rotates clockwise (vs. counterclockwise)</p>
+
+<p>Specifies whether the value of <a href="#//api/name/position">position</a> increases when the knob is turned clockwise instead of counterclockwise.
+The default value of this property is NO. It is ignored in IKCModeRotaryDial.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/currentFillColor" title="currentFillColor"></a>
+	<h3 class="subsubtitle method-title">currentFillColor</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The current fill color</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) UIColor *currentFillColor</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The current fill color</p>
+
+<p>The fill color for the current state.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/currentImage" title="currentImage"></a>
+	<h3 class="subsubtitle method-title">currentImage</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The current image</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) UIImage *currentImage</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The current image</p>
+
+<p>The image to use for the current state.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/currentTitleColor" title="currentTitleColor"></a>
+	<h3 class="subsubtitle method-title">currentTitleColor</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>The current title color</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) UIColor *currentTitleColor</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>The current title color</p>
+
+<p>The title color to use for the current state.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/drawsAsynchronously" title="drawsAsynchronously"></a>
+	<h3 class="subsubtitle method-title">drawsAsynchronously</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Whether to render certain things asynchronously</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL drawsAsynchronously</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Whether to render certain things asynchronously</p>
+
+<p>This property is passed to the animation layers that make up the knob. It can improve response by consuming more resources. Default is NO. See the CALayer class reference for
+more details.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/fontName" title="fontName"></a>
+	<h3 class="subsubtitle method-title">fontName</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Font name for generated <a href="#//api/name/titles">titles</a></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSString *fontName</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Font name for generated <a href="#//api/name/titles">titles</a></p>
+
+<p>The font name to use when rendering text in the discrete modes, including rotary dial. Default is Helvetica. The font size is determined by the knob size and the number of <a href="#//api/name/positions">positions</a>.
+CoreText interprets the font name and prefers PostScript names.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/foregroundImage" title="foregroundImage"></a>
+	<h3 class="subsubtitle method-title">foregroundImage</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Optional foreground image</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) UIImage *foregroundImage</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Optional foreground image</p>
+
+<p>An image to render in the foreground. Like the background image, this is totally stationary. The knob image is sandwiched between them and is the only thing
+that rotates. Obviously the foreground image has to be at least partly transparent. This is mainly useful for providing a stationary finger stop in the foreground of a
+rotary dial, but it may be used with any <a href="#//api/name/mode">mode</a>.</p>
+
+<p>If <a href="#//api/name/mode">mode</a> is IKCModeRotaryDial, and foregroundImage is nil, a simple stop image is generated around 4:00 on the dial.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/gesture" title="gesture"></a>
+	<h3 class="subsubtitle method-title">gesture</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Gesture to use</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) IKCGesture gesture</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Gesture to use</p>
+
+<p>Specifies the gesture the control should recognize. The default is IKCGestureOneFingerRotation.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Constants/IKCGesture.html">IKCGesture</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/max" title="max"></a>
+	<h3 class="subsubtitle method-title">max</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Maximum value of <a href="#//api/name/position">position</a></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) float max</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Maximum value of <a href="#//api/name/position">position</a></p>
+
+<p>Maximum value of the <a href="#//api/name/position">position</a> property if <a href="#//api/name/circular">circular</a> == NO. It is ignored in IKCModeRotaryDial. All values are valid, but <a href="#//api/name/min">min</a> and max must be no more than 2π apart. The last one set wins.
+For example, if you first set <a href="#//api/name/min">min</a> to 0 and max to 3π, <a href="#//api/name/min">min</a> will be adjusted to 2π after max is set. If you set max first and then <a href="#//api/name/min">min</a>, max will be adjusted to π after <a href="#//api/name/min">min</a> is set.
+In all cases, if the current knob <a href="#//api/name/position">position</a> is outside the allowed range, it will be made to lie within that range after the <a href="#//api/name/min">min</a> or max is adjusted, by setting either to the <a href="#//api/name/min">min</a> or max
+value.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/min" title="min"></a>
+	<h3 class="subsubtitle method-title">min</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Minimum value of <a href="#//api/name/position">position</a></p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) float min</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Minimum value of <a href="#//api/name/position">position</a></p>
+
+<p>Minimum value of the <a href="#//api/name/position">position</a> property if <a href="#//api/name/circular">circular</a> == NO. It is ignored in IKCModeRotaryDial. All values are valid, but min and <a href="#//api/name/max">max</a> must be no more than 2π apart. The last one set wins.
+For example, if you first set min to 0 and <a href="#//api/name/max">max</a> to 3π, min will be adjusted to 2π after <a href="#//api/name/max">max</a> is set. If you set <a href="#//api/name/max">max</a> first and then min, <a href="#//api/name/max">max</a> will be adjusted to π after min is set.
+In all cases, if the current knob <a href="#//api/name/position">position</a> is outside the allowed range, it will be made to lie within that range after the min or <a href="#//api/name/max">max</a> is adjusted, by setting either to the min or <a href="#//api/name/max">max</a>
+value.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/mode" title="mode"></a>
+	<h3 class="subsubtitle method-title">mode</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Overall knob control mode</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) IKCMode mode</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Overall knob control mode</p>
+
+<p>Specifies which mode to use for this knob control. IKCModeLinearReturn is the default.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Constants/IKCMode.html">IKCMode</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/normalized" title="normalized"></a>
+	<h3 class="subsubtitle method-title">normalized</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Whether <a href="#//api/name/position">position</a> is normalized</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL normalized</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Whether <a href="#//api/name/position">position</a> is normalized</p>
+
+<p>Only consulted if <a href="#//api/name/circular">circular</a> is YES. If YES, the <a href="#//api/name/position">position</a> property will always be normalized to lie in (-π, π]. If NO, <a href="#//api/name/position">position</a> can increase or decrease beyond those bounds, allowing
+determination of the number of complete revolutions. If <a href="#//api/name/circular">circular</a> is NO, this property is ignored, and the <a href="#//api/name/min">min</a> and <a href="#//api/name/max">max</a> properties are consulted instead. Defaults to YES.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/position" title="position"></a>
+	<h3 class="subsubtitle method-title">position</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Current knob position</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) float position</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Current knob position</p>
+
+<p>Current angular position, in radians, of the knob. Initial value is 0. Limited to (-π, π]. See <a href="#//api/name/setPosition:animated:">setPosition:animated:</a> for more details,
+including the role of the <a href="#//api/name/circular">circular</a>, <a href="#//api/name/min">min</a> and <a href="#//api/name/max">max</a> properties. Assigning to this property results in a call to that method, with animated = NO.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/positionIndex" title="positionIndex"></a>
+	<h3 class="subsubtitle method-title">positionIndex</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Current knob <a href="#//api/name/position">position</a> index</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSInteger positionIndex</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Current knob <a href="#//api/name/position">position</a> index</p>
+
+<p>Current <a href="#//api/name/position">position</a> index in discrete <a href="#//api/name/mode">mode</a>. Which of the <a href="#//api/name/positions">positions</a> is selected? This is simply (position<a href="#//api/name/min">min</a>)/(max<a href="#//api/name/min">min</a>) x <a href="#//api/name/positions">positions</a>. If <a href="#//api/name/circular">circular</a> is YES, the <a href="#//api/name/min">min</a> and <a href="#//api/name/max">max</a>
+properties are ignored, and then positionIndex is (position/2/π) x <a href="#//api/name/positions">positions</a>.
+This property always returns a non-negative number. While <a href="#//api/name/position">position</a> may return a negative angle, positionIndex will range from
+0 to <a href="#//api/name/positions">positions</a> - 1. For example, if <a href="#//api/name/positions">positions</a> is 6 and <a href="#//api/name/circular">circular</a> is YES, positionIndex 0 will range from <a href="#//api/name/position">position</a> -π/6 to π/6. The region from
+-π/2 to -π/6 will have positionIndex 5 instead of -1.</p>
+
+<p>In IKCModeRotaryDial, this property is used to represent the number last dialed. This property should be consulted whenever a UIControlEventValueChanged is generated.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/positions" title="positions"></a>
+	<h3 class="subsubtitle method-title">positions</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Number of discrete positions</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSUInteger positions</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Number of discrete positions</p>
+
+<p>Number of discrete positions. Default and minimum are 2. No maximum. (DEBT: Should there be some practical <a href="#//api/name/max">max</a>?) Not consulted in continuous or rotary dial modes.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/shadow" title="shadow"></a>
+	<h3 class="subsubtitle method-title">shadow</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Draw a shadow</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL shadow</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Draw a shadow</p>
+
+<p>Determine whether to draw a shadow behind the knob. Default is NO.</p><div class="warning"><p><strong>Warning:</strong> Note that this can be an expensive option. See <a href="https://github.com/jdee/ios-knob-control/issues/24.">https://github.com/jdee/ios-knob-control/issues/24.</a>
+Currently, performance is best when using an opaque fill color in any <a href="#//api/name/mode">mode</a> except rotary dial. Performance may be poor whenever using shadows with custom
+images.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/timeScale" title="timeScale"></a>
+	<h3 class="subsubtitle method-title">timeScale</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Animation time scale</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) float timeScale</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Animation time scale</p>
+
+<p>Used to specify the time scale for return animations.
+Default is 1.0. The duration of the animation is proportional to this property.
+Set the number below 1.0 to speed up the animation, and above to slow it down.
+Return animations will rotate through π/6/timeScale radians per second or
+through 2π in timeScale x 12 s.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/titles" title="titles"></a>
+	<h3 class="subsubtitle method-title">titles</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Titles for generated knob in discrete modes</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) NSArray *titles</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Titles for generated knob in discrete modes</p>
+
+<p>Only used when no image is provided in a discrete <a href="#//api/name/mode">mode</a>. These titles are rendered around the knob for each <a href="#//api/name/position">position</a> index. If this property is nil (the default), the <a href="#//api/name/position">position</a>
+indices will be rendered instead (0, 1, 2, &hellip;). If the length of titles is less than <a href="#//api/name/positions">positions</a>, remaining titles will be supplied by indices.</p>
+
+<p>Entries may be NSStrings, NSAttributedStrings, or a mix. If an NSAttributedString does not specify the NSFontAttributeName or the NSForegroundColorAttributeName, the
+attribute will be supplied as for NSStrings (from the <a href="#//api/name/currentTitleColor">currentTitleColor</a> and <a href="#//api/name/fontName">fontName</a> properties, and the font size will be determined to fit the knob or by zooming the top
+title). If an attributed string specifies a font, and the <a href="#//api/name/zoomTopTitle">zoomTopTitle</a> property is set to YES, the attributed string&rsquo;s font size will be increased. Otherwise, the
+attributed string&rsquo;s specified attributes will be used. Except for zooming the top title, specified font sizes of attributed strings are never adjusted to fit the knob
+like plain string titles.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/zoomPointSize" title="zoomPointSize"></a>
+	<h3 class="subsubtitle method-title">zoomPointSize</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Point size to which to zoom top title</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) CGFloat zoomPointSize</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Point size to which to zoom top title</p>
+
+<p>Only applicable if zoomTopTitle is set in IKCModeLinearReturn or IKCModeWheelOfFortune with no image. Specifies the point size to which the top title should be enlarged.
+If set to 0, on iOS 7+ the Dynamic Type headline size (i.e., [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleHeadline].pointSize) will be used; on
+iOS 5 or 6 a 17 pt font will be used. Otherwise, the specified point size will be used. The default is 0.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/zoomTopTitle" title="zoomTopTitle"></a>
+	<h3 class="subsubtitle method-title">zoomTopTitle</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Zoom the top title (in case it&rsquo;s too small)</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL zoomTopTitle</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Zoom the top title (in case it&rsquo;s too small)</p>
+
+<p>Only applicable in IKCModeLinearReturn and IKCModeWheelOfFortune when no image is present, and the knob image is generated from the <a href="#//api/name/titles">titles</a> property. If set to YES, the
+control will enlarge the top title up to a certain size (see <a href="#//api/name/zoomPointSize">zoomPointSize</a> above). The default value is YES.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/dialNumber:" title="dialNumber:"></a>
+	<h3 class="subsubtitle method-title">dialNumber:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Dial a number</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)dialNumber:(int)<em>number</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>number</em></dt>
+			<dd><p>the number to dial</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Dial a number</p>
+
+<p>ICKModeRotaryDial only.
+Programmatically dial a number on the control. This causes the dial to rotate <a href="#//api/name/clockwise">clockwise</a> as though the user had dialed the specified
+number and then to rotate back to the rest <a href="#//api/name/position">position</a>. It generates a UIControlEventValueChanged and sets the value of the
+<a href="#//api/name/positionIndex">positionIndex</a> property to number.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/fillColorForState:" title="fillColorForState:"></a>
+	<h3 class="subsubtitle method-title">fillColorForState:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Fill color for a given state</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (UIColor *)fillColorForState:(UIControlState)<em>state</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>state</em></dt>
+			<dd><p>any valid control state</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>the fill color to use for the specified state</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Fill color for a given state</p>
+
+<p>Retrieve the fill color to use for the generated knob image in a particular control state. The state argument may be any bitwise combination
+of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The fill color for the
+higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
+the disabled fill color will be returned. If no fill color has been configured for the specified state (e.g., in this example,
+if there were no disabled fill color specified), returns a color based on the tintColor property.
+If any of the UIControlStateApplication bits is set, returns the fill color for UIControlStateNormal.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/imageForState:" title="imageForState:"></a>
+	<h3 class="subsubtitle method-title">imageForState:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Image for a given state</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (UIImage *)imageForState:(UIControlState)<em>state</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>state</em></dt>
+			<dd><p>any valid control state</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>the image to use for the specified state</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Image for a given state</p>
+
+<p>Retrieve the image to use for a particular control state. The state argument may be any bitwise combination
+of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The image for the
+higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
+the disabled image will be returned. If no image has been configured for the specified state (e.g., in this example,
+if there were no disabled image specified), returns the image for UIControlStateNormal, if any has been set.
+If any of the UIControlStateApplication bits is set, returns the image for UIControlStateNormal.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithFrame:" title="initWithFrame:"></a>
+	<h3 class="subsubtitle method-title">initWithFrame:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Inherited initializer</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithFrame:(CGRect)<em>frame</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>frame</em></dt>
+			<dd><p>the initial frame for the control</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Inherited initializer</p>
+
+<p>Inherited from UIView and UIControl. No image is yet specified. Must subsequently call at least
+<a href="#//api/name/setImage:forState:">setImage:forState:</a> for the UIControlStateNormal state.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithFrame:image:" title="initWithFrame:image:"></a>
+	<h3 class="subsubtitle method-title">initWithFrame:image:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initialize the control with an image</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithFrame:(CGRect)<em>frame</em> image:(UIImage *)<em>image</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>frame</em></dt>
+			<dd><p>the initial frame for the control</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>image</em></dt>
+			<dd><p>an image to use for the control&rsquo;s normal state</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Initialize the control with an image</p>
+
+<p>Initialize the control with a specific knob image for the UIControlStateNormal state.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/initWithFrame:imageNamed:" title="initWithFrame:imageNamed:"></a>
+	<h3 class="subsubtitle method-title">initWithFrame:imageNamed:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Initialize the control with a specific knob image for the UIControlStateNormal state.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (instancetype)initWithFrame:(CGRect)<em>frame</em> imageNamed:(NSString *)<em>imageSetName</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>frame</em></dt>
+			<dd><p>the initial frame for the control</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>imageSetName</em></dt>
+			<dd><p>the name of an image set in the application&rsquo;s asset catalog</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Initialize the control with a specific knob image for the UIControlStateNormal state.</p>
+
+<p>The image used will be [UIImage imageNamed:imageSetName]. The image will be selected appropriately for the screen density
+from the specified image set in the application&rsquo;s asset catalog named imageSetName.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setFillColor:forState:" title="setFillColor:forState:"></a>
+	<h3 class="subsubtitle method-title">setFillColor:forState:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Set the fill color for a given state</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setFillColor:(UIColor *)<em>color</em> forState:(UIControlState)<em>state</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>color</em></dt>
+			<dd><p>the fill color to use for the specified state</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>state</em></dt>
+			<dd><p>one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Set the fill color for a given state</p>
+
+<p>Set the fill color to use for the knob in a specific control state. Unlike the case with <a href="#//api/name/fillColorForState:">fillColorForState:</a>, the state parameter
+must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no fill color values will be
+modified.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setImage:forState:" title="setImage:forState:"></a>
+	<h3 class="subsubtitle method-title">setImage:forState:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Set the image for a given state</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setImage:(UIImage *)<em>image</em> forState:(UIControlState)<em>state</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>image</em></dt>
+			<dd><p>the image to use for the specified state</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>state</em></dt>
+			<dd><p>one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Set the image for a given state</p>
+
+<p>Set the image to use for a specific control state. Unlike the case with <a href="#//api/name/imageForState:">imageForState:</a>, the state parameter
+must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no image values will be
+modified.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setPosition:animated:" title="setPosition:animated:"></a>
+	<h3 class="subsubtitle method-title">setPosition:animated:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Set <a href="#//api/name/position">position</a> to a new value</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setPosition:(float)<em>position</em> animated:(BOOL)<em>animated</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>position</em></dt>
+			<dd><p>the new angular <a href="#//api/name/position">position</a> for the knob; will be adjusted to lie within (-π, π] and respect the <a href="#//api/name/min">min</a> and <a href="#//api/name/max">max</a> properties if <a href="#//api/name/circular">circular</a> is NO</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>animated</em></dt>
+			<dd><p>if YES, animate the transition to the new <a href="#//api/name/position">position</a>; otherwise, the transition is instantaneous</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Set <a href="#//api/name/position">position</a> to a new value</p>
+
+<p>Set the <a href="#//api/name/position">position</a> property of the control with or without animation. The specified <a href="#//api/name/position">position</a> will first be constrained to lie between <a href="#//api/name/min">min</a>
+and <a href="#//api/name/max">max</a> if <a href="#//api/name/circular">circular</a> == NO. If the <a href="#//api/name/position">position</a> is greater than <a href="#//api/name/max">max</a> or less than <a href="#//api/name/min">min</a>, it is adjusted to the closest of those values.
+Next, the value of <a href="#//api/name/position">position</a> is constrained to lie in (-π, π] by adding a (possibly zero or negative) integer multiple of 2π.
+Finally, the <a href="#//api/name/position">position</a> property is set to this value. If animated is YES, the knob image gradually rotates to the new <a href="#//api/name/position">position</a>;
+otherwise the visual change is immediate. In either case, the <a href="#//api/name/position">position</a> property changes its value immediately. No UIControlEventValueChanged
+is generated.</p>
+
+<p>Though the <a href="#//api/name/position">position</a> will be forced to lie between the <a href="#//api/name/min">min</a> and <a href="#//api/name/max">max</a> properties, it may otherwise be set to a disallowed <a href="#//api/name/position">position</a>.
+That is, if <a href="#//api/name/mode">mode</a> is IKCModeLinearReturn, the
+knob may be positioned between discrete <a href="#//api/name/positions">positions</a>, and if <a href="#//api/name/mode">mode</a> is IKCModeWheelOfFortune, the knob may be positioned exactly
+on a boundary between segments. If the control is enabled, any subsequent <a href="#//api/name/gesture">gesture</a> will probably result in a return
+animation to the nearest allowed <a href="#//api/name/position">position</a>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setTitleColor:forState:" title="setTitleColor:forState:"></a>
+	<h3 class="subsubtitle method-title">setTitleColor:forState:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Set the title color for a given state</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setTitleColor:(UIColor *)<em>color</em> forState:(UIControlState)<em>state</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>color</em></dt>
+			<dd><p>the title color to use for the specified state</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>state</em></dt>
+			<dd><p>one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Set the title color for a given state</p>
+
+<p>Set the title color to use for the knob in a specific control state. Unlike the case with <a href="#//api/name/titleColorForState:">titleColorForState:</a>, the state parameter
+must be one of UIControlStateNormal, UIControlStateHighlighted, UIControlStateDisabled or UIControlStateSelected.
+Mixed states like UIControlStateHighlighted|UIControlStateDisabled will be ignored, and no title color values will be
+modified.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/titleColorForState:" title="titleColorForState:"></a>
+	<h3 class="subsubtitle method-title">titleColorForState:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Title color for a given state</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (UIColor *)titleColorForState:(UIControlState)<em>state</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>state</em></dt>
+			<dd><p>any valid control state</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>the title color to use for the specified state</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Title color for a given state</p>
+
+<p>Retrieve the title color to use for the generated knob image in a particular control state. The state argument may be any bitwise combination
+of UIControlState values, e.g. UIControlStateHighlighted|UIConrolStateDisabled. The title color for the
+higher-valued state is returned. For example, in the previous case, since UIControlStateDisabled > UIControlStateHighlighted,
+the disabled title color will be returned. If no title color has been configured for the specified state (e.g., in this example,
+if there were no disabled title color specified), returns a color based on the tintColor property.
+If any of the UIControlStateApplication bits is set, returns the title color for UIControlStateNormal.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2014 Jimmy Dee. All rights reserved. (Last updated: 2014-08-21)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 961)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>
