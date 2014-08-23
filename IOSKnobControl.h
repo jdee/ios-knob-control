@@ -95,6 +95,30 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  * for the control, the frame will be made square. The larger of the original sides will will be used for both the
  * width and height. The origin of the frame will be unchanged.
  *
+ * If so configured, the control can generate shadows. It will generate at most two: one for the knob image itself and
+ * one for the foreground layer. If foregroundImage is nil and mode is not IKCModeRotaryDial, there is no foreground
+ * layer and no shadow. In rotary dial mode, the knob control will generate a triangle representing a finger stop if
+ * foregroundImage is nil. Either a supplied foreground image or the finger stop may be configured to cast a shadow.
+ * This is done using the shadow parameters in the underlying CALayer. Four IOSKnobControl parameters are passed directly
+ * to the stationary middle layer, which contains the rotating knob, and the foreground layer: shadowOffset, shadowOpacity,
+ * shadowRadius and shadowColor. Those parameters will be the same for both the knob shadow and any foreground shadow.
+ *
+ * By default, the CALayer determines where to draw shadows by examining the alpha contents of the layer and filling
+ * an offset path that is the outline of all opaque content in the layer. However, determining the path to fill is
+ * expensive. On lesser hardware,
+ * it can pin the GPU. Supplying a shadowPath to the CALayer can greatly improve performance. This may be done using the
+ * middleLayerShadowPath and foregroundLayerShadowPath properties. (Note that because the knob image rotates within the
+ * middle layer, it is the middle layer that draws the shadow rather than the image layer. If the image layer draws the
+ * shadow, the shadow rotates with the image layer. For this reason, the rotary dialer performs poorly with a shadow,
+ * since the path and its shadow have to be animated and recomputed frame by frame due to the presence of finger holes.
+ * See https://github.com/jdee/ios-knob-control/issues/24 .)
+ *
+ * Since custom images are frequently circular, a circularShadowPathRadius property is also provided. Set this to provide
+ * a circular shadow path of a given radius if using a circular knob image. Note that generated knob images in modes other
+ * than IKCModeRotaryDial supply their own shadow paths.
+ *
+ * By default, shadowOpacity is 0. Set it to a positive value to turn on the default shadow.
+ *
  * The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1.
  */
 @interface IOSKnobControl : UIControl
@@ -251,14 +275,65 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @property (nonatomic) UIImage* foregroundImage;
 
-/** Draw a shadow
+/** Shadow opacity
  *
- * Determine whether to draw a shadow behind the knob. Default is NO.
- * @warning Note that this can be an expensive option. See https://github.com/jdee/ios-knob-control/issues/24.
- * Currently, performance is best when using an opaque fill color in any mode except rotary dial. Performance may be poor whenever using shadows with custom
- * images.
+ * Passed to the CALayer shadowOpacity property for the middle and foreground layers. Default is 0.
  */
-@property (nonatomic) BOOL shadow;
+@property (nonatomic) CGFloat shadowOpacity;
+
+/** Shadow offset
+ *
+ * Passed to the CALayer shadowOffset property for the middle and foreground layers. Default is CGSizeMake(0, 3), putting any shadow directly below the knob vertically.
+ */
+@property (nonatomic) CGSize shadowOffset;
+
+/** Shadow color
+ *
+ * The CGColor property of this UIColor object is passed to the shadowColor property of the middle and foreground CALayers. Default is [UIColor blackColor].
+ */
+@property (nonatomic) UIColor* shadowColor;
+
+/** Shadow blur radius
+ *
+ * Passed to the CALayer shadowRadius property for the middle and foreground layers. Default is 3.
+ */
+@property (nonatomic) CGFloat shadowRadius;
+
+/** Middle layer shadow path
+ *
+ * If you are using a custom image with circular symmetry, you can greatly improve the performance of the knob control with a shadow by setting this property.
+ * Use the circularShadowPathRadius property if your image is an opaque circle. Use this property if your knob image is, say, an annulus with a transparent center.
+ * If the shadow path is not fixed, it has to be computed by the CALayer frame by frame, which is slow. If the circularShadowPathRadius property is set to a
+ * positive value, this property is ignored. The control generates its own shadow paths for the knob images it generates in all modes but IKCModeRotaryDial,
+ * unless this property is non-nil or the circularShadowPathRadius is greater than 0.
+ * Default is nil.
+ * @see circularShadowPathRadius
+ */
+@property (nonatomic) UIBezierPath* middleLayerShadowPath;
+
+/** Foreground layer shadow path
+ *
+ * Since the foreground layer is stationary, this property is less useful, but it can have a small impact on performance. Set it to the outline of the opaque portion
+ * of your custom foregroundImage. This can also override the automatically provided shadow path for the generated finger stop triangle in case that should seem
+ * necessary.
+ * Default is nil.
+ * @see middleLayerShadowPath
+ */
+@property (nonatomic) UIBezierPath* foregroundLayerShadowPath;
+
+/** Circular shadow path radius
+ *
+ * If set to a positive value, the middle layer will be provided with a circular shadow path of the specified radius, in points. The center of the path will be at
+ * the center of the control. If you have a custom knob image like the one in the demo apps' Images.xcassets/disc.imageset, where an opaque circle is tangent to
+ * the bounds of the image, set circularShadowPathRadius to half the width or height of the knob control. If your custom image does not reach the bounds of the image but has a
+ * transparent margin, set this value to less than half the width or height of the square knob control. You have to reset this value any time the knob control
+ * resizes. This property takes precedence over the middleLayerShadowPath property and the default shadow paths generated by the control for its generated images
+ * in all modes but IKCModeRotaryDial. If set to 0, this property is ignored, and the middleLayerShadowPath or the automatically generated shadow path will be
+ * used instead.
+ * Default is 0.
+ * @see middleLayerShadowPath
+ */
+@property (nonatomic) CGFloat circularShadowPathRadius;
 
 /** Titles for generated knob in discrete modes
  *

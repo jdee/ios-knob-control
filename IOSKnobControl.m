@@ -534,7 +534,11 @@ static CGRect adjustFrame(CGRect frame) {
     _gesture = IKCGestureOneFingerRotation;
     _normalized = YES;
     _fontName = @"Helvetica";
-    _shadow = NO;
+    _shadowRadius = 3.0;
+    _shadowColor = [UIColor blackColor];
+    _shadowOpacity = 0.0;
+    _shadowOffset = CGSizeMake(0.0, 3.0);
+    _circularShadowPathRadius = 0.0;
     _zoomTopTitle = YES;
     _zoomPointSize = 0.0;
     _drawsAsynchronously = NO;
@@ -922,12 +926,6 @@ static CGRect adjustFrame(CGRect frame) {
     [self setNeedsLayout];
 }
 
-- (void)setShadow:(BOOL)shadow
-{
-    _shadow = shadow;
-    [self setNeedsLayout];
-}
-
 - (void)setZoomTopTitle:(BOOL)zoomTopTitle
 {
     _zoomTopTitle = zoomTopTitle;
@@ -937,6 +935,48 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setDrawsAsynchronously:(BOOL)drawsAsynchronously
 {
     _drawsAsynchronously = drawsAsynchronously;
+    [self setNeedsLayout];
+}
+
+- (void)setShadowColor:(UIColor *)shadowColor
+{
+    _shadowColor = shadowColor;
+    [self setNeedsLayout];
+}
+
+- (void)setShadowOffset:(CGSize)shadowOffset
+{
+    _shadowOffset = shadowOffset;
+    [self setNeedsLayout];
+}
+
+- (void)setShadowOpacity:(CGFloat)shadowOpacity
+{
+    _shadowOpacity = shadowOpacity;
+    [self setNeedsLayout];
+}
+
+- (void)setShadowRadius:(CGFloat)shadowRadius
+{
+    _shadowRadius = shadowRadius;
+    [self setNeedsLayout];
+}
+
+- (void)setMiddleLayerShadowPath:(UIBezierPath *)middleLayerShadowPath
+{
+    _middleLayerShadowPath = middleLayerShadowPath;
+    [self setNeedsLayout];
+}
+
+- (void)setForegroundLayerShadowPath:(UIBezierPath *)foregroundLayerShadowPath
+{
+    _foregroundLayerShadowPath = foregroundLayerShadowPath;
+    [self setNeedsLayout];
+}
+
+- (void)setCircularShadowPathRadius:(CGFloat)circularShadowPathRadius
+{
+    _circularShadowPathRadius = circularShadowPathRadius;
     [self setNeedsLayout];
 }
 
@@ -1500,8 +1540,11 @@ static CGRect adjustFrame(CGRect frame) {
     }
     middleLayer.bounds = self.bounds;
     middleLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
-    middleLayer.shadowOpacity = _shadow ? 1.0 : 0.0;
-    middleLayer.shadowOffset = CGSizeMake(0, 3); // DEBT: Make all the shadow params configurable
+    middleLayer.shadowOpacity = _shadowOpacity;
+    middleLayer.shadowOffset = _shadowOffset;
+    middleLayer.shadowColor = _shadowColor.CGColor;
+    middleLayer.shadowRadius = _shadowRadius;
+    [self setDefaultMiddleLayerShadowPath];
 
     UIImage* image = self.currentImage;
     if (image) {
@@ -1542,8 +1585,11 @@ static CGRect adjustFrame(CGRect frame) {
         foregroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
         foregroundLayer.backgroundColor = [UIColor clearColor].CGColor;
         foregroundLayer.opaque = NO;
-        foregroundLayer.shadowOpacity = _shadow ? 1.0 : 0.0;
-        foregroundLayer.shadowOffset = CGSizeMake(0, 3);
+        foregroundLayer.shadowOpacity = _shadowOpacity;
+        foregroundLayer.shadowOffset = _shadowOffset;
+        foregroundLayer.shadowRadius = _shadowRadius;
+        foregroundLayer.shadowColor = _shadowColor.CGColor;
+        foregroundLayer.shadowPath = _foregroundLayerShadowPath.CGPath;
         [self.layer addSublayer:foregroundLayer];
 
         if (_foregroundImage)
@@ -1598,6 +1644,16 @@ static CGRect adjustFrame(CGRect frame) {
     [self updateControlState];
 }
 
+- (void)setDefaultMiddleLayerShadowPath
+{
+    if (_circularShadowPathRadius > 0.0) {
+        middleLayer.shadowPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(0.5*self.bounds.size.width, 0.5*self.bounds.size.height) radius:_circularShadowPathRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    }
+    else {
+        middleLayer.shadowPath = _middleLayerShadowPath.CGPath;
+    }
+}
+
 /*
  * There are several things that require a full layout: Changing the appearance of the control (image vs. none, different font size, etc.),
  * changing the frame (resizing). And many other things, like changing the background image, redraw the control entirely because it's
@@ -1610,7 +1666,7 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (self.currentImage) {
         imageLayer.contents = (id)self.currentImage.CGImage;
-        middleLayer.shadowPath = NULL;
+        [self setDefaultMiddleLayerShadowPath];
     }
     else {
         shapeLayer.fillColor = self.currentFillColor.CGColor;
@@ -1630,11 +1686,11 @@ static CGRect adjustFrame(CGRect frame) {
          * knob, it's possible for the pip or markings to cast a shadow. That may be unusual, but we don't cache the shadow path
          * in that case.
          */
-        if (_mode != IKCModeRotaryDial && self.currentFillColorIsOpaque) {
+        if (_mode != IKCModeRotaryDial && middleLayer.shadowPath == NULL && self.currentFillColorIsOpaque) {
             middleLayer.shadowPath = shapeLayer.path;
         }
         else {
-            middleLayer.shadowPath = NULL;
+            [self setDefaultMiddleLayerShadowPath];
         }
     }
 }
@@ -1644,7 +1700,6 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
-    shapeLayer.shadowPath = shapeLayer.path;
 
     [self updateMarkings];
 }
@@ -1681,7 +1736,6 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.path = path.CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
-    shapeLayer.shadowPath = path.CGPath;
 }
 
 - (void)updateDialNumbers
@@ -1904,7 +1958,6 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
     shapeLayer.drawsAsynchronously = _drawsAsynchronously;
-    shapeLayer.shadowPath = shapeLayer.path;
 
     for (CATextLayer* layer in markings) {
         [layer removeFromSuperlayer];
@@ -2006,7 +2059,10 @@ static CGRect adjustFrame(CGRect frame) {
     stopLayer.bounds = self.bounds;
     stopLayer.backgroundColor = [UIColor clearColor].CGColor;
     stopLayer.opaque = NO;
-    stopLayer.shadowPath = path.CGPath;
+
+    if (foregroundLayer.shadowPath == NULL) {
+        foregroundLayer.shadowPath = stopLayer.path;
+    }
 
     return stopLayer;
 }

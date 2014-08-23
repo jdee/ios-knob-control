@@ -70,7 +70,7 @@ class ContinuousViewController: BaseViewController, ImageChooser {
         knobControl.mode = .Continuous
         knobControl.min = -π * 0.5
         knobControl.max = π * 0.5
-        knobControl.shadow = true
+        knobControl.shadowOpacity = 1.0
         knobControl.clipsToBounds = false
 
         minControl = IOSKnobControl(frame: minHolder.bounds)
@@ -215,6 +215,11 @@ class ContinuousViewController: BaseViewController, ImageChooser {
             maxControl.setImage(normalImage, forState: .Normal)
             maxControl.setImage(highlightedImage, forState: .Highlighted)
             maxControl.setImage(disabledImage, forState: .Disabled)
+
+            if title == "knob" {
+                // NOTE: This is an important optimization when using a custom circular image with a shadow.
+                knobControl.circularShadowPathRadius = 0.475 * knobControl.bounds.size.width
+            }
         }
         else {
             /*
@@ -235,6 +240,7 @@ class ContinuousViewController: BaseViewController, ImageChooser {
 
             knobControl.backgroundImage = nil
             knobControl.foregroundImage = nil
+            knobControl.circularShadowPathRadius = 0.0
         }
 
         // use the same foreground/background images (or nil) for the min and max knobs

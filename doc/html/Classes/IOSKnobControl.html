@@ -43,6 +43,8 @@
 	
 	<option value="//api/name/circular">&nbsp;&nbsp;&nbsp;&nbsp;circular</option>
 	
+	<option value="//api/name/circularShadowPathRadius">&nbsp;&nbsp;&nbsp;&nbsp;circularShadowPathRadius</option>
+	
 	<option value="//api/name/clockwise">&nbsp;&nbsp;&nbsp;&nbsp;clockwise</option>
 	
 	<option value="//api/name/currentFillColor">&nbsp;&nbsp;&nbsp;&nbsp;currentFillColor</option>
@@ -57,9 +59,13 @@
 	
 	<option value="//api/name/foregroundImage">&nbsp;&nbsp;&nbsp;&nbsp;foregroundImage</option>
 	
+	<option value="//api/name/foregroundLayerShadowPath">&nbsp;&nbsp;&nbsp;&nbsp;foregroundLayerShadowPath</option>
+	
 	<option value="//api/name/gesture">&nbsp;&nbsp;&nbsp;&nbsp;gesture</option>
 	
 	<option value="//api/name/max">&nbsp;&nbsp;&nbsp;&nbsp;max</option>
+	
+	<option value="//api/name/middleLayerShadowPath">&nbsp;&nbsp;&nbsp;&nbsp;middleLayerShadowPath</option>
 	
 	<option value="//api/name/min">&nbsp;&nbsp;&nbsp;&nbsp;min</option>
 	
@@ -73,7 +79,13 @@
 	
 	<option value="//api/name/positions">&nbsp;&nbsp;&nbsp;&nbsp;positions</option>
 	
-	<option value="//api/name/shadow">&nbsp;&nbsp;&nbsp;&nbsp;shadow</option>
+	<option value="//api/name/shadowColor">&nbsp;&nbsp;&nbsp;&nbsp;shadowColor</option>
+	
+	<option value="//api/name/shadowOffset">&nbsp;&nbsp;&nbsp;&nbsp;shadowOffset</option>
+	
+	<option value="//api/name/shadowOpacity">&nbsp;&nbsp;&nbsp;&nbsp;shadowOpacity</option>
+	
+	<option value="//api/name/shadowRadius">&nbsp;&nbsp;&nbsp;&nbsp;shadowRadius</option>
 	
 	<option value="//api/name/timeScale">&nbsp;&nbsp;&nbsp;&nbsp;timeScale</option>
 	
@@ -152,6 +164,8 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/circular">circular</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/circularShadowPathRadius">circularShadowPathRadius</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/clockwise">clockwise</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/currentFillColor">currentFillColor</a></span></li>
@@ -166,9 +180,13 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/foregroundImage">foregroundImage</a></span></li>
 	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/foregroundLayerShadowPath">foregroundLayerShadowPath</a></span></li>
+	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/gesture">gesture</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/max">max</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/middleLayerShadowPath">middleLayerShadowPath</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/min">min</a></span></li>
 	
@@ -182,7 +200,13 @@
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/positions">positions</a></span></li>
 	
-	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shadow">shadow</a></span></li>
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shadowColor">shadowColor</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shadowOffset">shadowOffset</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shadowOpacity">shadowOpacity</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/shadowRadius">shadowRadius</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/timeScale">timeScale</a></span></li>
 	
@@ -261,17 +285,41 @@
 						<h2 class="subtitle subtitle-overview">Overview</h2>
 						<p>This is a simple, reusable rotary control. You may provide custom knob images or use the default images, which may be customized
 using a number of properties and methods. The control chooses an image based on state,
-like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation <a href="#//api/name/gesture">gesture</a> and
-animates rotation of the current image in response, programmatically reading out the current angular <a href="#//api/name/position">position</a> of the knob
+like the UIButton control. In any state but disabled, the knob control responds to a one-fingered rotation gesture and
+animates rotation of the current image in response, programmatically reading out the current angular position of the knob
 and generating a UIControlEventValueChanged each time the knob rotates.</p>
 
 <p>The knob control and all images must be square. Images will usually be circles or regular polygons, with a
 transparent background or a solid one that matches the view behind it. However, the aspect
-ratio must be 1:1. The effect of the animation is <a href="#//api/name/circular">circular</a> rotation. This only works if the control
+ratio must be 1:1. The effect of the animation is circular rotation. This only works if the control
 is square. You can produce other effects, for example, by partially clipping a square control
 or using an oblong background. But the control itself always has to be square. If an oblong frame is specified
 for the control, the frame will be made square. The larger of the original sides will will be used for both the
 width and height. The origin of the frame will be unchanged.</p>
+
+<p>If so configured, the control can generate shadows. It will generate at most two: one for the knob image itself and
+one for the foreground layer. If foregroundImage is nil and mode is not IKCModeRotaryDial, there is no foreground
+layer and no shadow. In rotary dial mode, the knob control will generate a triangle representing a finger stop if
+foregroundImage is nil. Either a supplied foreground image or the finger stop may be configured to cast a shadow.
+This is done using the shadow parameters in the underlying CALayer. Four IOSKnobControl parameters are passed directly
+to the stationary middle layer, which contains the rotating knob, and the foreground layer: shadowOffset, shadowOpacity,
+shadowRadius and shadowColor. Those parameters will be the same for both the knob shadow and any foreground shadow.</p>
+
+<p>By default, the CALayer determines where to draw shadows by examining the alpha contents of the layer and filling
+an offset path that is the outline of all opaque content in the layer. However, determining the path to fill is
+expensive. On lesser hardware,
+it can pin the GPU. Supplying a shadowPath to the CALayer can greatly improve performance. This may be done using the
+middleLayerShadowPath and foregroundLayerShadowPath properties. (Note that because the knob image rotates within the
+middle layer, it is the middle layer that draws the shadow rather than the image layer. If the image layer draws the
+shadow, the shadow rotates with the image layer. For this reason, the rotary dialer performs poorly with a shadow,
+since the path and its shadow have to be animated and recomputed frame by frame due to the presence of finger holes.
+See <a href="https://github.com/jdee/ios-knob-control/issues/24">https://github.com/jdee/ios-knob-control/issues/24</a> .)</p>
+
+<p>Since custom images are frequently <a href="#//api/name/circular">circular</a>, a <a href="#//api/name/circularShadowPathRadius">circularShadowPathRadius</a> property is also provided. Set this to provide
+a <a href="#//api/name/circular">circular</a> shadow path of a given radius if using a <a href="#//api/name/circular">circular</a> knob image. Note that generated knob images in modes other
+than IKCModeRotaryDial supply their own shadow paths.</p>
+
+<p>By default, <a href="#//api/name/shadowOpacity">shadowOpacity</a> is 0. Set it to a positive value to turn on the default shadow.</p>
 
 <p>The knob control requires ARC, and hence iOS 5.0 or later. It has not been tested below iOS 6.1.</p>
 					</div>
@@ -403,7 +451,43 @@ width and height. The origin of the frame will be unchanged.</p>
 	
 </li><li>
 	<span class="tooltip">
-		<code><a href="#//api/name/shadow">&nbsp;&nbsp;shadow</a></code>
+		<code><a href="#//api/name/shadowOpacity">&nbsp;&nbsp;shadowOpacity</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shadowOffset">&nbsp;&nbsp;shadowOffset</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shadowColor">&nbsp;&nbsp;shadowColor</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/shadowRadius">&nbsp;&nbsp;shadowRadius</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/middleLayerShadowPath">&nbsp;&nbsp;middleLayerShadowPath</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/foregroundLayerShadowPath">&nbsp;&nbsp;foregroundLayerShadowPath</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/circularShadowPathRadius">&nbsp;&nbsp;circularShadowPathRadius</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -623,6 +707,65 @@ continue around the circle. The <a href="#//api/name/min">min</a> and <a href="#
 	
 	
 	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/circularShadowPathRadius" title="circularShadowPathRadius"></a>
+	<h3 class="subsubtitle method-title">circularShadowPathRadius</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Circular shadow path radius</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) CGFloat circularShadowPathRadius</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Circular shadow path radius</p>
+
+<p>If set to a positive value, the middle layer will be provided with a <a href="#//api/name/circular">circular</a> shadow path of the specified radius, in points. The center of the path will be at
+the center of the control. If you have a custom knob image like the one in the demo apps' Images.xcassets/disc.imageset, where an opaque circle is tangent to
+the bounds of the image, set circularShadowPathRadius to half the width or height of the knob control. If your custom image does not reach the bounds of the image but has a
+transparent margin, set this value to less than half the width or height of the square knob control. You have to reset this value any time the knob control
+resizes. This property takes precedence over the <a href="#//api/name/middleLayerShadowPath">middleLayerShadowPath</a> property and the default shadow paths generated by the control for its generated images
+in all modes but IKCModeRotaryDial. If set to 0, this property is ignored, and the <a href="#//api/name/middleLayerShadowPath">middleLayerShadowPath</a> or the automatically generated shadow path will be
+used instead.
+Default is 0.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/middleLayerShadowPath">@property middleLayerShadowPath</a></p></code></li>
+			
+		</ul>
+	</div>
 	
 	
 	
@@ -943,6 +1086,61 @@ rotary dial, but it may be used with any <a href="#//api/name/mode">mode</a>.</p
 </div>
 						
 						<div class="section-method">
+	<a name="//api/name/foregroundLayerShadowPath" title="foregroundLayerShadowPath"></a>
+	<h3 class="subsubtitle method-title">foregroundLayerShadowPath</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Foreground layer shadow path</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) UIBezierPath *foregroundLayerShadowPath</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Foreground layer shadow path</p>
+
+<p>Since the foreground layer is stationary, this property is less useful, but it can have a small impact on performance. Set it to the outline of the opaque portion
+of your custom <a href="#//api/name/foregroundImage">foregroundImage</a>. This can also override the automatically provided shadow path for the generated finger stop triangle in case that should seem
+necessary.
+Default is nil.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/middleLayerShadowPath">@property middleLayerShadowPath</a></p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
 	<a name="//api/name/gesture" title="gesture"></a>
 	<h3 class="subsubtitle method-title">gesture</h3>
 	
@@ -1029,6 +1227,63 @@ value.</p>
 	
 	
 	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/middleLayerShadowPath" title="middleLayerShadowPath"></a>
+	<h3 class="subsubtitle method-title">middleLayerShadowPath</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Middle layer shadow path</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) UIBezierPath *middleLayerShadowPath</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Middle layer shadow path</p>
+
+<p>If you are using a custom image with <a href="#//api/name/circular">circular</a> symmetry, you can greatly improve the performance of the knob control with a shadow by setting this property.
+Use the <a href="#//api/name/circularShadowPathRadius">circularShadowPathRadius</a> property if your image is an opaque circle. Use this property if your knob image is, say, an annulus with a transparent center.
+If the shadow path is not fixed, it has to be computed by the CALayer frame by frame, which is slow. If the <a href="#//api/name/circularShadowPathRadius">circularShadowPathRadius</a> property is set to a
+positive value, this property is ignored. The control generates its own shadow paths for the knob images it generates in all modes but IKCModeRotaryDial,
+unless this property is non-nil or the <a href="#//api/name/circularShadowPathRadius">circularShadowPathRadius</a> is greater than 0.
+Default is nil.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="#//api/name/circularShadowPathRadius">@property circularShadowPathRadius</a></p></code></li>
+			
+		</ul>
+	</div>
 	
 	
 	
@@ -1319,18 +1574,18 @@ This property always returns a non-negative number. While <a href="#//api/name/p
 </div>
 						
 						<div class="section-method">
-	<a name="//api/name/shadow" title="shadow"></a>
-	<h3 class="subsubtitle method-title">shadow</h3>
+	<a name="//api/name/shadowColor" title="shadowColor"></a>
+	<h3 class="subsubtitle method-title">shadowColor</h3>
 	
 	
 	
 	<div class="method-subsection brief-description">
-		<p>Draw a shadow</p>
+		<p>Shadow color</p>
 	</div>		
 	
     
 
-	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL shadow</code></div>
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) UIColor *shadowColor</code></div>
 
     
 	
@@ -1342,11 +1597,138 @@ This property always returns a non-negative number. While <a href="#//api/name/p
 	
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
-		<p>Draw a shadow</p>
+		<p>Shadow color</p>
 
-<p>Determine whether to draw a shadow behind the knob. Default is NO.</p><div class="warning"><p><strong>Warning:</strong> Note that this can be an expensive option. See <a href="https://github.com/jdee/ios-knob-control/issues/24.">https://github.com/jdee/ios-knob-control/issues/24.</a>
-Currently, performance is best when using an opaque fill color in any <a href="#//api/name/mode">mode</a> except rotary dial. Performance may be poor whenever using shadows with custom
-images.</p></div>
+<p>The CGColor property of this UIColor object is passed to the shadowColor property of the middle and foreground CALayers. Default is [UIColor blackColor].</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/shadowOffset" title="shadowOffset"></a>
+	<h3 class="subsubtitle method-title">shadowOffset</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Shadow offset</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) CGSize shadowOffset</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Shadow offset</p>
+
+<p>Passed to the CALayer shadowOffset property for the middle and foreground layers. Default is CGSizeMake(0, 3), putting any shadow directly below the knob vertically.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/shadowOpacity" title="shadowOpacity"></a>
+	<h3 class="subsubtitle method-title">shadowOpacity</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Shadow opacity</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) CGFloat shadowOpacity</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Shadow opacity</p>
+
+<p>Passed to the CALayer shadowOpacity property for the middle and foreground layers. Default is 0.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/shadowRadius" title="shadowRadius"></a>
+	<h3 class="subsubtitle method-title">shadowRadius</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Shadow blur radius</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) CGFloat shadowRadius</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Shadow blur radius</p>
+
+<p>Passed to the CALayer shadowRadius property for the middle and foreground layers. Default is 3.</p>
 	</div>
 	
 	

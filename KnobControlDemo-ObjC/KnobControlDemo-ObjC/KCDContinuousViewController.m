@@ -53,7 +53,7 @@
     // basic continuous knob configuration
     self.knobControl = [[IOSKnobControl alloc] initWithFrame:self.knobControlView.bounds];
     self.knobControl.mode = IKCModeContinuous;
-    self.knobControl.shadow = YES;
+    self.knobControl.shadowOpacity = 1.0;
     self.knobControl.clipsToBounds = NO;
 
     // arrange to be notified whenever the knob turns
@@ -149,6 +149,11 @@
         [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
         maxControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
         maxControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
+
+        if ([imageTitle isEqualToString:@"knob"]) {
+            // NOTE: This is an important optimization when using a custom circular knob image with a shadow.
+            self.knobControl.circularShadowPathRadius = 0.475 * self.knobControl.bounds.size.width;
+        }
     }
     else {
         /*
@@ -172,6 +177,8 @@
         [maxControl setImage:nil forState:UIControlStateDisabled];
         maxControl.backgroundImage = nil;
         maxControl.foregroundImage = nil;
+
+        self.knobControl.circularShadowPathRadius = 0.0;
     }
 }
 

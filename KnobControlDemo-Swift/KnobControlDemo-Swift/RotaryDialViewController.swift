@@ -48,7 +48,7 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
         knobControl = IOSKnobControl(frame: knobHolder.bounds)
         knobControl.mode = .RotaryDial
         knobControl.gesture = .OneFingerRotation
-        knobControl.shadow = true
+        knobControl.shadowOpacity = 1.0 // This is expensive here because the finger holes break circular symmetry.
         knobControl.clipsToBounds = false
 
         // knobControl.fontName = "CourierNewPS-BoldMT"

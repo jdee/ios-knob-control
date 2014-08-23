@@ -221,8 +221,12 @@
     self.knobControl.circular = YES;
     self.knobControl.normalized = NO;
     self.knobControl.enabled = NO;
-    self.knobControl.shadow = YES;
+    self.knobControl.shadowOpacity = 1.0;
     self.knobControl.clipsToBounds = NO;
+
+    // NOTE: This is an important optimization when using a custom circular image with a shadow.
+    self.knobControl.circularShadowPathRadius = 0.5 * self.knobControl.bounds.size.width;
+
     [self.knobControl addTarget:self action:@selector(knobRotated:) forControlEvents:UIControlEventValueChanged];
     [self.knobControl setImage:[UIImage imageNamed:@"disc-disabled"] forState:UIControlStateDisabled];
     [_knobHolder addSubview:self.knobControl];

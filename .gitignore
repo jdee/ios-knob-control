@@ -1,5 +1,6 @@
 project.xcworkspace
 xcuserdata
 .DS_Store
+docset-installed.txt
 *.swp
 *.bak
