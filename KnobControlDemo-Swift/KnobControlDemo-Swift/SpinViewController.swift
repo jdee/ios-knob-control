@@ -112,6 +112,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
     @IBAction func togglePlayState(sender: UIBarButtonItem!) {
         if musicPlayer.nowPlayingItem != nil {
             if musicPlayer.playbackState == MPMusicPlaybackState.Paused || musicPlayer.playbackState == MPMusicPlaybackState.Stopped {
+                musicPlayer.currentPlaybackTime = currentPlaybackTime;
                 musicPlayer.play()
                 updateMusicPlayer(.Playing)
             }

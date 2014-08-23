@@ -116,6 +116,7 @@
 {
     if (musicPlayer.nowPlayingItem) {
         if (musicPlayer.playbackState == MPMusicPlaybackStatePaused || musicPlayer.playbackState == MPMusicPlaybackStateStopped) {
+            musicPlayer.currentPlaybackTime = currentPlaybackTime;
             [musicPlayer play];
             [self updateMusicPlayer:MPMusicPlaybackStatePlaying];
         }
