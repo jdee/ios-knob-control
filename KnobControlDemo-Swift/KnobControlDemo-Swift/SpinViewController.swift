@@ -52,18 +52,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
     var trackLength : Double = 0
     var currentPlaybackTime : Double = 0
     var touchIsDown : Bool = false
-
-    // MARK: computed properties
-
-    var normalizedPlaybackTime : Double {
-    get {
-        var playbackTime = currentPlaybackTime % trackLength
-        if playbackTime < 0 {
-            playbackTime += trackLength
-        }
-        return playbackTime
-    }
-    }
+    var playbackOffset: Double = 0
 
     // MARK: constant(s)
 
@@ -83,7 +72,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         setupToolbar(musicPlayer.playbackState)
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePlaybackState", name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: nil)
-        // NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateCurrentTrack", name: MPMusicPlayerControllerNowPlayingItemDidChangeNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateCurrentTrack", name: MPMusicPlayerControllerNowPlayingItemDidChangeNotification, object: nil)
 
         let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
         appDelegate.foregrounder = self
@@ -111,7 +100,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
     @IBAction func play(sender: UIBarButtonItem!) {
         if musicPlayer.playbackState != .Playing {
-            musicPlayer.currentPlaybackTime = currentPlaybackTime;
+            musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset
             musicPlayer.play()
             updateMusicPlayer(.Playing)
         }
@@ -160,7 +149,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         if touchIsDown && !knobControl.highlighted {
             // resume whenever the touch comes up
             // NSLog("when touch came up, current playback time: %f/%f", currentPlaybackTime, trackLength)
-            musicPlayer.currentPlaybackTime = normalizedPlaybackTime
+            musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset
             if musicPlayer.playbackState != .Playing {
                 musicPlayer.beginGeneratingPlaybackNotifications()
                 musicPlayer.play()
@@ -173,7 +162,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
                 musicPlayer.endGeneratingPlaybackNotifications()
                 musicPlayer.pause()
             }
-            currentPlaybackTime = musicPlayer.currentPlaybackTime
+            currentPlaybackTime = musicPlayer.currentPlaybackTime + playbackOffset
             // NSLog("Touch went down. Current playback time: %f/%f", currentPlaybackTime, trackLength)
         }
         touchIsDown = knobControl.highlighted
@@ -190,7 +179,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
          * both the knob and the progress view to reflect the new value.
          */
 
-        currentPlaybackTime = musicPlayer.currentPlaybackTime
+        currentPlaybackTime = musicPlayer.currentPlaybackTime + playbackOffset
 
         // link.duration * link.frameInterval is how long it's been since the last invocation of
         // this callback, so this is another alternative:
@@ -210,7 +199,27 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
          * touch comes up. See animateKnob() above.
          */
         currentPlaybackTime = Double(sender.position/angularVelocity)
-        updateProgress()
+
+        if (currentPlaybackTime > playbackOffset + trackLength) {
+            musicPlayer.skipToNextItem()
+            // NSLog("Skipping to next item")
+
+            playbackOffset += trackLength
+            musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset
+            updateSelectedItem()
+        }
+        else if (currentPlaybackTime < playbackOffset) {
+            musicPlayer.skipToPreviousItem()
+            // NSLog("Skipping to previous item")
+
+            trackLength = musicPlayer.nowPlayingItem.playbackDuration
+            playbackOffset -= trackLength
+            musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset
+            updateSelectedItem()
+        }
+        else {
+            updateProgress()
+        }
     }
 
     /*
@@ -309,14 +318,14 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
     private func updateProgress() {
         if trackLength > 0 {
-            let progress = normalizedPlaybackTime / trackLength
+            let progress = (currentPlaybackTime - playbackOffset) / trackLength
             // NSLog("Setting track progress to %f", progress)
             trackProgress.progress = Float(progress)
         }
         else {
             trackProgress.progress = 0
         }
-        updateLabel(trackProgressLabel, withTime: normalizedPlaybackTime)
+        updateLabel(trackProgressLabel, withTime: currentPlaybackTime - playbackOffset)
     }
 
     private func updateLabel(label:UILabel, withTime time:Double) {
@@ -331,6 +340,10 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
     }
 
     func updateCurrentTrack() {
+        currentPlaybackTime = Double(knobControl.position / angularVelocity)
+        playbackOffset = currentPlaybackTime - musicPlayer.currentPlaybackTime // essentially reset this offset whenever we change tracks, since we don't know whether we went forward or backward
+
+        NSLog("knob position: %f. current playback time: %f. music player playback time: %f. playback offset is now %f", knobControl.position, currentPlaybackTime, musicPlayer.currentPlaybackTime, playbackOffset)
         updateMusicPlayer(musicPlayer.playbackState)
     }
 
@@ -347,7 +360,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         updateMusicPlayer(musicPlayer.playbackState)
     }
 
-    func updateMusicPlayer(playbackState: MPMusicPlaybackState) {
+    private func updateMusicPlayer(playbackState: MPMusicPlaybackState) {
         // The user could muck around with the iPod app while we're in the bg.
         displayLink.paused = playbackState != .Playing
 
@@ -359,20 +372,20 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         setupToolbar(playbackState)
     }
 
-    func updateSelectedItem() {
+    private func updateSelectedItem() {
         if musicPlayer.nowPlayingItem != nil {
-            trackLength = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyPlaybackDuration) as Double
+            trackLength = musicPlayer.nowPlayingItem.playbackDuration
             // NSLog("Selected item duration is %f", trackLength)
             updateLabel(trackLengthLabel, withTime: trackLength)
 
-            currentPlaybackTime = musicPlayer.currentPlaybackTime
+            currentPlaybackTime = musicPlayer.currentPlaybackTime + playbackOffset
             // NSLog("Current playback time is %f", currentPlaybackTime)
-            updateLabel(trackProgressLabel, withTime: currentPlaybackTime)
-
             updateProgress()
 
-            let trackName = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyTitle) as String
-            let artist = musicPlayer.nowPlayingItem.valueForProperty(MPMediaItemPropertyArtist) as String
+            // NSLog("Updated selected item: %@: %f (%f - %f)/%f", musicPlayer.nowPlayingItem.title, musicPlayer.currentPlaybackTime, currentPlaybackTime, playbackOffset, trackLength)
+
+            let trackName = musicPlayer.nowPlayingItem.title
+            let artist = musicPlayer.nowPlayingItem.artist
             iTunesButton.setTitle(String(format: "%@ - %@", artist, trackName), forState: .Normal)
 
             knobControl.enabled = true
@@ -380,21 +393,19 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
             knobControl.foregroundImage = UIImage(named: "tonearm")
         }
         else {
-            /*
-            * Is this ever really possible with the iPod player (no nowPlayingItem)?
-            */
             iTunesButton.setTitle("Select iTunes track(s)", forState: .Normal)
             displayLink.paused = true
             knobControl.enabled = false
             knobControl.foregroundImage = nil
 
+            playbackOffset = 0
             updateLabel(trackLengthLabel, withTime: 0)
             updateLabel(trackProgressLabel, withTime: 0)
             updateProgress()
         }
     }
 
-    func examinePlaybackState(playbackState: MPMusicPlaybackState) -> String {
+    private func examinePlaybackState(playbackState: MPMusicPlaybackState) -> String {
         switch (playbackState) {
         case .Playing:
             return "Playing"

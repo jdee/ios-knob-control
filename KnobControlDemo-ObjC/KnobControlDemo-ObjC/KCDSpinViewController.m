@@ -22,7 +22,6 @@
 #define IKC_33RPM_ANGULAR_VELOCITY (10.0 * M_PI / 9.0)
 
 @interface KCDSpinViewController ()
-@property (nonatomic) double normalizedPlaybackTime;
 @property (nonatomic) KCDAppDelegate* appDelegate;
 @end
 
@@ -48,22 +47,12 @@
     MPVolumeView* volumeView;
     UIView* loadingView;
 
-    double trackLength, currentPlaybackTime;
+    double trackLength, currentPlaybackTime, playbackOffset;
     BOOL touchIsDown;
 }
 
 // This never seems to make a bit of difference. Hence I forgot one of these originally.
-@dynamic normalizedPlaybackTime, appDelegate;
-
-- (double)normalizedPlaybackTime
-{
-    double completeLoops = 0.0;
-    double playbackTime = modf(currentPlaybackTime/trackLength, &completeLoops) * trackLength;
-    if (playbackTime < 0.0) {
-        playbackTime += trackLength;
-    }
-    return playbackTime;
-}
+@dynamic appDelegate;
 
 - (KCDAppDelegate *)appDelegate
 {
@@ -76,7 +65,7 @@
 {
     [super viewDidLoad];
 
-    trackLength = currentPlaybackTime = 0.0;
+    trackLength = currentPlaybackTime = playbackOffset = 0.0;
     touchIsDown = NO;
 
     [self createKnobControl];
@@ -87,6 +76,7 @@
     [self setupToolbar:musicPlayer.playbackState];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePlaybackState) name:MPMusicPlayerControllerPlaybackStateDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCurrentTrack) name:MPMusicPlayerControllerPlaybackStateDidChangeNotification object:nil];
 
     // arrange to be notified via resumeFromBackground() when the app becomes active
     self.appDelegate.foregrounder = self;
@@ -115,7 +105,7 @@
 - (void)play:(UIBarButtonItem *)sender
 {
     if (musicPlayer.playbackState != MPMusicPlaybackStatePlaying) {
-        musicPlayer.currentPlaybackTime = currentPlaybackTime;
+        musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset;
         [musicPlayer play];
         [self updateMusicPlayer:MPMusicPlaybackStatePlaying];
     }
@@ -170,7 +160,25 @@
      * touch comes up. See animateKnob() above.
      */
     currentPlaybackTime = sender.position / IKC_33RPM_ANGULAR_VELOCITY;
-    [self updateProgress];
+
+    if (currentPlaybackTime > trackLength + playbackOffset) {
+        [musicPlayer skipToNextItem];
+
+        playbackOffset += trackLength;
+        musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset;
+        [self updateSelectedItem];
+    }
+    else if (currentPlaybackTime < playbackOffset) {
+        [musicPlayer skipToPreviousItem];
+
+        trackLength = musicPlayer.nowPlayingItem.playbackDuration;
+        playbackOffset -= trackLength;
+        musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset;
+        [self updateSelectedItem];
+    }
+    else {
+        [self updateProgress];
+    }
 }
 
 // callback for the CADisplayLink
@@ -178,7 +186,7 @@
 {
     if (touchIsDown && !self.knobControl.highlighted) {
         // resume whenever the touch comes up
-        musicPlayer.currentPlaybackTime = self.normalizedPlaybackTime;
+        musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset;
         [musicPlayer beginGeneratingPlaybackNotifications];
         [musicPlayer play];
     }
@@ -186,7 +194,7 @@
         // pause whenever a touch goes down
         [musicPlayer endGeneratingPlaybackNotifications];
         [musicPlayer pause];
-        currentPlaybackTime = musicPlayer.currentPlaybackTime;
+        currentPlaybackTime = musicPlayer.currentPlaybackTime + playbackOffset;
     }
     touchIsDown = self.knobControl.highlighted;
 
@@ -202,7 +210,7 @@
      * both the knob and the progress view to reflect the new value.
      */
 
-    currentPlaybackTime = musicPlayer.currentPlaybackTime;
+    currentPlaybackTime = musicPlayer.currentPlaybackTime + playbackOffset;
 
     // link.duration * link.frameInterval is how long it's been since the last invocation of
     // this callback, so this is another alternative:
@@ -307,14 +315,14 @@
 - (void)updateProgress
 {
     if (trackLength > 0.0) {
-        double progress = self.normalizedPlaybackTime / trackLength;
+        double progress = (currentPlaybackTime - playbackOffset) / trackLength;
         // NSLog(@"Setting track progress to %f", progress);
         _trackProgress.progress = progress;
     }
     else {
         _trackProgress.progress = 0.0;
     }
-    [self updateLabel:_trackProgressLabel withTime:self.normalizedPlaybackTime];
+    [self updateLabel:_trackProgressLabel withTime:currentPlaybackTime - playbackOffset];
 }
 
 - (void)updateLabel:(UILabel*)label withTime:(double)time
@@ -329,6 +337,14 @@
         seconds = 0;
     }
     label.text = [NSString stringWithFormat:@"%d:%02d", minutes, seconds];
+}
+
+- (void)updateCurrentTrack
+{
+    currentPlaybackTime = self.knobControl.position / IKC_33RPM_ANGULAR_VELOCITY;
+    playbackOffset = currentPlaybackTime - musicPlayer.currentPlaybackTime; // essentially reset this offset whenever we change tracks, since we don't know whether we went forward or backward
+
+    [self updateMusicPlayer:musicPlayer.playbackState];
 }
 
 - (void)updatePlaybackState
@@ -352,17 +368,15 @@
 - (void)updateSelectedItem
 {
     if (musicPlayer.nowPlayingItem) {
-        trackLength = ((NSNumber*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyPlaybackDuration]).doubleValue;
+        trackLength = musicPlayer.nowPlayingItem.playbackDuration;
         NSLog(@"Selected item duration is %f", trackLength);
         [self updateLabel:_trackLengthLabel withTime:trackLength];
 
-        currentPlaybackTime = musicPlayer.currentPlaybackTime;
-        [self updateLabel:_trackProgressLabel withTime:currentPlaybackTime];
-
+        currentPlaybackTime = musicPlayer.currentPlaybackTime + playbackOffset;
         [self updateProgress];
 
-        NSString* title = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyTitle];
-        NSString* artist = (NSString*)[musicPlayer.nowPlayingItem valueForProperty:MPMediaItemPropertyArtist];
+        NSString* title = musicPlayer.nowPlayingItem.title;
+        NSString* artist = musicPlayer.nowPlayingItem.artist;
         [_iTunesButton setTitle:[NSString stringWithFormat:@"%@ - %@", artist, title] forState:UIControlStateNormal];
 
         self.knobControl.enabled = YES;
@@ -374,6 +388,8 @@
         displayLink.paused = YES;
         self.knobControl.enabled = NO;
         self.knobControl.foregroundImage = nil;
+
+        playbackOffset = 0;
 
         [self updateLabel:_trackProgressLabel withTime:0.0];
         [self updateLabel:_trackLengthLabel withTime:0.0];
