@@ -40,10 +40,6 @@
 #define IKC_TARGET_VERSION 0x010300
 #define IKC_TARGET_BUILD 1
 
-/*
- * DEBT: Should also do a runtime check in the constructors in case the control is ever built
- * into a library.
- */
 #if IKC_TARGET_VERSION != IKC_VERSION || IKC_TARGET_BUILD != IKC_BUILD
 #error IOSKnobControl.h version and build do not match IOSKnobControl.m.
 #endif // target version/build check
@@ -473,7 +469,7 @@ static CGRect adjustFrame(CGRect frame) {
 @implementation IOSKnobControl {
     float touchStart, positionStart, currentTouch;
     UIGestureRecognizer* gestureRecognizer;
-    CALayer* imageLayer, *backgroundLayer, *foregroundLayer, *middleLayer;
+    CALayer* imageLayer, *backgroundLayer, *foregroundLayer, *middleLayer, *shadowLayer;
     CAShapeLayer* shapeLayer, *pipLayer, *stopLayer;
     NSMutableArray* markings, *dialMarkings;
     UIImage* images[4];
@@ -1034,6 +1030,10 @@ static CGRect adjustFrame(CGRect frame) {
     animation.delegate = delegate;
 
     [imageLayer addAnimation:animation forKey:nil];
+    if (shadowLayer.shadowPath && _shadowOpacity > 0.0) {
+        shadowLayer.transform = imageLayer.transform;
+        [shadowLayer addAnimation:animation forKey:nil];
+    }
 
     [CATransaction commit];
 }
@@ -1219,8 +1219,12 @@ static CGRect adjustFrame(CGRect frame) {
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 
     [imageLayer addAnimation:animation forKey:nil];
-
     imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
+
+    if (shadowLayer.shadowPath && _shadowOpacity > 0.0) {
+        [shadowLayer addAnimation:animation forKey:nil];
+        shadowLayer.transform = imageLayer.transform;
+    }
     [CATransaction commit];
 
     _position = position;
@@ -1492,8 +1496,11 @@ static CGRect adjustFrame(CGRect frame) {
  */
 - (void)updateImage
 {
+    assert(self.bounds.origin.x == 0);
+    assert(self.bounds.origin.y == 0);
+
     self.layer.bounds = self.bounds;
-    self.layer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+    self.layer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
     /*
      * There is always a background layer. It may just have no contents and no
      * sublayers.
@@ -1506,7 +1513,7 @@ static CGRect adjustFrame(CGRect frame) {
         [self.layer addSublayer:backgroundLayer];
     }
     backgroundLayer.bounds = self.bounds;
-    backgroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+    backgroundLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
 
     if (_backgroundImage)
     {
@@ -1539,11 +1546,20 @@ static CGRect adjustFrame(CGRect frame) {
         [self.layer addSublayer:middleLayer];
     }
     middleLayer.bounds = self.bounds;
-    middleLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
-    middleLayer.shadowOpacity = _shadowOpacity;
-    middleLayer.shadowOffset = _shadowOffset;
-    middleLayer.shadowColor = _shadowColor.CGColor;
-    middleLayer.shadowRadius = _shadowRadius;
+    middleLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
+
+    /*
+     * There's always a shadowLayer. It may just be empty and unused.
+     */
+    if (!shadowLayer)
+    {
+        shadowLayer = [CALayer layer];
+        shadowLayer.opaque = NO;
+        shadowLayer.backgroundColor = [UIColor clearColor].CGColor;
+        [middleLayer addSublayer:shadowLayer];
+    }
+    shadowLayer.bounds = middleLayer.bounds;
+    shadowLayer.position = CGPointMake(self.bounds.size.width * 0.5 + _shadowOffset.width, self.bounds.size.height * 0.5 + _shadowOffset.height);
     [self setDefaultMiddleLayerShadowPath];
 
     UIImage* image = self.currentImage;
@@ -1575,14 +1591,14 @@ static CGRect adjustFrame(CGRect frame) {
         [middleLayer addSublayer:imageLayer];
     }
     imageLayer.bounds = self.bounds;
-    imageLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+    imageLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
 
     if (_foregroundImage || _mode == IKCModeRotaryDial)
     {
         [foregroundLayer removeFromSuperlayer];
         foregroundLayer = [CALayer layer];
         foregroundLayer.bounds = self.bounds;
-        foregroundLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+        foregroundLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
         foregroundLayer.backgroundColor = [UIColor clearColor].CGColor;
         foregroundLayer.opaque = NO;
         foregroundLayer.shadowOpacity = _shadowOpacity;
@@ -1614,6 +1630,8 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     [self updateShapeLayer];
+
+    [self setupShadowLayer];
 }
 
 - (void)updateShapeLayer
@@ -1647,10 +1665,10 @@ static CGRect adjustFrame(CGRect frame) {
 - (void)setDefaultMiddleLayerShadowPath
 {
     if (_circularShadowPathRadius > 0.0) {
-        middleLayer.shadowPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(0.5*self.bounds.size.width, 0.5*self.bounds.size.height) radius:_circularShadowPathRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+        shadowLayer.shadowPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(0.5*self.bounds.size.width, 0.5*self.bounds.size.height) radius:_circularShadowPathRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     }
     else {
-        middleLayer.shadowPath = _middleLayerShadowPath.CGPath;
+        shadowLayer.shadowPath = _middleLayerShadowPath.CGPath;
     }
 }
 
@@ -1676,22 +1694,6 @@ static CGRect adjustFrame(CGRect frame) {
         for (IKCTextLayer* layer in markings) {
             layer.foregroundColor = self.currentTitleColor.CGColor;
         }
-
-        /*
-         * It's the middleLayer that casts the shadow. (If the imageLayer casts a shadow, the shadow rotates with it).
-         * Shadows are expensive if you leave it to the layer to figure out its path. For simple cases, whenever we're rendering
-         * an opaque, circular knob, we set middleLayer.shadowPath. In the case of rotary dial mode, transparency means that the
-         * shadow path, in the coordinates of the middleLayer, changes as the finger holes rotate and would have to be specified
-         * frame by frame during the rotation. Which could still speed things up. If a transparent fill color is used for the
-         * knob, it's possible for the pip or markings to cast a shadow. That may be unusual, but we don't cache the shadow path
-         * in that case.
-         */
-        if (_mode != IKCModeRotaryDial && middleLayer.shadowPath == NULL && self.currentFillColorIsOpaque) {
-            middleLayer.shadowPath = shapeLayer.path;
-        }
-        else {
-            [self setDefaultMiddleLayerShadowPath];
-        }
     }
 }
 
@@ -1700,6 +1702,10 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+
+    if (!shadowLayer.shadowPath) {
+        shadowLayer.shadowPath = shapeLayer.path;
+    }
 
     [self updateMarkings];
 }
@@ -1736,6 +1742,10 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.path = path.CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
+
+    if (!shadowLayer.shadowPath) {
+        shadowLayer.shadowPath = path.CGPath;
+    }
 }
 
 - (void)updateDialNumbers
@@ -1959,6 +1969,11 @@ static CGRect adjustFrame(CGRect frame) {
     shapeLayer.opaque = NO;
     shapeLayer.drawsAsynchronously = _drawsAsynchronously;
 
+    if (!shadowLayer.shadowPath) {
+        // DEBT: What if fill color is clear? It can be overridden with circularBlah or middleLayerShadowBlah
+        shadowLayer.shadowPath = shapeLayer.path;
+    }
+
     for (CATextLayer* layer in markings) {
         [layer removeFromSuperlayer];
     }
@@ -2065,6 +2080,58 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     return stopLayer;
+}
+
+/*
+ * This is an optimization for the benefit of things like the rotary dialer, which lack total rotational symmetry (due to the presence of finger
+ * holes in the dialer, for example). There are two main layers involved: The middle layer is stationary and entirely transparent. It's just a placeholder
+ * for the imageLayer, which is either a plain CALayer with the contents of a custom image, or a CAShapeLayer for a generated knob (the dial in the
+ * case of the rotary dialer, with transparent finger holes). Since the image may be repeatedly changed, it's easier to recreate the imageLayer
+ * whenever necessary and not have to worry about making the new layer lie between the background and foreground layers. The stationary middleLayer is
+ * a place to put the imageLayer. It's also convenient for
+ * shadows, but inefficient. If the imageLayer's shadowOpacity is set to a positive number, it correctly generates a shadow, but then the shadow rotates
+ * with the imageLayer. Setting the middleLayer's shadowOpacity nonzero instead instantly produces correct shadows for all modes, including when
+ * using custom images. But whenever the knob image rotates, the animation changes the contents of the middle layer in ways it can't predict, so if
+ * left to its own devices, it will recompute the shadow path from its alpha content frame by frame, which can pin the GPU on lesser hardware.
+ *
+ * Supplying a shadowPath to the middleLayer fixes the performance issue in the simplest cases, when there is total rotational symmetry, such as
+ * with the generated continuous and discrete knobs. But if you use a shadowPath in this way with the rotary dialer, the shadow will be stationary and not
+ * rotate with the dial. There's no mechanism available to supply a shadowPath per frame or to say that the shadowPath should be animated.
+ *
+ * In some cases, like the rotary dialer, we make use of another sublayer of the middleLayer, the shadowLayer, which lies
+ * directly behind the imageLayer. Whenever a shadow path is present (when using a generated knob, when circularShadowPathRadius > 0 or when
+ * middleLayerShadowPath is non-nil), the shadow path is assigned to the shadowLayer instead of the middleLayer, along with all the other shadow
+ * properties with the exception of shadowOffset (shadowColor, shadowRadius, shadowOpacity). The shadowOffset property of the shadowLayer is CGSizeZero,
+ * but its frame is offset from that of the imageLayer by the control's shadowOffset property, and its animations are synchronized with those of the
+ * imageLayer. The shadowLayer has no contents of its own. It just generates a shadow that rotates with the knob at a constant offset from the knob,
+ * independent of rotation. Use of the shadowPath greatly improves performance in this case.
+ *
+ * The shadowLayer requires a shadowPath for this to work, since it has no contents. The control can always supply the shadowPath for any knobs it
+ * generates. When using a custom image, if the user has not set circularShadowPathRadius or middleLayerShadowPath, there is no shadowPath available,
+ * so the shadow has to be generated inefficiently by the middleLayer. In this case, the shadowOpacity, shadowColor, shadowRadius and shadowOffset are
+ * all assigned to the middleLayer, and the shadowLayer is unused.
+ *
+ * DEBT: Is there some way to generate a shadowLayer for a custom image? Or best of all, is there some way to determine the shadowPath that the
+ * CALayer would use and cache it, by determining the outline of the opaque portion of a UIImage?
+ */
+- (void)setupShadowLayer
+{
+    // Set by [self setDefaultMiddleLayerShadowPath]
+    if (shadowLayer.shadowPath != NULL) {
+        shadowLayer.shadowOffset = CGSizeZero;
+        shadowLayer.shadowOpacity = _shadowOpacity;
+        shadowLayer.shadowColor = _shadowColor.CGColor;
+        shadowLayer.shadowRadius = _shadowRadius;
+        // shadowLayer.position set in updateImage, with bounds
+        middleLayer.shadowOpacity = 0.0;
+    }
+    else {
+        middleLayer.shadowOffset = _shadowOffset;
+        middleLayer.shadowColor = _shadowColor.CGColor;
+        middleLayer.shadowRadius = _shadowRadius;
+        middleLayer.shadowOpacity = _shadowOpacity;
+        shadowLayer.shadowOpacity = 0.0;
+    }
 }
 
 - (CGFloat)titleCircumferenceWithFont:(UIFont*)font
