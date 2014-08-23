@@ -55,10 +55,9 @@ TDB  Jimmy Dee  <jgvdthree@gmail.com>
     
     You can now configure the font name to use for titles (they are still automatically sized to
     fit). Titles will no longer be rendered above the configured Dynamic Type headline size on
-    iOS 7+.
+    iOS 7+ (except when explicitly so configured with the zoomPointSize property, q.v.).
     
-    The title at the top of a discrete knob is automatically rendered at the headline size to
-    make it easier to read.
+    The title at the top of a discrete knob can be automatically increased in size if so configured.
     
     The control can now be used in an unnormalized mode so that the position property does not
     jump from π to -π or vice versa. If circular is YES, the position will continue to increase or
@@ -66,14 +65,27 @@ TDB  Jimmy Dee  <jgvdthree@gmail.com>
     
     New properties
     --------------
-    
+
+    BOOL drawsAsynchronously: Whether to use a background thread to render some animation layers
+    faster.
+
     NSString* fontName: The font name to use for titles in the discrete modes.
 
     BOOL normalized: Whether to limit the position property to (-π, π]. Only available when
     circular == YES.
-    
-    BOOL shadow: Whether to render shadows with the knob.
-    
+
+    Used to configure shadows:
+    UIColor* shadowColor
+    CGSize shadowOffset
+    CGFloat shadowOpacity
+    CGFloat shadowRadius
+    UIBezierPath* foregroundLayerShadowPath
+    UIBezierPath* middleLayerShadowPath
+    CGFloat circularShadowPathRadius
+
+    CGFloat zoomPointSize: The size to which to increase the top title of a generated knob.
+    BOOL zoomTopTitle: Whether to increase the top title of the knob if it is below a certain size.
+
     Bug fixes
     ---------
     
@@ -85,6 +97,8 @@ TDB  Jimmy Dee  <jgvdthree@gmail.com>
 
     Demo app
     --------
+
+    New Swift demo app with the same content as the Objective-C app.
 
     "Spin" music player demo uses the knob control to simulate a record player you can rewind and
     fast forward with your finger.
