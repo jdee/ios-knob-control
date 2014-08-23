@@ -26,6 +26,9 @@
 @property (nonatomic) IBOutlet UIProgressView* trackProgress;
 @property (nonatomic) IBOutlet UIToolbar* toolbar;
 
+- (IBAction)play:(UIBarButtonItem*)sender;
+- (IBAction)pause:(UIBarButtonItem*)sender;
+
 - (IBAction)selectTrack:(UIButton*)sender;
 
 @end

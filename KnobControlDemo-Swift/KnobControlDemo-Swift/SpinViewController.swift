@@ -103,23 +103,24 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         addLoadingView()
 
         let picker = MPMediaPickerController(mediaTypes: .AnyAudio)
-        picker.allowsPickingMultipleItems = false
+        picker.allowsPickingMultipleItems = true
         picker.delegate = self
-        picker.prompt = "Select a track"
+        picker.prompt = "Select track(s)"
         presentViewController(picker, animated: true, completion: nil)
     }
 
-    @IBAction func togglePlayState(sender: UIBarButtonItem!) {
-        if musicPlayer.nowPlayingItem != nil {
-            if musicPlayer.playbackState == MPMusicPlaybackState.Paused || musicPlayer.playbackState == MPMusicPlaybackState.Stopped {
-                musicPlayer.currentPlaybackTime = currentPlaybackTime;
-                musicPlayer.play()
-                updateMusicPlayer(.Playing)
-            }
-            else if musicPlayer.playbackState == .Playing {
-                musicPlayer.pause()
-                updateMusicPlayer(.Paused)
-            }
+    @IBAction func play(sender: UIBarButtonItem!) {
+        if musicPlayer.playbackState != .Playing {
+            musicPlayer.currentPlaybackTime = currentPlaybackTime;
+            musicPlayer.play()
+            updateMusicPlayer(.Playing)
+        }
+    }
+
+    @IBAction func pause(sender: UIBarButtonItem!) {
+        if musicPlayer.playbackState != .Paused {
+            musicPlayer.pause()
+            updateMusicPlayer(.Paused)
         }
     }
 
@@ -294,10 +295,10 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         volumeItem.width = width
 
         if musicPlayer.nowPlayingItem == nil || playbackState == .Playing {
-            toolbar.items = [ UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: "togglePlayState:"), volumeItem ]
+            toolbar.items = [ UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: "pause:"), volumeItem ]
         }
         else {
-            toolbar.items = [ UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: "togglePlayState:"), volumeItem ]
+            toolbar.items = [ UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: "play:"), volumeItem ]
         }
 
         if musicPlayer.nowPlayingItem == nil {
@@ -351,12 +352,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         displayLink.paused = playbackState != .Playing
 
         #if VERBOSE
-            if playbackState == .Playing {
-            NSLog("Current playback state: playing")
-            }
-            else {
-            NSLog("Current playback state: not playing")
-            }
+            NSLog("Current playback state: \(examinePlaybackState(playbackState))")
         #endif
 
         updateSelectedItem()
@@ -387,7 +383,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
             /*
             * Is this ever really possible with the iPod player (no nowPlayingItem)?
             */
-            iTunesButton.setTitle("Select iTunes track", forState: .Normal)
+            iTunesButton.setTitle("Select iTunes track(s)", forState: .Normal)
             displayLink.paused = true
             knobControl.enabled = false
             knobControl.foregroundImage = nil
@@ -395,6 +391,23 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
             updateLabel(trackLengthLabel, withTime: 0)
             updateLabel(trackProgressLabel, withTime: 0)
             updateProgress()
+        }
+    }
+
+    func examinePlaybackState(playbackState: MPMusicPlaybackState) -> String {
+        switch (playbackState) {
+        case .Playing:
+            return "Playing"
+        case .Paused:
+            return "Paused"
+        case .Interrupted:
+            return "Interrupted"
+        case .SeekingBackward:
+            return "SeekingBackward"
+        case .SeekingForward:
+            return "SeekingForward"
+        case .Stopped:
+            return "Stopped"
         }
     }
 }

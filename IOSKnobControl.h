@@ -151,7 +151,7 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  * Initialize the control with a specific knob image for the UIControlStateNormal state.
  *
  * The image used will be [UIImage imageNamed:imageSetName]. The image will be selected appropriately for the screen density
- * from the specified image set in the application's asset catalog named imageSetName.
+ * from the image set named imageSetName in the application's asset catalog.
  * @param frame the initial frame for the control
  * @param imageSetName the name of an image set in the application's asset catalog
  */

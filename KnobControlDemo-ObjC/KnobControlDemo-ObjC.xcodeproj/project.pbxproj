@@ -385,6 +385,7 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
+					VERBOSE,
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -440,6 +441,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = "KnobControlDemo-ObjC/KnobControlDemo-ObjC-Info.plist";
 				PRODUCT_NAME = "KnobControlDemo-ObjC";
 				TARGETED_DEVICE_FAMILY = "1,2";

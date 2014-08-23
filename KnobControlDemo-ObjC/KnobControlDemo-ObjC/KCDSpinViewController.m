@@ -106,24 +106,26 @@
     [self addLoadingView];
 
     MPMediaPickerController* mediaPicker = [[MPMediaPickerController alloc] initWithMediaTypes:MPMediaTypeAnyAudio];
-    mediaPicker.allowsPickingMultipleItems = NO;
+    mediaPicker.allowsPickingMultipleItems = YES;
     mediaPicker.delegate = self;
     mediaPicker.prompt = @"Select a track";
     [self presentViewController:mediaPicker animated:YES completion:nil];
 }
 
-- (void)togglePlayState:(UIBarButtonItem*)sender
+- (void)play:(UIBarButtonItem *)sender
 {
-    if (musicPlayer.nowPlayingItem) {
-        if (musicPlayer.playbackState == MPMusicPlaybackStatePaused || musicPlayer.playbackState == MPMusicPlaybackStateStopped) {
-            musicPlayer.currentPlaybackTime = currentPlaybackTime;
-            [musicPlayer play];
-            [self updateMusicPlayer:MPMusicPlaybackStatePlaying];
-        }
-        else {
-            [musicPlayer pause];
-            [self updateMusicPlayer:MPMusicPlaybackStatePaused];
-        }
+    if (musicPlayer.playbackState != MPMusicPlaybackStatePlaying) {
+        musicPlayer.currentPlaybackTime = currentPlaybackTime;
+        [musicPlayer play];
+        [self updateMusicPlayer:MPMusicPlaybackStatePlaying];
+    }
+}
+
+- (void)pause:(UIBarButtonItem *)sender
+{
+    if (musicPlayer.playbackState != MPMusicPlaybackStatePaused) {
+        [musicPlayer pause];
+        [self updateMusicPlayer:MPMusicPlaybackStatePaused];
     }
 }
 
@@ -290,10 +292,10 @@
     volumeItem.width = width;
 
     if (!musicPlayer.nowPlayingItem || playbackState == MPMusicPlaybackStatePlaying) {
-        _toolbar.items = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(togglePlayState:)], volumeItem ];
+        _toolbar.items = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPause target:self action:@selector(pause:)], volumeItem ];
     }
     else {
-        _toolbar.items = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(togglePlayState:)], volumeItem ];
+        _toolbar.items = @[ [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(play:)], volumeItem ];
     }
 
     if (!musicPlayer.nowPlayingItem) {
@@ -341,6 +343,10 @@
     displayLink.paused = playbackState != MPMusicPlaybackStatePlaying;
     [self updateSelectedItem];
     [self setupToolbar:playbackState];
+
+#ifdef VERBOSE
+    NSLog(@"current playback state: %@", [self examinePlaybackState:playbackState]);
+#endif // VERBOSE
 }
 
 - (void)updateSelectedItem
@@ -372,6 +378,23 @@
         [self updateLabel:_trackProgressLabel withTime:0.0];
         [self updateLabel:_trackLengthLabel withTime:0.0];
         [self updateProgress];
+    }
+}
+
+- (NSString*)examinePlaybackState:(MPMusicPlaybackState)playbackState {
+    switch (playbackState) {
+        case MPMusicPlaybackStatePlaying:
+            return @"Playing";
+        case MPMusicPlaybackStatePaused:
+            return @"Paused";
+        case MPMusicPlaybackStateInterrupted:
+            return @"Interrupted";
+        case MPMusicPlaybackStateSeekingBackward:
+            return @"SeekingBackward";
+        case MPMusicPlaybackStateSeekingForward:
+            return @"SeekingForward";
+        case MPMusicPlaybackStateStopped:
+            return @"Stopped";
     }
 }
 
