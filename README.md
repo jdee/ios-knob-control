@@ -7,7 +7,7 @@ iOS Knob Control
 &nbsp;
 ![Rotary Dial](http://i.imgur.com/X7foOjx.png)
 &nbsp;
-![Months](http://i.imgur.com/7pDV55t.png)
+![Months](http://i.imgur.com/IUPMSMV.png)
 
 This is a generic, reusable knob control you can insert into any application.
 You may provide custom knob images or use the customizable default images.

@@ -151,6 +151,10 @@
         [maxControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
         maxControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
         maxControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
+
+        if ([imageTitle isEqualToString:@"teardrop"]) {
+            self.knobControl.knobRadius = 0.0;
+        }
     }
     else {
         /*
@@ -174,6 +178,8 @@
         [maxControl setImage:nil forState:UIControlStateDisabled];
         maxControl.backgroundImage = nil;
         maxControl.foregroundImage = nil;
+
+        self.knobControl.knobRadius = 0.475 * self.knobControl.bounds.size.width;
     }
 }
 

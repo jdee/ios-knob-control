@@ -1714,9 +1714,12 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     else if (_middleLayerShadowPath) {
         shadowLayer.shadowPath = _middleLayerShadowPath.CGPath;
     }
-    else {
+    else if (_knobRadius > 0.0) {
         // this will be the default shadow path for any external image that doesn't override the behavior, with _knobRadius == 0.5 * self.bounds.size.width
         shadowLayer.shadowPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(0.5*self.bounds.size.width, 0.5*self.bounds.size.height) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    }
+    else {
+        shadowLayer.shadowPath = NULL;
     }
 }
 
