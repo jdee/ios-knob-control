@@ -43,7 +43,7 @@
     self.knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds];
     self.knobControl.mode = IKCModeRotaryDial;
     self.knobControl.gesture = IKCGestureOneFingerRotation;
-    self.knobControl.shadowOpacity = 1.0; // Can be expensive
+    self.knobControl.shadowOpacity = 0.7;
     self.knobControl.clipsToBounds = NO;
     self.knobControl.drawsAsynchronously = YES;
 
