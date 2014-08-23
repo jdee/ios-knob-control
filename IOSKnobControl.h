@@ -112,9 +112,17 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  * value of shadowOffset. This allows you to supply the outline of the knob image in the stationary coordinate system
  * of the image, independent of rotation.)
  *
- * Since custom images are frequently circular, a circularShadowPathRadius property is also provided. Set this to provide
+ * Since custom images are frequently circular, a knobRadius property is also provided. Set this to provide
  * a circular shadow path of a given radius if using a circular knob image. Note that generated knob images in modes other
  * than IKCModeRotaryDial supply their own shadow paths.
+ *
+ * Setting an appropriate path for a custom rotary dial image is tedious and error-prone, so the control gives you some
+ * help. In IKCModeRotaryDial, whether or not you are using a custom image, if you do not set middleLayerShadowPath, the
+ * control will generate a shadow path with appropriate finger holes using the knobRadius, fingerHoleMargin
+ * and fingerHoleRadius properties. These are used when constructing a rotary dial image. They are also used to generate
+ * a shadow path for any custom image, so adjust them to match your image. Note that you cannot vary the angular positions
+ * of the numbers and finger holes in your custom images. The control judges which number was dialed by the angular
+ * position of the number, so those cannot vary.
  *
  * By default, shadowOpacity is 0. Set it to a positive value to turn on the default shadow.
  *
@@ -131,8 +139,7 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 /**
  * Inherited initializer
  *
- * Inherited from UIView and UIControl. No image is yet specified. Must subsequently call at least
- * setImage:forState: for the UIControlStateNormal state.
+ * Inherited from UIView and UIControl. No image specified.
  * @param frame the initial frame for the control
  */
 - (instancetype)initWithFrame:(CGRect)frame;
@@ -257,6 +264,29 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @property (nonatomic) UIImage* backgroundImage;
 
+/** Finger hole radius
+ *
+ * Specifies the radius, in points, of finger holes in a generated knob image in IKCModeRotaryDial and when generating a shadow path for rotary dial mode.
+ *
+ * When using a custom rotary dial image, set this to reflect the size of the finger holes in your image, along with knobRadius. An appropriate
+ * shadow path will be generated to match your dial image.
+ *
+ * Default is 22.
+ * @see knobRadius
+ */
+@property (nonatomic) CGFloat fingerHoleRadius;
+
+/** Finger hole margin
+ *
+ * Specifies the distance from a finger hole to the edge of the dial. The default value, given the default value of 22 for fingerHoleRadius and the initial frame,
+ * is such that the distance between adjacent finger holes is also equal to fingerHoleMargin. If you resize the control or change fingerHoleRadius, fingerHoleMargin
+ * does not adjust automatically; you have to set it manually.
+ * @see knobRadius
+ * @see fingerHoleRadius
+ * @see middleLayerShadowPath
+ */
+@property (nonatomic) CGFloat fingerHoleMargin;
+
 /** Font name for generated titles
  *
  * The font name to use when rendering text in the discrete modes, including rotary dial. Default is Helvetica. The font size is determined by the knob size and the number of positions.
@@ -274,65 +304,24 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @property (nonatomic) UIImage* foregroundImage;
 
-/** Shadow opacity
+/** Knob radius
  *
- * Passed to the CALayer shadowOpacity property for the middle and foreground layers. Default is 0.
- */
-@property (nonatomic) CGFloat shadowOpacity;
-
-/** Shadow offset
- *
- * Passed to the CALayer shadowOffset property for the middle and foreground layers. Default is CGSizeMake(0, 3), putting any shadow directly below the knob vertically.
- */
-@property (nonatomic) CGSize shadowOffset;
-
-/** Shadow color
- *
- * The CGColor property of this UIColor object is passed to the shadowColor property of the middle and foreground CALayers. Default is [UIColor blackColor].
- */
-@property (nonatomic) UIColor* shadowColor;
-
-/** Shadow blur radius
- *
- * Passed to the CALayer shadowRadius property for the middle and foreground layers. Default is 3.
- */
-@property (nonatomic) CGFloat shadowRadius;
-
-/** Middle layer shadow path
- *
- * If you are using a custom image with circular symmetry, you can greatly improve the performance of the knob control with a shadow by setting this property.
- * Use the circularShadowPathRadius property if your image is an opaque circle. Use this property if your knob image is, say, an annulus with a transparent center.
- * If the shadow path is not fixed, it has to be computed by the CALayer frame by frame, which is slow. If the circularShadowPathRadius property is set to a
- * positive value, this property is ignored. The control generates its own shadow paths for the knob images it generates in all modes but IKCModeRotaryDial,
- * unless this property is non-nil or the circularShadowPathRadius is greater than 0.
- * Default is nil.
- * @see circularShadowPathRadius
- */
-@property (nonatomic) UIBezierPath* middleLayerShadowPath;
-
-/** Foreground layer shadow path
- *
- * Since the foreground layer is stationary, this property is less useful, but it can have a small impact on performance. Set it to the outline of the opaque portion
- * of your custom foregroundImage. This can also override the automatically provided shadow path for the generated finger stop triangle in case that should seem
- * necessary.
- * Default is nil.
- * @see middleLayerShadowPath
- */
-@property (nonatomic) UIBezierPath* foregroundLayerShadowPath;
-
-/** Circular shadow path radius
+ * Used to generate knob images or shadow paths for custom images. Defaults to half the (square) view width in the initial frame.
  *
  * If set to a positive value, the middle layer will be provided with a circular shadow path of the specified radius, in points. The center of the path will be at
  * the center of the control. If you have a custom knob image like the one in the demo apps' Images.xcassets/disc.imageset, where an opaque circle is tangent to
- * the bounds of the image, set circularShadowPathRadius to half the width or height of the knob control. If your custom image does not reach the bounds of the image but has a
+ * the bounds of the image, set knobRadius to half the width or height of the knob control. If your custom image does not reach the bounds of the image but has a
  * transparent margin, set this value to less than half the width or height of the square knob control. You have to reset this value any time the knob control
  * resizes. This property takes precedence over the middleLayerShadowPath property and the default shadow paths generated by the control for its generated images
  * in all modes but IKCModeRotaryDial. If set to 0, this property is ignored, and the middleLayerShadowPath or the automatically generated shadow path will be
  * used instead.
- * Default is 0.
- * @see middleLayerShadowPath
+ *
+ * When using a custom rotary dial image, set this to reflect the size of the outer dial, along with fingerHoleMargin and fingerHoleRadius. An appropriate
+ * shadow path will be generated to match your dial image.
+ * @see fingerHoleMargin
+ * @see fingerHoleRadius
  */
-@property (nonatomic) CGFloat circularShadowPathRadius;
+@property (nonatomic) CGFloat knobRadius;
 
 /** Titles for generated knob in discrete modes
  *
@@ -394,6 +383,57 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  * @param state one of UIControlStateNormal, UIcontrolStateHighlighted, UIControlStateDisabled or UIControlStateSelected
  */
 - (void)setTitleColor:(UIColor*)color forState:(UIControlState)state;
+
+#pragma mark - Casting shadows
+/**
+ * @name Casting shadows
+ */
+
+/** Middle layer shadow path
+ *
+ * If you are using a custom image with circular symmetry, you can greatly improve the performance of the knob control with a shadow by setting this property.
+ * Use the knobRadius property if your image is an opaque circle. Use this property if your knob image is, say, an annulus with a transparent center.
+ * If the shadow path is not fixed, it has to be computed by the CALayer frame by frame, which is slow. If the knobRadius property is set to a
+ * positive value, this property is ignored. The control generates its own shadow paths for the knob images it generates in all modes but IKCModeRotaryDial,
+ * unless this property is non-nil or the knobRadius is greater than 0.
+ * Default is nil.
+ * @see knobRadius
+ */
+@property (nonatomic) UIBezierPath* middleLayerShadowPath;
+
+/** Foreground layer shadow path
+ *
+ * Since the foreground layer is stationary, this property is less useful, but it can have a small impact on performance. Set it to the outline of the opaque portion
+ * of your custom foregroundImage. This can also override the automatically provided shadow path for the generated finger stop triangle in case that should seem
+ * necessary.
+ * Default is nil.
+ * @see middleLayerShadowPath
+ */
+@property (nonatomic) UIBezierPath* foregroundLayerShadowPath;
+
+/** Shadow opacity
+ *
+ * Passed to the CALayer shadowOpacity property for the middle and foreground layers. Default is 0.
+ */
+@property (nonatomic) CGFloat shadowOpacity;
+
+/** Shadow offset
+ *
+ * Passed to the CALayer shadowOffset property for the middle and foreground layers. Default is CGSizeMake(0, 3), putting any shadow directly below the knob vertically.
+ */
+@property (nonatomic) CGSize shadowOffset;
+
+/** Shadow color
+ *
+ * The CGColor property of this UIColor object is passed to the shadowColor property of the middle and foreground CALayers. Default is [UIColor blackColor].
+ */
+@property (nonatomic) UIColor* shadowColor;
+
+/** Shadow blur radius
+ *
+ * Passed to the CALayer shadowRadius property for the middle and foreground layers. Default is 3.
+ */
+@property (nonatomic) CGFloat shadowRadius;
 
 #pragma mark - Accessing knob control state (position and index)
 

@@ -240,7 +240,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         knobControl.clipsToBounds = false
 
         // NOTE: This is an important optimization when using a custom circular image with a shadow.
-        knobControl.circularShadowPathRadius = 0.5 * knobControl.bounds.size.width
+        knobControl.knobRadius = 0.5 * knobControl.bounds.size.width
         knobHolder.addSubview(knobControl)
     }
 

@@ -218,7 +218,7 @@ class ContinuousViewController: BaseViewController, ImageChooser {
 
             if title == "knob" {
                 // NOTE: This is an important optimization when using a custom circular image with a shadow.
-                knobControl.circularShadowPathRadius = 0.475 * knobControl.bounds.size.width
+                knobControl.knobRadius = 0.475 * knobControl.bounds.size.width
             }
         }
         else {
@@ -240,7 +240,7 @@ class ContinuousViewController: BaseViewController, ImageChooser {
 
             knobControl.backgroundImage = nil
             knobControl.foregroundImage = nil
-            knobControl.circularShadowPathRadius = 0.0
+            knobControl.knobRadius = 0.0
         }
 
         // use the same foreground/background images (or nil) for the min and max knobs

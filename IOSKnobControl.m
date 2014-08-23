@@ -33,7 +33,7 @@
 // this should probably be IKC_MIN_FINGER_HOLE_RADIUS. the actual radius should be a property initialized to this value, and this min. value should be enforced.
 // but I'm reluctant to introduce a new property just for rotary dial mode, and I'm not sure whether it's really necessary. it would only be useful for very
 // large dials (on an iPad).
-#define IKC_FINGER_HOLE_RADIUS 22.0
+#define IKC_DEFAULT_FINGER_HOLE_RADIUS 22.0
 #define IKC_TITLE_MARGIN_RATIO 0.2
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
@@ -62,8 +62,9 @@ static int numberDialed(float position) {
     return number % 10;
 }
 
-static CGRect adjustFrame(CGRect frame) {
-    const float IKC_MINIMUM_DIMENSION = ceil(9.72 * IKC_FINGER_HOLE_RADIUS);
+// DEBT: Doesn't account for variable _fingerHoleMargin
+static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
+    const float IKC_MINIMUM_DIMENSION = ceil(9.72 * fingerHoleRadius);
     if (frame.size.width < IKC_MINIMUM_DIMENSION) frame.size.width = IKC_MINIMUM_DIMENSION;
     if (frame.size.height < IKC_MINIMUM_DIMENSION) frame.size.height = IKC_MINIMUM_DIMENSION;
 
@@ -464,6 +465,7 @@ static CGRect adjustFrame(CGRect frame) {
  */
 @property (readonly) float nearestPosition;
 @property (readonly) BOOL currentFillColorIsOpaque;
+@property (readonly) UIBezierPath* rotaryDialPath;
 @end
 
 @implementation IOSKnobControl {
@@ -534,10 +536,14 @@ static CGRect adjustFrame(CGRect frame) {
     _shadowColor = [UIColor blackColor];
     _shadowOpacity = 0.0;
     _shadowOffset = CGSizeMake(0.0, 3.0);
-    _circularShadowPathRadius = 0.0;
+    _knobRadius = 0.5 * self.bounds.size.width;
     _zoomTopTitle = YES;
     _zoomPointSize = 0.0;
     _drawsAsynchronously = NO;
+    _fingerHoleRadius = IKC_DEFAULT_FINGER_HOLE_RADIUS;
+
+    // Default margin is the same as the space between adjacent holes
+    _fingerHoleMargin = (_knobRadius - 4.86*_fingerHoleRadius)/2.93;
 
     rotating = NO;
     lastNumberDialed = _numberDialed = -1;
@@ -674,7 +680,7 @@ static CGRect adjustFrame(CGRect frame) {
 {
     if (_mode == IKCModeRotaryDial)
     {
-        frame = adjustFrame(frame);
+        frame = adjustFrame(frame, _fingerHoleRadius);
     }
     [super setFrame:frame];
     [self setNeedsLayout];
@@ -754,7 +760,7 @@ static CGRect adjustFrame(CGRect frame) {
         _circular = NO;
         _max = IKC_EPSILON;
         _min = -11.0*M_PI/6.0;
-        self.frame = adjustFrame(self.frame);
+        self.frame = adjustFrame(self.frame, _fingerHoleRadius);
         lastNumberDialed = 0;
     }
 }
@@ -970,9 +976,22 @@ static CGRect adjustFrame(CGRect frame) {
     [self setNeedsLayout];
 }
 
-- (void)setCircularShadowPathRadius:(CGFloat)circularShadowPathRadius
+- (void)setKnobRadius:(CGFloat)knobRadius
 {
-    _circularShadowPathRadius = circularShadowPathRadius;
+    _knobRadius = knobRadius;
+    [self setNeedsLayout];
+}
+
+- (void)setFingerHoleRadius:(CGFloat)fingerHoleRadius
+{
+    _fingerHoleRadius = fingerHoleRadius;
+    self.frame = adjustFrame(self.frame, _fingerHoleRadius);
+    [self setNeedsLayout];
+}
+
+- (void)setFingerHoleMargin:(CGFloat)fingerHoleMargin
+{
+    _fingerHoleMargin = fingerHoleMargin;
     [self setNeedsLayout];
 }
 
@@ -1119,6 +1138,31 @@ static CGRect adjustFrame(CGRect frame) {
     }
 
     return ((_max-_min)/_positions)*(positionIndex+0.5) + _min;
+}
+
+- (UIBezierPath *)rotaryDialPath
+{
+    UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
+
+    float const centerRadius = _knobRadius - _fingerHoleMargin - _fingerHoleRadius;
+
+    int j;
+    for (j=0; j<10; ++j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:_fingerHoleRadius startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
+    }
+    for (--j; j>=0; --j)
+    {
+        double centerAngle = M_PI_4 + j*M_PI/6.0;
+        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
+        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
+        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:_fingerHoleRadius startAngle:1.5*M_PI-centerAngle endAngle:M_PI_2-centerAngle clockwise:YES];
+    }
+
+    return path;
 }
 
 #pragma mark - Private Methods: Animation
@@ -1664,11 +1708,15 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)setDefaultMiddleLayerShadowPath
 {
-    if (_circularShadowPathRadius > 0.0) {
-        shadowLayer.shadowPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(0.5*self.bounds.size.width, 0.5*self.bounds.size.height) radius:_circularShadowPathRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    if (_mode == IKCModeRotaryDial && !_middleLayerShadowPath) {
+        shadowLayer.shadowPath = self.rotaryDialPath.CGPath;
+    }
+    else if (_middleLayerShadowPath) {
+        shadowLayer.shadowPath = _middleLayerShadowPath.CGPath;
     }
     else {
-        shadowLayer.shadowPath = _middleLayerShadowPath.CGPath;
+        // this will be the default shadow path for any external image that doesn't override the behavior, with _knobRadius == 0.5 * self.bounds.size.width
+        shadowLayer.shadowPath = [UIBezierPath bezierPathWithArcCenter:CGPointMake(0.5*self.bounds.size.width, 0.5*self.bounds.size.height) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     }
 }
 
@@ -1699,7 +1747,7 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)updateKnobWithMarkings
 {
-    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
 
@@ -1712,40 +1760,11 @@ static CGRect adjustFrame(CGRect frame) {
 
 - (void)updateRotaryDial
 {
-    float const dialRadius = 0.5 * self.bounds.size.width;
-    UIBezierPath* path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:dialRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO];
-
-    // this follows because the holes are positioned so that the margin between adjacent holes
-    // is the same as the margin between each hole and the rim of the dial. see the discussion
-    // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
-    // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
-    // must be at least 214x214.
-    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
-    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
-
-    int j;
-    for (j=0; j<10; ++j)
-    {
-        double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
-        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:M_PI_2-centerAngle endAngle:1.5*M_PI-centerAngle clockwise:YES];
-    }
-    for (--j; j>=0; --j)
-    {
-        double centerAngle = M_PI_4 + j*M_PI/6.0;
-        double centerX = self.bounds.size.width*0.5 + centerRadius * cos(centerAngle);
-        double centerY = self.bounds.size.height*0.5 - centerRadius * sin(centerAngle);
-        [path addArcWithCenter:CGPointMake(centerX, centerY) radius:IKC_FINGER_HOLE_RADIUS startAngle:1.5*M_PI-centerAngle endAngle:M_PI_2-centerAngle clockwise:YES];
-    }
+    UIBezierPath* path = self.rotaryDialPath;
 
     shapeLayer.path = path.CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
-
-    if (!shadowLayer.shadowPath) {
-        shadowLayer.shadowPath = path.CGPath;
-    }
 }
 
 - (void)updateDialNumbers
@@ -1757,8 +1776,8 @@ static CGRect adjustFrame(CGRect frame) {
     // in handleTap:. the radius of a finger hole is constant, 22 pts, for a 44 pt diameter,
     // the minimum size for a tap target. the minimum value of dialRadius is 107. the control
     // must be at least 214x214.
-    float const margin = (dialRadius - 4.86*IKC_FINGER_HOLE_RADIUS)/2.93;
-    float const centerRadius = dialRadius - margin - IKC_FINGER_HOLE_RADIUS;
+    float const margin = (dialRadius - 4.86*_fingerHoleRadius)/2.93;
+    float const centerRadius = dialRadius - margin - _fingerHoleRadius;
 
     CGFloat fontSize = 17.0;
     if ([UIFontDescriptor respondsToSelector:@selector(preferredFontDescriptorWithTextStyle:)]) {
@@ -1895,7 +1914,7 @@ static CGRect adjustFrame(CGRect frame) {
         float actual = _clockwise ? -position : position;
 
         // distance from the center to place the upper left corner
-        float radius = 0.45*self.bounds.size.width - 0.5*textSize.height;
+        float radius = _knobRadius - 0.5*textSize.height;
 
         // place and rotate
         layer.position = CGPointMake(self.bounds.origin.x + 0.5*self.bounds.size.width+radius*sin(actual), self.bounds.origin.y + 0.5*self.bounds.size.height-radius*cos(actual));
@@ -1962,7 +1981,7 @@ static CGRect adjustFrame(CGRect frame) {
 - (CAShapeLayer*)createKnobWithPip
 {
     shapeLayer = [CAShapeLayer layer];
-    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:self.bounds.size.width*0.45 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     shapeLayer.bounds = self.bounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
@@ -1980,7 +1999,7 @@ static CGRect adjustFrame(CGRect frame) {
     markings = nil;
 
     pipLayer = [CAShapeLayer layer];
-    pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.1) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+    pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.08) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
     pipLayer.bounds = self.bounds;
     pipLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     pipLayer.opaque = NO;
@@ -2099,7 +2118,7 @@ static CGRect adjustFrame(CGRect frame) {
  * rotate with the dial. There's no mechanism available to supply a shadowPath per frame or to say that the shadowPath should be animated.
  *
  * In some cases, like the rotary dialer, we make use of another sublayer of the middleLayer, the shadowLayer, which lies
- * directly behind the imageLayer. Whenever a shadow path is present (when using a generated knob, when circularShadowPathRadius > 0 or when
+ * directly behind the imageLayer. Whenever a shadow path is present (when using a generated knob, when knobRadius > 0 or when
  * middleLayerShadowPath is non-nil), the shadow path is assigned to the shadowLayer instead of the middleLayer, along with all the other shadow
  * properties with the exception of shadowOffset (shadowColor, shadowRadius, shadowOpacity). The shadowOffset property of the shadowLayer is CGSizeZero,
  * but its frame is offset from that of the imageLayer by the control's shadowOffset property, and its animations are synchronized with those of the
@@ -2107,7 +2126,7 @@ static CGRect adjustFrame(CGRect frame) {
  * independent of rotation. Use of the shadowPath greatly improves performance in this case.
  *
  * The shadowLayer requires a shadowPath for this to work, since it has no contents. The control can always supply the shadowPath for any knobs it
- * generates. When using a custom image, if the user has not set circularShadowPathRadius or middleLayerShadowPath, there is no shadowPath available,
+ * generates. When using a custom image, if the user has not set knobRadius or middleLayerShadowPath, there is no shadowPath available,
  * so the shadow has to be generated inefficiently by the middleLayer. In this case, the shadowOpacity, shadowColor, shadowRadius and shadowOffset are
  * all assigned to the middleLayer, and the shadowLayer is unused.
  *
@@ -2116,6 +2135,9 @@ static CGRect adjustFrame(CGRect frame) {
  */
 - (void)setupShadowLayer
 {
+    // should always have a shadow path with rotary dial
+    assert(shadowLayer.shadowPath || _mode != IKCModeRotaryDial);
+
     // Set by [self setDefaultMiddleLayerShadowPath]
     if (shadowLayer.shadowPath != NULL) {
         shadowLayer.shadowOffset = CGSizeZero;
