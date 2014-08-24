@@ -434,29 +434,6 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 
 @end
 
-#pragma mark - IKCAnimationDelegate
-/*
- * Used in dialNumber:. There doesn't seem to be an appropriate delegate protocol for CAAnimation. 
- * The animationDidStop:finished: message is
- * simply sent to the delegate object when the animation completes. This method could be in the knob control itself,
- * but the CAAnimation object retains its delegate. It seems likely that the removedOnCompletion flag should make
- * that retention harmless: the imageLayer will eventually release the animation, which in turn will release the
- * control. But this mechanism, using a weak reference to the knob control, avoids that assumption and keeps this
- * method out of the main class, which is a better design.
- */
-@interface IKCAnimationDelegate : NSObject
-@property (nonatomic, weak) IOSKnobControl* knobControl;
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag;
-@end
-
-@implementation IKCAnimationDelegate
-- (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
-{
-    if (flag == NO) return;
-    _knobControl.enabled = YES;
-}
-@end
-
 #pragma mark - IOSKnobControl implementation
 
 @interface IOSKnobControl()
@@ -466,6 +443,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 @property (readonly) float nearestPosition;
 @property (readonly) BOOL currentFillColorIsOpaque;
 @property (readonly) UIBezierPath* rotaryDialPath;
+@property (readonly) CGRect roundedBounds;
 @end
 
 @implementation IOSKnobControl {
@@ -1031,27 +1009,32 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     while (adjusted < 0) adjusted += 2.0*M_PI;
     double totalRotation = 2.0*farPosition - adjusted;
 
-    IKCAnimationDelegate* delegate = [[IKCAnimationDelegate alloc] init];
-    delegate.knobControl = self;
-
     self.enabled = NO;
-
-    [CATransaction new];
-    [CATransaction setDisableActions:YES];
-    imageLayer.transform = CATransform3DMakeRotation(0.0, 0, 0, 1);
-    _position = 0.0;
+    assert(shadowLayer.shadowPath || IKCModeRotaryDial != _mode);
+    assert(!_middleLayerShadowPath || IKCModeRotaryDial != _mode);
+    assert(middleLayer.shadowOpacity == 0.0 || IKCModeRotaryDial != _mode);
 
     CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.rotation.z"];
     animation.values = @[@(adjusted), @(farPosition), @(0.0)];
     animation.keyTimes = @[@(0.0), @((farPosition-adjusted)/totalRotation), @(1.0)];
     animation.duration = _timeScale / IKC_ROTARY_DIAL_ANGULAR_VELOCITY_AT_UNIT_TIME_SCALE * totalRotation;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
-    animation.delegate = delegate;
+
+    _position = 0.0;
+
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    [CATransaction setCompletionBlock:^{
+        self.enabled = YES;
+    }];
+
+    imageLayer.transform = CATransform3DMakeRotation(0.0, 0, 0, 1);
 
     [imageLayer addAnimation:animation forKey:nil];
+
     if (shadowLayer.shadowPath && _shadowOpacity > 0.0) {
         shadowLayer.transform = imageLayer.transform;
-        [shadowLayer addAnimation:animation forKey:nil];
+        [shadowLayer addAnimation:animation.copy forKey:nil];
     }
 
     [CATransaction commit];
@@ -1165,6 +1148,15 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     return path;
 }
 
+- (CGRect)roundedBounds
+{
+    CGRect bounds = self.bounds;
+    // round to the nearest integer point values
+    bounds.size.width = floor(self.bounds.size.width + 0.5);
+    bounds.size.height = floor(self.bounds.size.height + 0.5);
+    return bounds;
+}
+
 #pragma mark - Private Methods: Animation
 
 - (void)snapToNearestPosition
@@ -1254,14 +1246,14 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     float minDuration = fabsf(actual-current)/IKC_FAST_ANGULAR_VELOCITY;
     duration = MAX(minDuration, fabsf(duration));
 
-    [CATransaction new];
-    [CATransaction setDisableActions:YES];
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     animation.fromValue = @(current);
     animation.toValue = @(actual);
     animation.duration = duration;
     animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear];
 
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
     [imageLayer addAnimation:animation forKey:nil];
     imageLayer.transform = CATransform3DMakeRotation(actual, 0, 0, 1);
 
@@ -1543,7 +1535,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     assert(self.bounds.origin.x == 0);
     assert(self.bounds.origin.y == 0);
 
-    self.layer.bounds = self.bounds;
+    self.layer.bounds = self.roundedBounds;
     self.layer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
     /*
      * There is always a background layer. It may just have no contents and no
@@ -1556,7 +1548,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
         backgroundLayer.opaque = NO;
         [self.layer addSublayer:backgroundLayer];
     }
-    backgroundLayer.bounds = self.bounds;
+    backgroundLayer.bounds = self.roundedBounds;
     backgroundLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
 
     if (_backgroundImage)
@@ -1589,7 +1581,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
         middleLayer.opaque = NO;
         [self.layer addSublayer:middleLayer];
     }
-    middleLayer.bounds = self.bounds;
+    middleLayer.bounds = self.roundedBounds;
     middleLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
 
     /*
@@ -1602,8 +1594,9 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
         shadowLayer.backgroundColor = [UIColor clearColor].CGColor;
         [middleLayer addSublayer:shadowLayer];
     }
-    shadowLayer.bounds = middleLayer.bounds;
+    shadowLayer.bounds = self.roundedBounds;
     shadowLayer.position = CGPointMake(self.bounds.size.width * 0.5 + _shadowOffset.width, self.bounds.size.height * 0.5 + _shadowOffset.height);
+    shadowLayer.drawsAsynchronously = _drawsAsynchronously;
     [self setDefaultMiddleLayerShadowPath];
 
     UIImage* image = self.currentImage;
@@ -1634,14 +1627,14 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
         }
         [middleLayer addSublayer:imageLayer];
     }
-    imageLayer.bounds = self.bounds;
+    imageLayer.bounds = self.roundedBounds;
     imageLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
 
     if (_foregroundImage || _mode == IKCModeRotaryDial)
     {
         [foregroundLayer removeFromSuperlayer];
         foregroundLayer = [CALayer layer];
-        foregroundLayer.bounds = self.bounds;
+        foregroundLayer.bounds = self.roundedBounds;
         foregroundLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
         foregroundLayer.backgroundColor = [UIColor clearColor].CGColor;
         foregroundLayer.opaque = NO;
@@ -1734,8 +1727,9 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 - (void)updateControlState
 {
     if (self.currentImage) {
-        imageLayer.contents = (id)self.currentImage.CGImage;
-        [self setDefaultMiddleLayerShadowPath];
+        if (imageLayer.contents != (id)self.currentImage.CGImage) {
+            imageLayer.contents = (id)self.currentImage.CGImage;
+        }
     }
     else {
         shapeLayer.fillColor = self.currentFillColor.CGColor;
@@ -1751,7 +1745,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 - (void)updateKnobWithMarkings
 {
     shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-    shapeLayer.bounds = self.bounds;
+    shapeLayer.bounds = self.roundedBounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
 
     if (!shadowLayer.shadowPath) {
@@ -1766,7 +1760,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     UIBezierPath* path = self.rotaryDialPath;
 
     shapeLayer.path = path.CGPath;
-    shapeLayer.bounds = self.bounds;
+    shapeLayer.bounds = self.roundedBounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
 }
 
@@ -1985,7 +1979,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 {
     shapeLayer = [CAShapeLayer layer];
     shapeLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-    shapeLayer.bounds = self.bounds;
+    shapeLayer.bounds = self.roundedBounds;
     shapeLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
     shapeLayer.opaque = NO;
@@ -2003,7 +1997,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 
     pipLayer = [CAShapeLayer layer];
     pipLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width*0.5, self.bounds.size.height*0.08) radius:self.bounds.size.width*0.03 startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
-    pipLayer.bounds = self.bounds;
+    pipLayer.bounds = self.roundedBounds;
     pipLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
     pipLayer.opaque = NO;
     pipLayer.backgroundColor = [UIColor clearColor].CGColor;
@@ -2093,7 +2087,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     stopLayer = [CAShapeLayer layer];
     stopLayer.path = path.CGPath;
     stopLayer.position = CGPointMake(self.bounds.origin.x + self.bounds.size.width * 0.5, self.bounds.origin.y + self.bounds.size.height * 0.5);
-    stopLayer.bounds = self.bounds;
+    stopLayer.bounds = self.roundedBounds;
     stopLayer.backgroundColor = [UIColor clearColor].CGColor;
     stopLayer.opaque = NO;
 
@@ -2126,7 +2120,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
  * properties with the exception of shadowOffset (shadowColor, shadowRadius, shadowOpacity). The shadowOffset property of the shadowLayer is CGSizeZero,
  * but its frame is offset from that of the imageLayer by the control's shadowOffset property, and its animations are synchronized with those of the
  * imageLayer. The shadowLayer has no contents of its own. It just generates a shadow that rotates with the knob at a constant offset from the knob,
- * independent of rotation. Use of the shadowPath greatly improves performance in this case.
+ * independent of rotation. Use of the shadowPath in the shadowLayer greatly improves performance.
  *
  * The shadowLayer requires a shadowPath for this to work, since it has no contents. The control can always supply the shadowPath for any knobs it
  * generates. When using a custom image, if the user has not set knobRadius or middleLayerShadowPath, there is no shadowPath available,
