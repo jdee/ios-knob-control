@@ -1627,14 +1627,19 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 
         imageLayer.contents = (id)image.CGImage;
 
-        if (_masksImage && _knobRadius > 0.0) {
+        if (_masksImage && (_middleLayerShadowPath || _knobRadius > 0.0)) {
             CAShapeLayer* maskLayer = [CAShapeLayer layer];
             maskLayer.opaque = NO;
             maskLayer.backgroundColor = [UIColor clearColor].CGColor;
             maskLayer.bounds = self.roundedBounds;
             maskLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
             maskLayer.fillColor = [UIColor blackColor].CGColor;
-            maskLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+            if (_middleLayerShadowPath) {
+                maskLayer.path = _middleLayerShadowPath.CGPath;
+            }
+            else {
+                maskLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+            }
 
             imageLayer.mask = maskLayer;
         }

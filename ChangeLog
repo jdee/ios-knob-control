@@ -76,7 +76,7 @@ TDB  Jimmy Dee  <jgvdthree@gmail.com>
     CGFloat fingerHoldRadius
     CGFloat knobRadius
 
-    BOOL masksImage: Whether to mask the image to a circle of knobRadius.
+    BOOL masksImage: Whether to mask the image to a circle or specified path.
 
     BOOL normalized: Whether to limit the position property to (-π, π]. Only available when
     circular == YES.

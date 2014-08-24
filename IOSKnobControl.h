@@ -325,7 +325,8 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 
 /** Mask image flag
  * 
- * Ignored when no image is present. If YES, the current image is masked to a circle whose radius is knobRadius. If NO, no mask is performed. Default is NO.
+ * Ignored when no image is present. If set to YES, the current image may be masked. If the middleLayerShadowPath is set, the image is masked to that path. Otherwise, the image is masked to a circle whose radius is knobRadius.
+ * If middleLayerShadowPath is nil and knobRadius is 0 or masksImage is set to NO, no mask is performed. Default is NO.
  */
 @property (nonatomic) BOOL masksImage;
 
