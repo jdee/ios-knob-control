@@ -234,6 +234,7 @@
     self.knobControl.enabled = NO;
     self.knobControl.shadowOpacity = 1.0;
     self.knobControl.clipsToBounds = NO;
+    self.knobControl.masksImage = YES;
 
     // NOTE: This is an important optimization when using a custom circular image with a shadow.
     self.knobControl.knobRadius = 0.5 * self.knobControl.bounds.size.width;
@@ -378,6 +379,16 @@
         NSString* title = musicPlayer.nowPlayingItem.title;
         NSString* artist = musicPlayer.nowPlayingItem.artist;
         [_iTunesButton setTitle:[NSString stringWithFormat:@"%@ - %@", artist, title] forState:UIControlStateNormal];
+
+        [self.knobControl setImage:[UIImage imageNamed:@"disc"] forState:UIControlStateNormal];
+
+        MPMediaItemArtwork* artwork = musicPlayer.nowPlayingItem.artwork;
+        if (artwork) {
+            UIImage* image = [artwork imageWithSize:self.knobControl.bounds.size];
+            if (image) {
+                [self.knobControl setImage:image forState:UIControlStateNormal];
+            }
+        }
 
         self.knobControl.enabled = YES;
         self.knobControl.position = IKC_33RPM_ANGULAR_VELOCITY * currentPlaybackTime;

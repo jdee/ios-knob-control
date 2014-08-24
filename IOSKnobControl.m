@@ -519,6 +519,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     _zoomPointSize = 0.0;
     _drawsAsynchronously = NO;
     _fingerHoleRadius = IKC_DEFAULT_FINGER_HOLE_RADIUS;
+    _masksImage = NO;
 
     // Default margin is the same as the space between adjacent holes
     _fingerHoleMargin = (_knobRadius - 4.86*_fingerHoleRadius)/2.93;
@@ -973,6 +974,12 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     [self setNeedsLayout];
 }
 
+- (void)setMasksImage:(BOOL)maskImage
+{
+    _masksImage = maskImage;
+    [self setNeedsLayout];
+}
+
 - (void)tintColorDidChange
 {
     [self setNeedsLayout];
@@ -1034,7 +1041,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 
     if (shadowLayer.shadowPath && _shadowOpacity > 0.0) {
         shadowLayer.transform = imageLayer.transform;
-        [shadowLayer addAnimation:animation.copy forKey:nil];
+        [shadowLayer addAnimation:animation forKey:nil];
     }
 
     [CATransaction commit];
@@ -1619,6 +1626,18 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
         }
 
         imageLayer.contents = (id)image.CGImage;
+
+        if (_masksImage && _knobRadius > 0.0) {
+            CAShapeLayer* maskLayer = [CAShapeLayer layer];
+            maskLayer.opaque = NO;
+            maskLayer.backgroundColor = [UIColor clearColor].CGColor;
+            maskLayer.bounds = self.roundedBounds;
+            maskLayer.position = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
+            maskLayer.fillColor = [UIColor blackColor].CGColor;
+            maskLayer.path = [UIBezierPath bezierPathWithArcCenter:CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5) radius:_knobRadius startAngle:0.0 endAngle:2.0*M_PI clockwise:NO].CGPath;
+
+            imageLayer.mask = maskLayer;
+        }
     }
     else {
         [imageLayer removeFromSuperlayer];

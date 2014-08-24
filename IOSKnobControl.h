@@ -323,6 +323,12 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  */
 @property (nonatomic) CGFloat knobRadius;
 
+/** Mask image flag
+ * 
+ * Ignored when no image is present. If YES, the current image is masked to a circle whose radius is knobRadius. If NO, no mask is performed. Default is NO.
+ */
+@property (nonatomic) BOOL masksImage;
+
 /** Titles for generated knob in discrete modes
  *
  * Only used when no image is provided in a discrete mode. These titles are rendered around the knob for each position index. If this property is nil (the default), the position

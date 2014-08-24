@@ -71,6 +71,13 @@ TDB  Jimmy Dee  <jgvdthree@gmail.com>
 
     NSString* fontName: The font name to use for titles in the discrete modes.
 
+    Used to configure generated images and shadow paths for custom images:
+    CGFloat fingerHoleMargin
+    CGFloat fingerHoldRadius
+    CGFloat knobRadius
+
+    BOOL masksImage: Whether to mask the image to a circle of knobRadius.
+
     BOOL normalized: Whether to limit the position property to (-π, π]. Only available when
     circular == YES.
 
@@ -81,7 +88,6 @@ TDB  Jimmy Dee  <jgvdthree@gmail.com>
     CGFloat shadowRadius
     UIBezierPath* foregroundLayerShadowPath
     UIBezierPath* middleLayerShadowPath
-    CGFloat circularShadowPathRadius
 
     CGFloat zoomPointSize: The size to which to increase the top title of a generated knob.
     BOOL zoomTopTitle: Whether to increase the top title of the knob if it is below a certain size.

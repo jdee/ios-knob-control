@@ -1,7 +1,7 @@
 iOS Knob Control
 ================
 
-![Spin](http://i.imgur.com/Kgbmk7q.png)
+![Spin](http://i.imgur.com/S4nydoP.png)
 &nbsp;
 ![Continuous](http://i.imgur.com/5rGuswG.png)
 &nbsp;

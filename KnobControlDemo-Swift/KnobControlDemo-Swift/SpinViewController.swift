@@ -238,6 +238,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         knobControl.setImage(UIImage(named:"disc-disabled"), forState: .Disabled)
         knobControl.shadowOpacity = 1.0
         knobControl.clipsToBounds = false
+        knobControl.masksImage = true
 
         // NOTE: This is an important optimization when using a custom circular image with a shadow.
         knobControl.knobRadius = 0.5 * knobControl.bounds.size.width
@@ -387,6 +388,16 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
             let trackName = musicPlayer.nowPlayingItem.title
             let artist = musicPlayer.nowPlayingItem.artist
             iTunesButton.setTitle(String(format: "%@ - %@", artist, trackName), forState: .Normal)
+
+            knobControl.setImage(UIImage(named: "disc"), forState: .Normal)
+
+            let artwork = musicPlayer.nowPlayingItem.artwork
+            if artwork != nil {
+                let image = artwork.imageWithSize(knobControl.bounds.size)
+                if image != nil {
+                    knobControl.setImage(image, forState: .Normal)
+                }
+            }
 
             knobControl.enabled = true
             knobControl.position = angularVelocity * Float(currentPlaybackTime)

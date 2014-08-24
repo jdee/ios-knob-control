@@ -67,6 +67,8 @@
 	
 	<option value="//api/name/knobRadius">&nbsp;&nbsp;&nbsp;&nbsp;knobRadius</option>
 	
+	<option value="//api/name/masksImage">&nbsp;&nbsp;&nbsp;&nbsp;masksImage</option>
+	
 	<option value="//api/name/max">&nbsp;&nbsp;&nbsp;&nbsp;max</option>
 	
 	<option value="//api/name/middleLayerShadowPath">&nbsp;&nbsp;&nbsp;&nbsp;middleLayerShadowPath</option>
@@ -193,6 +195,8 @@
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/gesture">gesture</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/knobRadius">knobRadius</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/masksImage">masksImage</a></span></li>
 	
 	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/max">max</a></span></li>
 	
@@ -481,6 +485,12 @@ of the numbers and finger holes in your custom images. The control judges which 
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/knobRadius">&nbsp;&nbsp;knobRadius</a></code>
+	</span>
+	<span class="task-item-suffix">property</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/masksImage">&nbsp;&nbsp;masksImage</a></code>
 	</span>
 	<span class="task-item-suffix">property</span>
 	
@@ -1339,6 +1349,49 @@ shadow path will be generated to match your dial image.</p>
 			
 		</ul>
 	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">IOSKnobControl.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/masksImage" title="masksImage"></a>
+	<h3 class="subsubtitle method-title">masksImage</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Mask image flag</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>@property (nonatomic) BOOL masksImage</code></div>
+
+    
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Mask image flag</p>
+
+<p>Ignored when no image is present. If YES, the current image is masked to a circle whose radius is <a href="#//api/name/knobRadius">knobRadius</a>. If NO, no mask is performed. Default is NO.</p>
+	</div>
+	
+	
+	
+	
 	
 	
 	
