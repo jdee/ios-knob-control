@@ -114,10 +114,8 @@
 
 - (void)pause:(UIBarButtonItem *)sender
 {
-    if (musicPlayer.playbackState != MPMusicPlaybackStatePaused) {
-        [musicPlayer pause];
-        [self updateMusicPlayer:MPMusicPlaybackStatePaused];
-    }
+    [musicPlayer pause];
+    [self updateMusicPlayer:MPMusicPlaybackStatePaused];
 }
 
 // --- implementation of Foregrounder protocol ---
