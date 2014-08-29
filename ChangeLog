@@ -36,33 +36,31 @@
     - Rotary dial demo with some poor images (as well as generated dial images).
     - Tap gesture option available in continuous and discrete demos.
     
-TDB  Jimmy Dee  <jgvdthree@gmail.com>
+2014-08-29  Jimmy Dee  <jgvdthree@gmail.com>
 
     * Version 1.3.0
-    
-    NOT YET RELEASED
-    
+
     New features
     ------------
 
-    This version improves support for Swift. This mainly means the mode and gesture enumeration
+    This version offers support for Swift. This mainly means the mode and gesture enumeration
     cases were renamed. The old names are still around with deprecation warnings. A full Swift
     demo app is now available with the same content as the Objective-C app.
-    
+
     The control can now cast shadows if so configured.
-    
+
     The control supports attributed strings for titles.
-    
+
     You can now configure the font name to use for titles (they are still automatically sized to
     fit). Titles will no longer be rendered above the configured Dynamic Type headline size on
     iOS 7+ (except when explicitly so configured with the zoomPointSize property, q.v.).
-    
+
     The title at the top of a discrete knob can be automatically increased in size if so configured.
-    
+
     The control can now be used in an unnormalized mode so that the position property does not
     jump from π to -π or vice versa. If circular is YES, the position will continue to increase or
     decrease without bound as the knob turns.
-    
+
     New properties
     --------------
 
@@ -94,18 +92,17 @@ TDB  Jimmy Dee  <jgvdthree@gmail.com>
 
     Bug fixes
     ---------
-    
+
     Fixed the knob animation so that it can now keep up with a fast finger.
-    
+
     The knob control now properly resizes itself.
-    
+
     Greatly improved text rendered by the knob in discrete and rotary dial modes.
 
-    Demo app
-    --------
+    Demo apps
+    ---------
 
     New Swift demo app with the same content as the Objective-C app.
 
     "Spin" music player demo uses the knob control to simulate a record player you can rewind and
     fast forward with your finger.
-    
