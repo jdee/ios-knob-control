@@ -107,10 +107,8 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
     }
 
     @IBAction func pause(sender: UIBarButtonItem!) {
-        if musicPlayer.playbackState != .Paused {
-            musicPlayer.pause()
-            updateMusicPlayer(.Paused)
-        }
+        musicPlayer.pause()
+        updateMusicPlayer(.Paused)
     }
 
     // MARK: Foregrounder protocol implementation
@@ -225,6 +223,34 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
     /*
      * MARK: Private convenience functions for DRYness, readability
      */
+
+    private var tonearmShadowPath: UIBezierPath {
+        get {
+            let path = UIBezierPath()
+
+            let circleCenter = CGPointMake(258.25, 26.75)
+
+            path.moveToPoint(CGPointMake(206, 225))
+            path.addLineToPoint(CGPointMake(227, 235.5))
+            path.addLineToPoint(CGPointMake(229, 229))
+            path.addLineToPoint(CGPointMake(236.5, 232.5))
+            path.addLineToPoint(CGPointMake(238, 229))
+            path.addLineToPoint(CGPointMake(230, 224))
+            path.addLineToPoint(CGPointMake(236, 201))
+            path.addLineToPoint(CGPointMake(249, 167.5))
+            path.addLineToPoint(CGPointMake(259, 45.5))
+            path.addArcWithCenter(circleCenter, radius: 18.76, startAngle: -1.5308, endAngle: 1.5308, clockwise: false)
+            path.addLineToPoint(CGPointMake(263, 2))
+            path.addLineToPoint(CGPointMake(257.5, 2))
+            path.addLineToPoint(CGPointMake(257.5, 8))
+            path.addArcWithCenter(circleCenter, radius: 18.76, startAngle: 1.6108, endAngle: 4.673, clockwise: false)
+            path.addLineToPoint(CGPointMake(243.5, 166))
+            path.addLineToPoint(CGPointMake(229, 197.5))
+            path.addLineToPoint(CGPointMake(226, 196))
+            path.closePath()
+            return path
+        }
+    }
 
     private func createKnobControl() {
         // use UIImage(named: "disc") for the .Normal state
@@ -402,6 +428,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
             knobControl.enabled = true
             knobControl.position = angularVelocity * Float(currentPlaybackTime)
             knobControl.foregroundImage = UIImage(named: "tonearm")
+            knobControl.foregroundLayerShadowPath = tonearmShadowPath
         }
         else {
             iTunesButton.setTitle("Select iTunes track(s)", forState: .Normal)

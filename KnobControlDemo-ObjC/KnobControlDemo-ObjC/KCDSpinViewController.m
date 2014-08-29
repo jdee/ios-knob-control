@@ -23,6 +23,7 @@
 
 @interface KCDSpinViewController ()
 @property (nonatomic) KCDAppDelegate* appDelegate;
+@property (nonatomic, readonly) UIBezierPath* tonearmShadowPath;
 @end
 
 /*
@@ -224,6 +225,38 @@
 
 #pragma mark - Private methods
 
+- (UIBezierPath*)tonearmShadowPath
+{
+    /*
+     * These numbers are copied from the Swift demo, but the record image is a bit smaller here for the
+     * benefit of iOS 6. So:
+     */
+    CGFloat const scale = 256.0/280.0;
+
+    UIBezierPath* path = [UIBezierPath bezierPath];
+    CGPoint circleCenter = CGPointMake(258.25 * scale, 26.75 * scale);
+    [path moveToPoint:CGPointMake(206 * scale, 225 * scale)];
+    [path addLineToPoint:CGPointMake(227 * scale, 235.5 * scale)];
+    [path addLineToPoint:CGPointMake(229 * scale, 229 * scale)];
+    [path addLineToPoint:CGPointMake(236.5 * scale, 232.5 * scale)];
+    [path addLineToPoint:CGPointMake(238 * scale, 229 * scale)];
+    [path addLineToPoint:CGPointMake(230 * scale, 224 * scale)];
+    [path addLineToPoint:CGPointMake(236 * scale, 201 * scale)];
+    [path addLineToPoint:CGPointMake(249 * scale, 167.5 * scale)];
+    [path addLineToPoint:CGPointMake(259 * scale, 45.5 * scale)];
+    [path addArcWithCenter:circleCenter radius:18.76 * scale startAngle:-1.5308 endAngle:1.5308 clockwise:NO];
+    [path addLineToPoint:CGPointMake(263 * scale, 2 * scale)];
+    [path addLineToPoint:CGPointMake(257.5 * scale, 2 * scale)];
+    [path addLineToPoint:CGPointMake(257.5 * scale, 8 * scale)];
+    [path addArcWithCenter:circleCenter radius:18.75 * scale startAngle:1.6108 endAngle:4.673 clockwise:NO];
+    [path addLineToPoint:CGPointMake(243.5 * scale, 166 * scale)];
+    [path addLineToPoint:CGPointMake(229 * scale, 197.5 * scale)];
+    [path addLineToPoint:CGPointMake(226 * scale, 196 * scale)];
+    [path closePath];
+
+    return path;
+}
+
 - (void)createKnobControl
 {
     self.knobControl = [[IOSKnobControl alloc] initWithFrame:_knobHolder.bounds imageNamed:@"disc"];
@@ -393,6 +426,7 @@
         self.knobControl.enabled = YES;
         self.knobControl.position = IKC_33RPM_ANGULAR_VELOCITY * currentPlaybackTime;
         self.knobControl.foregroundImage = [UIImage imageNamed:@"tonearm"];
+        self.knobControl.foregroundLayerShadowPath = self.tonearmShadowPath;
     }
     else {
         [_iTunesButton setTitle:@"select iTunes track" forState:UIControlStateNormal];

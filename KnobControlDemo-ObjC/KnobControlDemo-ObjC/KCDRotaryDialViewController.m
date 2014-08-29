@@ -18,7 +18,7 @@
 #import "KCDRotaryDialViewController.h"
 
 @interface KCDRotaryDialViewController()
-@property (nonatomic) UIBezierPath* dialStopShadowPath;
+@property (nonatomic, readonly) UIBezierPath* dialStopShadowPath;
 @end
 
 /*
