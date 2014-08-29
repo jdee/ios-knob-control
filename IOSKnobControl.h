@@ -412,9 +412,9 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
 
 /** Foreground layer shadow path
  *
- * Since the foreground layer is stationary, this property is less useful, but it can have a small impact on performance. Set it to the outline of the opaque portion
- * of your custom foregroundImage. This can also override the automatically provided shadow path for the generated finger stop triangle in case that should seem
- * necessary.
+ * Though the foreground layer is stationary, this property is just as important to performance as the middleLayerShadowPath when using a custom foreground
+ * image. Set it to the outline of the opaque portion of your custom foregroundImage. This can also override the automatically provided shadow path for the
+ * generated finger stop triangle in case that should seem necessary.
  * Default is nil.
  * @see middleLayerShadowPath
  */

@@ -17,6 +17,10 @@
 #import "KCDImageViewController.h"
 #import "KCDRotaryDialViewController.h"
 
+@interface KCDRotaryDialViewController()
+@property (nonatomic) UIBezierPath* dialStopShadowPath;
+@end
+
 /*
  * This demo exercises the knob control's IKCModeRotaryDial mode. The size of the control
  * limits the size of the finger holes in the control, so in this mode it's recommended
@@ -133,6 +137,8 @@
         [self.knobControl setImage:[UIImage imageNamed:[NSString stringWithFormat:@"%@-disabled", imageTitle]] forState:UIControlStateDisabled];
         self.knobControl.backgroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-background", imageTitle]];
         self.knobControl.foregroundImage = [UIImage imageNamed:[NSString stringWithFormat:@"%@-foreground", imageTitle]];
+
+        self.knobControl.foregroundLayerShadowPath = self.dialStopShadowPath;
     }
     else {
         [self.knobControl setImage:nil forState:UIControlStateNormal];
@@ -141,6 +147,35 @@
         self.knobControl.backgroundImage = nil;
         self.knobControl.foregroundImage = nil;
     }
+}
+
+- (UIBezierPath*)dialStopShadowPath
+{
+    float const stopWidth = 0.05;
+
+    // the stop is an isosceles triangle at 4:00 (-M_PI/6) pointing inward radially.
+
+    // the near point is the point nearest the center of the dial, at the edge of the
+    // outer tap ring. (see handleTap: for where the 0.586 comes from.)
+
+    float nearX = self.knobControl.bounds.size.width*0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.5);
+    float nearY = self.knobControl.bounds.size.height*0.5 * (1.0 + 0.586 * 0.5);
+
+    // the opposite edge is tangent to the perimeter of the dial. the width of the far side
+    // is stopWidth * self.frame.size.height * 0.5.
+
+    float upperEdgeX = self.knobControl.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 + stopWidth * 0.5);
+    float upperEdgeY = self.knobControl.bounds.size.height*0.5 * (1.0 + 0.5 - stopWidth * sqrt(3.0)*0.5);
+
+    float lowerEdgeX = self.knobControl.bounds.size.width*0.5 * (1.0 + sqrt(3.0) * 0.5 - stopWidth * 0.5);
+    float lowerEdgeY = self.knobControl.bounds.size.height*0.5 * (1.0 + 0.5 + stopWidth * sqrt(3.0)*0.5);
+
+    UIBezierPath* path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(nearX, nearY)];
+    [path addLineToPoint:CGPointMake(lowerEdgeX, lowerEdgeY)];
+    [path addLineToPoint:CGPointMake(upperEdgeX, upperEdgeY)];
+    [path closePath];
+    return path;
 }
 
 @end

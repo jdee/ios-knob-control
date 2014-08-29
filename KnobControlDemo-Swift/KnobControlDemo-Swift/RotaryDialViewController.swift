@@ -143,6 +143,7 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
             knobControl.setImage(UIImage(named: "\(title)-disabled"), forState: .Disabled)
             knobControl.backgroundImage = UIImage(named: "\(title)-background")
             knobControl.foregroundImage = UIImage(named: "\(title)-foreground")
+            knobControl.foregroundLayerShadowPath = dialStopShadowPath
         }
         else {
             // use the default, generated images if (none) selected
@@ -153,5 +154,38 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
             knobControl.foregroundImage = nil
         }
     }
-}
 
+    private var dialStopShadowPath: UIBezierPath {
+        get {
+            let stopWidth: CGFloat = 0.05
+
+            // the stop is an isosceles triangle at 4:00 (-M_PI/6) pointing inward radially.
+
+            // the near point is the point nearest the center of the dial, at the edge of the
+            // outer tap ring. (see handleTap: for where the 0.586 comes from.)
+
+            let width = knobControl.bounds.size.width
+            let height = knobControl.bounds.size.height
+
+            let nearX = width * 0.5 * (1.0 + 0.586 * sqrt(3.0) * 0.5)
+            let nearY = height * 0.5 * (1.0 + 0.586 * 0.5)
+
+            // the opposite edge is tangent to the perimeter of the dial. the width of the far side
+            // is stopWidth * self.frame.size.height * 0.5.
+
+            let upperEdgeX = width * 0.5 * (1.0 + sqrt(3.0) * 0.5 + stopWidth * 0.5)
+            let upperEdgeY = height * 0.5 * (1.0 + 0.5 - stopWidth * sqrt(3.0) * 0.5)
+
+            let lowerEdgeX = width * 0.5 * (1.0 + sqrt(3.0) * 0.5 - stopWidth * 0.5)
+            let lowerEdgeY = height * 0.5 * (1.0 + 0.5 + stopWidth * sqrt(3.0) * 0.5)
+
+            let path = UIBezierPath()
+            path.moveToPoint(CGPointMake(nearX, nearY))
+            path.addLineToPoint(CGPointMake(lowerEdgeX, lowerEdgeY))
+            path.addLineToPoint(CGPointMake(upperEdgeX, upperEdgeY))
+            path.closePath()
+            return path
+        }
+    }
+
+}
