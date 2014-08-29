@@ -1,4 +1,5 @@
 /*
+ iOS Knob Control
  Copyright (c) 2013-14, Jimmy Dee
  All rights reserved.
 

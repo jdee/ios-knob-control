@@ -1,0 +1,11 @@
+#!/bin/sh
+
+#
+# Build documentation for the iOS Knob Control with appledoc:
+#
+
+# 1. As HTML in doc/html/index.html
+appledoc -o doc -p 'iOS Knob Control' -v '1.3.0' -c 'Jimmy Dee' --company-id technology.violation --no-create-docset -h --clean-output IOSKnobControl.h
+
+# 2. As an installed docset you can view with Xcode
+appledoc -p 'iOS Knob Control' -v '1.3.0' -c 'Jimmy Dee' --company-id technology.violation IOSKnobControl.h

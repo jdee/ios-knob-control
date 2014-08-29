@@ -85,6 +85,13 @@ Documentation
 All API documentation can be found in IOSKnobControl.h. Browsable HTML documentation generated from this source is
 checked into this repository in the doc/html subdirectory. See doc/html/index.html.
 
+### Appledoc
+
+The HTML documentation here is built with Appledoc. If you install Appledoc (from a distro like Homebrew or MacPorts
+or from source; see https://github.com/tomaz/appledoc#quick-install) you can use the build-appledoc script in this
+directory to update the HTML if it is out of date and install the documentation as a docset that you can view with
+XCode.
+
 Releases
 --------
 
