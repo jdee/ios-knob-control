@@ -107,7 +107,7 @@ class ContinuousViewController: BaseViewController, ImageChooser {
         updateKnobImages()
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if let imageVC = segue.destinationViewController as? ImageViewController {
             // set up image selection for this demo
             imageVC.delegate = self                           // arrange for imageChosen() to be called later

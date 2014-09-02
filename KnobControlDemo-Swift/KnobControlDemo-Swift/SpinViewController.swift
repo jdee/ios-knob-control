@@ -338,7 +338,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         }
 
         if musicPlayer.nowPlayingItem == nil {
-            let pauseButton = toolbar.items[0] as UIBarButtonItem
+            let pauseButton = toolbar.items![0] as UIBarButtonItem
             pauseButton.enabled = false
         }
     }

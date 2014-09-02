@@ -84,7 +84,7 @@ class RotaryDialViewController: BaseViewController, ImageChooser {
         numberLabel.text = "(number dialed)"
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if let imageVC = segue.destinationViewController as? ImageViewController {
             imageVC.delegate = self                    // arrange for imageChosen() to be called later
             imageVC.titles = [ "(none)", "telephone" ] // specify the images to use
