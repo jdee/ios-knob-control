@@ -432,9 +432,15 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         }
         else {
             iTunesButton.setTitle("Select iTunes track(s)", forState: .Normal)
-            displayLink.paused = true
-            knobControl.enabled = false
-            knobControl.foregroundImage = nil
+
+            if displayLink != nil {
+                displayLink.paused = true
+            }
+
+            if knobControl != nil {
+                knobControl.enabled = false
+                knobControl.foregroundImage = nil
+            }
 
             playbackOffset = 0
             updateLabel(trackLengthLabel, withTime: 0)
