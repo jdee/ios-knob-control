@@ -1,3 +1,38 @@
+Knobs in the App Store
+======================
+
+Dubsar
+------
+
+![Dubsar](http://i.imgur.com/KRwnpfX.png)
+
+[Dubsar](https://github.com/jdee/dubsar_ios) is an open-source dictionary app by the
+same author that supports different themes (fonts, color schemes). A knob is used to
+select themes within the app. The theme changes as the knob rotates, including the
+theming of the generated discrete knob itself.
+
+[Version 2.0](https://itunes.apple.com/us/app/dubsar/id453868483?mt=8) of Dubsar is
+available for free in the App Store.
+
+cpyn
+----
+
+![cpyn](http://i.imgur.com/NHTj8bb.png)
+
+cpyn is an audio-player app by the same author inspired by the Spin demo in the demo
+apps here. Unlike the demo here, cpyn provides an array of audio features like
+equalization and cross fading. It also allows you to play in reverse and scratch
+records as they play.
+
+Several generated continuous knobs appear in the header views to adjust the balance,
+playback rate and track delay. Unlike the demos here, the knob control is not used
+for the turntable, which is entirely built on OpenGL, not UIKit. Note the knob gesture
+setting for cpyn in the Settings app. The knobs here can use either one-finger rotation
+or a vertical pan gesture.
+
+[Version 1.0](https://itunes.apple.com/us/app/cpyn/id929721548?mt=8) of cpyn is
+available in the App Store.
+
 iOS Knob Control
 ================
 
