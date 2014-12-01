@@ -17,7 +17,7 @@ available for free in the App Store.
 cpyn
 ----
 
-![cpyn](https://i.imgur.com/ZiRwkZj.png)
+![cpyn](http://i.imgur.com/Ixqmkm1.png)
 
 cpyn is an audio-player app by the same author inspired by the Spin demo in the demo
 apps here. Unlike the demo here, cpyn provides an array of audio features like
