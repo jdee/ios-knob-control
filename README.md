@@ -30,8 +30,11 @@ for the turntable, which is entirely built on OpenGL, not UIKit. Note the knob g
 setting for cpyn in the Settings app. The knobs here can use either one-finger rotation
 or a vertical pan gesture.
 
-[Version 1.0](https://itunes.apple.com/us/app/cpyn/id929721548?mt=8) of cpyn is
+[Version 1.1](https://itunes.apple.com/us/app/cpyn/id929721548?mt=8) of cpyn is
 available in the App Store.
+
+Have an app in the App Store using this knob control? Get in touch, and I'll post your
+screenshot here.
 
 iOS Knob Control
 ================
