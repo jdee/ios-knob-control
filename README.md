@@ -11,27 +11,26 @@ same author that supports different themes (fonts, color schemes). A knob is use
 select themes within the app. The theme changes as the knob rotates, including the
 theming of the generated discrete knob itself.
 
-[Version 2.0](https://itunes.apple.com/us/app/dubsar/id453868483?mt=8) of Dubsar is
-available for free in the App Store.
+Dubsar is available for free on the [App Store.](https://itunes.apple.com/us/app/dubsar/id453868483?mt=8)
 
 cpyn
 ----
 
-![cpyn](http://i.imgur.com/Ixqmkm1.png)
+![cpyn audio settings](http://i.imgur.com/WnbyWvP.png)
+![cpyn cross feed settings](http://i.imgur.com/VYrcxFb.png)
+![cpyn reverb settings 1](http://i.imgur.com/zAdDiOB.png)
+![cpyn reverb settings 2](http://i.imgur.com/yICaI2W.png)
 
-cpyn is an audio-player app by the same author inspired by the Spin demo in the demo
+[cpyn](https://itunes.apple.com/us/app/cpyn/id929721548?mt=8) is an audio-player app by
+the same author inspired by the Spin tab in the demo
 apps here. Unlike the demo here, cpyn provides an array of audio features like
-equalization and cross fading. It also allows you to play in reverse and scratch
+equalization, reverb and cross fading. It also allows you to play in reverse and scratch
 records as they play.
 
-Several generated continuous knobs appear in the header views to adjust the balance,
-playback rate and track delay. Unlike the demos here, the knob control is not used
-for the turntable, which is entirely built on OpenGL, not UIKit. Note the knob gesture
-setting for cpyn in the Settings app. The knobs here can use either one-finger rotation
-or a vertical pan gesture.
-
-[Version 1.1](https://itunes.apple.com/us/app/cpyn/id929721548?mt=8) of cpyn is
-available in the App Store.
+Quite a few generated continuous knobs appear to adjust various audio settings. Unlike the
+demos here, the knob control is not used
+for the turntable, which is entirely built on OpenGL, not UIKit. Note that some settings
+support fine tuning via the vertical pan gesture vs. one-finger rotation.
 
 Have an app in the App Store using this knob control? Get in touch, and I'll post your
 screenshot here.
