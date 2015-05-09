@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     var foregrounder: Foregrounder?
 
-    func applicationDidBecomeActive(application: UIApplication!) {
+    func applicationDidBecomeActive(application: UIApplication) {
         foregrounder?.resumeFromBackground(self)
     }
 }

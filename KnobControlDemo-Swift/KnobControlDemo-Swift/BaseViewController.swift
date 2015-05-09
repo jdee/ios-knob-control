@@ -19,7 +19,7 @@ class BaseViewController: UIViewController, Foregrounder {
 
     var appDelegate : AppDelegate {
     get {
-        return UIApplication.sharedApplication().delegate as AppDelegate
+        return UIApplication.sharedApplication().delegate as! AppDelegate
     }
     }
 

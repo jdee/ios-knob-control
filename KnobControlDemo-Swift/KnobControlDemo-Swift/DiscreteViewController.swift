@@ -46,7 +46,7 @@ class DiscreteViewController: BaseViewController {
     var hexagonImage : UIImage {
     get {
         let suffix = clockwiseSwitch.on ? "cw" : "ccw"
-        return UIImage(named: "hexagon-\(suffix)")
+        return UIImage(named: "hexagon-\(suffix)")!
     }
     }
 
@@ -157,7 +157,18 @@ class DiscreteViewController: BaseViewController {
 
             for (index, title) in enumerate(titles) {
                 let textColor = UIColor(hue:CGFloat(index)/CGFloat(titles.count), saturation:1.0, brightness:1.0, alpha:1.0)
-                let attributed = NSAttributedString(string: title, attributes: [NSFontAttributeName: index % 2 == 0 ? font : italicFont, NSForegroundColorAttributeName: textColor])
+                let isOdd: Bool = index % 2 != 0
+                let currentFont = isOdd ? italicFont : font
+ 
+                /*
+                 * Not sure why the literal expression [NSFontAttributeName: currentFont, NSForegroundColorAttributeName: textColor]
+                 * is not working. But this does.
+                 */
+                var attributes = [NSObject: AnyObject]()
+                attributes[NSFontAttributeName] = currentFont
+                attributes[NSForegroundColorAttributeName] = textColor
+
+                let attributed = NSAttributedString(string: title, attributes: attributes)
                 attribTitles.append(attributed)
             }
             knobControl.titles = attribTitles

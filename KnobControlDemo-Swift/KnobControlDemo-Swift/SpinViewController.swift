@@ -74,7 +74,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updatePlaybackState", name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "updateCurrentTrack", name: MPMusicPlayerControllerNowPlayingItemDidChangeNotification, object: nil)
 
-        let appDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         appDelegate.foregrounder = self
     }
 
@@ -338,7 +338,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         }
 
         if musicPlayer.nowPlayingItem == nil {
-            let pauseButton = toolbar.items![0] as UIBarButtonItem
+            let pauseButton = toolbar.items![0] as! UIBarButtonItem
             pauseButton.enabled = false
         }
     }
