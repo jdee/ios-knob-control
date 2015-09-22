@@ -46,7 +46,7 @@ protocol ImageChooser : class {
  * top, where it is mest legible. Then she taps the Choose button, the model view controller
  * disappears, and the main view controller's imageChosen() method is called.
  */
-class ImageViewController: BaseViewController, Foregrounder {
+class ImageViewController: BaseViewController {
 
     // MARK: Storyboard Outlet
     @IBOutlet var knobHolder : UIView!
@@ -92,7 +92,7 @@ class ImageViewController: BaseViewController, Foregrounder {
         knobControl.fontName = "TrebuchetMS-Bold"
 
         // color set up
-        var titleColor = UIColor.blackColor()
+        let titleColor = UIColor.blackColor()
         knobControl.tintColor = UIColor.yellowColor()
 
         knobControl.setTitleColor(titleColor, forState: .Normal)
@@ -127,7 +127,7 @@ class ImageViewController: BaseViewController, Foregrounder {
         // The user has spoken
 
         // This looks enough like Obj-C at a glance to make me nervous.
-        var selected = titles[knobControl.positionIndex]
+        let selected = titles[knobControl.positionIndex]
         if selected == "(none)" {
             // note that the nil/unset value of imageTitle is mapped to the "(none)" entry
             imageTitle = nil

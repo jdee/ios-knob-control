@@ -5,13 +5,17 @@
     },
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "hexagon-ccw.png"
+      "filename" : "hexagon-ccw.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "hexagon-ccw@2x.png"
+      "filename" : "hexagon-ccw@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

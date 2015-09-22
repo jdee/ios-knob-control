@@ -18,6 +18,7 @@
 		7B3F7C14195D109000771BD8 /* ChangeLog in Resources */ = {isa = PBXBuildFile; fileRef = 7B3F7C12195D109000771BD8 /* ChangeLog */; };
 		7B5268731965DABF00732EA4 /* SpinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5268721965DABF00732EA4 /* SpinViewController.swift */; };
 		7B5268781965E8C300732EA4 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B5268771965E8C300732EA4 /* MediaPlayer.framework */; };
+		7B9698E01BB0F00500A327BC /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B9698DF1BB0F00500A327BC /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
 		7BAFFA7F195CDBC200C88446 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */; };
 		7BAFFA81195CDC1900C88446 /* ContinuousViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */; };
 		7BCAA9EA1993124B00B23F4F /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCAA9E91993124B00B23F4F /* BaseViewController.swift */; };
@@ -66,6 +67,7 @@
 		7B3F7C13195D109000771BD8 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		7B5268721965DABF00732EA4 /* SpinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinViewController.swift; sourceTree = "<group>"; };
 		7B5268771965E8C300732EA4 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		7B9698DF1BB0F00500A327BC /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		7BAFFA7E195CDBC200C88446 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		7BAFFA80195CDC1900C88446 /* ContinuousViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContinuousViewController.swift; sourceTree = "<group>"; };
 		7BCAA9E91993124B00B23F4F /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				7B5268711965CFCD00732EA4 /* View Controllers */,
 				7B25BDA7195B98E80060A1BA /* Main.storyboard */,
 				7B25BDAA195B98E80060A1BA /* Images.xcassets */,
+				7B9698DF1BB0F00500A327BC /* Launch Screen.storyboard */,
 				7B25BD9F195B98E80060A1BA /* Supporting Files */,
 			);
 			path = "KnobControlDemo-Swift";
@@ -227,7 +230,9 @@
 		7B25BD94195B98E80060A1BA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Your Organization";
 				TargetAttributes = {
 					7B25BD9B195B98E80060A1BA = {
@@ -265,6 +270,7 @@
 			files = (
 				7B25BDA9195B98E80060A1BA /* Main.storyboard in Resources */,
 				7B3F7C14195D109000771BD8 /* ChangeLog in Resources */,
+				7B9698E01BB0F00500A327BC /* Launch Screen.storyboard in Resources */,
 				7B25BDAB195B98E80060A1BA /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,6 +361,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -421,9 +428,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = "KnobControlDemo-Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "KnobControlDemo-Swift/KnobControlDemo-Swift-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -434,9 +442,10 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = "KnobControlDemo-Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "KnobControlDemo-Swift/KnobControlDemo-Swift-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -444,10 +453,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/KnobControlDemo-Swift.app/KnobControlDemo-Swift";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -455,6 +461,7 @@
 				INFOPLIST_FILE = "KnobControlDemo-SwiftTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				METAL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};
@@ -464,13 +471,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/KnobControlDemo-Swift.app/KnobControlDemo-Swift";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "KnobControlDemo-SwiftTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				METAL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.example.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 			};

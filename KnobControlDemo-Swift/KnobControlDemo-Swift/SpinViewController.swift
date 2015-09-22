@@ -119,7 +119,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
     // MARK: --- implementation of MPMediaPickerControllerDelegate protocol ---
 
-    func mediaPicker(mediaPicker: MPMediaPickerController!, didPickMediaItems mediaItemCollection: MPMediaItemCollection!) {
+    func mediaPicker(mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
         dismissViewControllerAnimated(true, completion: nil)
         loadingView.removeFromSuperview()
 
@@ -134,7 +134,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         updateMusicPlayer(.Playing)
     }
 
-    func mediaPickerDidCancel(mediaPicker: MPMediaPickerController!) {
+    func mediaPickerDidCancel(mediaPicker: MPMediaPickerController) {
         dismissViewControllerAnimated(true, completion: nil)
         loadingView.removeFromSuperview()
     }
@@ -210,7 +210,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
             musicPlayer.skipToPreviousItem()
             // NSLog("Skipping to previous item")
 
-            trackLength = musicPlayer.nowPlayingItem.playbackDuration
+            trackLength = musicPlayer.nowPlayingItem!.playbackDuration
             playbackOffset -= trackLength
             musicPlayer.currentPlaybackTime = currentPlaybackTime - playbackOffset
             updateSelectedItem()
@@ -338,7 +338,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
         }
 
         if musicPlayer.nowPlayingItem == nil {
-            let pauseButton = toolbar.items![0] as! UIBarButtonItem
+            let pauseButton = toolbar.items![0] 
             pauseButton.enabled = false
         }
     }
@@ -401,7 +401,7 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
     private func updateSelectedItem() {
         if musicPlayer.nowPlayingItem != nil {
-            trackLength = musicPlayer.nowPlayingItem.playbackDuration
+            trackLength = musicPlayer.nowPlayingItem!.playbackDuration
             // NSLog("Selected item duration is %f", trackLength)
             updateLabel(trackLengthLabel, withTime: trackLength)
 
@@ -411,15 +411,15 @@ class SpinViewController: BaseViewController, MPMediaPickerControllerDelegate {
 
             // NSLog("Updated selected item: %@: %f (%f - %f)/%f", musicPlayer.nowPlayingItem.title, musicPlayer.currentPlaybackTime, currentPlaybackTime, playbackOffset, trackLength)
 
-            let trackName = musicPlayer.nowPlayingItem.title
-            let artist = musicPlayer.nowPlayingItem.artist
-            iTunesButton.setTitle(String(format: "%@ - %@", artist, trackName), forState: .Normal)
+            let trackName = musicPlayer.nowPlayingItem!.title
+            let artist = musicPlayer.nowPlayingItem!.artist
+            iTunesButton.setTitle(String(format: "%@ - %@", artist!, trackName!), forState: .Normal)
 
             knobControl.setImage(UIImage(named: "disc"), forState: .Normal)
 
-            let artwork = musicPlayer.nowPlayingItem.artwork
+            let artwork = musicPlayer.nowPlayingItem!.artwork
             if artwork != nil {
-                let image = artwork.imageWithSize(knobControl.bounds.size)
+                let image = artwork!.imageWithSize(knobControl.bounds.size)
                 if image != nil {
                     knobControl.setImage(image, forState: .Normal)
                 }

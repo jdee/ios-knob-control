@@ -26,8 +26,7 @@ class BaseViewController: UIViewController, Foregrounder {
     // MARK: Knob control
     var knobControl: IOSKnobControl!
 
-    // DEBT: Why is this suddenly necessary?
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
