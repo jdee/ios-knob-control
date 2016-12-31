@@ -291,7 +291,7 @@
 
 - (void)createMusicPlayer
 {
-    musicPlayer = [MPMusicPlayerController systemMusicPlayer];
+    musicPlayer = [MPMusicPlayerController applicationMusicPlayer];
     musicPlayer.repeatMode = MPMusicRepeatModeAll;
     [musicPlayer beginGeneratingPlaybackNotifications];
 
