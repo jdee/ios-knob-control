@@ -4,8 +4,8 @@
 #error IOSKnobControl requires automatic reference counting.
 #endif // objc_arc
 
-#define IKC_VERSION_STRING @"1.3.0"
-#define IKC_VERSION 0x010300
+#define IKC_VERSION_STRING @"1.4.0"
+#define IKC_VERSION 0x010400
 #define IKC_BUILD 1
 
 /*
@@ -202,6 +202,13 @@ static const NSInteger IKCGTap DEPRECATED_MSG_ATTRIBUTE("Use IKCGestureTap inste
  * @see IKCGesture
  */
 @property (nonatomic) IKCGesture gesture;
+
+/** Sensitivity for the vertical pan gesture
+ *
+ * Specifies how many radians to rotate the knob when the touch traverses the height of the control. Default is 1.0. Ignored unless gesture is set to
+ * IKCGestureVerticalPan.
+ */
+@property (nonatomic) double gestureSensitivity;
 
 /** Maximum value of position
  *

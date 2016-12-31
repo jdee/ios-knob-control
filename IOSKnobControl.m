@@ -38,7 +38,7 @@
 #define IKC_TITLE_MARGIN_RATIO 0.2
 
 // Must match IKC_VERSION and IKC_BUILD from IOSKnobControl.h.
-#define IKC_TARGET_VERSION 0x010300
+#define IKC_TARGET_VERSION 0x010400
 #define IKC_TARGET_BUILD 1
 
 #if IKC_TARGET_VERSION != IKC_VERSION || IKC_TARGET_BUILD != IKC_BUILD
@@ -251,12 +251,6 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     CGFloat horizMargin = _horizMargin;
     CGFloat vertMargin = _vertMargin;
 
-    size.width *= [UIScreen mainScreen].scale;
-    size.height *= [UIScreen mainScreen].scale;
-
-    horizMargin = _horizMargin * [UIScreen mainScreen].scale;
-    vertMargin = _vertMargin * [UIScreen mainScreen].scale;
-
     /*
      * Get the attributed string to render
      */
@@ -275,7 +269,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     CFRelease(attributed);
 
     // Generate a bitmap context at the correct resolution
-    UIGraphicsBeginImageContext(size);
+    UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
 
     // flip y
@@ -521,6 +515,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     _drawsAsynchronously = NO;
     _fingerHoleRadius = IKC_DEFAULT_FINGER_HOLE_RADIUS;
     _masksImage = NO;
+    _gestureSensitivity = 1.0;
 
     // Default margin is the same as the space between adjacent holes
     _fingerHoleMargin = (_knobRadius - 4.86*_fingerHoleRadius)/2.93;
@@ -1367,7 +1362,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 
     // 1 vertical pass over the control bounds = 1 radian
     // DEBT: Might want to make this sensitivity configurable.
-    float position = positionStart - [sender translationInView:self].y/self.bounds.size.height;
+    float position = positionStart - _gestureSensitivity * [sender translationInView:self].y/self.bounds.size.height;
     [self followGesture:sender toPosition:position];
 }
 
@@ -1898,7 +1893,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
 
         // NSLog(@"Using title font %@, %f", titleFont.fontName, titleFont.pointSize);
 
-        CGSize textSize;
+        CGSize textSize = CGSizeZero;
 
         if (attribTitle) {
             textSize = _zoomTopTitle && currentIndex == j ? [attribTitle.string sizeOfTextWithFont:titleFont] : attribTitle.size;
@@ -2183,7 +2178,7 @@ static CGRect adjustFrame(CGRect frame, CGFloat fingerHoleRadius) {
     CGFloat max = 0.0;
     for (id titleObject in _titles) {
 
-        CGSize textSize;
+        CGSize textSize = CGSizeZero;
         if ([titleObject isKindOfClass:NSAttributedString.class]) {
             NSAttributedString* attributed = (NSAttributedString*)titleObject;
             textSize = attributed.size;
