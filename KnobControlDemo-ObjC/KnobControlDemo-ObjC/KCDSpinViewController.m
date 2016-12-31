@@ -57,7 +57,7 @@
 
 - (KCDAppDelegate *)appDelegate
 {
-    return [UIApplication sharedApplication].delegate;
+    return (KCDAppDelegate *)[UIApplication sharedApplication].delegate;
 }
 
 #pragma mark - Object lifecycle
@@ -291,7 +291,7 @@
 
 - (void)createMusicPlayer
 {
-    musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
+    musicPlayer = [MPMusicPlayerController systemMusicPlayer];
     musicPlayer.repeatMode = MPMusicRepeatModeAll;
     [musicPlayer beginGeneratingPlaybackNotifications];
 
